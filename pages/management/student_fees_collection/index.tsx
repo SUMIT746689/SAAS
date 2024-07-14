@@ -129,7 +129,9 @@ function Managementschools() {
         return showNotification('student_id not founds', 'error');
       }
     } else if (v?.id && academicYear?.id) {
-      const res = await axios.get(`/api/student_payment_collect/${v.student_table_id}?selected_month=${selected_month}&subject_ids=${v.subject_ids || ''}&section_id=${v?.section_id}`);
+      let url = `/api/student_payment_collect/${searchValue.student_table_id}?selected_month=${selected_month}&section_id=${searchValue?.section_id}`;
+      if (searchValue?.subject_ids && !haveInvalidSubjectId(searchValue?.subject_ids)) url = url + `&subject_ids=${searchValue?.subject_ids}`;
+      const res = await axios.get(url);
       setLeftFeesTableColumnDataState(res?.data?.data);
       leftFeesTableColumnData(res?.data?.data);
     }
