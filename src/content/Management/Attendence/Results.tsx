@@ -304,6 +304,13 @@ const Results = ({ selectedClass, setSelectedClass, selectedSection, setSelected
     const date_ = selectedDate ? dayjs(selectedDate).format('YYYY-MM-DD') : '';
     const date = new Date(date_);
 
+
+
+
+
+
+    
+
     if (selectedForAll) {
       axios.post(`/api/attendance/student?school_id=${user?.school_id}&section_id=${selectedSection?.id}&date=${date}&status=${selectedForAll.id}`)
         .then(() => {
