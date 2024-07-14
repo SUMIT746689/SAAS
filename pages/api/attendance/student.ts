@@ -171,12 +171,12 @@ const index = async (req, res) => {
                         exam_id: parseInt(req.body.exam_id)
                     }
                 }
-                console.log({
-                    school_id: parseInt(req.query.school_id),
-                    section_id: parseInt(req.query.section_id),
-                    ...temp,
-                    student_id: parseInt(req.query.student_id),
-                });
+                // console.log({
+                //     school_id: parseInt(req.query.school_id),
+                //     section_id: parseInt(req.query.section_id),
+                //     ...temp,
+                //     student_id: parseInt(req.query.student_id),
+                // });
 
                 const user = await prisma.attendance.findFirst({
                     where: {
