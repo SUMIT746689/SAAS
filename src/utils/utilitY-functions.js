@@ -39,6 +39,24 @@ export function generateUsername(firstName) {
   );
 }
 
+export async function generateUsernameNew(firstName) {
+  try {
+    const res = await axios.get(`/api/generate_username?name=${firstName}`)
+    console.log({ res })
+    return res.data
+    // const text = Date.now().toString();
+    // return (
+    // if(firstName)
+    // firstName?.split(' ').join('').toLowerCase() +
+    // text.substring(text.length - 5) +
+    // Math.random().toString(36).substring(0, 8)
+    // );
+  }
+  catch (err) {
+    return firstName
+  }
+}
+
 // export async function generateUsernameUsingNumber(value) {
 //   const resUser = await prisma.user.findFirst({ where: { username: { contains: value } }, select: { username: true }, orderBy: { created_at: "desc" } });
 //   console.log({ resUser });

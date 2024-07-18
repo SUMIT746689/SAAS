@@ -31,7 +31,7 @@ import { DatePicker, MobileDatePicker } from '@mui/lab';
 import dayjs from 'dayjs';
 import { PageHeaderTitleWrapper } from '@/components/PageHeaderTitle';
 import { DialogActionWrapper } from '@/components/DialogWrapper';
-import { generateUsername, getFile } from '@/utils/utilitY-functions';
+import { generateUsername, generateUsernameNew, getFile } from '@/utils/utilitY-functions';
 import { NewFileUploadFieldWrapper, PreviewImageCard, TextFieldWrapper } from '@/components/TextFields';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -192,7 +192,7 @@ function PageHeader({
       setStatus({ success: false });
       setErrors({ submit: err.message });
       setSubmitting(false);
-      showNotification("failed ","error")
+      showNotification("failed ", "error")
     }
   };
 
@@ -373,7 +373,7 @@ function PageHeader({
                         item
                         xs={12}
                       >
-                        <TextField
+                        {/* <TextField
                           sx={{
                             '& fieldset': {
                               borderRadius: '3px'
@@ -399,7 +399,32 @@ function PageHeader({
                           onChange={handleChange}
                           value={values.first_name}
                           variant="outlined"
+                        /> */}
+                        <TextField
+                          sx={{
+                            '& fieldset': {
+                              borderRadius: '3px'
+                            }
+                          }}
+                          size="small"
+                          error={Boolean(touched.first_name && errors.first_name)}
+                          fullWidth
+                          helperText={touched.first_name && errors.first_name}
+                          name="first_name"
+                          placeholder={t('first name here...')}
+                          onBlur={handleBlur}
+                          onBlurCapture={async (v) => {
+                            if (v) {
+                              if (editSchool) return;
+                              const uniqueUsername = await generateUsernameNew(values.first_name);
+                              setFieldValue('username', uniqueUsername)
+                            }
+                          }}
+                          onChange={handleChange}
+                          value={values.first_name}
+                          variant="outlined"
                         />
+
                       </Grid>
                     </Grid>
 

@@ -22,6 +22,7 @@ import {
 import { FileUploadFieldWrapper } from '@/components/TextFields';
 import Image from 'next/image';
 import axios from 'axios';
+import { NewDebounceInput } from '@/components/DebounceInput';
 
 function RegistrationSecondPart({
   totalFormData,
@@ -46,9 +47,7 @@ function RegistrationSecondPart({
   const [isExtraClass, setIsExtraClass] = useState(false);
   const [extraClassesOptions, setExtraClassesOptions] = useState([]);
   const [selectedXtraCls, setSelectedXtraCls] = useState(null);
-  const [sectionsForSelectedXtraCls, setSectionsForSelectedXtraCls] = useState(
-    []
-  );
+  const [sectionsForSelectedXtraCls, setSectionsForSelectedXtraCls] = useState([]);
   const [selectedXtraClsSection, setSelectedXtraClsSection] = useState(null);
 
   useEffect(() => {
@@ -211,17 +210,38 @@ function RegistrationSecondPart({
     }
   };
 
-  const password = unique_password_generate();
+  // const password = unique_password_generate();
   // console.log({ classes })
+
+  const [isAvailableUsername, setIsAvailableUsername] = useState();
+
+
+  const handleDebounce = (value) => {
+    // console.log({ isEdit, name: student?.student_info?.user?.username })
+    // if (totalFormData?.username?.toLowerCase() === value?.toLowerCase()) return setIsAvailableUsername(null);
+    if (student?.student_info?.user?.username?.toLowerCase() === value?.toLowerCase()) return setIsAvailableUsername(null);
+    if (value) {
+      axios
+        .get(`/api/user/is_available?username=${value}`)
+        .then((res) => {
+          setIsAvailableUsername(null);
+        })
+        .catch((err) => {
+          setIsAvailableUsername(err?.response?.data?.message);
+        });
+    }
+  };
+
+
   return (
     <>
       <Formik
         initialValues={{
           username: student
             ? student?.student_info?.user?.username || student?.username
-            : generateUsername(totalFormData.first_name),
-          password: student ? student?.password || '' : password,
-          confirm_password: student ? student?.password || '' : password,
+            : '',
+          password: student ? student?.password || '' : totalFormData.phone,
+          confirm_password: student ? student?.password || '' : totalFormData.phone,
           class_id: student
             ? student?.class_id
               ? Number(student?.class_id)
@@ -347,7 +367,7 @@ function RegistrationSecondPart({
                   <Grid container item spacing={2}>
                     {/* username */}
                     <Grid item xs={12}>
-                      <TextField
+                      {/* <TextField
                         required
                         fullWidth
                         size="small"
@@ -364,6 +384,20 @@ function RegistrationSecondPart({
                         onChange={handleChange}
                         value={values.username}
                         variant="outlined"
+                      /> */}
+                      <NewDebounceInput
+                        touched={touched.username}
+                        errors={errors.username || isAvailableUsername}
+                        label={'username'}
+                        name="username"
+                        handleBlur={handleBlur}
+                        handleChange={handleChange}
+                        type="username"
+                        value={values.username || ''}
+                        debounceTimeout={500}
+                        handleDebounce={handleDebounce}
+                        autocomplete="false"
+                        required={true}
                       />
                     </Grid>
 

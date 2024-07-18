@@ -31,7 +31,7 @@ import { DatePicker, MobileDatePicker } from '@mui/lab';
 import dayjs from 'dayjs';
 import { PageHeaderTitleWrapper } from '@/components/PageHeaderTitle';
 import { DialogActionWrapper } from '@/components/DialogWrapper';
-import { generateUsername, getFile } from '@/utils/utilitY-functions';
+import { generateUsername, generateUsernameNew, getFile } from '@/utils/utilitY-functions';
 import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
 
 const BoxUploadWrapper = styled(Box)(
@@ -80,6 +80,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
 
     setOpen(false);
   };
+
   const handleFormSubmit = async (_values, resetForm, setErrors, setStatus, setSubmitting) => {
     try {
       const resume: any = [];
@@ -251,7 +252,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                       item
                       xs={12}
                     >
-                      <TextField
+                      {/* <TextField
                         sx={{
                           '& fieldset': {
                             borderRadius: '3px'
@@ -276,7 +277,32 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         onChange={handleChange}
                         value={values.first_name}
                         variant="outlined"
+                      /> */}
+                      <TextField
+                        sx={{
+                          '& fieldset': {
+                            borderRadius: '3px'
+                          }
+                        }}
+                        size="small"
+                        error={Boolean(touched.first_name && errors.first_name)}
+                        fullWidth
+                        helperText={touched.first_name && errors.first_name}
+                        name="first_name"
+                        placeholder={t('first name here...')}
+                        onBlur={handleBlur}
+                        onBlurCapture={async (v) => {
+                          if (v) {
+                            if (editSchool) return;
+                            const uniqueUsername = await generateUsernameNew(values.first_name);
+                            setFieldValue('username', uniqueUsername)
+                          }
+                        }}
+                        onChange={handleChange}
+                        value={values.first_name}
+                        variant="outlined"
                       />
+
                     </Grid>
                   </Grid>
 
