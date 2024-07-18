@@ -232,6 +232,7 @@ function RegistrationSecondPart({
     }
   };
 
+  console.log({ssss:totalFormData.username})
 
   return (
     <>

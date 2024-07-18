@@ -6,12 +6,13 @@ import RegistrationSecondPart from '@/content/Management/Students/RegistrationSe
 import RegistrationThirdPart from '@/content/Management/Students/RegistrationThirdPart';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { generateUsernameNew } from '@/utils/utilitY-functions';
 
 export default function StudentForm({ student = null, handleClose = null, onlineAdmission_id = null }) {
   const router = useRouter();
 
   const [activeStep, setActiveStep] = useState(0);
-  const [totalFormData, setTotalFormData] = useState({});
+  const [totalFormData, setTotalFormData] = useState<any>({});
   const [classesFlag, setClassesFlag] = useState(false);
   const [academicYears, setacademicYears] = useState([]);
   const [classes, setClasses] = useState([]);
@@ -44,6 +45,22 @@ export default function StudentForm({ student = null, handleClose = null, online
     else router.push('/management/students');
   };
 
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGenerateUserName = async () => {
+    setIsLoading(true)
+    const generateUserName = await generateUsernameNew(totalFormData.first_name);
+    setIsLoading(false);
+    setTotalFormData((value) => ({ ...value, username: generateUserName }))
+  }
+
+  useEffect(() => {
+    // if (isEdit || !totalFormData?.first_name) return;
+    if (student?.student_info?.user?.username || !totalFormData?.first_name) return;
+    handleGenerateUserName()
+  }, [totalFormData?.first_name])
+
   return (
     <>
       <Grid>
@@ -73,7 +90,7 @@ export default function StudentForm({ student = null, handleClose = null, online
               student={student}
             />
           )}
-          {activeStep === 1 && (
+          {activeStep === 1 && !isLoading && (
             <RegistrationSecondPart
               totalFormData={totalFormData}
               setTotalFormData={setTotalFormData}
