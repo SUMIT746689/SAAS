@@ -33,6 +33,7 @@ import { PageHeaderTitleWrapper } from '@/components/PageHeaderTitle';
 import { DialogActionWrapper } from '@/components/DialogWrapper';
 import { generateUsername, generateUsernameNew, getFile } from '@/utils/utilitY-functions';
 import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
+import { NewDebounceInput } from '@/components/DebounceInput';
 
 const BoxUploadWrapper = styled(Box)(
   ({ theme }) => `
@@ -103,6 +104,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
       formData.append('permanent_address', _values.permanent_address);
       formData.append('salary_type', _values.salary_type);
       formData.append('teacher_id', _values.teacher_id);
+      formData.append('username', _values.username);
 
       if (_values.password !== '') {
         formData.append('password', _values.password);
@@ -133,7 +135,6 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
         if (result.data?.success) successProcess(t('A teacher has been updated successfully'));
         else throw new Error('edit teacher failed');
       } else {
-        formData.append('username', _values.username);
         const res = await axios({
           method: 'POST',
           url: '/api/teacher',
@@ -152,6 +153,26 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
       setSubmitting(false);
     }
   };
+
+
+  const [isAvailableUsername, setIsAvailableUsername] = useState();
+
+  const handleDebounce = (value) => {
+    // console.log({ value, name: editSchool },?.user?.username?.toLowerCase() === value?.toLowerCase())
+    // if (totalFormData?.username?.toLowerCase() === value?.toLowerCase()) return setIsAvailableUsername(null);
+    if (editSchool?.user?.username?.toLowerCase() === value?.toLowerCase()) return setIsAvailableUsername(null);
+    if (value) {
+      axios
+        .get(`/api/user/is_available?username=${value}`)
+        .then((res) => {
+          setIsAvailableUsername(null);
+        })
+        .catch((err) => {
+          setIsAvailableUsername(err?.response?.data?.message);
+        });
+    }
+  };
+
 
   return (
     <>
@@ -293,8 +314,9 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         onBlur={handleBlur}
                         onBlurCapture={async (v) => {
                           if (v) {
-                            if (editSchool) return;
+                            if (editSchool || values.username) return;
                             const uniqueUsername = await generateUsernameNew(values.first_name);
+                            console.log({uniqueUsername})
                             setFieldValue('username', uniqueUsername)
                           }
                         }}
@@ -498,6 +520,10 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values.phone}
+                        onBlurCapture={(v) => {
+                          if (!v || editSchool || values.password) return;
+                          setFieldValue('password', values.phone)
+                        }}
                         variant="outlined"
                       />
                     </Grid>
@@ -914,7 +940,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                       }}
                       item
                     >
-                      <TextField
+                      {/* <TextField
                         sx={{
                           '& fieldset': {
                             borderRadius: '3px'
@@ -931,6 +957,20 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         // disabled
                         value={values.username}
                         variant="outlined"
+                      /> */}
+                      <NewDebounceInput
+                        touched={touched.username || isAvailableUsername}
+                        errors={errors.username || isAvailableUsername}
+                        label={''}
+                        name="username"
+                        handleBlur={handleBlur}
+                        handleChange={handleChange}
+                        type="username"
+                        value={values.username || ''}
+                        debounceTimeout={500}
+                        handleDebounce={handleDebounce}
+                        autocomplete="false"
+                        required={true}
                       />
                     </Grid>
                   </Grid>
@@ -1141,6 +1181,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                 title="Teacher"
                 errors={errors}
                 editData={editSchool}
+                disabled={isAvailableUsername}
                 handleCreateClassClose={handleCreateProjectClose}
                 isSubmitting={isSubmitting}
               />

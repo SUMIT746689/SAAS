@@ -41,7 +41,7 @@ function RegistrationFirstPart({
           last_name: student ? (student?.middle_name || student?.student_info?.last_name || '') : '',
           student_id: student ? (student?.student_id || student?.student_info?.student_id) : '',
           admission_no: student ? (student?.admission_no || student?.student_info?.admission_no) : '',
-          admission_date: student ? (student?.admission_date || student?.student_info?.admission_date) : null,
+          admission_date: student ? (student?.admission_date || student?.student_info?.admission_date) : new Date(Date.now()),
           date_of_birth: student ? (student?.date_of_birth || student?.student_info?.date_of_birth) : null,
           gender: student ? (student?.gender || student?.student_info?.gender) : 'male',
           blood_group: student ? (student?.blood_group || student?.student_info?.blood_group || '') : '',
@@ -123,12 +123,13 @@ function RegistrationFirstPart({
                         error={Boolean(touched.first_name && errors.first_name)}
                         fullWidth
                         helperText={touched.first_name && errors.first_name}
-                        label={t('First name')}
+                        label={t('First Name')}
                         name="first_name"
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values.first_name}
                         variant="outlined"
+                        required={true}
                       />
                     </Grid>
                     {/* middle_name */}
@@ -145,7 +146,7 @@ function RegistrationFirstPart({
                         )}
                         fullWidth
                         helperText={touched.middle_name && errors.middle_name}
-                        label={t('Middle name')}
+                        label={t('Middle Name')}
                         name="middle_name"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -165,7 +166,7 @@ function RegistrationFirstPart({
                         error={Boolean(touched.last_name && errors.last_name)}
                         fullWidth
                         helperText={touched.last_name && errors.last_name}
-                        label={t('Last name')}
+                        label={t('Last Name')}
                         name="last_name"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -189,7 +190,7 @@ function RegistrationFirstPart({
                         )}
                         fullWidth
                         helperText={touched.admission_no && errors.admission_no}
-                        label={t('Admission no')}
+                        label={t('Admission No')}
                         name="admission_no"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -223,7 +224,7 @@ function RegistrationFirstPart({
                     <Grid item xs={12} md={6}>
 
                       <MobileDateTimePicker
-                        label="admission Date"
+                        label="Admission Date"
                         inputFormat='dd/MM/yyyy hh:mm a'
                         value={values.admission_date}
                         renderInput={(params) => (
@@ -264,7 +265,7 @@ function RegistrationFirstPart({
                     {/* date_of_birth */}
                     <Grid item xs={12} md={6}>
                       <MobileDatePicker
-                        label="Date of birth"
+                        label="Date of Birth"
                         inputFormat='dd/MM/yyyy'
                         value={values.date_of_birth}
                         onChange={(n) => {
@@ -362,7 +363,7 @@ function RegistrationFirstPart({
                         )}
                         fullWidth
                         helperText={touched.blood_group && errors.blood_group}
-                        label={t('blood Group')}
+                        label={t('Blood Group')}
                         name="blood_group"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -411,7 +412,7 @@ function RegistrationFirstPart({
                         onBlur={handleBlur}
                         onChange={handleChange}
                         type="text"
-                        // required
+                        required
                         value={values.phone}
                         variant="outlined"
                       />
@@ -429,7 +430,7 @@ function RegistrationFirstPart({
                         error={Boolean(touched.email && errors.email)}
                         fullWidth
                         helperText={touched.email && errors.email}
-                        label={t('email')}
+                        label={t('Email')}
                         name="email"
                         onBlur={handleBlur}
                         onChange={handleChange}

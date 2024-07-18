@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma_client';
+import axios from 'axios';
 import crypto from 'crypto';
 
 export const getOneCookies = (cname) => {

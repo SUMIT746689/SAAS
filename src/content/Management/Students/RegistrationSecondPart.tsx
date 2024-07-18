@@ -239,7 +239,7 @@ function RegistrationSecondPart({
         initialValues={{
           username: student
             ? student?.student_info?.user?.username || student?.username
-            : '',
+            : totalFormData.username,
           password: student ? student?.password || '' : totalFormData.phone,
           confirm_password: student ? student?.password || '' : totalFormData.phone,
           class_id: student
@@ -388,7 +388,7 @@ function RegistrationSecondPart({
                       <NewDebounceInput
                         touched={touched.username}
                         errors={errors.username || isAvailableUsername}
-                        label={'username'}
+                        label={'User Name'}
                         name="username"
                         handleBlur={handleBlur}
                         handleChange={handleChange}
@@ -895,7 +895,7 @@ function RegistrationSecondPart({
                     isSubmitting ? <CircularProgress size="1rem" /> : null
                   }
                   // @ts-ignore
-                  disabled={Boolean(errors.submit) || isSubmitting}
+                  disabled={Boolean(errors.submit) || isSubmitting || isAvailableUsername}
                   variant="contained"
                 >
                   {t('Next')}

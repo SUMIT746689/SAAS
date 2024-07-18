@@ -77,7 +77,7 @@ export const DialogTitleWrapper = ({ editData, name }) => {
   );
 };
 
-export const DialogActionWrapper = ({ handleCreateClassClose, errors, editData, isSubmitting, title, titleFront = null, customSubmitLabel = '' }) => {
+export const DialogActionWrapper = ({ handleCreateClassClose, errors, editData, isSubmitting, title, titleFront = null, customSubmitLabel = '', disabled = false }) => {
   const { t }: { t: any } = useTranslation();
 
   return (
@@ -93,7 +93,7 @@ export const DialogActionWrapper = ({ handleCreateClassClose, errors, editData, 
         type="submit"
         startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
         //@ts-ignore
-        disabled={Boolean(errors.submit) || isSubmitting}
+        disabled={Boolean(errors.submit) || isSubmitting || disabled}
         variant="contained"
       >
         {customSubmitLabel ? customSubmitLabel : `${editData ? 'Update' : titleFront || `Create`} ${title}`}
