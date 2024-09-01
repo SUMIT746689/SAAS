@@ -1,11 +1,12 @@
 import prisma from '@/lib/prisma_client';
 import { authenticate } from 'middleware/authenticate';
 import { logFile } from 'utilities_api/handleLogFile';
+import { dcrypt } from 'utilities_api/hashing';
 
 async function get(req, res, refresh_token) {
   try {
     const { section_id, academic_year_id, class_id } = req.query;
-
+    const { role, school_id } = refresh_token;
     const where = {};
 
     if (class_id) where['class_id'] = parseInt(class_id);
@@ -22,7 +23,7 @@ async function get(req, res, refresh_token) {
         ...where,
         is_separate: false,
         student_info: {
-          school_id: refresh_token.school_id,
+          school_id,
           user: {
             is: {
               deleted_at: null
@@ -44,7 +45,8 @@ async function get(req, res, refresh_token) {
             user: {
               select: {
                 id: true,
-                username: true
+                username: true,
+                // ...role?.title === 'ADMIN' && { password: true }
               }
             }
           }

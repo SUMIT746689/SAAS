@@ -223,8 +223,8 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
 
   return (
     <>
-   
-    <Dialog
+
+      <Dialog
         fullWidth
         maxWidth="lg"
         open={studentProfileModal}
@@ -415,28 +415,28 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
           </Box>
         )} */}
         {/* {!selectedBulkActions && ( */}
-          <Box
-            px={2}
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Box>
-              <Typography component="span" variant="subtitle1">
-                {t('Showing')}:
-              </Typography>{' '}
-              <b>{paginatedClasses.length}</b> <b>{t('students')}</b>
-            </Box>
-            <TablePagination
-              component="div"
-              count={filteredClasses.length}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleLimitChange}
-              page={page}
-              rowsPerPage={limit}
-              rowsPerPageOptions={[20, 50, 70]}
-            />
+        <Box
+          px={2}
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Box>
+            <Typography component="span" variant="subtitle1">
+              {t('Showing')}:
+            </Typography>{' '}
+            <b>{paginatedClasses.length}</b> <b>{t('students')}</b>
           </Box>
+          <TablePagination
+            component="div"
+            count={filteredClasses.length}
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleLimitChange}
+            page={page}
+            rowsPerPage={limit}
+            rowsPerPageOptions={[20, 50, 70]}
+          />
+        </Box>
         {/* )} */}
         <Divider />
 
@@ -467,6 +467,7 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
                     />
                   </TableHeaderCellWrapper>
                   <TableHeaderCellWrapper>{t('User id')}</TableHeaderCellWrapper>
+                  <TableHeaderCellWrapper>{t('User Name')}</TableHeaderCellWrapper>
 
                   <TableHeaderCellWrapper>{t('student name')}</TableHeaderCellWrapper>
                   <TableHeaderCellWrapper>{t('student id')}</TableHeaderCellWrapper>
@@ -495,6 +496,9 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
                       </TableHeaderCellWrapper>
                       <TableBodyCellWrapper>
                         {i?.student_info?.user?.id}
+                      </TableBodyCellWrapper>
+                      <TableBodyCellWrapper>
+                        {i?.student_info?.user?.username}
                       </TableBodyCellWrapper>
                       <TableBodyCellWrapper>
                         {[i?.student_info?.first_name, i?.student_info?.middle_name, i?.student_info?.last_name].join(' ')}
@@ -670,7 +674,7 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
         </Box>
       </DialogWrapper>
 
-    
+
     </>
   );
 };

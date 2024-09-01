@@ -47,11 +47,7 @@ export default async function post(req, res) {
             permissions: true
           }
         },
-        user_role: {
-          include: {
-            permissions: true
-          }
-        },
+        user_role: true,
         school: {
           include: {
             subscription: {
@@ -68,7 +64,7 @@ export default async function post(req, res) {
         }
       }
     });
-
+    
     if (!user) throw new Error(`Invalid Authorization`);
 
     // admin_panel domain verification
@@ -96,10 +92,11 @@ export default async function post(req, res) {
       }
 
     }
-    if (user.user_role_id) {
-      user['permissions'] = user.user_role?.permissions;
-      delete user['user_role']['permissions'];
-    }
+    // if (user.role?.title) {
+      user['permissions'] = user.role?.id ? user.role.permissions : user.permissions;
+      if(user.role) delete user['role']['permissions'];
+    // }
+
     if (user?.user_role?.title !== 'ASSIST_SUPER_ADMIN' && user?.user_role?.title !== 'SUPER_ADMIN') {
       let isSubscriptionActive = false;
       // console.log(user.school?.subscription[0]?.end_date.getTime() + 86400000 > new Date().getTime());
