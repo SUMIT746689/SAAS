@@ -1,5 +1,4 @@
 import HomeContent from '@/components/HomeContent';
-
 import prisma from '@/lib/prisma_client';
 import { headers } from 'next/headers';
 import Banner from '@/new_components/Banner/Banner';
