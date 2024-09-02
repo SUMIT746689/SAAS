@@ -42,7 +42,7 @@
     "**/*.tsx",
     "src/app/school_not_found.js",
     "src/components/OnlineAdmission.jsx"
-, "src/app/(showFile)/layout.js", "src/app/layout.js"  ],
+, "src/app/(showFile)/layout.js", "src/app/layout.js", "src/app/(default)/dynamic-pages/[pageId].js", "src/components/FeesPayment.jsx", "src/new_components/FeesPayment/FeesPayment.jsx"  ],
   "exclude": [
     "node_modules"
   ]

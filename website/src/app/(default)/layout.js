@@ -1,13 +1,16 @@
 import Head from 'next/head';
 import '../globals.css';
-import Footer from '@/layout/Footer';
-import Header from '@/layout/Header';
-import LayoutWrapper from '@/layout/LayoutWrapper';
-import Nav from '@/layout/Nav';
+// import Footer from '@/layout/Footer';
+// import Header from '@/layout/Header';
+// import LayoutWrapper from '@/layout/LayoutWrapper';
+// import Nav from '@/layout/Nav';
 import prisma from '@/lib/prisma_client';
 import { headers } from 'next/headers';
 import SchoolNotFound from '@/components/SchoolNotFound'
 import React from 'react';
+import Navbar from '@/new_components/Navbar/Navbar';
+import Footer from '@/new_components/Footer/Footer';
+import { LanguageContextProvider } from '../context/language';
 
 export default async function RootLayout({ children }) {
 
@@ -26,6 +29,7 @@ export default async function RootLayout({ children }) {
           select: {
             name: true,
             address: true,
+            email: true,
             phone: true
           }
         },
@@ -40,6 +44,26 @@ export default async function RootLayout({ children }) {
     })
     console.log({ domain })
 
+    const navarDatas = {
+      name: school_info?.school?.name,
+      phone: school_info?.school?.phone,
+      email: school_info?.school?.email,
+      address: school_info?.school?.address,
+      eiin_number: school_info?.eiin_number,
+      header_image: `${process.env.SERVER_HOST}/api/get_file/${school_info?.header_image?.replace(/\\/g, '/')}`,
+      serverHost: `${process.env.SERVER_HOST}`
+    }
+    
+    const resMenus = await prisma.websiteMenu.findMany({
+      where: { school: { domain }, status: "publish" }, include: {
+        websiteDynamicPage: {
+          select: {
+            id: true
+          }
+        }
+      }
+    });
+
     return (
       school_info ?
         <html lang="en">
@@ -48,9 +72,13 @@ export default async function RootLayout({ children }) {
           </Head>
           <body >
 
-
+            <LanguageContextProvider>
+              <Navbar datas={navarDatas} menus={resMenus}></Navbar>
+              {children}
+              <Footer />
+            </LanguageContextProvider>
             {/* <LayoutWrapper> */}
-            <div className=' px-4'>
+            {/* <div className=' px-4'>
               <Header
                 name={school_info?.school?.name}
                 phone={school_info?.school?.phone}
@@ -59,19 +87,21 @@ export default async function RootLayout({ children }) {
                 header_image={`${process.env.SERVER_HOST}/api/get_file/${school_info?.header_image?.replace(/\\/g, '/')}`}
                 serverhost={`${process.env.SERVER_HOST}`}
               />
-              <Nav serverhost={`${process.env.SERVER_HOST}`} />
+              <Nav serverhost={`${process.env.SERVER_HOST}`} /> */}
+            {/* <LanguageContext.Provider value={{ language, handleChangeLang }}> */}
 
-              {children}
-            </div>
+            {/* </LanguageContext.Provider> */}
+
+            {/* </div> */}
 
             {/* </LayoutWrapper> */}
-            <Footer
+            {/* <Footer
               facebook_link={school_info?.facebook_link || ''}
               twitter_link={school_info?.twitter_link || ''}
               google_link={school_info?.google_link || ''}
               linkedin_link={school_info?.linkedin_link || ''}
               youtube_link={school_info?.youtube_link || ''}
-            />
+            /> */}
           </body>
         </html>
         :

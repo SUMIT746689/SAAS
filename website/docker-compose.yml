@@ -2,7 +2,7 @@ version: "3"
 
 services:
   website:
-    image: ridoy235/elitbuzz:school_website_v2
+    image: ridoy235/elitbuzz:school_website_v6
     pull_policy: always
     # volumes: 
     #   - AllFiles:/app/AllFiles
@@ -12,8 +12,8 @@ services:
       # - "8089:3000"
     restart: unless-stopped
     environment:
-      - SERVER_HOST=${SERVER_HOST}
-      - DATABASE_URL=${DATABASE_URL}
+      - SERVER_HOST=http://172.17.0.1:3000
+      - DATABASE_URL=mysql://root:password@172.17.0.1:3306/school?parseTime=true
 
 # volumes:
 #   AllFiles:

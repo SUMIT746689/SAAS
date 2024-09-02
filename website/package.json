@@ -31,6 +31,7 @@
     "react-icons": "^4.8.0",
     "react-slick": "^0.29.0",
     "react-to-print": "^2.14.15",
+    "sharp": "^0.33.4",
     "slick-carousel": "^1.8.1",
     "yup": "0.32.11"
   },

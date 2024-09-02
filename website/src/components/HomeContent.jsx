@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { Inter } from 'next/font/google';
-import ImgSlider from './ImageSlider';
+// import ImgSlider from './ImageSlider';
 import { useEffect, useRef, useState } from 'react';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 import { useClientFetch } from '../hooks/useClientFetch';
@@ -266,7 +266,7 @@ export default function HomeContent({ latest_news, carousel_image, speechDatas, 
     <div>
       {/* slider */}
       <div className="w-full pb-2">
-        <ImgSlider carousel_image={carousel_image} />
+        {/* <ImgSlider carousel_image={carousel_image} /> */}
       </div>
 
       {/* announcement */}

@@ -17,7 +17,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 # Copying prisma source files
 COPY . .
-# COPY ../prisma .
+COPY ../prisma .
 # prisma schema to update the generated Prisma Client code 
 RUN npx prisma generate 
 # This will do the trick, use the corresponding env file for each environment.
