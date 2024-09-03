@@ -218,7 +218,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                         Description (English): *
                       </Grid>
                       <RichTextEditorWrapper
-                        height='200px'
+                        // height='200px'
                         value={values.english_description}
                         handleChange={(newValue: any) => {
                           console.log({ newValue });
@@ -239,7 +239,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                         Description (বাংলা): *
                       </Grid>
                       <RichTextEditorWrapper
-                        height='200px'
+                        // height='200px'
                         value={values.bangla_description}
                         handleChange={(newValue: any) => {
                           console.log({ newValue });
