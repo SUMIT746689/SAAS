@@ -73,7 +73,8 @@ async function get(req, res, refresh_token) {
           select: {
             title: true
           }
-        }
+        },
+        subjects: true
       },
       orderBy: { id: "desc" }
     });

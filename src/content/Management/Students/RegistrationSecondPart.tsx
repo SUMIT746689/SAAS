@@ -49,6 +49,8 @@ function RegistrationSecondPart({
   const [selectedXtraCls, setSelectedXtraCls] = useState(null);
   const [sectionsForSelectedXtraCls, setSectionsForSelectedXtraCls] = useState([]);
   const [selectedXtraClsSection, setSelectedXtraClsSection] = useState(null);
+  const [classSubjects, setClassSubjects] = useState([]);
+  const [selectedClassSubjects, setSelectedClassSubjects] = useState([]);
 
   useEffect(() => {
     const classes_ = [];
@@ -92,11 +94,19 @@ function RegistrationSecondPart({
     }
   }, [classesOptions, student]);
 
+  const handleGetClassSubjects = (class_id) => {
+    axios.get(`/api/subject?class_id=${class_id}`).then(res => { setClassSubjects(res.data.map(subject => ({ id: subject.id, label: subject.name }))) }).catch(getClsSubjectsError => { console.log({ getClsSubjectsError }) })
+  }
+  console.log({ classSubjects })
   useEffect(() => {
     if (student) {
       const targetClassSections = classes?.find(
         (i) => i.id == (Number(student?.class_id) || student?.section?.class_id)
       );
+
+      // class section
+      handleGetClassSubjects(targetClassSections.id)
+      setSelectedClassSubjects(student?.subjects?.map(subject => ({ id: subject.id, label: subject.name })))
 
       setSectionsForSelectedClass(
         targetClassSections?.sections?.map((i) => {
@@ -146,8 +156,14 @@ function RegistrationSecondPart({
 
   const handleClassSelect = (event, value, setFieldValue) => {
     setFieldValue('class_id', value?.id);
+    setSelectedClassSubjects([]);
     setselectedClass(value);
     if (value) {
+
+      // get class subjects
+      handleGetClassSubjects(value?.id)
+
+      // get group
       axios
         .get(`/api/group?class_id=${value.id}`)
         .then((res) => {
@@ -210,6 +226,11 @@ function RegistrationSecondPart({
     }
   };
 
+  const handleClsSubjectSelect = (event, value, setFieldValue) => {
+    setSelectedClassSubjects(value)
+    setFieldValue("subject_ids", value?.map(sub => (sub.id)))
+  }
+
   // const password = unique_password_generate();
   // console.log({ classes })
 
@@ -232,7 +253,7 @@ function RegistrationSecondPart({
     }
   };
 
-  console.log({ssss:totalFormData.username})
+  console.log({ ssss: totalFormData.username })
 
   return (
     <>
@@ -253,6 +274,7 @@ function RegistrationSecondPart({
               ? Number(student?.section_id)
               : student?.section?.id
             : undefined,
+          subject_ids: [],
           group_id: student
             ? student?.group_id
               ? Number(student?.group_id)
@@ -356,6 +378,7 @@ function RegistrationSecondPart({
           values,
           setFieldValue
         }) => {
+          console.log({ values })
           return (
             <form onSubmit={handleSubmit}>
               <DialogContent
@@ -517,6 +540,36 @@ function RegistrationSecondPart({
                       )}
                     </Grid>
 
+                    {/* subjects */}
+                    <Grid item xs={12} md={6}>
+                      <Autocomplete
+                        disablePortal
+                        multiple={true}
+                        options={classSubjects}
+                        value={selectedClassSubjects}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            // required
+                            size="small"
+                            sx={{
+                              '& fieldset': {
+                                borderRadius: '3px'
+                              }
+                            }}
+                            fullWidth
+                            error={Boolean(touched.subject_ids && errors.subject_ids)}
+                            helperText={touched.subject_ids && errors.subject_ids}
+                            onBlur={handleBlur}
+                            label={t('Select Subjects')}
+                          />
+                        )}
+                        onChange={(event, value) =>
+                          handleClsSubjectSelect(event, value, setFieldValue)
+                        }
+                      />
+                    </Grid>
+
                     {/* Group  */}
                     <Grid item xs={12} md={6}>
                       {selectedClass && selectedClass.has_section && (
@@ -661,7 +714,7 @@ function RegistrationSecondPart({
                     </Grid>
 
                     {/* dummy  */}
-                    <Grid item xs={0} md={6}></Grid>
+                    {/* <Grid item xs={0} md={6}></Grid> */}
 
                     {/* student_present_address */}
                     <Grid item xs={12} md={6}>

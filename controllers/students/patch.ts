@@ -179,6 +179,20 @@ const patchHandle = async (req, res, authenticate_user) => {
                 }
             }
 
+            // subjects 
+            const { subject_ids } = fields;
+
+            const subjects = {}
+            if (subject_ids && typeof subject_ids === "string") {
+                const customSubjectList = subject_ids.split(',').map(subject_id => {
+                    const parseId = parseInt(subject_id)
+                    if (Number.isNaN(parseId)) throw new Error("provided invalid subject id")
+                    return { id: parseId }
+                });
+                subjects["connect"] = customSubjectList;
+            };
+
+
             await transaction.student.update({
                 where: {
                     id: student_id
@@ -208,6 +222,7 @@ const patchHandle = async (req, res, authenticate_user) => {
                         connect: { id: parseInt(fields?.academic_year_id) }
                     },
                     ...extra_section_datas,
+                    subjects,
                     student_info: {
                         // connect: { id: studentInformation.id }
                         update: {
@@ -242,7 +257,7 @@ const patchHandle = async (req, res, authenticate_user) => {
 
                             student_permanent_address: fields?.student_permanent_address,
                             previous_school: fields?.previous_school,
-
+                            student_id: fields?.student_id || undefined,
                             user: {
                                 update: userUpdateQuery
                             }
