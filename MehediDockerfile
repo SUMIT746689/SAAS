@@ -1,4 +1,4 @@
-FROM node:current-alpine3.19 as base
+FROM node:20.17-alpine3.19 as base
 # FROM node:current-alpine3.19
 
 # 1. Install dependencies only when needed
