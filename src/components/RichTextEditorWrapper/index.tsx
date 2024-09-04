@@ -36,12 +36,12 @@ import dynamic from "next/dynamic";
 //   )
 // }
 
-export function RichTextEditorWrapper({ value, handleChange }) {
-  const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }),[]);
+export function RichTextEditorWrapper({ height = "auto", value, handleChange }) {
+  const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }), []);
 
   return (
     <Grid item width={"100%"} >
-      <ReactQuill theme="snow" value={value} onChange={handleChange} />
+      <ReactQuill theme="snow" value={value} onChange={handleChange} style={{ height }} />
     </Grid>
   )
 }
