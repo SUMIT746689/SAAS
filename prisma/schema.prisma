@@ -134,8 +134,9 @@ model School {
   teacherSalaries            TeacherSalaryStructure[]
   // StudentClassSubjects       StudentClassSubjects[]
   smsSettings                SmsSettings?
-  studentFeeWiseTeacherPay studentFeeWiseTeacherPay[]
-
+  studentFeeWiseTeacherPay   studentFeeWiseTeacherPay[]
+  websiteMenus               WebsiteMenu[]
+  websiteDynamicPages        WebsiteDynamicPage[]
   // routines Routine[]
   @@map("schools")
 }
@@ -1797,4 +1798,51 @@ model attendence_info {
   created_at DateTime               @default(now())
 
   @@map("attendence_info")
+}
+
+
+
+enum WebsiteMenuStatus {
+  publish
+  unpublish
+}
+
+model WebsiteMenu {
+  id              Int               @id @default(autoincrement())
+  parent_id       Int?
+  english_title   String
+  bangla_title    String?
+  link_type       String
+  website_link    String
+  status          WebsiteMenuStatus @default(publish)
+  dynamic_page_id Int?
+  school_id       Int
+
+  websiteDynamicPage WebsiteDynamicPage? @relation(fields: [dynamic_page_id], references: [id])
+  school             School              @relation(fields: [school_id], references: [id])
+  parent             WebsiteMenu?        @relation("WebsiteMenus", fields: [parent_id], references: [id])
+  subcategories      WebsiteMenu[]       @relation("WebsiteMenus")
+
+  @@map("website_menus")
+}
+
+enum WebsiteDynamicPageStatus {
+  publish
+  unpublish
+}
+
+model WebsiteDynamicPage {
+  id                  Int                      @id @default(autoincrement())
+  english_title       String
+  bangla_title        String
+  english_description Json
+  bangla_description  Json
+  feature_photo       String?
+  status              WebsiteDynamicPageStatus
+  school_id           Int
+
+  school      School        @relation(fields: [school_id], references: [id])
+  WebsiteMenu WebsiteMenu[]
+
+  @@map("website_dynamic_pages")
 }
