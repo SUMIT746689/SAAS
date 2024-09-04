@@ -331,9 +331,11 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
         </Grid>
       )}
 
-      <Grid sx={{ width: 200, p: 1 }}>
-        <InputLabel sx={{ color: 'white', fontSize: 12, fontWeight:600 }}>Max Student Id: {highestStudentId}</InputLabel>
-      </Grid>
+      {auth?.user?.role?.title === 'ADMIN' &&
+        <Grid sx={{ width: 200, p: 1,ml:1, border:"1px solid white" }}>
+          <InputLabel sx={{ color: 'white', fontSize: 12, fontWeight: 600 }}>Max Student Id: {highestStudentId}</InputLabel>
+        </Grid>
+      }
       {/* @ts-ignore */}
       {/* {auth?.user?.role?.title !== 'SUPER_ADMIN' && auth?.user?.role?.title !== 'ASSIST_SUPER_ADMIN' &&
         (

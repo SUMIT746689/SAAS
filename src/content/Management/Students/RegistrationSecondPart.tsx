@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -13,16 +13,12 @@ import {
   Checkbox
 } from '@mui/material';
 import useNotistick from '@/hooks/useNotistick';
-import {
-  generateUsername,
-  getFile,
-  registration_no_generate,
-  unique_password_generate
-} from '@/utils/utilitY-functions';
+import { getFile, registration_no_generate } from '@/utils/utilitY-functions';
 import { FileUploadFieldWrapper } from '@/components/TextFields';
 import Image from 'next/image';
 import axios from 'axios';
 import { NewDebounceInput } from '@/components/DebounceInput';
+import { AcademicYearContext } from '@/contexts/UtilsContextUse';
 
 function RegistrationSecondPart({
   totalFormData,
@@ -51,6 +47,8 @@ function RegistrationSecondPart({
   const [selectedXtraClsSection, setSelectedXtraClsSection] = useState(null);
   const [classSubjects, setClassSubjects] = useState([]);
   const [selectedClassSubjects, setSelectedClassSubjects] = useState([]);
+  const [academicYear,] = useContext(AcademicYearContext);
+  const [isAvailableUsername, setIsAvailableUsername] = useState();
 
   useEffect(() => {
     const classes_ = [];
@@ -97,7 +95,7 @@ function RegistrationSecondPart({
   const handleGetClassSubjects = (class_id) => {
     axios.get(`/api/subject?class_id=${class_id}`).then(res => { setClassSubjects(res.data.map(subject => ({ id: subject.id, label: subject.name }))) }).catch(getClsSubjectsError => { console.log({ getClsSubjectsError }) })
   }
-  console.log({ classSubjects })
+
   useEffect(() => {
     if (student) {
       const targetClassSections = classes?.find(
@@ -178,7 +176,6 @@ function RegistrationSecondPart({
         .catch((err) => console.log(err));
 
       const targetClassSections = classes?.find((i) => i.id == value.id);
-      console.log(targetClassSections);
 
       setSectionsForSelectedClass(
         targetClassSections?.sections?.map((i) => {
@@ -205,7 +202,6 @@ function RegistrationSecondPart({
     setSelectedXtraCls(value);
 
     const targetClassSections = classes?.find((i) => i.id == value?.id);
-    console.log(targetClassSections);
 
     setSectionsForSelectedXtraCls(
       targetClassSections?.sections?.map((i) => {
@@ -231,15 +227,7 @@ function RegistrationSecondPart({
     setFieldValue("subject_ids", value?.map(sub => (sub.id)))
   }
 
-  // const password = unique_password_generate();
-  // console.log({ classes })
-
-  const [isAvailableUsername, setIsAvailableUsername] = useState();
-
-
   const handleDebounce = (value) => {
-    // console.log({ isEdit, name: student?.student_info?.user?.username })
-    // if (totalFormData?.username?.toLowerCase() === value?.toLowerCase()) return setIsAvailableUsername(null);
     if (student?.student_info?.user?.username?.toLowerCase() === value?.toLowerCase()) return setIsAvailableUsername(null);
     if (value) {
       axios
@@ -253,7 +241,6 @@ function RegistrationSecondPart({
     }
   };
 
-  console.log({ ssss: totalFormData.username })
 
   return (
     <>
@@ -290,7 +277,7 @@ function RegistrationSecondPart({
 
           academic_year_id: student
             ? Number(student?.academic_year_id)
-            : undefined,
+            : academicYear?.id,
           roll_no: student ? student?.class_roll_no : undefined,
           registration_no:
             student?.class_registration_no || registration_no_generate(),
@@ -378,7 +365,6 @@ function RegistrationSecondPart({
           values,
           setFieldValue
         }) => {
-          console.log({ values })
           return (
             <form onSubmit={handleSubmit}>
               <DialogContent
@@ -777,7 +763,7 @@ function RegistrationSecondPart({
                     </Grid>
 
                     {/* extra info */}
-                    <Grid
+                    {/* <Grid
                       item
                       xs={12}
                       display="flex"
@@ -793,7 +779,7 @@ function RegistrationSecondPart({
                         />{' '}
                         Add Extra Class ?{' '}
                       </Grid>
-                    </Grid>
+                    </Grid> */}
 
                     {isExtraClass && (
                       <>
@@ -866,10 +852,7 @@ function RegistrationSecondPart({
                                 />
                               )}
                               onChange={(event, value) => {
-                                console.log('selected sections__', {
-                                  event,
-                                  value
-                                });
+
                                 setSelectedXtraClsSection(value);
                                 // @ts-ignore
 
