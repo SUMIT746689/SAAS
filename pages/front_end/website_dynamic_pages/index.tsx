@@ -1,7 +1,5 @@
 import { Authenticated } from '@/components/Authenticated';
 import Footer from '@/components/Footer';
-import PageHeader from '@/content/FrontEnd/WebsiteDynamicPage/PageHeader';
-import Results from '@/content/FrontEnd/WebsiteDynamicPage/Results';
 import { useClientFetch } from '@/hooks/useClientFetch';
 import ExtendedSidebarLayout from '@/layouts/ExtendedSidebarLayout';
 import { Grid } from '@mui/material';
@@ -9,6 +7,8 @@ import Head from 'next/head';
 import PageBodyWrapper from '@/components/PageBodyWrapper';
 import { useState } from 'react';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
+import PageHeader from 'WebsiteDynamicPage/PageHeader';
+import Results from 'WebsiteDynamicPage/Results';
 
 const EmailTemplates = () => {
   const [editData, setEditData] = useState();
