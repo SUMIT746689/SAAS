@@ -288,15 +288,15 @@ async function put(req, res, refresh_token) {
             }
             query['gallery'] = gallery_imageList
         }
-        if (fields?.school_history) {
-            query['school_history'] = fields?.school_history
-        }
-        if (fields?.chairman_speech) {
-            query['chairman_speech'] = fields?.chairman_speech
-        }
-        if (fields?.principal_speech) {
-            query['principal_speech'] = fields?.principal_speech
-        }
+        // if (fields?.school_history) {
+        //     query['school_history'] = fields?.school_history
+        // }
+        // if (fields?.chairman_speech) {
+        //     query['chairman_speech'] = fields?.chairman_speech
+        // }
+        // if (fields?.principal_speech) {
+        //     query['principal_speech'] = fields?.principal_speech
+        // }
         if (fields?.eiin_number) {
             query['eiin_number'] = fields?.eiin_number
         }
