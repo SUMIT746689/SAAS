@@ -694,6 +694,21 @@ const website_settings: MenuItems[] = [
         name: 'Front End',
         icon: CameraFrontIcon,
         link: '/front_end'
+      },
+      {
+        name: 'Gallery',
+        icon: CameraFrontIcon,
+        link: '/front_end/galleries'
+      },
+      {
+        name: 'Menu',
+        icon: CameraFrontIcon,
+        link: '/front_end/menus'
+      },
+      {
+        name: 'Pages',
+        icon: CameraFrontIcon,
+        link: '/front_end/website_dynamic_pages'
       }
     ]
   }

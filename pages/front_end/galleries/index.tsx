@@ -1,7 +1,7 @@
 import { Authenticated } from '@/components/Authenticated';
 import Footer from '@/components/Footer';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
-import Gallery from '@/content/Management/Gallery/Result';
+// import Gallery from '@/content/Management/Gallery/Result';
 import { useClientFetch } from '@/hooks/useClientFetch';
 import ExtendedSidebarLayout from '@/layouts/ExtendedSidebarLayout';
 import { Grid } from '@mui/material';
