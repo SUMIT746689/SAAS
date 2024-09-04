@@ -15,6 +15,7 @@ async function put(req, res, refresh_token) {
         header_image: fileType,
         chairman_photo: fileType,
         principal_photo: fileType,
+        assist_principal_photo: fileType
     }
 
     const { files, fields, error } = await fileUpload({ req, filterFiles, uploadFolderName, uniqueFileName: false });
@@ -46,16 +47,14 @@ async function put(req, res, refresh_token) {
 
                 })
                 .catch(err => {
-                    console.log('not rename');
                     console.log("error____", err);
                     const temp = path.join(uploadFolderName, files.header_image?.newFilename)
                     allFiles.push(temp)
                     query['header_image'] = temp
                 })
-            if (websiteUirow) {
+            if (websiteUirow?.header_image) {
                 const filePath = path.join(process.cwd(), `${process.env.FILESFOLDER}`, websiteUirow.header_image);
                 if (fs.existsSync(filePath)) {
-                    console.log("header_image__", filePath);
                     fs.unlink(filePath, (err) => {
                         if (err) console.log('photo deletion failed');
                         else console.log("photo deleted");
@@ -64,26 +63,26 @@ async function put(req, res, refresh_token) {
             }
 
         }
-        if (files.history_photo?.newFilename) {
-            const history_photoNewName = Date.now().toString() + '_' + files.history_photo.originalFilename;
-            await fsP.rename(files.history_photo.filepath, path.join(process.cwd(), `${process.env.FILESFOLDER}`, uploadFolderName, history_photoNewName))
+        if (files.about_school_photo?.newFilename) {
+            const photoNewName = Date.now().toString() + '_' + files.about_school_photo.originalFilename;
+            await fsP.rename(files.about_school_photo.filepath, path.join(process.cwd(), `${process.env.FILESFOLDER}`, uploadFolderName, photoNewName))
                 .then(() => {
-                    const temp = path.join(uploadFolderName, history_photoNewName)
+                    const temp = path.join(uploadFolderName, photoNewName)
                     allFiles.push(temp)
-                    query['history_photo'] = temp
+                    query['about_school_photo'] = temp
 
                 })
                 .catch(err => {
                     console.log("err__", err);
-                    const temp = path.join(uploadFolderName, files.history_photo?.newFilename)
+                    const temp = path.join(uploadFolderName, files.about_school_photo?.newFilename)
                     allFiles.push(temp)
-                    query['history_photo'] = temp
+                    query['about_school_photo'] = temp
                 })
 
-            if (websiteUirow) {
-                const filePath = path.join(process.cwd(), `${process.env.FILESFOLDER}`, websiteUirow.history_photo);
+            if (websiteUirow?.about_school_photo) {
+                const filePath = path.join(process.cwd(), `${process.env.FILESFOLDER}`, websiteUirow.about_school_photo);
                 if (fs.existsSync(filePath)) {
-                    console.log("history_photo");
+                    console.log("about_school_photo");
                     fs.unlink(filePath, (err) => {
                         if (err) console.log('photo deletion failed');
                         else console.log("photo deleted");
@@ -108,7 +107,7 @@ async function put(req, res, refresh_token) {
                     allFiles.push(temp)
                     query['chairman_photo'] = temp
                 })
-            if (websiteUirow) {
+            if (websiteUirow?.chairman_photo) {
                 const filePath = path.join(process.cwd(), `${process.env.FILESFOLDER}`, websiteUirow.chairman_photo);
                 if (fs.existsSync(filePath)) {
                     console.log("chairman_photo");
@@ -136,10 +135,37 @@ async function put(req, res, refresh_token) {
                     allFiles.push(temp)
                     query['principal_photo'] = temp
                 })
-            if (websiteUirow) {
+            if (websiteUirow?.principal_photo) {
                 const filePath = path.join(process.cwd(), `${process.env.FILESFOLDER}`, websiteUirow.principal_photo);
                 if (fs.existsSync(filePath)) {
                     console.log("principal_photo");
+                    fs.unlink(filePath, (err) => {
+                        if (err) console.log('photo deletion failed');
+                        else console.log("photo deleted");
+                    })
+                }
+            }
+        }
+        if (files.assist_principal_photo?.newFilename) {
+            const photoNewName = Date.now().toString() + '_' + files.assist_principal_photo.originalFilename;
+
+            await fsP.rename(files.assist_principal_photo.filepath, path.join(process.cwd(), `${process.env.FILESFOLDER}`, uploadFolderName, photoNewName))
+                .then(() => {
+                    const temp = path.join(uploadFolderName, photoNewName)
+                    allFiles.push(temp)
+                    query['assist_principal_photo'] = temp
+
+                })
+                .catch(err => {
+                    console.log("err__", err);
+                    const temp = path.join(uploadFolderName, files.assist_principal_photo?.newFilename)
+                    allFiles.push(temp)
+                    query['assist_principal_photo'] = temp
+                })
+            if (websiteUirow?.assist_principal_photo) {
+                const filePath = path.join(process.cwd(), `${process.env.FILESFOLDER}`, websiteUirow.assist_principal_photo);
+                if (fs.existsSync(filePath)) {
+                    console.log("assist_principal_photo");
                     fs.unlink(filePath, (err) => {
                         if (err) console.log('photo deletion failed');
                         else console.log("photo deleted");
@@ -182,7 +208,7 @@ async function put(req, res, refresh_token) {
 
                     })
 
-                if (websiteUirow && !flag) {
+                if (websiteUirow?.carousel_image && !flag) {
                     // @ts-ignore 
                     for (const l of websiteUirow.carousel_image) {
                         console.log("ttttttttttttt");
@@ -239,7 +265,7 @@ async function put(req, res, refresh_token) {
 
                     })
 
-                if (websiteUirow && !flag) {
+                if (websiteUirow?.gallery && !flag) {
                     // @ts-ignore 
                     for (const l of websiteUirow.gallery) {
                         if (l?.path) {
@@ -295,6 +321,29 @@ async function put(req, res, refresh_token) {
         if (fields?.downloads_section) {
             query['downloads_section'] = JSON.parse(fields?.downloads_section)
         }
+
+        if (fields?.english_about_school_desc) query['english_about_school_desc'] = fields.english_about_school_desc
+        if (fields?.bangla_about_school_desc) query['bangla_about_school_desc'] = fields.bangla_about_school_desc
+
+        if (fields?.english_chairman_name) query['english_chairman_name'] = fields.english_chairman_name
+        if (fields?.bangla_chairman_name) query['bangla_chairman_name'] = fields.bangla_chairman_name
+
+        if (fields?.english_principal_name) query['english_principal_name'] = fields.english_principal_name
+        if (fields?.bangla_principal_name) query['bangla_principal_name'] = fields.bangla_principal_name
+
+        if (fields?.english_assist_principal_name) query['english_assist_principal_name'] = fields.english_assist_principal_name
+        if (fields?.bangla_assist_principal_name) query['bangla_assist_principal_name'] = fields.bangla_assist_principal_name
+
+        if (fields?.english_chairman_speech) query['english_chairman_speech'] = fields.english_chairman_speech
+        if (fields?.bangla_chairman_speech) query['bangla_chairman_speech'] = fields.bangla_chairman_speech
+
+        if (fields?.english_principal_speech) query['english_principal_speech'] = fields.english_principal_speech
+        if (fields?.bangla_principal_speech) query['bangla_principal_speech'] = fields.bangla_principal_speech
+
+        if (fields?.english_assist_principal_speech) query['english_assist_principal_speech'] = fields.english_assist_principal_speech
+        if (fields?.bangla_assist_principal_speech) query['bangla_assist_principal_speech'] = fields.bangla_assist_principal_speech
+
+
         if (websiteUirow) {
             await prisma.websiteUi.update({
                 where: {
@@ -305,15 +354,33 @@ async function put(req, res, refresh_token) {
         }
         else {
             const tempData = {
-                header_image: query?.header_image || '*',
+                header_image: query?.header_image || undefined,
                 carousel_image: Array.isArray(query?.carousel_image) ? query?.carousel_image : [],
-                school_history: query?.school_history || '',
-                history_photo: query?.history_photo || '*',
-                history_description: '',
-                chairman_photo: query?.chairman_photo || '*',
-                chairman_speech: query?.chairman_speech || '',
-                principal_photo: query?.principal_photo || '*',
-                principal_speech: query?.principal_speech || '',
+                // school_history: query?.school_history || '',
+                // history_photo: query?.history_photo || '*',
+                // history_description: '',
+                about_school_photo: query?.about_school_photo || undefined,
+                bangla_about_school_desc: query?.bangla_about_school_desc || undefined,
+                english_about_school_desc: query?.english_about_school_desc || undefined,
+
+                english_chairman_name: query?.english_chairman_name || undefined,
+                bangla_chairman_name: query?.bangla_chairman_name || undefined,
+                chairman_photo: query?.chairman_photo || undefined,
+                english_chairman_speech: query?.english_chairman_speech || undefined,
+                bangla_chairman_speech: query?.bangla_chairman_speech || undefined,
+
+                english_principal_name: query?.english_principal_name || undefined,
+                bangla_principal_name: query?.bangla_principal_name || undefined,
+                principal_photo: query?.principal_photo || undefined,
+                english_principal_speech: query?.english_principal_speech || undefined,
+                bangla_principal_speech: query?.bangla_principal_speech || undefined,
+
+                english_assist_principal_name: query?.english_assist_principal_name || undefined,
+                bangla_assist_principal_name: query?.bangla_assist_principal_name || undefined,
+                assist_principal_photo: query?.assist_principal_photo || undefined,
+                english_assist_principal_speech: query?.english_assist_principal_speech || undefined,
+                bangla_assist_principal_speech: query?.bangla_assist_principal_speech || undefined,
+
                 eiin_number: query?.eiin_number || '',
                 facebook_link: query?.facebook_link || '',
                 youtube_link: query?.youtube_link || '',
