@@ -1,5 +1,4 @@
 import { ReactElement, ReactNode, useState } from 'react';
-
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
