@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -13,16 +13,12 @@ import {
   Checkbox
 } from '@mui/material';
 import useNotistick from '@/hooks/useNotistick';
-import {
-  generateUsername,
-  getFile,
-  registration_no_generate,
-  unique_password_generate
-} from '@/utils/utilitY-functions';
+import { getFile, registration_no_generate } from '@/utils/utilitY-functions';
 import { FileUploadFieldWrapper } from '@/components/TextFields';
 import Image from 'next/image';
 import axios from 'axios';
 import { NewDebounceInput } from '@/components/DebounceInput';
+import { AcademicYearContext } from '@/contexts/UtilsContextUse';
 
 function RegistrationSecondPart({
   totalFormData,
@@ -49,6 +45,10 @@ function RegistrationSecondPart({
   const [selectedXtraCls, setSelectedXtraCls] = useState(null);
   const [sectionsForSelectedXtraCls, setSectionsForSelectedXtraCls] = useState([]);
   const [selectedXtraClsSection, setSelectedXtraClsSection] = useState(null);
+  const [classSubjects, setClassSubjects] = useState([]);
+  const [selectedClassSubjects, setSelectedClassSubjects] = useState([]);
+  const [academicYear,] = useContext(AcademicYearContext);
+  const [isAvailableUsername, setIsAvailableUsername] = useState();
 
   useEffect(() => {
     const classes_ = [];
@@ -92,11 +92,19 @@ function RegistrationSecondPart({
     }
   }, [classesOptions, student]);
 
+  const handleGetClassSubjects = (class_id) => {
+    axios.get(`/api/subject?class_id=${class_id}`).then(res => { setClassSubjects(res.data.map(subject => ({ id: subject.id, label: subject.name }))) }).catch(getClsSubjectsError => { console.log({ getClsSubjectsError }) })
+  }
+
   useEffect(() => {
     if (student) {
       const targetClassSections = classes?.find(
         (i) => i.id == (Number(student?.class_id) || student?.section?.class_id)
       );
+
+      // class section
+      handleGetClassSubjects(targetClassSections.id)
+      setSelectedClassSubjects(student?.subjects?.map(subject => ({ id: subject.id, label: subject.name })))
 
       setSectionsForSelectedClass(
         targetClassSections?.sections?.map((i) => {
@@ -146,8 +154,14 @@ function RegistrationSecondPart({
 
   const handleClassSelect = (event, value, setFieldValue) => {
     setFieldValue('class_id', value?.id);
+    setSelectedClassSubjects([]);
     setselectedClass(value);
     if (value) {
+
+      // get class subjects
+      handleGetClassSubjects(value?.id)
+
+      // get group
       axios
         .get(`/api/group?class_id=${value.id}`)
         .then((res) => {
@@ -162,7 +176,6 @@ function RegistrationSecondPart({
         .catch((err) => console.log(err));
 
       const targetClassSections = classes?.find((i) => i.id == value.id);
-      console.log(targetClassSections);
 
       setSectionsForSelectedClass(
         targetClassSections?.sections?.map((i) => {
@@ -189,7 +202,6 @@ function RegistrationSecondPart({
     setSelectedXtraCls(value);
 
     const targetClassSections = classes?.find((i) => i.id == value?.id);
-    console.log(targetClassSections);
 
     setSectionsForSelectedXtraCls(
       targetClassSections?.sections?.map((i) => {
@@ -210,15 +222,12 @@ function RegistrationSecondPart({
     }
   };
 
-  // const password = unique_password_generate();
-  // console.log({ classes })
-
-  const [isAvailableUsername, setIsAvailableUsername] = useState();
-
+  const handleClsSubjectSelect = (event, value, setFieldValue) => {
+    setSelectedClassSubjects(value)
+    setFieldValue("subject_ids", value?.map(sub => (sub.id)))
+  }
 
   const handleDebounce = (value) => {
-    // console.log({ isEdit, name: student?.student_info?.user?.username })
-    // if (totalFormData?.username?.toLowerCase() === value?.toLowerCase()) return setIsAvailableUsername(null);
     if (student?.student_info?.user?.username?.toLowerCase() === value?.toLowerCase()) return setIsAvailableUsername(null);
     if (value) {
       axios
@@ -232,7 +241,6 @@ function RegistrationSecondPart({
     }
   };
 
-  console.log({ssss:totalFormData.username})
 
   return (
     <>
@@ -253,6 +261,7 @@ function RegistrationSecondPart({
               ? Number(student?.section_id)
               : student?.section?.id
             : undefined,
+          subject_ids: [],
           group_id: student
             ? student?.group_id
               ? Number(student?.group_id)
@@ -268,7 +277,7 @@ function RegistrationSecondPart({
 
           academic_year_id: student
             ? Number(student?.academic_year_id)
-            : undefined,
+            : academicYear?.id,
           roll_no: student ? student?.class_roll_no : undefined,
           registration_no:
             student?.class_registration_no || registration_no_generate(),
@@ -517,6 +526,36 @@ function RegistrationSecondPart({
                       )}
                     </Grid>
 
+                    {/* subjects */}
+                    <Grid item xs={12} md={6}>
+                      <Autocomplete
+                        disablePortal
+                        multiple={true}
+                        options={classSubjects}
+                        value={selectedClassSubjects}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            // required
+                            size="small"
+                            sx={{
+                              '& fieldset': {
+                                borderRadius: '3px'
+                              }
+                            }}
+                            fullWidth
+                            error={Boolean(touched.subject_ids && errors.subject_ids)}
+                            helperText={touched.subject_ids && errors.subject_ids}
+                            onBlur={handleBlur}
+                            label={t('Select Subjects')}
+                          />
+                        )}
+                        onChange={(event, value) =>
+                          handleClsSubjectSelect(event, value, setFieldValue)
+                        }
+                      />
+                    </Grid>
+
                     {/* Group  */}
                     <Grid item xs={12} md={6}>
                       {selectedClass && selectedClass.has_section && (
@@ -661,7 +700,7 @@ function RegistrationSecondPart({
                     </Grid>
 
                     {/* dummy  */}
-                    <Grid item xs={0} md={6}></Grid>
+                    {/* <Grid item xs={0} md={6}></Grid> */}
 
                     {/* student_present_address */}
                     <Grid item xs={12} md={6}>
@@ -724,7 +763,7 @@ function RegistrationSecondPart({
                     </Grid>
 
                     {/* extra info */}
-                    <Grid
+                    {/* <Grid
                       item
                       xs={12}
                       display="flex"
@@ -740,7 +779,7 @@ function RegistrationSecondPart({
                         />{' '}
                         Add Extra Class ?{' '}
                       </Grid>
-                    </Grid>
+                    </Grid> */}
 
                     {isExtraClass && (
                       <>
@@ -813,10 +852,7 @@ function RegistrationSecondPart({
                                 />
                               )}
                               onChange={(event, value) => {
-                                console.log('selected sections__', {
-                                  event,
-                                  value
-                                });
+
                                 setSelectedXtraClsSection(value);
                                 // @ts-ignore
 

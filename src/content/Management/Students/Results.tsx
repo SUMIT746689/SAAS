@@ -473,8 +473,8 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
                   <TableHeaderCellWrapper>{t('student id')}</TableHeaderCellWrapper>
 
                   <TableHeaderCellWrapper>{t('Class')}</TableHeaderCellWrapper>
-                  <TableHeaderCellWrapper >{t('Class Roll')}</TableHeaderCellWrapper>
-                  <TableHeaderCellWrapper >{t('Branch')}</TableHeaderCellWrapper>
+                  <TableHeaderCellWrapper>{t('Class Roll')}</TableHeaderCellWrapper>
+                  <TableHeaderCellWrapper>{t('Batch')}</TableHeaderCellWrapper>
                   <TableHeaderCellWrapper>{t('Phone')}</TableHeaderCellWrapper>
                   <TableHeaderCellWrapper align="center">{t('Actions')}</TableHeaderCellWrapper>
                 </TableRow>

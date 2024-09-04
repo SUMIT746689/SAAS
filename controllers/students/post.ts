@@ -195,7 +195,7 @@ const postHandle = async (req, res, refresh_token) => {
           phone: fields.phone,
           email: fields?.email,
           national_id: fields?.national_id,
-          student_id:fields?.student_id || undefined,
+          student_id: fields?.student_id || undefined,
 
           father_name: fields?.father_name,
           father_phone: fields?.father_phone,
@@ -241,6 +241,20 @@ const postHandle = async (req, res, refresh_token) => {
       if (fields?.extra_section_id) extra_section['extra_section'] = {
         connect: { id: parseInt(fields?.extra_section_id) }
       };
+
+      // subjects 
+      const { subject_ids } = fields;
+
+      const subjects = {}
+      if (subject_ids && typeof subject_ids === "string") {
+        const customSubjectList = subject_ids.split(',').map(subject_id => {
+          const parseId = parseInt(subject_id)
+          if (Number.isNaN(parseId)) throw new Error("provided invalid subject id")
+          return { id: parseId }
+        });
+        subjects["connect"] = customSubjectList;
+      };
+
       const student = await transaction.student.create({
         data: {
           class_roll_no: fields?.roll_no,
@@ -259,6 +273,7 @@ const postHandle = async (req, res, refresh_token) => {
 
           ...group,
           ...extra_section,
+          subjects,
           // section: {
           //   connect: { id: parseInt(fields?.section_id) }
           // },

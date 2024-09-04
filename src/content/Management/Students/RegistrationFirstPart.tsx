@@ -58,6 +58,7 @@ function RegistrationFirstPart({
             .required(t('First name field is required')),
           middle_name: Yup.string().max(255).nullable(true),
           last_name: Yup.string().max(255).nullable(true),
+          student_id: Yup.string().max(16).required(t('student id field is required')),
           admission_date: Yup.date().required(t('Admission date is required!')),
           // date_of_birth: Yup.date().required(t('Date of birth is required!')),
           gender: Yup.string().required(t('select a gender')),
@@ -199,7 +200,7 @@ function RegistrationFirstPart({
                       />
 
                       <TextField
-                        // required
+                        required
                         size="small"
                         sx={{
                           '& fieldset': {

@@ -155,6 +155,27 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
     }
   }, [selectedAcademicYear]);
 
+  const [highestStudentId, setHighestStudentId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/api/student/highest_student_id');
+        console.log({ response })
+        setHighestStudentId(response.data.highestStudentId);
+      } catch (err) {
+        setError(err);
+        console.error('Error fetching highest student ID:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+
   const handleAcademicYearChange = async (event: any, newValue: { id: number; label: string } | null) => {
     if (!newValue?.id && !newValue?.label) return showNotification('academic year values not found', 'error');
     axios
@@ -310,6 +331,11 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
         </Grid>
       )}
 
+      {auth?.user?.role?.title === 'ADMIN' &&
+        <Grid sx={{ width: 200, p: 1,ml:1, border:"1px solid white" }}>
+          <InputLabel sx={{ color: 'white', fontSize: 12, fontWeight: 600 }}>Max Student Id: {highestStudentId}</InputLabel>
+        </Grid>
+      }
       {/* @ts-ignore */}
       {/* {auth?.user?.role?.title !== 'SUPER_ADMIN' && auth?.user?.role?.title !== 'ASSIST_SUPER_ADMIN' &&
         (
