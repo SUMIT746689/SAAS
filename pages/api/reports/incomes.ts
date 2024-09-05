@@ -17,14 +17,28 @@ const index = async (req, res, refresh_token, dcrypt_academic_year) => {
         const isoToDate = new Date(new Date(to_date).setHours(23, 59, 59, 999)).toISOString();
 
         const resvoucherTrans = await prisma.$queryRaw`
-                    SELECT 
-                    voucher_id, MIN(voucher_name) as voucher_name, SUM(amount) as total_amount, 
-                    GROUP_CONCAT(DISTINCT(payment_method)) as payment_methods, max(created_at) as created_at
-                    FROM transactions
-                    WHERE voucher_type = "credit" AND school_id=${school_id} AND created_at >= ${isoFromDate} AND created_at <= ${isoToDate}
-                    GROUP BY voucher_id
-                    ORDER BY max(created_at) DESC
-                `;
+              WITH voucherWiseTranGroup AS 
+                (
+                  SELECT 
+                  voucher_id, MIN(voucher_name) as voucher_name, SUM(amount) as total_amount, 
+                  GROUP_CONCAT(DISTINCT(payment_method)) as payment_methods, max(created_at) as created_at
+                  FROM transactions
+                  WHERE voucher_type = "credit" 
+                  AND school_id=${school_id} 
+                  AND created_at >= ${isoFromDate} AND created_at <= ${isoToDate}
+                  GROUP BY voucher_id
+                  ORDER BY max(created_at) DESC
+                ),
+                
+                withClsName AS (
+                  SELECT voucherWiseTranGroup.*, classes.name AS class_name FROM voucherWiseTranGroup
+                  JOIN vouchers ON vouchers.id = voucherWiseTranGroup.voucher_id
+                  LEFT JOIN fees ON vouchers.resource_type="fees" AND fees.id = vouchers.resource_id
+                  LEFT JOIN classes ON classes.id = fees.class_id
+                )
+                
+                SELECT * FROM withClsName;
+              `;
 
         return res.status(200).json(resvoucherTrans);
 

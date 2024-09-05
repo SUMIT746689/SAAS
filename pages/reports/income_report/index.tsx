@@ -185,6 +185,7 @@ const IncomeReport = () => {
               <TableRow>
                 <TableHeaderCellWrapper>SL</TableHeaderCellWrapper>
                 <TableHeaderCellWrapper>Voucher Name</TableHeaderCellWrapper>
+                <TableHeaderCellWrapper>Class Name</TableHeaderCellWrapper>
                 <TableHeaderCellWrapper>Payment Methods</TableHeaderCellWrapper>
                 {/* <TableHeaderCellWrapper>Description</TableHeaderCellWrapper> */}
                 <TableHeaderCellWrapper>Last Collected Date</TableHeaderCellWrapper>
@@ -199,6 +200,9 @@ const IncomeReport = () => {
                   </TableBodyCellWrapper>
                   <TableBodyCellWrapper>
                     <Grid textTransform="capitalize">{report.voucher_name}</Grid>
+                  </TableBodyCellWrapper>
+                  <TableBodyCellWrapper>
+                    <Grid textTransform="capitalize">{report.class_name}</Grid>
                   </TableBodyCellWrapper>
                   <TableBodyCellWrapper>
                     <Grid textTransform="capitalize">{report.payment_methods}</Grid>

@@ -165,7 +165,7 @@ export const post = async (req, res, refresh_token) => {
 
           const voucher = await prisma.voucher.findFirstOrThrow({
             where: {
-              resource_type: 'fee',
+              resource_type: 'fees',
               resource_id: fee_id
             }
           });

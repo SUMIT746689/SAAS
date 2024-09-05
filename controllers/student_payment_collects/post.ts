@@ -190,7 +190,7 @@ export const post = async (req, res, refresh_token) => {
       throw new Error('provide valid informations');
     const voucher = await prisma.voucher.findFirstOrThrow({
       where: {
-        resource_type: 'fee',
+        resource_type: 'fees',
         resource_id: fee_id
       }
     });
