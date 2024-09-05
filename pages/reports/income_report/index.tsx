@@ -214,7 +214,7 @@ const IncomeReport = () => {
             </TableBody>
 
             <TableFooter>
-              <TableFooterCellWrapper colSpan={4} align="right">
+              <TableFooterCellWrapper colSpan={5} align="right">
                 Total
               </TableFooterCellWrapper>
               <TableFooterCellWrapper align="right">{formatNumber(total)}</TableFooterCellWrapper>
