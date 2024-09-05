@@ -2,7 +2,6 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, CircularProgress, Grid } from '@mui/material';
-import { useEffect, useState } from 'react';
 import { NewFileUploadFieldWrapper, PreviewImageCard, TextAreaWrapper, TextFieldWrapper } from '@/components/TextFields';
 import Image from 'next/image';
 import axios from 'axios';
@@ -60,19 +59,35 @@ const Results = ({ data, reFetchData }) => {
         carousel_image: undefined,
         preview_carousel_image: [],
 
-        history_photo: data?.history_photo || undefined,
-        preview_history_photo: [],
+        // history_photo: data?.history_photo || undefined,
+        // preview_history_photo: [],
+        // school_history: data?.school_history || '',
 
+        about_school_photo: data?.about_school_photo || undefined,
+        preview_about_school_photo: [],
+        english_about_school_desc: data?.english_about_school_desc || undefined,
+        bangla_about_school_desc: data?.bangla_about_school_desc || undefined,
 
-        school_history: data?.school_history || '',
-
+        english_chairman_name: data?.english_chairman_name || '',
+        bangla_chairman_name: data?.bangla_chairman_name || '',
         chairman_photo: data?.chairman_photo || undefined,
         preview_chairman_photo: [],
-        chairman_speech: data?.chairman_speech || '',
+        english_chairman_speech: data?.english_chairman_speech || '',
+        bangla_chairman_speech: data?.bangla_chairman_speech || '',
 
+        english_principal_name: data?.english_principal_name || '',
+        bangla_principal_name: data?.bangla_principal_name || '',
         principal_photo: data?.principal_photo || '',
         preview_principal_photo: [],
-        principal_speech: data?.principal_speech || '',
+        english_principal_speech: data?.english_principal_speech || '',
+        bangla_principal_speech: data?.bangla_principal_speech || '',
+
+        english_assist_principal_name: data?.english_assist_principal_name || '',
+        bangla_assist_principal_name: data?.bangla_assist_principal_name || '',
+        assist_principal_photo: data?.assist_principal_photo || '',
+        preview_assist_principal_photo: [],
+        english_assist_principal_speech: data?.english_assist_principal_speech || '',
+        bangla_assist_principal_speech: data?.bangla_assist_principal_speech || '',
 
         eiin_number: data?.eiin_number || '',
 
@@ -111,6 +126,7 @@ const Results = ({ data, reFetchData }) => {
           const formData = new FormData();
 
           for (let i in _values) {
+            if (i.includes('preview_')) continue;
             if (i == 'carousel_image') {
               const temp = _values[i]
               for (const j in temp) {
@@ -119,15 +135,15 @@ const Results = ({ data, reFetchData }) => {
                 }
               }
             }
-            else if (i == 'gallery') {
-              const temp = _values[i]
-              for (const j in temp) {
-                if (typeof (temp[j]) == 'object') {
-                  formData.append('gallery', temp[j])
-                }
-              }
-            }
-            else if (["header_image", "history_photo", "chairman_photo", "principal_photo"].includes(i) && _values[i]) {
+            // else if (i == 'gallery') {
+            //   const temp = _values[i]
+            //   for (const j in temp) {
+            //     if (typeof (temp[j]) == 'object') {
+            //       formData.append('gallery', temp[j])
+            //     }
+            //   }
+            // }
+            else if (["header_image", "about_school_photo", "chairman_photo", "principal_photo", "assist_principal_photo"].includes(i) && _values[i]) {
               formData.append(`${i}`, _values[i][0]);
             }
             else if (["e_books_section", "downloads_section"].includes(i) && _values[i]) {
@@ -172,11 +188,13 @@ const Results = ({ data, reFetchData }) => {
           <>
             <form onSubmit={handleSubmit}>
               <Card sx={{ maxWidth: 1400 }}>
-                <DialogTitleWrapper name={"Certificate Templates"} editData={undefined} />
+                <DialogTitleWrapper name={"Website Dynamic Fields"} editData={undefined} />
                 <Grid container columnSpacing={1} paddingTop={2} borderTop='1px solid lightGray' borderBottom='1px solid lightGray' p={2}>
+
+                  {/* Eiin number  */}
                   <Grid container item borderRadius='10px' marginBottom='10px'>
                     <Grid item>
-                      Eiin Number:
+                      Eiin Number: <span style={{ color: "red" }}>*</span>
                     </Grid>
                     <TextFieldWrapper
                       touched={touched.eiin_number}
@@ -188,7 +206,48 @@ const Results = ({ data, reFetchData }) => {
                       handleChange={handleChange}
                       value={values.eiin_number}
                       autocomplete="false"
+                      required={true}
                     />
+                  </Grid>
+
+                  {/* carousel_image */}
+                  <Grid item xs={12} pb={0.5}>
+                    <NewFileUploadFieldWrapper
+                      htmlFor="carousel_image"
+                      accept="image/*"
+                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, "carousel_image", "preview_carousel_image")}
+                      label='Carousel Image'
+                      multiple={true}
+                    />
+                    <Grid item display="flex" columnGap={0.5}>
+                      {
+                        values?.preview_carousel_image?.map((image, index) => (
+                          <>
+                            <PreviewImageCard
+                              data={image}
+                              index={index}
+                              key={index}
+                              handleRemove={() => handleFileRemove(setFieldValue, "carousel_image", "preview_carousel_image")}
+                            />
+                          </>
+                        ))
+                      }
+                    </Grid>
+                    {
+                      Array.isArray(data?.carousel_image) && <Grid item display="flex" gap={1} sx={{ overflowX: "auto" }} columnSpacing={0.5}>
+                        {
+                          data?.carousel_image?.map((image) => (
+                            <Image src={getFile(image?.path)}
+                              height={150}
+                              width={150}
+                              alt='Header image'
+                              loading='lazy'
+                              style={{ objectFit: "contain", height: "150px" }}
+                            />
+                          ))
+                        }
+                      </Grid>
+                    }
                   </Grid>
 
                   {/* heaer image */}
@@ -250,48 +309,8 @@ const Results = ({ data, reFetchData }) => {
 
                   </Grid>
 
-                  {/* carousel_image */}
-                  <Grid item xs={12} md={6} pb={0.5}>
-                    <NewFileUploadFieldWrapper
-                      htmlFor="carousel_image"
-                      accept="image/*"
-                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, "carousel_image", "preview_carousel_image")}
-                      label='Carousel Image'
-                      multiple={true}
-                    />
-                    <Grid item display="flex" columnGap={0.5}>
-                      {
-                        values?.preview_carousel_image?.map((image, index) => (
-                          <>
-                            <PreviewImageCard
-                              data={image}
-                              index={index}
-                              key={index}
-                              handleRemove={() => handleFileRemove(setFieldValue, "carousel_image", "preview_carousel_image")}
-                            />
-                          </>
-                        ))
-                      }
-                    </Grid>
-                    {
-                      Array.isArray(data?.carousel_image) && <Grid item display="flex" gap={1} sx={{ overflowX: "auto" }} columnSpacing={0.5}>
-                        {
-                          data?.carousel_image?.map((image) => (
-                            <Image src={getFile(image?.path)}
-                              height={150}
-                              width={150}
-                              alt='Header image'
-                              loading='lazy'
-                              style={{ objectFit: "contain", height: "150px" }}
-                            />
-                          ))
-                        }
-                      </Grid>
-                    }
-                  </Grid>
-
                   {/* gallery */}
-                  <Grid item xs={12} md={6} pb={0.5}>
+                  {/* <Grid item xs={12} md={6} pb={0.5}>
                     <NewFileUploadFieldWrapper
                       htmlFor="gallery"
                       accept="image/*"
@@ -329,10 +348,10 @@ const Results = ({ data, reFetchData }) => {
                         }
                       </Grid>
                     }
-                  </Grid>
+                  </Grid> */}
 
                   {/* history_photo */}
-                  <Grid item xs={12} md={6} pb={0.5}>
+                  {/* <Grid item xs={12} md={6} pb={0.5}>
                     <NewFileUploadFieldWrapper
                       htmlFor="history_photo"
                       accept="image/*"
@@ -364,21 +383,85 @@ const Results = ({ data, reFetchData }) => {
 
                       </Grid>
                     }
-                  </Grid>
+                  </Grid> */}
 
                   {/* school_history */}
-                  <Grid container item borderRadius='10px' marginBottom='10px'>
-                    <Grid>School history:</Grid>
+                  {/* <Grid container item borderRadius='10px' marginBottom='10px'>
+                    <Grid>About School (English):</Grid>
                     <TextAreaWrapper
-                      touched={touched.school_history}
-                      errors={errors.school_history}
-                      // label={t('Eiin number')}
+                      touched={touched.english_about_school_desc}
+                      errors={errors.english_about_school_desc}
                       label={t('')}
-                      name="school_history"
+                      name="english_about_school_desc"
                       handleBlur={handleBlur}
                       handleChange={handleChange}
-                      value={values.school_history}
+                      value={values.english_about_school_desc}
                     />
+                  </Grid> */}
+
+                  {/* about_school_photo */}
+                  <Grid item xs={12} md={6} pb={0.5}>
+                    <NewFileUploadFieldWrapper
+                      htmlFor="about_school_photo"
+                      accept="image/*"
+                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, "about_school_photo", "preview_about_school_photo")}
+                      label='About School Photo'
+                    />
+                    <Grid item>
+                      {
+                        values?.preview_about_school_photo?.map((image, index) => (
+                          <>
+                            <PreviewImageCard
+                              data={image}
+                              index={index}
+                              key={index}
+                              handleRemove={() => handleFileRemove(setFieldValue, "about_school_photo", "preview_about_school_photo")}
+                            />
+                          </>
+                        ))
+                      }
+                    </Grid>
+                    {
+                      data?.about_school_photo && <Grid item>
+                        <Image src={getFile(data?.about_school_photo)}
+                          height={150}
+                          width={150}
+                          alt='About School Photo'
+                          loading='lazy'
+                        />
+
+                      </Grid>
+                    }
+                  </Grid>
+
+
+                  {/* about school */}
+                  <Grid item xs={12} md={6} pt={1} borderRadius='10px' marginBottom='10px'>
+                    <Grid>About School (English):</Grid>
+                    <TextAreaWrapper
+                      touched={touched.english_about_school_desc}
+                      errors={errors.english_about_school_desc}
+                      label={t('')}
+                      name="english_about_school_desc"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.english_about_school_desc}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6} pt={1} borderRadius='10px' marginBottom='10px'>
+                    <Grid>About School (বাংলা):</Grid>
+
+                    <TextAreaWrapper
+                      touched={touched.bangla_about_school_desc}
+                      errors={errors.bangla_about_school_desc}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="bangla_about_school_desc"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.bangla_about_school_desc}
+                    />
+
 
                     {/* <TextField
                       id="outlined-basic"
@@ -468,34 +551,229 @@ const Results = ({ data, reFetchData }) => {
                     }
                   </Grid>
 
-                  {/* chairman_speech */}
-                  <Grid item xs={12}>
-                    <Grid>Chairman Speech:</Grid>
-                    <TextAreaWrapper
-                      touched={touched.chairman_speech}
-                      errors={errors.chairman_speech}
-                      // label={t('Eiin number')}
-                      label={t('')}
-                      name="chairman_speech"
-                      handleBlur={handleBlur}
-                      handleChange={handleChange}
-                      value={values.chairman_speech}
+                  {/* Assistant_principal_photo */}
+                  <Grid item xs={12} md={6} pb={0.5}>
+                    <NewFileUploadFieldWrapper
+                      htmlFor="assist_principal_photo"
+                      accept="image/*"
+                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, "assist_principal_photo", "preview_assist_principal_photo")}
+                      label='Assistant Principal Photo'
                     />
+                    <Grid item>
+                      {
+                        values?.preview_assist_principal_photo?.map((image, index) => (
+                          <>
+                            <PreviewImageCard
+                              data={image}
+                              index={index}
+                              key={index}
+                              handleRemove={() => handleFileRemove(setFieldValue, "assist_principal_photo", "preview_assist_principal_photo")}
+                            />
+                          </>
+                        ))
+                      }
+                    </Grid>
+                    {
+                      data?.assist_principal_photo && <Grid item>
+                        <Image src={getFile(data?.assist_principal_photo)}
+                          height={150}
+                          width={150}
+                          alt='Principal Photo'
+                          loading='lazy'
+                        />
 
+                      </Grid>
+                    }
                   </Grid>
 
-                  {/* principal_speech */}
-                  <Grid item xs={12}>
-                    <Grid>Principal speech:</Grid>
-                    <TextAreaWrapper
-                      touched={touched.principal_speech}
-                      errors={errors.principal_speech}
+                  <Grid xs={12} md={6}>
+                  </Grid>
+
+                  {/* chairman_name  */}
+                  <Grid container item xs={12} md={6} pt={1}>
+                    <Grid item>
+                      Chairman Name (English):
+                    </Grid>
+                    <TextFieldWrapper
+                      touched={touched.english_chairman_name}
+                      errors={errors.english_chairman_name}
                       // label={t('Eiin number')}
                       label={t('')}
-                      name="principal_speech"
+                      name="english_chairman_name"
                       handleBlur={handleBlur}
                       handleChange={handleChange}
-                      value={values.principal_speech}
+                      value={values.english_chairman_name}
+                      autocomplete="false"
+                    />
+                  </Grid>
+                  <Grid container item xs={12} md={6} pt={1}>
+                    <Grid item>
+                      Chairman Name (বাংলা):
+                    </Grid>
+                    <TextFieldWrapper
+                      touched={touched.bangla_chairman_name}
+                      errors={errors.bangla_chairman_name}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="bangla_chairman_name"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.bangla_chairman_name}
+                      autocomplete="false"
+                    />
+                  </Grid>
+
+                  {/* chairman_speech */}
+                  <Grid item xs={12} md={6}>
+                    <Grid>Chairman Speech (English):</Grid>
+                    <TextAreaWrapper
+                      touched={touched.english_chairman_speech}
+                      errors={errors.english_chairman_speech}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="english_chairman_speech"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.english_chairman_speech}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Grid>Chairman Speech (বাংলা):</Grid>
+                    <TextAreaWrapper
+                      touched={touched.bangla_chairman_speech}
+                      errors={errors.bangla_chairman_speech}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="bangla_chairman_speech"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.bangla_chairman_speech}
+                    />
+                  </Grid>
+
+                  {/* principal_name  */}
+                  <Grid container item xs={12} md={6}>
+                    <Grid item>
+                      Principal Name (English):
+                    </Grid>
+                    <TextFieldWrapper
+                      touched={touched.english_principal_name}
+                      errors={errors.english_principal_name}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="english_principal_name"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.english_principal_name}
+                      autocomplete="false"
+                    />
+                  </Grid>
+                  <Grid container item xs={12} md={6}>
+                    <Grid item>
+                      Principal Name (বাংলা):
+                    </Grid>
+                    <TextFieldWrapper
+                      touched={touched.bangla_principal_name}
+                      errors={errors.bangla_principal_name}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="bangla_principal_name"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.bangla_principal_name}
+                      autocomplete="false"
+                    />
+                  </Grid>
+
+
+                  {/* principal_speech */}
+                  <Grid item xs={12} md={6}>
+                    <Grid>Principal Speech (English):</Grid>
+                    <TextAreaWrapper
+                      touched={touched.english_principal_speech}
+                      errors={errors.english_principal_speech}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="english_principal_speech"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.english_principal_speech}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Grid>Principal Speech (বাংলা):</Grid>
+                    <TextAreaWrapper
+                      touched={touched.bangla_principal_speech}
+                      errors={errors.bangla_principal_speech}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="bangla_principal_speech"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.bangla_principal_speech}
+                    />
+                  </Grid>
+
+                  {/* assist_principal_name  */}
+                  <Grid container item xs={12} md={6}>
+                    <Grid item>
+                      Assistant Principal Name (English):
+                    </Grid>
+                    <TextFieldWrapper
+                      touched={touched.english_assist_principal_name}
+                      errors={errors.english_assist_principal_name}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="english_assist_principal_name"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.english_assist_principal_name}
+                      autocomplete="false"
+                    />
+                  </Grid>
+                  <Grid container item xs={12} md={6}>
+                    <Grid item>
+                      Assistant Principal Name (বাংলা):
+                    </Grid>
+                    <TextFieldWrapper
+                      touched={touched.bangla_assist_principal_name}
+                      errors={errors.bangla_assist_principal_name}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="bangla_assist_principal_name"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.bangla_assist_principal_name}
+                      autocomplete="false"
+                    />
+                  </Grid>
+
+
+                  {/* Assistant_principal_speech */}
+                  <Grid item xs={12} md={6}>
+                    <Grid>Assistant Principal Speech (English):</Grid>
+                    <TextAreaWrapper
+                      touched={touched.english_assist_principal_speech}
+                      errors={errors.english_assist_principal_speech}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="english_assist_principal_speech"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.english_assist_principal_speech}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Grid>Assistant Principal Speech (বাংলা):</Grid>
+                    <TextAreaWrapper
+                      touched={touched.bangla_assist_principal_speech}
+                      errors={errors.bangla_assist_principal_speech}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="bangla_assist_principal_speech"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.bangla_assist_principal_speech}
                     />
                   </Grid>
 
@@ -584,7 +862,6 @@ const Results = ({ data, reFetchData }) => {
                     />
                   </Grid>
 
-
                   {/* ebooks sections */}
                   <Grid item xs={12}>
                     <Grid >
@@ -631,8 +908,6 @@ const Results = ({ data, reFetchData }) => {
                     </Grid>
                     <ButtonWrapper sx={{ mx: 2 }} handleClick={() => setFieldValue("e_books_section", [...values.e_books_section, { title: null, url: null }])} > + Add More Ebooks Section </ButtonWrapper>
                   </Grid>
-
-
 
                   {/* downloads sections */}
                   <Grid item xs={12}>

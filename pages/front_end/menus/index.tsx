@@ -446,7 +446,7 @@ const WebsiteMenu = () => {
                       fullWidth
                       helperText={touched.english_title && errors.english_title}
                       name="english_title"
-                      placeholder={t('english_title here...')}
+                      placeholder={t('english title here...')}
                       onBlur={handleBlur}
                       onBlurCapture={async (v) => { }}
                       onChange={handleChange}
@@ -467,7 +467,7 @@ const WebsiteMenu = () => {
                       fullWidth
                       helperText={touched.bangla_title && errors.bangla_title}
                       name="bangla_title"
-                      placeholder={t('bangla_title here...')}
+                      placeholder={t('bangla title here...')}
                       onBlur={handleBlur}
                       onBlurCapture={async (v) => { }}
                       onChange={handleChange}
@@ -510,7 +510,7 @@ const WebsiteMenu = () => {
                         fullWidth
                         helperText={touched.website_link && errors.website_link}
                         name="website_link"
-                        placeholder={t('website_link here...')}
+                        placeholder={t('website link here...')}
                         onBlur={handleBlur}
                         onBlurCapture={async (v) => { }}
                         onChange={handleChange}
