@@ -35,7 +35,7 @@ export const TextFieldWrapper = ({
         fullWidth
         helperText={touched && errors}
         name={name}
-        placeholder={`${name} here...`}
+        placeholder={`${name.split('_').join(' ')} here...`}
         onBlur={handleBlur}
         onChange={handleChange}
         value={value}
@@ -122,7 +122,7 @@ export const TextAreaWrapper = ({
         fullWidth
         helperText={touched && errors}
         name={name}
-        placeholder={`${name} here...`}
+        placeholder={`${name.split('_').join(' ')} here...`}
         onBlur={handleBlur}
         onChange={handleChange}
         value={value}
