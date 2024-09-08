@@ -11,8 +11,8 @@ export const get = async (req, res) => {
     const domain = req.rawHeaders[req.rawHeaders.indexOf('origin') + 1];
     const finalDomain = domain.replace(/(https:\/\/|http:\/\/)/, "");
 
-    console.log({ finalDomain });
-    console.log({ domain, body: req.query });
+    // console.log({ finalDomain });
+    // console.log({ domain, body: req.query });
 
     if (!student_id) throw new Error('provide student id');
 
@@ -29,19 +29,27 @@ export const get = async (req, res) => {
             first_name: true, middle_name: true, last_name: true, student_id: true
           }
         },
-        section: {
-          select:
-          {
+        class: {
+          select: {
+            id: true,
             name: true,
-            class: {
-              select: {
-                id: true,
-                name: true,
-                has_section: true
-              }
-            }
-          }
+            has_section: true
+          },
         },
+        subjects: true,
+        // section: {
+        //   select:
+        //   {
+        //     name: true,
+        //     class: {
+        //       select: {
+        //         id: true,
+        //         name: true,
+        //         has_section: true
+        //       }
+        //     }
+        //   }
+        // },
         discount: true
         // {
         //   select: {
@@ -49,12 +57,15 @@ export const get = async (req, res) => {
         //   }
         // }
       }
-    })
-
+    });
+    console.log("heoo..", JSON.stringify(resStd, null, 4))
     if (!resStd) throw new Error('student not founds...')
 
     const resFee = await prisma.fee.findMany({
-      where: { school: { domain: finalDomain }, class_id: resStd.section.class.id },
+      where: {
+        school: { domain: finalDomain },
+        class_id: resStd.class.id
+      },
       include: {
         fees_head: { select: { title: true } },
         student_fees: {
@@ -89,17 +100,23 @@ export const get = async (req, res) => {
       }
     });
 
+    // console.log("heoo..", JSON.stringify(resFee, null, 4))
+
     const today = new Date(Date.now()).getTime();
 
-    console.log(JSON.stringify(resFee, null, 4));
+    const customizeFees: any = [];
+    const resStdIds = resStd.subjects.map(subject => subject.id);
 
-    const customizeFees:any = []
     resFee.forEach(fee => {
+
+      // console.log("fee subject",fee.subject_id && !resStdIds.includes(fee.subject_id));
+
+      if (fee.subject_id && !resStdIds.includes(fee.subject_id)) return;
       const lastDate = new Date(fee.last_date).getTime();
-      console.log({ lastDate, today });
+      const subject_name = fee.subject_id ? resStd.subjects.find(subject => subject.id === fee.subject_id)?.name : undefined;
 
       // on time discount
-      let on_time_discount = 0
+      let on_time_discount = 0;
 
       if (Array.isArray(fee.student_fees) && fee.student_fees.length > 0) {
         on_time_discount = fee.student_fees.reduce((accumulator, currentValue) => accumulator + currentValue.on_time_discount, 0);
@@ -112,8 +129,6 @@ export const get = async (req, res) => {
       // @ts-ignore
       if (findDiscount) discount = findDiscount.type === "flat" ? findDiscount.amt : (fee.amount * findDiscount.amt) / 100;
 
-      console.log({ feeId: fee.id, ddddd: resStd.discount, on_time_discount, findDiscount, discount });
-
       const is_late = lastDate < today ? true : false;
       const total_collected_amt = (Array.isArray(fee.student_fees) && fee.student_fees.length > 0) ?
         fee.student_fees.reduce((accumulator, currentValue) => accumulator + currentValue.collected_amount, 0) : 0;
@@ -125,6 +140,7 @@ export const get = async (req, res) => {
         id: fee.id,
         fees_head: fee.fees_head.title,
         fees_month: fee.fees_month,
+        subject_name,
         late_fee: fee.late_fee,
         last_date: fee.last_date,
         amount: fee.amount,
@@ -134,9 +150,7 @@ export const get = async (req, res) => {
         due,
       });
     })
-
-    console.log(JSON.stringify(customizeFees, null, 2));
-
+    // console.log(customizeFees)
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*'); // replace this your actual origin
     res.setHeader('Access-Control-Allow-Methods', 'GET,DELETE,PATCH,POST,PUT');
@@ -144,10 +158,6 @@ export const get = async (req, res) => {
       'Access-Control-Allow-Headers',
       'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
     );
-    // res.status(200).json({
-    //   success: true,
-    //   message: 'Admission Application submitted !!'
-    // });
 
     res.status(200).json({ data: { stdInfo: resStd, fees: customizeFees }, success: true });
 
