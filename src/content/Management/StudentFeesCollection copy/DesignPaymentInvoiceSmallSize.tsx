@@ -1,0 +1,1026 @@
+import { Grid, Typography, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Avatar } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import { useAuth } from '@/hooks/useAuth';
+import { useState, useEffect, FC, useRef } from 'react';
+import { formatNumber } from '@/utils/numberFormat';
+import dayjs from 'dayjs';
+import { Data } from '@/models/front_end';
+import Image from 'next/image';
+import { getFile } from '@/utils/utilitY-functions';
+
+type PaymentInvoiceType = {
+  collectionDate: any;
+  leftFeesTableTotalCalculation: object | null;
+  feesUserData: any;
+  totalDueValue: string;
+  leftFeesTableData: Array<any>;
+  setShowPrint?: (arg: boolean) => void;
+  printFees: any[];
+  student: any;
+  student_id: any;
+  printAndCollect: Boolean;
+  setPrintAndCollect?: (arg: boolean) => void;
+  setIsCompleteUpdate: (arg: boolean) => void;
+  schoolData: Data;
+  teacherFees: any[];
+};
+
+const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
+  schoolData,
+  printAndCollect,
+  setPrintAndCollect,
+  student_id,
+  collectionDate,
+  leftFeesTableTotalCalculation,
+  feesUserData,
+  totalDueValue,
+  leftFeesTableData,
+  setShowPrint,
+  printFees,
+  student,
+  setIsCompleteUpdate,
+  teacherFees
+}) => {
+
+  const dueRef = useRef(0);
+  const { user } = useAuth();
+  const [word, setWord] = useState('');
+  const [totalFeeamount, setTotalFeeamount] = useState(0);
+  const [totalPaidAmount, setTotalPaidAmount] = useState(0);
+  const [selectedFees, setSelectedFees] = useState([]);
+  const [totalDueAmount, setTotalDueAmount] = useState(0);
+  const [totalPreAmount, setTotalPreDueAmount] = useState(0);
+  const [totalCurrentDisountAmount, setTotalCurrentDiscountAmount] = useState(0);
+  const [totalPreviousDiscount, setTotalPreviousDiscount] = useState(0);
+
+  const { username } = user || {};
+
+  // date
+  let date = dayjs(new Date(collectionDate));
+  date = date.subtract(1, 'day');
+  let formattedDate = date.format('DD-MM-YYYY');
+
+  useEffect(() => {
+    // update teacher name information part code start
+    for (let i = 0; i < teacherFees.length; i++) {
+      for (let j = 0; j < leftFeesTableData.length; j++) {
+        if (teacherFees[i].subject_id === leftFeesTableData[j].subject_id && teacherFees[i].class_id === leftFeesTableData[j].class_id) {
+          leftFeesTableData[j]['teacher_name'] = [
+            teacherFees[i].teacher.first_name,
+            teacherFees[i].teacher.middle_name,
+            teacherFees[i].teacher.last_name
+          ]
+            .filter(Boolean)
+            .join(' ');
+        }
+      }
+    }
+    // update teacher name information part code end
+
+    let temp = printFees.map((payment: any) => {
+      const last_date = new Date(payment.last_date);
+      // @ts-ignore
+      const today = payment?.last_payment_date ? new Date(payment?.last_payment_date) : new Date(collectionDate);
+      let payableAmount = payment.amount;
+
+      if ((payment?.status !== 'paid' || payment?.status !== 'paid late') && today > last_date) {
+        payableAmount += payment.late_fee ? payment.late_fee : 0;
+      }
+      payment['payableAmount'] = payableAmount;
+      if (payment?.tracking_number) {
+        payment['tracking_number'] = payment.tracking_number;
+      }
+      if (payment?.created_at) {
+        payment['created_at'] = payment.created_at;
+      }
+
+      return {
+        ...payment
+      };
+    });
+
+    // update printFees data start
+    for (let i = 0; i < temp.length; i++) {
+      for (let j = 0; j < leftFeesTableData.length; j++) {
+        if (temp[i].fee_id === leftFeesTableData[j].feeId) {
+          let sum = 0;
+          sum =
+            Number(temp[i].payableAmount) -
+            (Number(leftFeesTableData[j].dueAmount) +
+              Number(temp[i].paidAmount) +
+              Number(leftFeesTableData[j].on_time_discount + leftFeesTableData[j].discount));
+
+          temp[i].prevAmount = sum;
+          temp[i].due = leftFeesTableData[j].dueAmount;
+          // temp[i].head_title = leftFeesTableData[j].head_title;
+          temp[i].prev_disount = leftFeesTableData[j].discount + (leftFeesTableData[j].on_time_discount - temp[i].on_time_discount);
+          temp[i].payableAmount = temp[i].payableAmount - leftFeesTableData[j].discount;
+          temp[i]['subject_name'] = leftFeesTableData[j]?.subject_name;
+          temp[i]['teacher_name'] = leftFeesTableData[j]?.teacher_name;
+        }
+      }
+    }
+
+    // update printFees data end
+    const totalCurrentDiscountValue = temp.reduce((prev, curr) => prev + Number(curr.on_time_discount), 0) || 0;
+    setTotalCurrentDiscountAmount(totalCurrentDiscountValue);
+    const totalPrePaidvalue =
+      temp.reduce((prev, curr) => {
+        if (curr?.prevAmount) {
+          return prev + Number(curr.prevAmount);
+        } else {
+          return prev;
+        }
+      }, 0) || 0;
+
+    setTotalPreDueAmount(totalPrePaidvalue);
+    const totalDueValue = temp.reduce((prev, curr) => prev + Number(curr.due), 0) || 0;
+
+    setTotalDueAmount(Number(totalDueValue));
+
+    const totalPaidAmount_ = temp.reduce((prev, curr) => prev + (Number(curr.paidAmount) || 0), 0) || 0;
+
+    setTotalPaidAmount(totalPaidAmount_);
+    setWord(numberToWordConverter(totalPaidAmount_));
+
+    // findout head title
+    // for (let i = 0; i < temp.length; i++) {
+    //   for (let j = 0; j < leftFeesTableData.length; j++) {
+    //     if (temp[i].fee_id === leftFeesTableData[j].feeId) {
+    //       temp[i].head_title = leftFeesTableData[j].head_title;
+    //     }
+    //   }
+    // }
+
+    const totalPrevDiscountValue =
+      temp.reduce((prev, curr) => {
+        if (curr?.prev_disount) {
+          return prev + Number(curr.prev_disount);
+        } else {
+          return prev;
+        }
+      }, 0) || 0;
+
+    setTotalPreviousDiscount(Number(totalPrevDiscountValue));
+    const totalAmount = temp.reduce((prev, curr) => prev + Number(curr.payableAmount), 0) || 0;
+    setTotalFeeamount(totalAmount);
+
+    setSelectedFees(temp);
+    if (printFees.length > 0) {
+      setShowPrint(true);
+      // setTimeout(() => setIsCompleteUpdate(true), 1);
+
+      // setPrintAndCollect(true);
+    }
+  }, [printFees, leftFeesTableData]);
+
+
+  let calAmount = totalPreAmount + totalPaidAmount;
+  let sumPaidAmount = Number(calAmount.toFixed(2))
+
+
+  return (
+    <Grid>
+      {/* part 1 */}
+      <Grid pt={2} width={"340px"}>
+        {/* school information */}
+
+        <Grid sx={{ borderBottom: '1px solid #000' }} mb={0.5}>
+          <Grid>
+            {' '}
+            <Typography variant="h4" sx={{ textAlign: 'center' }}>
+              {user?.school?.name}
+            </Typography>
+            <Typography variant="body1" sx={{ textAlign: 'center', fontSize: '0.775rem' }}>
+              {user?.school?.address}
+            </Typography>
+            <Typography  sx={{ textAlign: 'center', fontWeight: 'bold' , fontSize: '0.7rem' }}>
+              Student Payment Receipt
+            </Typography>
+            <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold' , fontSize: '0.7rem'}}>
+              Received By: {username}
+            </Typography>
+            <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold' , fontSize: '0.7rem'}}>
+              Office Copy
+            </Typography>
+          </Grid>
+          {/* <Grid width="80px" height="80px"></Grid> */}
+        </Grid>
+
+        {/* student information */}
+        <Grid sx={{ display: 'flex' , flexDirection: 'column'}}>
+          <Grid sx={{ display: 'flex', gap: '20px' }}>
+            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <Typography variant="body1" sx={{ color: '#000'  , fontSize: '0.7rem' }}>
+                Rec. No.
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#000'  , fontSize: '0.7rem' }}>
+                Student Id & Name
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#000' , fontSize: '0.7rem' }}>
+                Section
+              </Typography>
+            </Grid>
+            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <Typography variant="body1" sx={{ color: '#000' , fontSize: '0.7rem'  }}>
+                : {selectedFees[0]?.tracking_number}
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#000' , fontSize: '0.7rem'  }}>
+                : {student_id} {[feesUserData?.first_name, feesUserData?.middle_name, feesUserData?.last_name].join(' ')}
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#000' , fontSize: '0.7rem'  }}>
+                : {feesUserData?.section_name}
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid sx={{ display: 'flex', gap: '20px' }}>
+            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem'  }}>
+                Date
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem'  }}>
+                Class
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem'  }}>
+                Roll No
+              </Typography>
+            </Grid>
+            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <Typography variant="body1" sx={{ color: '#000' , fontSize: '0.7rem' }}>
+                : {formattedDate}
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#000' , fontSize: '0.7rem' }}>
+                : {feesUserData?.class_name}
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#000' , fontSize: '0.7rem' }}>
+                : {feesUserData?.class_roll_no}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        {/* table one */}
+        <Grid mt={1}>
+          <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
+            <Table sx={{ minWidth: "340px", maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
+              <TableHead>
+                  <TableRow>
+                  <TableCell
+                    style={{
+                      border: '1px solid black',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    Particulars
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      fontSize: '0.7rem',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      paddingTop: '2px',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {/* {totalDueAmount?.toFixed(2)} */}
+                  </TableCell>
+                  {/* </TableRow>
+                  <TableRow> */}
+
+                  {selectedFees.find((item) => item.teacher_name) ? (
+                    <TableCell
+                      style={{
+                        border: '1px solid black',
+                        textTransform: 'capitalize',
+                        // fontWeight: 'bold',
+                        width: '25%',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        paddingTop: '2px',
+                        paddingBottom: '2px',
+                        color: '#000'
+                      }}
+                    >
+                      Teacher Name
+                    </TableCell>
+                  ) : (
+                    ''
+                  )}
+                  </TableRow>
+
+
+
+
+                  <TableRow>
+                  <TableCell
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
+
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    
+                    Payable Amt.
+                  </TableCell>
+                  <TableCell
+                  
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
+
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {totalPreAmount?.toFixed(2)}
+                  </TableCell>
+                  
+                  </TableRow>
+
+
+
+
+                  <TableRow>
+
+                  <TableCell
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
+
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    Prev. Paid
+                  </TableCell>
+                  <TableCell
+                  
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
+
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {totalPreAmount?.toFixed(2)}
+                  </TableCell>
+                  </TableRow>
+
+
+
+
+                  <TableRow>
+                    
+                  <TableCell
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
+
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    Prev. Discount
+                  </TableCell>
+                  <TableCell
+                  
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
+
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {totalPreviousDiscount?.toFixed(2)}
+                  </TableCell>
+                  </TableRow>
+
+
+
+                  <TableRow>
+                    
+                  <TableCell
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
+
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    Paid Amt
+                  </TableCell>
+                  <TableCell
+                  
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
+
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {totalPaidAmount?.toFixed(2)}
+                  </TableCell>
+                  </TableRow>
+
+
+                  <TableRow>
+                    
+                  <TableCell
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
+
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    Discount
+                  </TableCell>
+                  <TableCell
+                  
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {totalCurrentDisountAmount?.toFixed(2)}
+                  </TableCell>
+                  </TableRow>
+
+
+                  <TableRow>
+                    
+                  <TableCell
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    Due Amt.
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {totalDueAmount?.toFixed(2)}
+                  </TableCell>
+
+                  
+                  </TableRow>
+
+
+              </TableHead>
+              <TableBody>
+                {selectedFees?.map((payment, index) => {
+                  return (
+                    <TableRow
+                      sx={{
+                        '&:last-child td, &:last-child th': { border: 0 }
+                      }}
+                    >
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        align="left"
+                        style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
+                      >
+                        {payment?.head_title && payment?.fee_id ? `${payment?.head_title} (${payment?.title})` : payment?.title}
+
+                        {/* {[payment?.head_title, payment?.title, payment?.subject_name].filter(Boolean)[0] +
+                          ' ' +
+                          [payment?.head_title, payment?.title, payment?.subject_name]
+                            .filter(Boolean)
+                            .slice(1)
+                            .map((item) => `(${item})`)
+                            .join(' ')} */}
+                      </TableCell>
+
+                      {selectedFees.find((item) => item.teacher_name) ? (
+                        <TableCell
+                          align="left"
+                          style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
+                        >
+                          {payment?.teacher_name ? payment?.teacher_name : ''}
+                        </TableCell>
+                      ) : (
+                        ''
+                      )}
+
+                      <TableCell
+                        align="right"
+                        style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
+                      >
+                        {payment?.payableAmount?.toFixed(2)}
+                      </TableCell>
+                      {/* <TableCell
+                        align="left"
+                        style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
+                      >
+                        {payment.prevAmount ? formatNumber(payment?.prevAmount?.toFixed(2)) : 0}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
+                      >
+                        {payment.prev_disount ? formatNumber(payment.prev_disount?.toFixed(2)) : 0}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
+                      >
+                        {payment.paidAmount ? formatNumber(payment.paidAmount?.toFixed(2)) : 0}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
+                      >
+                        {payment.on_time_discount && payment.fee_id ? formatNumber(payment.on_time_discount?.toFixed(2)) : 0}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
+                      >
+                        {payment.paidAmount ? formatNumber(payment.due?.toFixed(2)) : 0}
+                      </TableCell> */}
+                    </TableRow>
+                  );
+                })}
+                <TableRow
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 }
+                  }}
+                >
+                  <TableCell
+                    colSpan={selectedFees.find((item) => item.teacher_name) ? 2 : 1}
+                    component="th"
+                    scope="row"
+                    align="left"
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      paddingTop: '2px',
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    Total
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      paddingTop: '2px',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {totalDueAmount?.toFixed(2)}
+                  </TableCell>
+                </TableRow>
+
+
+                
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+        {/* taka in words */}
+        {/* <Typography variant="body1" sx={{ fontWeight: 'bold' }} my={1}>
+          In Words: One Thousand
+        </Typography> */}
+        <Grid container sx={{    gap:"2px"   , display: 'flex',  justifyContent: 'space-between', 
+                      fontSize: '0.7rem',}} my={1} >
+          <Grid sx={{
+                      fontSize: '0.7rem', }}>
+            IN WORD:{' '}
+            <b>
+              {word} {user?.school?.currency} only
+            </b>
+          </Grid>
+          <Grid>
+            Paid: <b>{formatNumber(parseFloat(Number(totalPaidAmount).toFixed(2)))}</b>
+          </Grid>
+        </Grid>
+        {/* table two */}
+        <Grid mt={1} mb={6}>
+          <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
+            <Table sx={{ minWidth: "340px", maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    colSpan={4}
+                    style={{
+                      border: '1px solid black',
+                      textTransform: 'capitalize',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      fontSize: '0.7rem',
+                      paddingTop: '2px',
+                      paddingBottom: '2px',
+                      // color: '#000'
+                    }}
+                  >
+                    Payment Status
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+
+                <TableRow
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 }
+                  }}
+                >
+
+
+{/* Total Amount to Pay start */}
+                  <TableCell
+                    align="left"
+                    style={{
+                      border: '1px solid black',
+                      width: '30%',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      fontSize: '0.7rem',
+                      paddingTop: '2px',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    Total Amount to Pay
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      width: '20%',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      fontSize: '0.7rem',
+                      paddingTop: '2px',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {totalFeeamount?.toFixed(2)}
+                  </TableCell>
+                  </TableRow>
+{/* Total Amount to Pay end */}
+
+{/* Total Previous Paid start */}
+                  <TableCell
+                    align="left"
+                    style={{
+                      border: '1px solid black',
+                      width: '30%',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      fontSize: '0.7rem',
+                      paddingTop: '2px',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    Total Previous Paid
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      width: '20%',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      fontSize: '0.7rem',
+                      paddingTop: '2px',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {totalPreAmount?.toFixed(2)}
+                  </TableCell>
+{/* Total Previous Paid end */}
+                
+{/* Previous Discount start */}
+                <TableRow
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 }
+                  }}
+                >
+                  <TableCell
+                    align="left"
+                    style={{
+                      border: '1px solid black',
+                      width: '30%',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      fontSize: '0.7rem',
+                      paddingTop: '2px',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    Previous Discount
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      width: '20%',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      fontSize: '0.7rem',
+                      paddingTop: '2px',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {totalPreviousDiscount?.toFixed(2)}
+                  </TableCell>
+{/* Previous Discount end */}
+ </TableRow>
+
+
+                  <TableCell
+                    align="left"
+                    style={{
+                      border: '1px solid black',
+                      width: '30%',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      paddingTop: '2px',
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    Discount Amount
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      width: '20%',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      paddingTop: '2px',
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {totalCurrentDisountAmount?.toFixed(2)}
+                  </TableCell>
+               
+                  {/* Now Pay Amount start  */}
+                <TableRow
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 }
+                  }}
+                >
+                  <TableCell
+                    align="left"
+                    style={{
+                      border: '1px solid black',
+                      width: '30%',
+                      paddingLeft: '5px',
+                      fontSize: '0.7rem',
+                      paddingRight: '5px',
+                      paddingTop: '2px',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    Now Pay Amount
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      width: '20%',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      fontSize: '0.7rem',
+                      paddingTop: '2px',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {totalPaidAmount?.toFixed(2)}
+                  </TableCell>
+                  </TableRow>
+                   {/* Now Pay Amount end  */}
+                  
+                  {/* Total Paid Amount start  */}
+                  <TableCell
+                    align="left"
+                    style={{
+                      border: '1px solid black',
+                      width: '30%',
+                      paddingLeft: '5px',
+                      fontSize: '0.7rem',
+                      paddingRight: '5px',
+                      paddingTop: '2px',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    Total Paid Amount
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      width: '20%',
+                      paddingLeft: '5px',
+                      fontSize: '0.7rem',
+                      paddingRight: '5px',
+                      paddingTop: '2px',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {sumPaidAmount}
+                  </TableCell>
+                   {/* Total Paid Amount start  */}
+
+            
+
+                <TableRow
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 }
+                  }}
+                >
+                  <TableCell
+                    align="left"
+                    style={{
+                      border: '1px solid black',
+                      width: '30%',
+                      paddingLeft: '5px',
+                      fontSize: '0.7rem',
+                      paddingRight: '5px',
+                      paddingTop: '2px',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    Total Due
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      width: '20%',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      fontSize: '0.7rem',
+                      paddingTop: '2px',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {totalDueAmount?.toFixed(2)}
+                  </TableCell></TableRow>
+
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+        {/* signature  */}
+        <Grid sx={{ display: 'flex',  flexDirection: 'column', gap: 3 }}>
+          <Grid sx={{ flexGrow: 1 ,
+                      fontSize: '0.7rem',}}>
+            <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
+            <Grid>Student/Gurdiant Signature </Grid>
+          </Grid>
+          <Grid sx={{ flexGrow: 1,
+                      fontSize: '0.7rem', }}>
+            <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
+            <Grid>Superintendent Signature </Grid>
+          </Grid>
+          <Grid sx={{ flexGrow: 1 ,
+                      fontSize: '0.7rem',}}>
+            <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
+            <Grid>Accounts Officer </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+
+      
+    </Grid>
+  );
+};
+
+export default DesignPaymentInvoiceSmallSize;
+
+const th = ['', 'thousand', 'million', 'billion', 'trillion'];
+const dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+const tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+const tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+const numberToWordConverter = (s) => {
+  s = s.toString();
+  s = s.replace(/[\, ]/g, '');
+  if (s != parseFloat(s)) return 'not a number';
+  var x = s.indexOf('.');
+  if (x == -1) x = s.length;
+  if (x > 15) return 'too big';
+  var n = s.split('');
+  var str = '';
+  var sk = 0;
+  for (var i = 0; i < x; i++) {
+    if ((x - i) % 3 == 2) {
+      if (n[i] == '1') {
+        str += tn[Number(n[i + 1])] + ' ';
+        i++;
+        sk = 1;
+      } else if (n[i] != 0) {
+        str += tw[n[i] - 2] + ' ';
+        sk = 1;
+      }
+    } else if (n[i] != 0) {
+      // 0235
+      str += dg[n[i]] + ' ';
+      if ((x - i) % 3 == 0) str += 'hundred ';
+      sk = 1;
+    }
+    if ((x - i) % 3 == 1) {
+      if (sk) str += th[(x - i - 1) / 3] + ' ';
+      sk = 0;
+    }
+  }
+
+  if (x != s.length) {
+    var y = s.length;
+    str += 'point ';
+    // @ts-ignore
+    for (var i = x + 1; i < y; i++) str += dg[n[i]] + ' ';
+  }
+
+  return str.replace(/\s+/g, ' ');
+};
