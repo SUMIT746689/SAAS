@@ -503,7 +503,28 @@ function Managementschools() {
   const [showPrint, setShowPrint] = useState(false);
   const [isCompleteUpdate, setIsCompleteUpdate] = useState(false);
 
+
+
+
+
   const [isSmallSize, setIsSmallSize] = useState(false);
+  useEffect(() => {
+    const storedValue = localStorage.getItem('isSmallSize');
+    console.log(storedValue)
+    if (storedValue !== null) {
+      setIsSmallSize(JSON.parse(storedValue)); // Parse since it's stored as a string
+    }
+  }, []);
+
+  // Save the toggle state in local storage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('isSmallSize', JSON.stringify(isSmallSize));
+  }, [isSmallSize]);
+
+
+
+
+
 
   useEffect(() => {
     const temp = datas.filter((i) => {

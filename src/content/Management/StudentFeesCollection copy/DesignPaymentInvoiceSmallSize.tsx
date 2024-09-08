@@ -179,6 +179,8 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
   let sumPaidAmount = Number(calAmount.toFixed(2))
 
 
+
+
   return (
     <Grid>
       {/* part 1 */}
