@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, ChangeEvent, MouseEvent, useContext } from
 import ExtendedSidebarLayout from 'src/layouts/ExtendedSidebarLayout';
 import { Authenticated } from 'src/components/Authenticated';
 import Footer from 'src/components/Footer';
-import { Button, Card, Grid, Switch, Typography } from '@mui/material';
+import { Button, Card, FormControlLabel, FormGroup, Grid, Switch, Typography } from '@mui/material';
 // import Results from 'src/content/Management/StudentFeesCollection/Results';
 import { useClientFetch } from 'src/hooks/useClientFetch';
 // import PaymentInvoice from '@/content/Management/StudentFeesCollection/PaymentInvoice';
@@ -692,7 +692,7 @@ function Managementschools() {
   useEffect(() => {
     // console.log({ accounts, selectedAccount, selectedGateway });
   }, [selectedGateway]);
- 
+  console.log({ collectionDate: collectionDate.format('DD:MM:YYYY') })
   return (
     <>
       <Head>
@@ -729,39 +729,39 @@ function Managementschools() {
           <Grid px={4} sx={{ backgroundColor: '#fff' }} ref={printPageRef}>
 
 
-          {isSmallSize ? (
-            <DesignPaymentInvoiceSmallSize
-              schoolData={schoolData}
-              printAndCollect={printAndCollect}
-              setPrintAndCollect={setPrintAndCollect}
-              student_id={student_id}
-              collectionDate={collectionDate}
-              leftFeesTableTotalCalculation={leftFeesTableTotalCalculation}
-              feesUserData={feesUserData}
-              totalDueValue={totalDueValue}
-              leftFeesTableData={leftFeesTableData}
-              setShowPrint={setShowPrint}
-              printFees={prinCollectedtFees}
-              student={selectedStudent}
-              setIsCompleteUpdate={setIsCompleteUpdate}
-              teacherFees={teacherFees}
-            />) : (
-            <DesignPaymentInvoice
-              schoolData={schoolData}
-              printAndCollect={printAndCollect}
-              setPrintAndCollect={setPrintAndCollect}
-              student_id={student_id}
-              collectionDate={collectionDate}
-              leftFeesTableTotalCalculation={leftFeesTableTotalCalculation}
-              feesUserData={feesUserData}
-              totalDueValue={totalDueValue}
-              leftFeesTableData={leftFeesTableData}
-              setShowPrint={setShowPrint}
-              printFees={prinCollectedtFees}
-              student={selectedStudent}
-              setIsCompleteUpdate={setIsCompleteUpdate}
-              teacherFees={teacherFees}
-            />)}
+            {isSmallSize ? (
+              <DesignPaymentInvoiceSmallSize
+                schoolData={schoolData}
+                printAndCollect={printAndCollect}
+                setPrintAndCollect={setPrintAndCollect}
+                student_id={student_id}
+                collectionDate={collectionDate}
+                leftFeesTableTotalCalculation={leftFeesTableTotalCalculation}
+                feesUserData={feesUserData}
+                totalDueValue={totalDueValue}
+                leftFeesTableData={leftFeesTableData}
+                setShowPrint={setShowPrint}
+                printFees={prinCollectedtFees}
+                student={selectedStudent}
+                setIsCompleteUpdate={setIsCompleteUpdate}
+                teacherFees={teacherFees}
+              />) : (
+              <DesignPaymentInvoice
+                schoolData={schoolData}
+                printAndCollect={printAndCollect}
+                setPrintAndCollect={setPrintAndCollect}
+                student_id={student_id}
+                collectionDate={collectionDate}
+                leftFeesTableTotalCalculation={leftFeesTableTotalCalculation}
+                feesUserData={feesUserData}
+                totalDueValue={totalDueValue}
+                leftFeesTableData={leftFeesTableData}
+                setShowPrint={setShowPrint}
+                printFees={prinCollectedtFees}
+                student={selectedStudent}
+                setIsCompleteUpdate={setIsCompleteUpdate}
+                teacherFees={teacherFees}
+              />)}
           </Grid>
         </Grid>
 
@@ -884,16 +884,21 @@ function Managementschools() {
             setGatewayOption={setGatewayOption}
             btnHandleClick={btnHandleClick}
           >
-            <Switch
-                checked={isSmallSize}
-                onChange={() => setIsSmallSize(value=>!value)}
-                inputProps={{ 'aria-label': 'controlled' }}
-            />
 
-      {/* On/Off text using MUI Typography */}
-          <Typography variant="body1" sx={{ marginLeft: 1 }}>
-            {isSmallSize ? 'On' : 'Off'}
-          </Typography>
+
+            <FormGroup>
+              <FormControlLabel control={
+                <Switch
+                  checked={isSmallSize}
+                  onChange={() => setIsSmallSize(value => !value)}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              }
+                label={`Thermal Print: ${isSmallSize ? 'On' : 'Off'}`}
+                labelPlacement="start"
+                sx={{ mr: "auto" }}
+              />
+            </FormGroup>
 
             <Reset_Sent_SMS_Collect_Invoice
               handlePrint={handlePrint}

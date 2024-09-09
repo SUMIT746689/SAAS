@@ -57,9 +57,9 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
 
   // date
   let date = dayjs(new Date(collectionDate));
-  date = date.subtract(1, 'day');
-  let formattedDate = date.format('DD-MM-YYYY');
-
+  // date = date.subtract(1, 'day');
+  let formattedDate = collectionDate.format('DD-MM-YYYY');
+  // console.log({date,formattedDate},collectionDate.format('DD-MM-YYYY'));
   useEffect(() => {
     // update teacher name information part code start
     for (let i = 0; i < teacherFees.length; i++) {
@@ -237,10 +237,10 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
                 Rec. No.
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
-                Student Id & Name
+                Student Name & Id
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
-                Section
+                Batch
               </Typography>
             </Grid>
             <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -248,7 +248,7 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
                 : {selectedFees[0]?.tracking_number}
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
-                : {student_id}, {[feesUserData?.first_name, feesUserData?.middle_name, feesUserData?.last_name].join(' ')}
+                : {`${[feesUserData?.first_name, feesUserData?.middle_name, feesUserData?.last_name].join(' ')} (${student_id})`}
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
                 : {feesUserData?.section_name}
