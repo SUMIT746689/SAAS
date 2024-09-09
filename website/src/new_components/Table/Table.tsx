@@ -18,7 +18,7 @@ export const TableRowWrapper = ({ children, ...params }) => {
 
 export const TableCellWrapper = ({ children }) => {
   return (
-    <TableCell sx={{ border: '1px solid lightgray' }}>
+    <TableCell sx={{ border:(theme)=>`1px solid ${theme.palette.primary.light}`}}>
       <Typography noWrap variant="h5" fontWeight={500}>
         {children}
       </Typography>

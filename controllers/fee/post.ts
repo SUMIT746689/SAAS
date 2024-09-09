@@ -76,12 +76,12 @@ export default async function post(req, res, refresh_token, dcryptAcademicYear) 
         });
         await prisma.voucher.create({
           data: {
-            title: `${month} fee`,
+            title: `${month} fees`,
             description: month,
             amount: data.amount,
             reference: `${refresh_token.name}, ${refresh_token.role.title.toUpperCase()}`,
             type: 'credit',
-            resource_type: 'fee',
+            resource_type: 'fees',
             resource_id: fee.id,
             school_id
           }

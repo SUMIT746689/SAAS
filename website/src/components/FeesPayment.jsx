@@ -116,8 +116,9 @@ const FeesPayment = ({ serverHost }) => {
     }
 
 
-    console.log({ stdInfo, lists })
-    console.log({ selectedItems, selectedPayAmt })
+    console.log({ stdInfo, lists });
+    console.log({ selectedItems, selectedPayAmt });
+    
     return (
         <>
             <Typography variant="h4" gutterBottom p={4} align="center">
@@ -243,7 +244,8 @@ const FeesPayment = ({ serverHost }) => {
                 <Grid>
                     <Grid>Name: {[stdInfo?.student_info?.first_name, stdInfo?.student_info?.middle_name, stdInfo?.student_info?.last_name].join(' ')}</Grid>
                     <Grid> Student Id: {stdInfo?.student_info?.student_id} </Grid>
-                    <Grid>Class: {stdInfo?.section?.class?.name}</Grid>
+                    <Grid>Class: {stdInfo?.class?.name}</Grid>
+                    <Grid>Subjects: {stdInfo?.subjects?.map(subject=>subject.name)?.join(', ')}</Grid>
                     {stdInfo?.section?.class?.has_section ? <Grid>Section: {stdInfo?.section?.name}</Grid> : ''}
                     <Grid>Roll No: {stdInfo?.class_roll_no}</Grid>
 
@@ -254,7 +256,10 @@ const FeesPayment = ({ serverHost }) => {
                 </Card>
             </Card>
 
-            <Card sx={{ m: 1, p: 1 }}>
+            {/* info msg */}
+            <Grid color={(theme) => theme.palette.warning.light} textAlign="center"> - - - Select fees for payment - - - </Grid>
+
+            <Card sx={{ m: 1, p: 1, border:(theme)=>`1px solid ${theme.palette.primary.light}`,boxShadow:(theme)=>`0px 0px 13px -4px ${theme.palette.primary.light}` }}>
                 <Table>
                     <TableRowWrapper>
                         <TableHeaderCellWrapper padding="checkbox">
@@ -265,6 +270,7 @@ const FeesPayment = ({ serverHost }) => {
                             />
                         </TableHeaderCellWrapper>
                         <TableHeaderCellWrapper>Fee Head</TableHeaderCellWrapper>
+                        <TableHeaderCellWrapper>Subject</TableHeaderCellWrapper>
                         <TableHeaderCellWrapper>Fee Month</TableHeaderCellWrapper>
                         <TableHeaderCellWrapper align="right">Amount</TableHeaderCellWrapper>
                         <TableHeaderCellWrapper align="right">Disc. Amt.</TableHeaderCellWrapper>
@@ -287,6 +293,7 @@ const FeesPayment = ({ serverHost }) => {
                                         />
                                     </TableBodyCellWrapper>
                                     <TableBodyCellWrapper> {fee?.fees_head} </TableBodyCellWrapper>
+                                    <TableBodyCellWrapper> {fee?.subject_name} </TableBodyCellWrapper>
                                     <TableBodyCellWrapper> {fee?.fees_month} </TableBodyCellWrapper>
                                     <TableBodyCellWrapper align="right"> {formatNumber(fee?.amount)} </TableBodyCellWrapper>
                                     <TableBodyCellWrapper align="right"> {formatNumber(fee?.total_discount)} </TableBodyCellWrapper>
