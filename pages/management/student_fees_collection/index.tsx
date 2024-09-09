@@ -22,7 +22,7 @@ import { AcademicYearContext } from '@/contexts/UtilsContextUse';
 import { monthList } from '@/utils/getDay';
 import { Data } from '@/models/front_end';
 import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
-import DesignPaymentInvoiceSmallSize from '@/content/Management/StudentFeesCollection copy/DesignPaymentInvoiceSmallSize';
+import DesignPaymentInvoiceSmallSize from '@/content/Management/StudentFeesCollection/DesignPaymentInvoiceSmallSize';
 
 // updated searching code start
 
