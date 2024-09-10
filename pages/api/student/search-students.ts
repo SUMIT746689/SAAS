@@ -48,7 +48,7 @@ const index = async (req, res, refresh_token, academic_year) => {
         } else if (search_value) {
           students = await prisma.$queryRaw`
             SELECT 
-                student_informations.id,student_informations.first_name,student_informations.middle_name,student_informations.last_name, student_informations.student_id
+                student_informations.id, students.id as student_table_id, student_informations.first_name,student_informations.middle_name,student_informations.last_name, student_informations.student_id
                 ,students.class_roll_no
                 ,sections.name as section_name
                 ,classes.name as class_name
