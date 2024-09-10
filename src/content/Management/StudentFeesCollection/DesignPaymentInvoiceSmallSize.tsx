@@ -41,7 +41,6 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
   setIsCompleteUpdate,
   teacherFees
 }) => {
-
   const dueRef = useRef(0);
   const { user } = useAuth();
   const [word, setWord] = useState('');
@@ -174,17 +173,13 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
     }
   }, [printFees, leftFeesTableData]);
 
-
   let calAmount = totalPreAmount + totalPaidAmount;
-  let sumPaidAmount = Number(calAmount.toFixed(2))
-
-
-
+  let sumPaidAmount = Number(calAmount.toFixed(2));
 
   return (
     <Grid>
       {/* part 1 */}
-      <Grid pt={2} width={"340px"}>
+      <Grid pt={2} width={'340px'}>
         {/* school information */}
 
         <Grid sx={{ borderBottom: '1px solid #000' }} mb={0.5}>
@@ -196,13 +191,11 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
             <Typography variant="body1" sx={{ textAlign: 'center', fontSize: '0.775rem' }}>
               {user?.school?.address}
             </Typography>
-            <Typography  sx={{ textAlign: 'center', fontWeight: 'bold' , fontSize: '0.7rem' }}>
-              Student Payment Receipt
-            </Typography>
-            <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold' , fontSize: '0.7rem'}}>
+            <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>Student Payment Receipt</Typography>
+            <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>
               Received By: {username}
             </Typography>
-            <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold' , fontSize: '0.7rem'}}>
+            <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>
               Office Copy
             </Typography>
           </Grid>
@@ -210,51 +203,51 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
         </Grid>
 
         {/* student information */}
-        <Grid sx={{ display: 'flex' , flexDirection: 'column'}}>
+        <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
           <Grid sx={{ display: 'flex', gap: '20px' }}>
             <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <Typography variant="body1" sx={{ color: '#000'  , fontSize: '0.7rem' }}>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
                 Rec. No.
               </Typography>
-              <Typography variant="body1" sx={{ color: '#000'  , fontSize: '0.7rem' }}>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
                 Student Name & Id
               </Typography>
-              <Typography variant="body1" sx={{ color: '#000' , fontSize: '0.7rem' }}>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
                 Batch
               </Typography>
             </Grid>
             <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <Typography variant="body1" sx={{ color: '#000' , fontSize: '0.7rem'  }}>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
                 : {selectedFees[0]?.tracking_number}
               </Typography>
-              <Typography variant="body1" sx={{ color: '#000' , fontSize: '0.7rem'  }}>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
                 : {`${[feesUserData?.first_name, feesUserData?.middle_name, feesUserData?.last_name].join(' ')} (${student_id})`}
               </Typography>
-              <Typography variant="body1" sx={{ color: '#000' , fontSize: '0.7rem'  }}>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
                 : {feesUserData?.section_name}
               </Typography>
             </Grid>
           </Grid>
           <Grid sx={{ display: 'flex', gap: '20px' }}>
             <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem'  }}>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
                 Date
               </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem'  }}>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
                 Class
               </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem'  }}>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
                 Roll No
               </Typography>
             </Grid>
             <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <Typography variant="body1" sx={{ color: '#000' , fontSize: '0.7rem' }}>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
                 : {formattedDate}
               </Typography>
-              <Typography variant="body1" sx={{ color: '#000' , fontSize: '0.7rem' }}>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
                 : {feesUserData?.class_name}
               </Typography>
-              <Typography variant="body1" sx={{ color: '#000' , fontSize: '0.7rem' }}>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
                 : {feesUserData?.class_roll_no}
               </Typography>
             </Grid>
@@ -264,9 +257,9 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
         {/* table one */}
         <Grid mt={1}>
           <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
-            <Table sx={{ minWidth: "340px", maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
+            <Table sx={{ minWidth: '340px', maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
               <TableHead>
-                  <TableRow>
+                <TableRow>
                   <TableCell
                     style={{
                       border: '1px solid black',
@@ -316,12 +309,9 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   ) : (
                     ''
                   )}
-                  </TableRow>
+                </TableRow>
 
-
-
-
-                  <TableRow>
+                <TableRow>
                   <TableCell
                     style={{
                       border: '1px solid black',
@@ -335,34 +325,37 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       paddingBottom: '2px'
                     }}
                   >
-                    
                     Payable Amt.
                   </TableCell>
-                  <TableCell
-                  
-                    align="right"
-                    style={{
-                      border: '1px solid black',
-                      // fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      textTransform: 'capitalize',
-                      paddingTop: '2px',
+                  {selectedFees?.map((payment, index) => {
+                    return (
+                      // <TableRow
+                      //   sx={{
+                      //     '&:last-child td, &:last-child th': { border: 0 }
+                      //   }}
+                      // >
+                      <TableCell
+                        align="right"
+                        style={{
+                          border: '1px solid black',
+                          // fontWeight: 'bold',
+                          paddingLeft: '5px',
+                          paddingRight: '5px',
+                          textTransform: 'capitalize',
+                          paddingTop: '2px',
 
-                      fontSize: '0.7rem',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalPreAmount?.toFixed(2)}
-                  </TableCell>
-                  
-                  </TableRow>
+                          fontSize: '0.7rem',
+                          paddingBottom: '2px'
+                        }}
+                      >
+                        {/* {totalPreAmount?.toFixed(2)} */}
+                        {payment?.payableAmount?.toFixed(2)}
+                      </TableCell>
+                    );
+                  })}{' '}
+                </TableRow>
 
-
-
-
-                  <TableRow>
-
+                <TableRow>
                   <TableCell
                     style={{
                       border: '1px solid black',
@@ -379,7 +372,6 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     Prev. Paid
                   </TableCell>
                   <TableCell
-                  
                     align="right"
                     style={{
                       border: '1px solid black',
@@ -395,13 +387,9 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   >
                     {totalPreAmount?.toFixed(2)}
                   </TableCell>
-                  </TableRow>
+                </TableRow>
 
-
-
-
-                  <TableRow>
-                    
+                <TableRow>
                   <TableCell
                     style={{
                       border: '1px solid black',
@@ -418,7 +406,6 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     Prev. Discount
                   </TableCell>
                   <TableCell
-                  
                     align="right"
                     style={{
                       border: '1px solid black',
@@ -434,12 +421,9 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   >
                     {totalPreviousDiscount?.toFixed(2)}
                   </TableCell>
-                  </TableRow>
+                </TableRow>
 
-
-
-                  <TableRow>
-                    
+                <TableRow>
                   <TableCell
                     style={{
                       border: '1px solid black',
@@ -456,7 +440,6 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     Paid Amt
                   </TableCell>
                   <TableCell
-                  
                     align="right"
                     style={{
                       border: '1px solid black',
@@ -472,11 +455,9 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   >
                     {totalPaidAmount?.toFixed(2)}
                   </TableCell>
-                  </TableRow>
+                </TableRow>
 
-
-                  <TableRow>
-                    
+                <TableRow>
                   <TableCell
                     style={{
                       border: '1px solid black',
@@ -493,7 +474,6 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     Discount
                   </TableCell>
                   <TableCell
-                  
                     align="right"
                     style={{
                       border: '1px solid black',
@@ -508,11 +488,9 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   >
                     {totalCurrentDisountAmount?.toFixed(2)}
                   </TableCell>
-                  </TableRow>
+                </TableRow>
 
-
-                  <TableRow>
-                    
+                <TableRow>
                   <TableCell
                     style={{
                       border: '1px solid black',
@@ -541,11 +519,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   >
                     {totalDueAmount?.toFixed(2)}
                   </TableCell>
-
-                  
-                  </TableRow>
-
-
+                </TableRow>
               </TableHead>
               <TableBody>
                 {selectedFees?.map((payment, index) => {
@@ -658,9 +632,6 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     {totalDueAmount?.toFixed(2)}
                   </TableCell>
                 </TableRow>
-
-
-                
               </TableBody>
             </Table>
           </TableContainer>
@@ -669,10 +640,12 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
         {/* <Typography variant="body1" sx={{ fontWeight: 'bold' }} my={1}>
           In Words: One Thousand
         </Typography> */}
-        <Grid container sx={{    gap:"2px"   , display: 'flex',  justifyContent: 'space-between', 
-                      fontSize: '0.7rem',}} my={1} >
-          <Grid sx={{
-                      fontSize: '0.7rem', }}>
+        <Grid container sx={{ gap: '2px', display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem' }} my={1}>
+          <Grid
+            sx={{
+              fontSize: '0.7rem'
+            }}
+          >
             IN WORD:{' '}
             <b>
               {word} {user?.school?.currency} only
@@ -685,7 +658,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
         {/* table two */}
         <Grid mt={1} mb={6}>
           <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
-            <Table sx={{ minWidth: "340px", maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
+            <Table sx={{ minWidth: '340px', maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
               <TableHead>
                 <TableRow>
                   <TableCell
@@ -698,7 +671,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       paddingRight: '5px',
                       fontSize: '0.7rem',
                       paddingTop: '2px',
-                      paddingBottom: '2px',
+                      paddingBottom: '2px'
                       // color: '#000'
                     }}
                   >
@@ -707,15 +680,12 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-
                 <TableRow
                   sx={{
                     '&:last-child td, &:last-child th': { border: 0 }
                   }}
                 >
-
-
-{/* Total Amount to Pay start */}
+                  {/* Total Amount to Pay start */}
                   <TableCell
                     align="left"
                     style={{
@@ -744,41 +714,41 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   >
                     {totalFeeamount?.toFixed(2)}
                   </TableCell>
-                  </TableRow>
-{/* Total Amount to Pay end */}
+                </TableRow>
+                {/* Total Amount to Pay end */}
 
-{/* Total Previous Paid start */}
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      fontSize: '0.7rem',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Total Previous Paid
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      fontSize: '0.7rem',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalPreAmount?.toFixed(2)}
-                  </TableCell>
-{/* Total Previous Paid end */}
-                
-{/* Previous Discount start */}
+                {/* Total Previous Paid start */}
+                <TableCell
+                  align="left"
+                  style={{
+                    border: '1px solid black',
+                    width: '30%',
+                    paddingLeft: '5px',
+                    paddingRight: '5px',
+                    fontSize: '0.7rem',
+                    paddingTop: '2px',
+                    paddingBottom: '2px'
+                  }}
+                >
+                  Total Previous Paid
+                </TableCell>
+                <TableCell
+                  align="right"
+                  style={{
+                    border: '1px solid black',
+                    width: '20%',
+                    paddingLeft: '5px',
+                    paddingRight: '5px',
+                    fontSize: '0.7rem',
+                    paddingTop: '2px',
+                    paddingBottom: '2px'
+                  }}
+                >
+                  {totalPreAmount?.toFixed(2)}
+                </TableCell>
+                {/* Total Previous Paid end */}
+
+                {/* Previous Discount start */}
                 <TableRow
                   sx={{
                     '&:last-child td, &:last-child th': { border: 0 }
@@ -812,40 +782,39 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   >
                     {totalPreviousDiscount?.toFixed(2)}
                   </TableCell>
-{/* Previous Discount end */}
- </TableRow>
+                  {/* Previous Discount end */}
+                </TableRow>
 
+                <TableCell
+                  align="left"
+                  style={{
+                    border: '1px solid black',
+                    width: '30%',
+                    paddingLeft: '5px',
+                    paddingRight: '5px',
+                    paddingTop: '2px',
+                    fontSize: '0.7rem',
+                    paddingBottom: '2px'
+                  }}
+                >
+                  Discount Amount
+                </TableCell>
+                <TableCell
+                  align="right"
+                  style={{
+                    border: '1px solid black',
+                    width: '20%',
+                    paddingLeft: '5px',
+                    paddingRight: '5px',
+                    paddingTop: '2px',
+                    fontSize: '0.7rem',
+                    paddingBottom: '2px'
+                  }}
+                >
+                  {totalCurrentDisountAmount?.toFixed(2)}
+                </TableCell>
 
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      fontSize: '0.7rem',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Discount Amount
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      fontSize: '0.7rem',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalCurrentDisountAmount?.toFixed(2)}
-                  </TableCell>
-               
-                  {/* Now Pay Amount start  */}
+                {/* Now Pay Amount start  */}
                 <TableRow
                   sx={{
                     '&:last-child td, &:last-child th': { border: 0 }
@@ -879,41 +848,39 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   >
                     {totalPaidAmount?.toFixed(2)}
                   </TableCell>
-                  </TableRow>
-                   {/* Now Pay Amount end  */}
-                  
-                  {/* Total Paid Amount start  */}
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      fontSize: '0.7rem',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Total Paid Amount
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      fontSize: '0.7rem',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {sumPaidAmount}
-                  </TableCell>
-                   {/* Total Paid Amount start  */}
+                </TableRow>
+                {/* Now Pay Amount end  */}
 
-            
+                {/* Total Paid Amount start  */}
+                <TableCell
+                  align="left"
+                  style={{
+                    border: '1px solid black',
+                    width: '30%',
+                    paddingLeft: '5px',
+                    fontSize: '0.7rem',
+                    paddingRight: '5px',
+                    paddingTop: '2px',
+                    paddingBottom: '2px'
+                  }}
+                >
+                  Total Paid Amount
+                </TableCell>
+                <TableCell
+                  align="right"
+                  style={{
+                    border: '1px solid black',
+                    width: '20%',
+                    paddingLeft: '5px',
+                    fontSize: '0.7rem',
+                    paddingRight: '5px',
+                    paddingTop: '2px',
+                    paddingBottom: '2px'
+                  }}
+                >
+                  {sumPaidAmount}
+                </TableCell>
+                {/* Total Paid Amount start  */}
 
                 <TableRow
                   sx={{
@@ -947,33 +914,28 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     }}
                   >
                     {totalDueAmount?.toFixed(2)}
-                  </TableCell></TableRow>
-
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
         </Grid>
         {/* signature  */}
-        <Grid sx={{ display: 'flex',  flexDirection: 'column', gap: 3 }}>
-          <Grid sx={{ flexGrow: 1 ,
-                      fontSize: '0.7rem',}}>
+        <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
             <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
             <Grid>Student/Gurdiant Signature </Grid>
           </Grid>
-          <Grid sx={{ flexGrow: 1,
-                      fontSize: '0.7rem', }}>
+          <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
             <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
             <Grid>Superintendent Signature </Grid>
           </Grid>
-          <Grid sx={{ flexGrow: 1 ,
-                      fontSize: '0.7rem',}}>
+          <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
             <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
             <Grid>Accounts Officer </Grid>
           </Grid>
         </Grid>
       </Grid>
-
-      
     </Grid>
   );
 };
