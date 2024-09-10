@@ -94,7 +94,7 @@ function Managementschools() {
       } else if (!value) {
         setSearchOptionData([]);
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const searchHandleChange = async (event: ChangeEvent<HTMLInputElement>, v) => {
@@ -117,7 +117,9 @@ function Managementschools() {
 
       if (res?.data?.length > 0) {
         const response = await axios.get(
-          `/api/student_payment_collect/${res?.data[0]?.student_table_id}?selected_month=${selected_month}&subject_ids=${res?.data[0]?.subject_ids || ''}&section_id=${res?.data[0]?.section_id}`
+          `/api/student_payment_collect/${res?.data[0]?.student_table_id}?selected_month=${selected_month}&subject_ids=${
+            res?.data[0]?.subject_ids || ''
+          }&section_id=${res?.data[0]?.section_id}`
         );
         // set search level code
         setSearchValue(`${res?.data[0]?.first_name} | ${res?.data[0]?.class_name} | ${res?.data[0]?.class_roll_no} | ${res?.data[0]?.section_name}`);
@@ -355,7 +357,9 @@ function Managementschools() {
         // if (!searchValue?.subject_ids) return showNotification('student subjects not founds', 'error');
         // if (haveInvalidSubjectId(searchValue?.subject_ids)) return showNotification('student subjects not founds', 'error');
 
-        let url = `/api/student_payment_collect/${searchValue.student_table_id}?selected_month=${selected_month}&subject_ids=${searchValue?.subject_ids || ''}&section_id=${searchValue?.section_id}`;
+        let url = `/api/student_payment_collect/${searchValue.student_table_id}?selected_month=${selected_month}&subject_ids=${
+          searchValue?.subject_ids || ''
+        }&section_id=${searchValue?.section_id}`;
         if (searchValue?.subject_ids && !haveInvalidSubjectId(searchValue?.subject_ids)) url = url + `&subject_ids=${searchValue?.subject_ids}`;
         const res = await axios.get(url);
 
@@ -369,7 +373,7 @@ function Managementschools() {
       if (teacherFeesRes?.data?.teacherSalary?.length > 0) {
         setTeacherFees(teacherFeesRes.data.teacherSalary);
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   // useEffect(() => {
@@ -503,14 +507,10 @@ function Managementschools() {
   const [showPrint, setShowPrint] = useState(false);
   const [isCompleteUpdate, setIsCompleteUpdate] = useState(false);
 
-
-
-
-
   const [isSmallSize, setIsSmallSize] = useState(false);
   useEffect(() => {
     const storedValue = localStorage.getItem('isSmallSize');
-    console.log(storedValue)
+    console.log(storedValue);
     if (storedValue !== null) {
       setIsSmallSize(JSON.parse(storedValue)); // Parse since it's stored as a string
     }
@@ -520,11 +520,6 @@ function Managementschools() {
   useEffect(() => {
     localStorage.setItem('isSmallSize', JSON.stringify(isSmallSize));
   }, [isSmallSize]);
-
-
-
-
-
 
   useEffect(() => {
     const temp = datas.filter((i) => {
@@ -692,7 +687,7 @@ function Managementschools() {
   useEffect(() => {
     // console.log({ accounts, selectedAccount, selectedGateway });
   }, [selectedGateway]);
-  console.log({ collectionDate: collectionDate.format('DD:MM:YYYY') })
+  console.log({ collectionDate: collectionDate.format('DD:MM:YYYY') });
   return (
     <>
       <Head>
@@ -727,8 +722,6 @@ function Managementschools() {
 
         <Grid sx={{ display: 'none' }}>
           <Grid px={4} sx={{ backgroundColor: '#fff' }} ref={printPageRef}>
-
-
             {isSmallSize ? (
               <DesignPaymentInvoiceSmallSize
                 schoolData={schoolData}
@@ -745,7 +738,8 @@ function Managementschools() {
                 student={selectedStudent}
                 setIsCompleteUpdate={setIsCompleteUpdate}
                 teacherFees={teacherFees}
-              />) : (
+              />
+            ) : (
               <DesignPaymentInvoice
                 schoolData={schoolData}
                 printAndCollect={printAndCollect}
@@ -761,7 +755,8 @@ function Managementschools() {
                 student={selectedStudent}
                 setIsCompleteUpdate={setIsCompleteUpdate}
                 teacherFees={teacherFees}
-              />)}
+              />
+            )}
           </Grid>
         </Grid>
 
@@ -807,7 +802,7 @@ function Managementschools() {
           }}
           columnGap={1}
           gap={{ xs: 1 }}
-        // minHeight="fit-content"
+          // minHeight="fit-content"
         >
           <LeftFeesTable
             onTimeDiscountArr={onTimeDiscountArr}
@@ -884,19 +879,14 @@ function Managementschools() {
             setGatewayOption={setGatewayOption}
             btnHandleClick={btnHandleClick}
           >
-
-
             <FormGroup>
-              <FormControlLabel control={
-                <Switch
-                  checked={isSmallSize}
-                  onChange={() => setIsSmallSize(value => !value)}
-                  inputProps={{ 'aria-label': 'controlled' }}
-                />
-              }
+              <FormControlLabel
+                control={
+                  <Switch checked={isSmallSize} onChange={() => setIsSmallSize((value) => !value)} inputProps={{ 'aria-label': 'controlled' }} />
+                }
                 label={`Thermal Print: ${isSmallSize ? 'On' : 'Off'}`}
                 labelPlacement="start"
-                sx={{ mr: "auto" }}
+                sx={{ mr: 'auto' }}
               />
             </FormGroup>
 

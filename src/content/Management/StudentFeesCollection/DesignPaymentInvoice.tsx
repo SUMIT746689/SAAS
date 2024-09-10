@@ -41,7 +41,6 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
   setIsCompleteUpdate,
   teacherFees
 }) => {
-
   const dueRef = useRef(0);
   const { user } = useAuth();
   const [word, setWord] = useState('');
@@ -174,10 +173,8 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
     }
   }, [printFees, leftFeesTableData]);
 
-
   let calAmount = totalPreAmount + totalPaidAmount;
-  let sumPaidAmount = Number(calAmount.toFixed(2))
-
+  let sumPaidAmount = Number(calAmount.toFixed(2));
 
   return (
     <Grid>
@@ -185,7 +182,16 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
       <Grid pt={2} height={`${selectedFees.length <= 1 ? '50vh' : '100vh'}`}>
         {/* school information */}
 
-        <Grid sx={{ borderBottom: '1px solid #000', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} pb={1} mb={0.5}>
+        <Grid
+          sx={{
+            borderBottom: '1px solid #000',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}
+          pb={1}
+          mb={0.5}
+        >
           <Grid width="80px" height="80px">
             {schoolData?.header_image && (
               <Avatar
@@ -1157,6 +1163,7 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
                     </TableRow>
                   );
                 })}
+
                 <TableRow
                   sx={{
                     '&:last-child td, &:last-child th': { border: 0 }
