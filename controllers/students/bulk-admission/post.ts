@@ -77,17 +77,18 @@ const handlePost = async (req, res, refresh_token, dcryptAcademicYear) => {
                 if (keys.length === 0) return;
                 for (const student of res) {
                     console.log({ perStd: student });
-                    if (!student['Students ID'] || !student['Student Name'] || !student.Gender || !student['Mobile (SMS)']) continue;
+                    if (!student['Students ID'] || !student['Student Name'] || !student.Roll || !student['Mobile (SMS)']) continue;
 
-                    // gender verify
-                    let gender = student.Gender ? student.Gender.trim().toLowerCase() : undefined;
-                    if (gender) {
-                        if (!["male", "female"].includes(gender)) {
-                            logFile.error(`invalid gender field, provide data ${gender} `)
-                            continue;
-                        }
-                    }
+                    // // gender verify
+                    // let gender = student.Gender ? student.Gender.trim().toLowerCase() : undefined;
+                    // if (gender) {
+                    //     if (!["male", "female"].includes(gender)) {
+                    //         logFile.error(`invalid gender field, provide data ${gender} `)
+                    //         continue;
+                    //     }
+                    // }
 
+                    // roll no
 
                     // verify and convert number to 13 digits
                     const { number, err } = handleConvBanNum(String(student['Mobile (SMS)']));
@@ -108,7 +109,8 @@ const handlePost = async (req, res, refresh_token, dcryptAcademicYear) => {
                         phone: number,
                         admission_date: new Date(Date.now()),
                         admission_status: "approved",
-                        gender,
+                        // class_roll_number
+                        // gender,
                         school: {
                             connect: { id: school_id }
                         },
@@ -124,7 +126,7 @@ const handlePost = async (req, res, refresh_token, dcryptAcademicYear) => {
                         }
                     };
                     console.log({ studentData })
-                    customStudentsData.push(studentData);
+                    customStudentsData.push({ customStudentInfo: studentData, customStudent: { class_roll_no: student.Roll ? String(student.Roll) : undefined } });
                     // if (!err) finalContacts.push(number);
                 }
             })
@@ -146,7 +148,7 @@ const handlePost = async (req, res, refresh_token, dcryptAcademicYear) => {
         let faildedSmS = [], successSmS = [];
         let faildedCreateStd = [], succesCreateStd = [];
 
-        const allPromise = customStudentsData.map((customStudentInfo, index) => {
+        const allPromise = customStudentsData.map(({ customStudentInfo, customStudent }, index) => {
             return new Promise(async (resolve, reject) => {
                 await prisma.$transaction(async (transaction) => {
                     const stdInfo = await transaction.studentInformation.create({
@@ -154,7 +156,7 @@ const handlePost = async (req, res, refresh_token, dcryptAcademicYear) => {
                     });
                     const resStd = await transaction.student.create({
                         data: {
-                            class_roll_no: String(today) + index,
+                            class_roll_no: customStudent.class_roll_no,
                             class_registration_no: registration_no_generate(index),
                             // section: { connect: { id: parseInt(section_id) } },
                             batches: { connect: { id: parseInt(section_id) } },

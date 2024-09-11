@@ -283,7 +283,7 @@ function HeaderSearch() {
               <Scrollbar>
                 {searchResults?.map((result) => (
                   <Link
-                    href={`/students/${result?.id}`}
+                    href={`/students/${result?.student_table_id}`}
                     key={result.id}
                     style={{ textDecoration: 'none' }}
                     onClick={handleClose}
