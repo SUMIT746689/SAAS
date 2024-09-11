@@ -2,16 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import {
-  Grid,
-  DialogActions,
-  DialogContent,
-  TextField,
-  CircularProgress,
-  Autocomplete,
-  Button,
-  Checkbox
-} from '@mui/material';
+import { Grid, DialogActions, DialogContent, TextField, CircularProgress, Autocomplete, Button, Checkbox } from '@mui/material';
 import useNotistick from '@/hooks/useNotistick';
 import { getFile, registration_no_generate } from '@/utils/utilitY-functions';
 import { FileUploadFieldWrapper } from '@/components/TextFields';
@@ -20,15 +11,7 @@ import axios from 'axios';
 import { NewDebounceInput } from '@/components/DebounceInput';
 import { AcademicYearContext } from '@/contexts/UtilsContextUse';
 
-function RegistrationSecondPart({
-  totalFormData,
-  setTotalFormData,
-  setActiveStep,
-  handleCreateClassClose,
-  student = null,
-  classes,
-  academicYears
-}) {
+function RegistrationSecondPart({ totalFormData, setTotalFormData, setActiveStep, handleCreateClassClose, student = null, classes, academicYears }) {
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
 
@@ -47,7 +30,7 @@ function RegistrationSecondPart({
   const [selectedXtraClsSection, setSelectedXtraClsSection] = useState(null);
   const [classSubjects, setClassSubjects] = useState([]);
   const [selectedClassSubjects, setSelectedClassSubjects] = useState([]);
-  const [academicYear,] = useContext(AcademicYearContext);
+  const [academicYear] = useContext(AcademicYearContext);
   const [isAvailableUsername, setIsAvailableUsername] = useState();
 
   useEffect(() => {
@@ -70,12 +53,7 @@ function RegistrationSecondPart({
 
   useEffect(() => {
     if (classesOptions && student) {
-      setselectedClass(
-        classesOptions?.find(
-          (i) =>
-            i.id == (Number(student?.class_id) || student?.section?.class_id)
-        )
-      );
+      setselectedClass(classesOptions?.find((i) => i.id == (Number(student?.class_id) || student?.section?.class_id)));
       axios
         .get(`/api/group?class_id=${student?.section?.class_id}`)
         .then((res) => {
@@ -93,18 +71,23 @@ function RegistrationSecondPart({
   }, [classesOptions, student]);
 
   const handleGetClassSubjects = (class_id) => {
-    axios.get(`/api/subject?class_id=${class_id}`).then(res => { setClassSubjects(res.data.map(subject => ({ id: subject.id, label: subject.name }))) }).catch(getClsSubjectsError => { console.log({ getClsSubjectsError }) })
-  }
+    axios
+      .get(`/api/subject?class_id=${class_id}`)
+      .then((res) => {
+        setClassSubjects(res.data.map((subject) => ({ id: subject.id, label: subject.name })));
+      })
+      .catch((getClsSubjectsError) => {
+        console.log({ getClsSubjectsError });
+      });
+  };
 
   useEffect(() => {
     if (student) {
-      const targetClassSections = classes?.find(
-        (i) => i.id == (Number(student?.class_id) || student?.section?.class_id)
-      );
+      const targetClassSections = classes?.find((i) => i.id == (Number(student?.class_id) || student?.section?.class_id));
 
       // class section
-      handleGetClassSubjects(targetClassSections.id)
-      setSelectedClassSubjects(student?.subjects?.map(subject => ({ id: subject.id, label: subject.name })))
+      handleGetClassSubjects(targetClassSections.id);
+      setSelectedClassSubjects(student?.subjects?.map((subject) => ({ id: subject.id, label: subject.name })));
 
       setSectionsForSelectedClass(
         targetClassSections?.sections?.map((i) => {
@@ -115,9 +98,7 @@ function RegistrationSecondPart({
         })
       );
 
-      const targetExtraClassSections = classes?.find(
-        (i) => i.id == Number(student?.extra_section?.class_id)
-      );
+      const targetExtraClassSections = classes?.find((i) => i.id == Number(student?.extra_section?.class_id));
       if (targetExtraClassSections) {
         setIsExtraClass(true);
         setSelectedXtraCls({
@@ -144,11 +125,7 @@ function RegistrationSecondPart({
 
   useEffect(() => {
     if (student && sectionsForSelectedClass?.length > 0) {
-      setSelecetedSection(
-        sectionsForSelectedClass.find(
-          (i) => i.id == (Number(student?.section_id) || student?.section?.id)
-        )
-      );
+      setSelecetedSection(sectionsForSelectedClass.find((i) => i.id == (Number(student?.section_id) || student?.section?.id)));
     }
   }, [sectionsForSelectedClass, student]);
 
@@ -157,9 +134,8 @@ function RegistrationSecondPart({
     setSelectedClassSubjects([]);
     setselectedClass(value);
     if (value) {
-
       // get class subjects
-      handleGetClassSubjects(value?.id)
+      handleGetClassSubjects(value?.id);
 
       // get group
       axios
@@ -223,9 +199,12 @@ function RegistrationSecondPart({
   };
 
   const handleClsSubjectSelect = (event, value, setFieldValue) => {
-    setSelectedClassSubjects(value)
-    setFieldValue("subject_ids", value?.map(sub => (sub.id)))
-  }
+    setSelectedClassSubjects(value);
+    setFieldValue(
+      'subject_ids',
+      value?.map((sub) => sub.id)
+    );
+  };
 
   const handleDebounce = (value) => {
     if (student?.student_info?.user?.username?.toLowerCase() === value?.toLowerCase()) return setIsAvailableUsername(null);
@@ -241,74 +220,34 @@ function RegistrationSecondPart({
     }
   };
 
-
   return (
     <>
       <Formik
         initialValues={{
-          username: student
-            ? student?.student_info?.user?.username || student?.username
-            : totalFormData.username,
+          username: student ? student?.student_info?.user?.username || student?.username : totalFormData.username,
           password: student ? student?.password || '' : totalFormData.phone,
           confirm_password: student ? student?.password || '' : totalFormData.phone,
-          class_id: student
-            ? student?.class_id
-              ? Number(student?.class_id)
-              : student?.section?.class_id
-            : undefined,
-          section_id: student
-            ? student?.section_id
-              ? Number(student?.section_id)
-              : student?.section?.id
-            : undefined,
+          class_id: student ? (student?.class_id ? Number(student?.class_id) : student?.section?.class_id) : undefined,
+          section_id: student ? (student?.section_id ? Number(student?.section_id) : student?.section?.id) : undefined,
           subject_ids: [],
-          group_id: student
-            ? student?.group_id
-              ? Number(student?.group_id)
-              : student?.group?.id
-            : undefined,
+          group_id: student ? (student?.group_id ? Number(student?.group_id) : student?.group?.id) : undefined,
 
-          extra_class_id: student?.extra_section_id
-            ? student?.extra_section?.class_id
-            : undefined,
-          extra_section_id: student?.extra_section_id
-            ? student?.extra_section?.id
-            : undefined,
+          extra_class_id: student?.extra_section_id ? student?.extra_section?.class_id : undefined,
+          extra_section_id: student?.extra_section_id ? student?.extra_section?.id : undefined,
 
-          academic_year_id: student
-            ? Number(student?.academic_year_id)
-            : academicYear?.id,
+          academic_year_id: student ? Number(student?.academic_year_id) : academicYear?.id,
           roll_no: student ? student?.class_roll_no : undefined,
-          registration_no:
-            student?.class_registration_no || registration_no_generate(),
+          registration_no: student?.class_registration_no || registration_no_generate(),
           student_photo: null,
-          student_present_address: student
-            ? student?.student_present_address
-            : '',
-          student_permanent_address: student
-            ? student?.student_permanent_address ||
-            student?.student_info?.student_permanent_address ||
-            ''
-            : '',
-          previous_school: student
-            ? student?.previous_school ||
-            student?.student_info?.previous_school ||
-            ''
-            : ''
+          student_present_address: student ? student?.student_present_address : '',
+          student_permanent_address: student ? student?.student_permanent_address || student?.student_info?.student_permanent_address || '' : '',
+          previous_school: student ? student?.previous_school || student?.student_info?.previous_school || '' : ''
         }}
         validationSchema={Yup.object().shape({
-          username: Yup.string()
-            .max(255)
-            .required(t('First name field is required')),
+          username: Yup.string().max(255).required(t('First name field is required')),
 
-          class_id: Yup.number()
-            .integer()
-            .positive()
-            .required(t('Class field is required')),
-          section_id: Yup.number()
-            .integer()
-            .positive()
-            .required(t('batch field is required')),
+          class_id: Yup.number().integer().positive().required(t('Class field is required')),
+          section_id: Yup.number().integer().positive().required(t('batch field is required')),
 
           academic_year_id: Yup.number().positive().integer().required(),
 
@@ -316,9 +255,7 @@ function RegistrationSecondPart({
             .max(255)
             .when('username', {
               is: undefined,
-              then: Yup.string()
-                .required('Must enter password')
-                .min(8, 'Password is too short - should be 8 chars minimum.')
+              then: Yup.string().required('Must enter password').min(8, 'Password is too short - should be 8 chars minimum.')
             }),
           // .required(t('The password field is required'))
           // .min(8, 'Password is too short - should be 8 chars minimum.'),
@@ -334,14 +271,9 @@ function RegistrationSecondPart({
                 .oneOf([Yup.ref('password'), null], 'Passwords must match')
             }),
           roll_no: Yup.string().required(t('roll no is required!')),
-          registration_no: Yup.string().required(
-            t('registration no is required!')
-          )
+          registration_no: Yup.string().required(t('registration no is required!'))
         })}
-        onSubmit={async (
-          _values,
-          { resetForm, setErrors, setStatus, setSubmitting }
-        ) => {
+        onSubmit={async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
           try {
             setActiveStep(2);
             setTotalFormData((value) => ({ ...value, ..._values }));
@@ -355,16 +287,7 @@ function RegistrationSecondPart({
           }
         }}
       >
-        {({
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          touched,
-          values,
-          setFieldValue
-        }) => {
+        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
           return (
             <form onSubmit={handleSubmit}>
               <DialogContent
@@ -444,13 +367,9 @@ function RegistrationSecondPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.confirm_password && errors.confirm_password
-                        )}
+                        error={Boolean(touched.confirm_password && errors.confirm_password)}
                         fullWidth
-                        helperText={
-                          touched.confirm_password && errors.confirm_password
-                        }
+                        helperText={touched.confirm_password && errors.confirm_password}
                         label={t('Confirm password')}
                         name="confirm_password"
                         onBlur={handleBlur}
@@ -484,9 +403,7 @@ function RegistrationSecondPart({
                             label={t('Select class')}
                           />
                         )}
-                        onChange={(event, value) =>
-                          handleClassSelect(event, value, setFieldValue)
-                        }
+                        onChange={(event, value) => handleClassSelect(event, value, setFieldValue)}
                       />
                     </Grid>
 
@@ -509,9 +426,7 @@ function RegistrationSecondPart({
                                 }
                               }}
                               fullWidth
-                              error={Boolean(
-                                touched.password && errors.password
-                              )}
+                              error={Boolean(touched.password && errors.password)}
                               helperText={touched.password && errors.password}
                               onBlur={handleBlur}
                               label={t('Select Batch')}
@@ -550,9 +465,7 @@ function RegistrationSecondPart({
                             label={t('Select Subjects')}
                           />
                         )}
-                        onChange={(event, value) =>
-                          handleClsSubjectSelect(event, value, setFieldValue)
-                        }
+                        onChange={(event, value) => handleClsSubjectSelect(event, value, setFieldValue)}
                       />
                     </Grid>
 
@@ -563,9 +476,7 @@ function RegistrationSecondPart({
                           size="small"
                           disablePortal
                           options={group}
-                          value={
-                            group?.find((i) => i.id == values?.group_id) || null
-                          }
+                          value={group?.find((i) => i.id == values?.group_id) || null}
                           renderInput={(params) => (
                             <TextField
                               {...params}
@@ -576,9 +487,7 @@ function RegistrationSecondPart({
                                 }
                               }}
                               fullWidth
-                              error={Boolean(
-                                touched.group_id && errors.group_id
-                              )}
+                              error={Boolean(touched.group_id && errors.group_id)}
                               helperText={touched.group_id && errors.group_id}
                               onBlur={handleBlur}
                               label={t('Select group')}
@@ -597,9 +506,7 @@ function RegistrationSecondPart({
                         size="small"
                         disablePortal
                         options={academicYears}
-                        value={academicYears?.find(
-                          (i) => i.id == values?.academic_year_id || null
-                        )}
+                        value={academicYears?.find((i) => i.id == values?.academic_year_id || null)}
                         renderInput={(params) => (
                           <TextField
                             required
@@ -613,8 +520,8 @@ function RegistrationSecondPart({
                             name="academic_year_id"
                             {...params}
                             label={t('Select Academic Year')}
-                          //  error={Boolean(touched.academic_year_id && errors.academic_year_id)}
-                          //  helperText={'The session is required'}
+                            //  error={Boolean(touched.academic_year_id && errors.academic_year_id)}
+                            //  helperText={'The session is required'}
                           />
                         )}
                         onChange={(event, value) => {
@@ -656,13 +563,9 @@ function RegistrationSecondPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.registration_no && errors.registration_no
-                        )}
+                        error={Boolean(touched.registration_no && errors.registration_no)}
                         fullWidth
-                        helperText={
-                          touched.registration_no && errors.registration_no
-                        }
+                        helperText={touched.registration_no && errors.registration_no}
                         label={t('Provide an unique Registration number')}
                         name="registration_no"
                         onBlur={handleBlur}
@@ -682,13 +585,9 @@ function RegistrationSecondPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.previous_school && errors.previous_school
-                        )}
+                        error={Boolean(touched.previous_school && errors.previous_school)}
                         fullWidth
-                        helperText={
-                          touched.previous_school && errors.previous_school
-                        }
+                        helperText={touched.previous_school && errors.previous_school}
                         label={t('Previous school')}
                         name="previous_school"
                         onBlur={handleBlur}
@@ -713,15 +612,9 @@ function RegistrationSecondPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.student_present_address &&
-                          errors.student_present_address
-                        )}
+                        error={Boolean(touched.student_present_address && errors.student_present_address)}
                         fullWidth
-                        helperText={
-                          touched.student_present_address &&
-                          errors.student_present_address
-                        }
+                        helperText={touched.student_present_address && errors.student_present_address}
                         label={t('Student present address')}
                         name="student_present_address"
                         onBlur={handleBlur}
@@ -743,15 +636,9 @@ function RegistrationSecondPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.student_permanent_address &&
-                          errors.student_permanent_address
-                        )}
+                        error={Boolean(touched.student_permanent_address && errors.student_permanent_address)}
                         fullWidth
-                        helperText={
-                          touched.student_permanent_address &&
-                          errors.student_permanent_address
-                        }
+                        helperText={touched.student_permanent_address && errors.student_permanent_address}
                         label={t('Student permanent address')}
                         name="student_permanent_address"
                         onBlur={handleBlur}
@@ -800,25 +687,13 @@ function RegistrationSecondPart({
                                   }
                                 }}
                                 fullWidth
-                                error={Boolean(
-                                  touched.extra_class_id &&
-                                  errors.extra_class_id
-                                )}
-                                helperText={
-                                  touched.extra_class_id &&
-                                  errors.extra_class_id
-                                }
+                                error={Boolean(touched.extra_class_id && errors.extra_class_id)}
+                                helperText={touched.extra_class_id && errors.extra_class_id}
                                 onBlur={handleBlur}
                                 label={t('Select Extra class')}
                               />
                             )}
-                            onChange={(event, value) =>
-                              handleExtraClassSelect(
-                                event,
-                                value,
-                                setFieldValue
-                              )
-                            }
+                            onChange={(event, value) => handleExtraClassSelect(event, value, setFieldValue)}
                           />
                         </Grid>
 
@@ -841,18 +716,13 @@ function RegistrationSecondPart({
                                     }
                                   }}
                                   fullWidth
-                                  error={Boolean(
-                                    touched.password && errors.password
-                                  )}
-                                  helperText={
-                                    touched.password && errors.password
-                                  }
+                                  error={Boolean(touched.password && errors.password)}
+                                  helperText={touched.password && errors.password}
                                   onBlur={handleBlur}
                                   label={t('Select Extra section')}
                                 />
                               )}
                               onChange={(event, value) => {
-
                                 setSelectedXtraClsSection(value);
                                 // @ts-ignore
 
@@ -869,14 +739,7 @@ function RegistrationSecondPart({
                     <Grid container p={1} gap={1} xs={12}>
                       <Grid item>
                         <Image
-                          src={
-                            student_photo
-                              ? student_photo
-                              : getFile(
-                                student?.student_photo ||
-                                student?.filePathQuery?.student_photo_path
-                              )
-                          }
+                          src={student_photo ? student_photo : getFile(student?.student_photo || student?.filePathQuery?.student_photo_path)}
                           height={150}
                           width={150}
                           alt="Student photo"
@@ -888,16 +751,10 @@ function RegistrationSecondPart({
                         htmlFor="student_photo"
                         label="Select Student photo:"
                         name="student_photo"
-                        value={
-                          values?.student_photo?.name ||
-                          student?.student_photo ||
-                          ''
-                        }
+                        value={values?.student_photo?.name || student?.student_photo || ''}
                         handleChangeFile={(e) => {
                           if (e.target?.files?.length) {
-                            const photoUrl = URL.createObjectURL(
-                              e.target.files[0]
-                            );
+                            const photoUrl = URL.createObjectURL(e.target.files[0]);
                             setStudent_photo(photoUrl);
                             setFieldValue('student_photo', e.target.files[0]);
                           }
@@ -919,18 +776,12 @@ function RegistrationSecondPart({
                 <Button color="secondary" onClick={handleCreateClassClose}>
                   {t('Cancel')}
                 </Button>
-                {/* <Button
-                  color="warning"
-                  variant="contained"
-                  onClick={() => setActiveStep(0)}
-                >
+                <Button color="warning" variant="contained" onClick={() => setActiveStep(0)}>
                   {t('<< Previous')}
-                </Button> */}
+                </Button>
                 <Button
                   type="submit"
-                  startIcon={
-                    isSubmitting ? <CircularProgress size="1rem" /> : null
-                  }
+                  startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
                   // @ts-ignore
                   disabled={Boolean(errors.submit) || isSubmitting || isAvailableUsername}
                   variant="contained"
