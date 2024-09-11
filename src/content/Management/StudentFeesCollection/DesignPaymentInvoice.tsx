@@ -23,9 +23,11 @@ type PaymentInvoiceType = {
   setIsCompleteUpdate: (arg: boolean) => void;
   schoolData: Data;
   teacherFees: any[];
+  userInformation: any;
 };
 
 const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
+  userInformation,
   schoolData,
   printAndCollect,
   setPrintAndCollect,
@@ -272,6 +274,9 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
               <Typography variant="body1" sx={{ color: '#000' }}>
                 Roll No
               </Typography>
+              <Typography variant="body1" sx={{ color: '#000' }}>
+                Phone No
+              </Typography>
             </Grid>
             <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
               <Typography variant="body1" sx={{ color: '#000' }}>
@@ -282,6 +287,9 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
                 : {feesUserData?.class_roll_no}
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#000' }}>
+                : {userInformation?.phone}
               </Typography>
             </Grid>
           </Grid>

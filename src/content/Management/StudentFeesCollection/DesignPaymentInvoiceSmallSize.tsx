@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { Data } from '@/models/front_end';
 import Image from 'next/image';
 import { getFile } from '@/utils/utilitY-functions';
+import { BoltRounded } from '@mui/icons-material';
 
 type PaymentInvoiceType = {
   collectionDate: any;
@@ -23,9 +24,11 @@ type PaymentInvoiceType = {
   setIsCompleteUpdate: (arg: boolean) => void;
   schoolData: Data;
   teacherFees: any[];
+  userInformation: any;
 };
 
 const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
+  userInformation,
   schoolData,
   printAndCollect,
   setPrintAndCollect,
@@ -174,7 +177,10 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
   }, [printFees, leftFeesTableData]);
 
   let calAmount = totalPreAmount + totalPaidAmount;
+
   let sumPaidAmount = Number(calAmount.toFixed(2));
+
+  console.log({ feesUserData });
 
   return (
     <Grid>
@@ -239,6 +245,9 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
               <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
                 Roll No
               </Typography>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                Phone No
+              </Typography>
             </Grid>
             <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
               <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
@@ -249,6 +258,9 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
               </Typography>
               <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
                 : {feesUserData?.class_roll_no}
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                : {userInformation?.phone}
               </Typography>
             </Grid>
           </Grid>
@@ -559,7 +571,14 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
 
                       <TableCell
                         align="right"
-                        style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
+                        style={{
+                          border: '1px solid black',
+                          paddingLeft: '5px',
+                          fontSize: '0.7rem',
+                          paddingRight: '5px',
+                          paddingTop: '2px',
+                          paddingBottom: '2px'
+                        }}
                       >
                         {payment?.payableAmount?.toFixed(2)}
                       </TableCell>
@@ -622,7 +641,8 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     align="right"
                     style={{
                       border: '1px solid black',
-                      // fontWeight: 'bold',
+                      fontSize: '0.7rem',
+                      fontWeight: 'bold',
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       paddingTop: '2px',
@@ -906,6 +926,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     style={{
                       border: '1px solid black',
                       width: '20%',
+                      fontWeight: 'bold',
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       fontSize: '0.7rem',
