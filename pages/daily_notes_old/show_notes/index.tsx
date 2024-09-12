@@ -16,8 +16,8 @@ export async function getServerSideProps(context: any) {
   try {
     const refresh_token_varify: any = serverSideAuthentication(context);
     const { school_id } = refresh_token_varify;
-    // commented code
-    // if (!refresh_token_varify || refresh_token_varify?.role?.title !== 'ADMIN') return { props };
+
+    if (!refresh_token_varify || refresh_token_varify?.role?.title !== 'ADMIN') return { props };
     const classes = await prisma.class.findMany({ where: { school_id }, include: { sections: true } });
     props['classes'] = JSON.parse(JSON.stringify(classes));
     // const periods = await prisma.period.findMany({ where: { teacher: { user_id: refresh_token_varify.id, } }, include: { section: { include: { class: true } }, subject: true, room: true } })
