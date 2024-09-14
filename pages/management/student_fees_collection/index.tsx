@@ -222,7 +222,8 @@ function Managementschools() {
           if (data?.discount[j].type === 'flat') {
             feesData[i].discount = feesData[i].discount + Number(data.discount[j].amt); // 100
           } else if (data?.discount[j].type === 'percent') {
-            feesData[i].discount = feesData[i].discount + Number(feesData[i].amount) / Number(data.discount[j].amt);
+            // feesData[i].discount = feesData[i].discount + Number(feesData[i].amount) / Number(data.discount[j].amt);
+            feesData[i].discount = feesData[i].discount + (parseInt(feesData[i].amount) * parseInt(data.discount[j].amt)) / 100;
           }
         }
       }
