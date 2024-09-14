@@ -26,6 +26,7 @@ const index = async (req, res, refresh_token, academic_year) => {
           SELECT 
               student_informations.id,students.id as std_id,student_informations.first_name,student_informations.middle_name,student_informations.last_name, student_informations.student_id
               ,students.class_roll_no
+              ,student_informations.phone as phone_number
               ,classes.name as class_name
               ,sections.name as section_name
               ,classes.id as class_id
@@ -50,6 +51,7 @@ const index = async (req, res, refresh_token, academic_year) => {
             SELECT 
                 student_informations.id, students.id as student_table_id, student_informations.first_name,student_informations.middle_name,student_informations.last_name, student_informations.student_id
                 ,students.class_roll_no
+                ,student_informations.phone as phone_number
                 ,sections.name as section_name
                 ,classes.name as class_name
                 ,classes.id as class_id

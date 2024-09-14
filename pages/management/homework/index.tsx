@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import ExtendedSidebarLayout from 'src/layouts/ExtendedSidebarLayout';
 import { Authenticated } from 'src/components/Authenticated';
-import PageHeader from 'src/content/Management/HomeWork/PageHeader';
+import PageHeader from '@/content/Management/HomeWork old/PageHeader';
 import Footer from 'src/components/Footer';
 import { Grid } from '@mui/material';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
-import Results from 'src/content/Management/HomeWork/Results';
+import Results from '@/content/Management/HomeWork old/Results';
 import { useContext, useEffect, useState } from 'react';
 import { serverSideAuthentication } from '@/utils/serverSideAuthentication';
 import prisma from '@/lib/prisma_client';
@@ -13,14 +13,12 @@ import { AcademicYearContext } from '@/contexts/UtilsContextUse';
 import axios from 'axios';
 
 export async function getServerSideProps(context: any) {
-
   let data: any = null;
   try {
-    const refresh_token_varify: any = serverSideAuthentication(context)
+    const refresh_token_varify: any = serverSideAuthentication(context);
     if (!refresh_token_varify) return { props: { data } };
 
     if (refresh_token_varify.role.title === 'STUDENT') {
-
       data = await prisma.student.findFirst({
         where: {
           student_info: {
@@ -47,72 +45,61 @@ export async function getServerSideProps(context: any) {
               id: true,
               name: true
             }
-          },
+          }
         }
       });
     }
-  }
-  catch (error) {
-    console.log({ error })
+  } catch (error) {
+    console.log({ error });
   }
   const parse = JSON.parse(JSON.stringify({ data }));
-  return { props: parse }
+  return { props: parse };
 }
 function ManagementLeave({ data }) {
-  const [leave, setLeave] = useState([])
+  const [leave, setLeave] = useState([]);
   const [academicYear, setAcademicYear] = useContext(AcademicYearContext);
-  const [classes, setClasses] = useState([])
-  const [classList, setClassList] = useState([])
+  const [classes, setClasses] = useState([]);
+  const [classList, setClassList] = useState([]);
 
   const reFetchData = () => {
     if (data) {
       if (academicYear?.id) {
-        axios.get(`/api/homework?academic_year_id=${academicYear?.id}&class_id=${data?.class_id}&student_id=${data?.id}`)
-          .then(res => setLeave(res.data))
-          .catch(err => console.log(err))
+        axios
+          .get(`/api/homework?academic_year_id=${academicYear?.id}&class_id=${data?.class_id}&student_id=${data?.id}`)
+          .then((res) => setLeave(res.data))
+          .catch((err) => console.log(err));
       }
     } else {
-      axios.get(`/api/class`)
-        .then(res => {
-          setClasses(res.data)
-          setClassList(res.data?.map(i => ({
-            label: i.name,
-            id: i.id,
-            has_section: i.has_section
-          })
-          ))
+      axios
+        .get(`/api/class`)
+        .then((res) => {
+          setClasses(res.data);
+          setClassList(
+            res.data?.map((i) => ({
+              label: i.name,
+              id: i.id,
+              has_section: i.has_section
+            }))
+          );
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     }
-  }
+  };
   useEffect(() => {
-    reFetchData()
-  }, [data, academicYear])
+    reFetchData();
+  }, [data, academicYear]);
 
-console.log({data})
+  console.log({ data });
   return (
     <>
       <Head>
         <title>Homework - Management</title>
       </Head>
       <PageTitleWrapper>
-        <PageHeader
-          data={data}
-          classes={classes}
-          classList={classList}
-          setLeave={setLeave}
-          reFetchData={reFetchData}
-        />
+        <PageHeader data={data} classes={classes} classList={classList} setLeave={setLeave} reFetchData={reFetchData} />
       </PageTitleWrapper>
 
-      <Grid
-        sx={{ px: 4 }}
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="stretch"
-        spacing={3}
-      >
+      <Grid sx={{ px: 4 }} container direction="row" justifyContent="center" alignItems="stretch" spacing={3}>
         <Grid item xs={12}>
           <Results users={leave} reFetchData={reFetchData} />
         </Grid>

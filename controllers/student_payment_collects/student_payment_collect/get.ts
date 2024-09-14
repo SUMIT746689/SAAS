@@ -88,7 +88,8 @@ const get = async (req, res, refresh_token, academic_year) => {
             first_name: true,
             middle_name: true,
             last_name: true,
-            father_name: true
+            father_name: true,
+            phone:true
           }
         },
         group: {
@@ -348,7 +349,7 @@ const get = async (req, res, refresh_token, academic_year) => {
       class_registration_no: all_fees.class_registration_no,
       class_roll_no: all_fees.class_roll_no,
       discount: all_fees.discount,
-      fees: newFees
+      fees: newFees,
       // fees: newFees.filter((item) => {
       //   return item.status !== 'paid' && item.status !== 'paid late';
       // })

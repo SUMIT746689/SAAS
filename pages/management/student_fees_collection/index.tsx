@@ -36,7 +36,9 @@ const monthData = monthList.map((month) => ({ label: month, value: month }));
 
 function Managementschools() {
   // updated code start
+
   const [teacherFees, setTeacherFees] = useState<Array<any>>([]);
+  const [phone, setPhone] = useState('');
   const [studentClass, setStudentClass] = useState<any>(null);
   const [searchValue, setSearchValue] = useState<any>(null);
   const [searchOptionData, setSearchOptionData] = useState<Array<any>>([]);
@@ -76,7 +78,6 @@ function Managementschools() {
     try {
       if (value?.length >= 2) {
         const res = await axios.get(`/api/student/search-students?search_value=${value?.toLowerCase()}`);
-
         const userInfoArr = res?.data?.map((item) => {
           return {
             label: `${item.first_name} | ${item.class_name} | ${item.class_roll_no} | ${item.section_name}`,
@@ -85,7 +86,8 @@ function Managementschools() {
             student_table_id: item.student_table_id,
             subject_ids: item.subject_ids,
             subject_names: item.subject_names,
-            section_id: item.section_id
+            section_id: item.section_id,
+            phone: item.phone_number
           };
         });
         setSearchOptionData(userInfoArr);
@@ -96,6 +98,8 @@ function Managementschools() {
       }
     } catch (error) {}
   };
+
+  console.log({ searchOptionData });
 
   const searchHandleChange = async (event: ChangeEvent<HTMLInputElement>, v) => {
     setSearchValue(v);
@@ -155,7 +159,7 @@ function Managementschools() {
       currDiscount: 0,
       dueAmount: 0
     };
-    console.log({ data });
+    // console.log({ data });
     // fees array
     let feesData = data?.fees?.map((item) => {
       const last_trnsaction_time = new Date(item?.last_payment_date).getTime();
@@ -687,7 +691,9 @@ function Managementschools() {
   useEffect(() => {
     // console.log({ accounts, selectedAccount, selectedGateway });
   }, [selectedGateway]);
-  console.log({ collectionDate: collectionDate.format('DD:MM:YYYY') });
+  // console.log({ collectionDate: collectionDate.format('DD:MM:YYYY') });
+  console.log({ userInformation });
+
   return (
     <>
       <Head>
@@ -724,6 +730,7 @@ function Managementschools() {
           <Grid px={4} sx={{ backgroundColor: '#fff' }} ref={printPageRef}>
             {isSmallSize ? (
               <DesignPaymentInvoiceSmallSize
+                userInformation={userInformation}
                 schoolData={schoolData}
                 printAndCollect={printAndCollect}
                 setPrintAndCollect={setPrintAndCollect}
@@ -741,6 +748,7 @@ function Managementschools() {
               />
             ) : (
               <DesignPaymentInvoice
+                userInformation={userInformation}
                 schoolData={schoolData}
                 printAndCollect={printAndCollect}
                 setPrintAndCollect={setPrintAndCollect}
