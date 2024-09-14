@@ -10,14 +10,10 @@ export default async function get(req: any, res: any, refresh_token, dcryptAcade
       deleted_at: null,
       academic_year_id
     };
-    // if (req.query.academic_year_id) {
-    //   where['academic_year_id'] = Number(req.query.academic_year_id)
-    // }
-    if (req.query.class_id) {
-      where['class_id'] = Number(req.query.class_id);
-    }
 
-    //@ts-ignore
+    if (req.query.class_id) where['class_id'] = parseInt(req.query.class_id);
+    if (req.query.subject_id) where['subject_id'] = parseInt(req.query.subject_id);
+
     const fee = await prisma.fee.findMany({
       where,
       include: {
@@ -39,7 +35,7 @@ export default async function get(req: any, res: any, refresh_token, dcryptAcade
         id: 'desc'
       }
     });
-    // delete user['password'];
+    
     res.status(200).json({ data: fee, success: true });
   } catch (err) {
     logFile.error(err.message);
