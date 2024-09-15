@@ -33,6 +33,30 @@ const gettingFile = (req) => {
 };
 
 
+const generateUniqueUsername = async (name) => {
+
+    const searchUserRegExp = `${name}\d*[0-9]*$`
+
+    if (!name) throw new Error('name field not founds')
+
+    const getMaxUsername = await prisma.$queryRaw`
+    SELECT id,username
+    FROM users
+    WHERE username REGEXP ${searchUserRegExp}
+    ORDER BY CAST(SUBSTRING(username, CHAR_LENGTH(${name}) + 1) AS UNSIGNED) DESC , username DESC
+    LIMIT 1
+`;
+    // @ts-ignore
+    if (getMaxUsername.length === 0) return name
+
+    const username = getMaxUsername[0].username;
+
+    const regexObj = new RegExp(name, "i");
+    const extraNumberParts = username.replace(regexObj, "");
+    const numberIncreament = extraNumberParts ? parseInt(extraNumberParts) + 1 : 0;
+    const newUsername = [name, String(numberIncreament)].join('')
+    return newUsername;
+}
 
 const handlePost = async (req, res, refresh_token, dcryptAcademicYear) => {
 
@@ -76,7 +100,6 @@ const handlePost = async (req, res, refresh_token, dcryptAcademicYear) => {
                 const keys = Object.keys(res[0])
                 if (keys.length === 0) return;
                 for (const student of res) {
-                    console.log({ perStd: student });
                     if (!student['Students ID'] || !student['Student Name'] || !student.Roll || !student['Mobile (SMS)']) continue;
 
                     // // gender verify
@@ -98,9 +121,9 @@ const handlePost = async (req, res, refresh_token, dcryptAcademicYear) => {
                     }
 
                     const hashPassword = await bcrypt.hash(number, Number(process.env.SALTROUNDS));
+                    // const userName = generateUsername(student['Student Name']);
 
-                    const userName = generateUsername(student['Student Name']);
-
+                    const userName = await generateUniqueUsername(student['Student Name']);
                     const studentData = {
                         student_id: String(student['Students ID']),
                         first_name: student['Student Name'],
@@ -125,7 +148,7 @@ const handlePost = async (req, res, refresh_token, dcryptAcademicYear) => {
                             }
                         }
                     };
-                    console.log({ studentData })
+
                     customStudentsData.push({ customStudentInfo: studentData, customStudent: { class_roll_no: student.Roll ? String(student.Roll) : undefined } });
                     // if (!err) finalContacts.push(number);
                 }
@@ -147,6 +170,7 @@ const handlePost = async (req, res, refresh_token, dcryptAcademicYear) => {
 
         let faildedSmS = [], successSmS = [];
         let faildedCreateStd = [], succesCreateStd = [];
+        const failedForUniqueStudentId = [];
 
         const allPromise = customStudentsData.map(({ customStudentInfo, customStudent }, index) => {
             return new Promise(async (resolve, reject) => {
@@ -195,16 +219,20 @@ const handlePost = async (req, res, refresh_token, dcryptAcademicYear) => {
                     })
                     .catch(err => {
                         console.log({ transactionErr: err })
+                        logFile.error(`user_id=${user_id}` + err.message);
                         faildedCreateStd.push(customStudentInfo.student_id);
-                        logFile.error(`user_id=${user_id}` + err.message)
-                        if (err.message.includes('Unique constraint failed')) resolve(false);
+
+                        if (err.message.includes('Unique constraint failed')) {
+                            failedForUniqueStudentId.push(customStudentInfo.student_id)
+                            return resolve(false);
+                        }
+
+                        resolve(false);
                         // if (err.message === '\n' + 'Invalid `prisma.studentInformation.create()` invocation:\n' + '\n' + '\n' + 'Unique constraint failed on the constraint: `student_informations_student_id_school_id_key`') {
                         //     // resolve({ isSuccess: false, error: 'student id already used', student_id: customStudentInfo.student_id })
                         //     resolve(false)
                         // }
                         // resolve({ isSuccess: false, error: err.message, student_id: customStudentInfo.student_id });
-                        resolve(false)
-
                     })
             })
 
@@ -212,9 +240,9 @@ const handlePost = async (req, res, refresh_token, dcryptAcademicYear) => {
         Promise
             .all(allPromise)
             .then(resp => {
-                if (resp.includes(true)) return res.status(200).json({ message: 'students data inserted', faildedCreateStd, succesCreateStd });
+                if (resp.includes(true)) return res.status(200).json({ message: 'students data inserted', faildedCreateStd, failedForUniqueStudentId, succesCreateStd });
                 // if (resp[0].isSuccess) return res.status(200).json({ message: 'students data inserted', faildedCreateStd, succesCreateStd });
-                res.status(404).json({ error: 'failed insert all students' });
+                res.status(404).json({ error: 'failed insert all students',failedForUniqueStudentId });
             })
             .catch(err => {
                 console.log({ promiseErr: err })

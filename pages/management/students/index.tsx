@@ -107,8 +107,7 @@ function ManagementClasses() {
     if (academicYear && selectedSection) {
       axios
         .get(
-          `/api/student/?${selectedSection.id == 'all' ? `class_id=${selectedClass?.id}` : `section_id=${selectedSection?.id}`}&academic_year_id=${
-            academicYear?.id
+          `/api/student/?${selectedSection.id == 'all' ? `class_id=${selectedClass?.id}` : `section_id=${selectedSection?.id}`}&academic_year_id=${academicYear?.id
           }`
         )
         .then((res) => {
@@ -281,7 +280,7 @@ function ManagementClasses() {
       </Card>
 
       <Grid sx={{ px: 1 }} container direction="row" justifyContent="center" alignItems="stretch" spacing={3}>
-        <Grid item xs={12} sx={{width: {xs:'100vw', md:'100%'}, minWidth: '150px'}}>
+        <Grid item xs={12} sx={{ width: { xs: '100vw', md: '100%' }, minWidth: '150px' }}>
           <Results students={students?.AllStudents || []} refetch={handleStudentList} discount={discount} fee={fee} idCard={idCard} />
         </Grid>
       </Grid>
@@ -303,6 +302,8 @@ const BulkStudentUpload = ({ section_id, class_id, open, setOpen }) => {
   const [excelFileUpload, setExcelFileUpload] = useState(null);
   const { showNotification } = useNotistick();
   const { t }: { t: any } = useTranslation();
+  const [failedForUniqueStudentId, setFailedForUniqueStudentId] = useState([]);
+  const [faildedCreateStd, setFaildedCreateStd] = useState([]);
 
   const handleExcelUpload = () => {
     // console.log(excelFileUpload);
@@ -327,18 +328,23 @@ const BulkStudentUpload = ({ section_id, class_id, open, setOpen }) => {
     axios
       .post('/api/student/bulk-admission', form)
       .then((res) => {
+        setFaildedCreateStd([]);
+        setFailedForUniqueStudentId([]);
         setExcelFileUpload(null);
         showNotification(
           t(
-            `${res?.data?.message}, ${
-              Array.isArray(res?.data?.faildedCreateStd) && res?.data?.faildedCreateStd.length > 0
-                ? '(failed:' + res?.data?.faildedCreateStd + ')'
-                : ''
+            `${res?.data?.message}, ${Array.isArray(res?.data?.faildedCreateStd) && res?.data?.faildedCreateStd.length > 0
+              ? '(failed:' + res?.data?.faildedCreateStd + ')'
+              : ''
             }`
           )
         );
+        setFaildedCreateStd(res?.data?.faildedCreateStd || []);
+        setFailedForUniqueStudentId(res?.data?.failedForUniqueStudentId || []);
       })
       .catch((err) => {
+        setFailedForUniqueStudentId(err.response?.data?.failedForUniqueStudentId || []);
+        console.log({err})
         handleShowErrMsg(err, showNotification);
       })
       .finally(() => {
@@ -378,6 +384,7 @@ const BulkStudentUpload = ({ section_id, class_id, open, setOpen }) => {
     };
     reader.readAsArrayBuffer(event.target.files[0]);
   };
+  console.log({faildedCreateStd,failedForUniqueStudentId})
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={handleModalClose}>
       <DialogTitle display="flex" justifyContent="space-between" sx={{ p: 3 }}>
@@ -434,6 +441,19 @@ const BulkStudentUpload = ({ section_id, class_id, open, setOpen }) => {
               </Grid>
             </Grid>
           )}
+
+          {faildedCreateStd.length > 0 &&
+            <Grid p={1} color={"red"} border="1px solid red">
+              Failed Student Ids: {faildedCreateStd.join(', ')}
+            </Grid>
+          }
+
+          {failedForUniqueStudentId.length > 0 &&
+            <Grid p={1} mt={1} color={"red"} border="1px solid red">
+              Failed for Unique Student Ids: {failedForUniqueStudentId.join(', ')}
+            </Grid>
+          }
+
         </Grid>
 
         <SearchingButtonWrapper isLoading={isLoading} disabled={isLoading} handleClick={handleExcelUpload}>

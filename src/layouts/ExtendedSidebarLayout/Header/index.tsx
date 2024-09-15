@@ -333,7 +333,7 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
 
       {auth?.user?.role?.title === 'ADMIN' &&
         <Grid sx={{ width: 200, p: 1,ml:1, border:"1px solid white" }}>
-          <InputLabel sx={{ color: 'white', fontSize: 12, fontWeight: 600 }}>Max Student Id: {highestStudentId}</InputLabel>
+          <InputLabel sx={{ color: 'white', fontSize: 12, fontWeight: 600 }}>Last Student ID: {highestStudentId}</InputLabel>
         </Grid>
       }
       {/* @ts-ignore */}
