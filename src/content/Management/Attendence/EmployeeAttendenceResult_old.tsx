@@ -6,13 +6,17 @@ import axios from 'axios';
 import { useAuth } from '@/hooks/useAuth';
 import { AcademicYearContext } from '@/contexts/UtilsContextUse';
 import dayjs from 'dayjs';
+import { TableVirtuoso } from 'react-virtuoso';
 import useNotistick from '@/hooks/useNotistick';
+import { ClassAndSectionSelect } from '@/components/Attendence';
+
 import { MobileDatePicker } from '@mui/lab';
 import { ButtonWrapper, DisableButtonWrapper } from '@/components/ButtonWrapper';
 import { AutoCompleteWrapper, EmptyAutoCompleteWrapper } from '@/components/AutoCompleteWrapper';
 import { TextFieldWrapper } from '@/components/TextFields';
 import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
 import { TableBodyCellWrapper, TableHeaderCellWrapper } from '@/components/Table/Table';
+
 const columns = [
   {
     width: 30,
@@ -36,6 +40,7 @@ const columns = [
     dataKey: 'phone_number'
   }
 ];
+
 const VirtuosoTableComponents = {
   Scroller: forwardRef((props, ref) => (
     // @ts-ignore
@@ -69,6 +74,29 @@ function fixedHeaderContent() {
     </tr>
   );
 }
+
+// function rowContent(_index, row, setSectionAttendence) {
+//   //  console.log("row__", row);
+
+//   return columns.map((column) => (
+//     <td
+//       key={column.dataKey}
+//       style={{
+//         whiteSpace: 'nowrap',
+//         minWidth: column.width,
+//         padding: 3,
+//         margin: 'auto',
+//         textAlign: 'center'
+//       }}
+//     >
+//       {column.dataKey == 'attendence' ? (
+//         <AttendenceSwitch attendence={row['attendence']} employee_id={row.id} remark={row['remark']} setSectionAttendence={setSectionAttendence} />
+//       ) : (
+//         row[column.dataKey]
+//       )}
+//     </td>
+//   ));
+// }
 
 const AttendenceSwitch = ({ attendence, remark, employee_id, setSectionAttendence }) => {
   const [attendenceValue, setAttendenceValue] = useState(attendence);
@@ -111,6 +139,11 @@ const AttendenceSwitch = ({ attendence, remark, employee_id, setSectionAttendenc
         return [...prev];
       }
     });
+    // axios.patch(`/api/attendance/student?school_id=${user?.school_id}&section_id=${selectedSection?.id}&date=${date}&student_id=${student_id}&status=${e}${remarkValue ? `&remark=${remarkValue}` : ''}`)
+    //   .then(() => {
+    //     setAttendenceValue(e)
+    //   })
+    //   .catch(err => console.log(err))
   };
 
   return (
@@ -199,8 +232,7 @@ const Results = ({ selectedClass, setSelectedClass, selectedSection, setSelected
       axios
         .get(`/api/role/${selectedRole?.label}?school_id=${user?.school_id}`)
         .then((res) => {
-          setTargetRoleEmployees(res?.data);
-          console.log('ressssssssssssss', res?.data);
+          setTargetRoleEmployees(res.data);
         })
         .catch((err) => {
           showNotification(err?.response?.data?.message, 'error');
@@ -218,6 +250,21 @@ const Results = ({ selectedClass, setSelectedClass, selectedSection, setSelected
       .catch((err) => console.log(err));
   }, []);
 
+  // useEffect(() => {
+  //   if (user && selectedSection && academicYear) {
+  //     setStudents(null);
+  //     axios
+  //       .get(`/api/student?school_id=${user?.school_id}&section_id=${selectedSection?.id}&academic_year_id=${academicYear?.id}`)
+  //       .then((res) => {
+  //         setTargetsectionStudents(res.data);
+  //       })
+  //       .catch((err) => {
+  //         showNotification(err?.response?.data?.message, 'error');
+  //         console.log(err);
+  //       });
+  //   }
+  // }, [user, selectedSection, academicYear]);
+
   const handleAttendenceFind = () => {
     if (selectedRole && selectedDate && academicYear) {
       setStudents(null);
@@ -226,11 +273,10 @@ const Results = ({ selectedClass, setSelectedClass, selectedSection, setSelected
       axios
         .get(`/api/attendance/employee?school_id=${user?.school_id}&role_id=${selectedRole?.id}&date=${date}`)
         .then((response) => {
-          console.log(targetRoleEmployees);
           const temp = targetRoleEmployees?.map((i) => {
             let attendance;
             let remark;
-            const check = response?.data?.find((j) => j?.user_id == i.user_id);
+            const check = response.data?.find((j) => j?.user_id == i.user_id);
 
             if (check) {
               attendance = check.status;
@@ -440,10 +486,13 @@ const Results = ({ selectedClass, setSelectedClass, selectedSection, setSelected
     </Grid>
   );
 };
+
 Results.propTypes = {
   schools: PropTypes.array.isRequired
 };
+
 Results.defaultProps = {
   schools: []
 };
+
 export default Results;
