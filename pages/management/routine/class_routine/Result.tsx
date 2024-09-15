@@ -66,7 +66,7 @@ const Result = ({ routineInfo, setEditData, setOpen, handleDeleteRoutine }) => {
 
   return (
     <Grid component={Paper} sx={{ borderRadius: 0.5 }} mx={1} mt={3}>
-      {routineInfo.map((item, i) => {
+      {routineInfo?.map((item, i) => {
         return (
           <Grid key={i}>
             <Grid
