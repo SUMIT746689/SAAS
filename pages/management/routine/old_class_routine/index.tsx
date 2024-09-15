@@ -8,11 +8,10 @@ import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 
 import { Grid } from '@mui/material';
-
-import ExampRoutine from '@/content/Management/Routine/ExamRoutine';
+import Results from 'src/content/Management/Routine/Results';
+import StudentResults from '@/content/Management/Routine/StudentResult';
 import { serverSideAuthentication } from '@/utils/serverSideAuthentication';
 import prisma from '@/lib/prisma_client';
-import SingleStudentExamRoutine from '@/content/Management/Routine/SingleStudentExamRoutine';
 
 export async function getServerSideProps(context: any) {
   let student: any = null;
@@ -22,7 +21,7 @@ export async function getServerSideProps(context: any) {
     if (!refresh_token_varify) return { props: { student } };
 
     if (refresh_token_varify.role.title === 'STUDENT') {
-
+      
       student = await prisma.student.findFirst({
         where: {
           student_info: {
@@ -75,7 +74,7 @@ export async function getServerSideProps(context: any) {
         section_id: student.section.id,
         name: [student.student_info.first_name, student.student_info.middle_name, student.student_info.last_name].join(' '),
         class: student.section.class.name,
-        section: student.section.class.has_section ? student.section.name : 'No section',
+        section: student.section.class.has_section ? student.section.name : '',
         class_registration_no: student.class_registration_no,
         class_roll_no: student.class_roll_no,
         student_id: student.id
@@ -85,13 +84,14 @@ export async function getServerSideProps(context: any) {
   catch (error) {
     console.log({ error })
   }
-  const parse = JSON.parse(JSON.stringify({ data }));
+  const parse = JSON.parse(JSON.stringify({ student, data }));
   return { props: parse }
 }
 
-function ExamRoutine({ data }) {
+function ClassRoutine({data}) {
+console.log({data});
 
-  // const { user }: any = useAuth();
+  // const { user }:any = useAuth();
 
   return (
     <>
@@ -99,7 +99,7 @@ function ExamRoutine({ data }) {
         <title>Routine</title>
       </Head>
       <PageTitleWrapper>
-        <PageHeader title={'Exam routine'} />
+        <PageHeader title={'Class routine'} />
       </PageTitleWrapper>
 
       <Grid
@@ -109,16 +109,14 @@ function ExamRoutine({ data }) {
         justifyContent="center"
         alignItems="stretch"
         spacing={3}
-
       >
         <Grid item xs={12}>
-          {
-            data ?
-              <SingleStudentExamRoutine data={data} />
-              :
-              <ExampRoutine />
-          }
 
+          {data ?
+            <StudentResults data={data} />
+            :
+            <Results />
+          }
         </Grid>
       </Grid>
       <Footer />
@@ -126,10 +124,10 @@ function ExamRoutine({ data }) {
   );
 }
 
-ExamRoutine.getLayout = (page) => (
-  <Authenticated name="exam_routine">
+ClassRoutine.getLayout = (page) => (
+  <Authenticated name="class_routine">
     <ExtendedSidebarLayout>{page}</ExtendedSidebarLayout>
   </Authenticated>
 );
 
-export default ExamRoutine;
+export default ClassRoutine;
