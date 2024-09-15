@@ -931,6 +931,7 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
           </Grid>
           <Grid width="80px" height="80px"></Grid>
         </Grid>
+
         {/* student information */}
         <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Grid sx={{ display: 'flex', gap: '20px' }}>
@@ -939,10 +940,10 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
                 Rec. No.
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
-                Student Id & Name
+                Student Name & Id
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
-                Section
+                Batch
               </Typography>
             </Grid>
             <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -950,7 +951,7 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
                 : {selectedFees[0]?.tracking_number}
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
-                : {student_id}, {[feesUserData?.first_name, feesUserData?.middle_name, feesUserData?.last_name].join(' ')}
+                : {`${[feesUserData?.first_name, feesUserData?.middle_name, feesUserData?.last_name].join(' ')} (${student_id})`}
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
                 : {feesUserData?.section_name}
@@ -968,6 +969,9 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
               <Typography variant="body1" sx={{ color: '#000' }}>
                 Roll No
               </Typography>
+              <Typography variant="body1" sx={{ color: '#000' }}>
+                Phone No
+              </Typography>
             </Grid>
             <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
               <Typography variant="body1" sx={{ color: '#000' }}>
@@ -978,6 +982,9 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
                 : {feesUserData?.class_roll_no}
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#000' }}>
+                : {userInformation?.phone}
               </Typography>
             </Grid>
           </Grid>
