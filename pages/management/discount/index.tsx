@@ -13,10 +13,11 @@ import { AcademicYearContext } from '@/contexts/UtilsContextUse';
 function ManagementClasses() {
   const [editDiscount, setEditDiscount] = useState(null);
   const [academicYear, setAcademicYear] = useContext(AcademicYearContext);
+  const { data: classes } = useClientFetch(`/api/class`);
   const { data: discount, reFetchData } = useClientFetch(`/api/discount?academic_year_id=${academicYear?.id}`);
-  const { data: fees } = useClientFetch(`/api/fee?academic_year_id=${academicYear?.id}`);
+  // const { data: fees } = useClientFetch(`/api/fee?academic_year_id=${academicYear?.id}`);
 
-  console.log({editDiscount});
+  console.log({ classes });
 
   return (
     <>
@@ -28,10 +29,20 @@ function ManagementClasses() {
           editDiscount={editDiscount}
           setEditDiscount={setEditDiscount}
           reFetchData={reFetchData}
-          fees={fees?.data?.map(i => ({
-            label: `${i?.title} (${i?.class?.name})`,
-            value: i.id
-          })) || []}
+          classes={
+            classes?.map(i => ({
+              label: i?.name,
+              value: i.id,
+              sections:i.sections.map(sec=>({
+                label: sec.name,
+                value:sec.id
+              }))
+            })) || []
+          }
+        // fees={fees?.data?.map(i => ({
+        //   label: `${i?.title} (${i?.class?.name})`,
+        //   value: i.id
+        // })) || []}
         />
       </PageTitleWrapper>
 

@@ -142,8 +142,21 @@ export const post = async (req, res, refresh_token) => {
       collect_filter_data
     }: any = req.body;
 
+
     // create a single trancking_number
-    let tracking_number = await new_unique_tracking_number(`st-${user_id}-${student_id}`, school_id);
+      //get max track number for student fees transaction
+      const getMaxTrackingNumber = await prisma.$queryRaw`
+        SELECT 
+        -- CAST(SUBSTRING(tracking_number, 4) AS UNSIGNED) as 
+        tracking_number FROM transactions
+        WHERE school_id = ${school_id} AND tracking_number LIKE BINARY'ST-%' AND SUBSTRING(tracking_number, 4) REGEXP '^[0-9]+$'
+        ORDER BY CAST(SUBSTRING(tracking_number, 4) AS UNSIGNED) DESC , tracking_number DESC
+        LIMIT 1
+        `;
+
+      // create a new unique tracking number
+      const tracking_number = getMaxTrackingNumber[0]?.tracking_number ? `ST-${parseInt(getMaxTrackingNumber[0]?.tracking_number.slice(3)) + 1}` : 'ST-1000'
+      // let tracking_number = await new_unique_tracking_number(`st-${user_id}-${student_id}`, school_id);
 
     if (student_id && fee_id.length > 0 && account_id && payment_method_id && collected_by_user) {
       const promises = collect_filter_data.map(async (item) => {

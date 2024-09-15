@@ -233,7 +233,7 @@ const Results = ({ setEditDiscount, discount }) => {
 
                         <TableCell>
                           <Typography variant="h5">
-                            {i?.fee?.title}
+                           {i?.fee?.fees_head?.title} ( {i?.fee?.title} )
                           </Typography>
                         </TableCell>
                         <TableCell>

@@ -11,7 +11,16 @@ import axios from 'axios';
 import { NewDebounceInput } from '@/components/DebounceInput';
 import { AcademicYearContext } from '@/contexts/UtilsContextUse';
 
-function RegistrationSecondPart({ totalFormData, setTotalFormData, setActiveStep, handleCreateClassClose, student = null, classes, academicYears }) {
+function RegistrationSecondPart({
+  totalFormData,
+  setTotalFormData,
+  setActiveStep,
+  handleCreateClassClose,
+  student = null,
+  classes,
+  academicYears,
+  uniqueRegNum
+}) {
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
 
@@ -237,7 +246,7 @@ function RegistrationSecondPart({ totalFormData, setTotalFormData, setActiveStep
 
           academic_year_id: student ? Number(student?.academic_year_id) : academicYear?.id,
           roll_no: student ? student?.class_roll_no : undefined,
-          registration_no: student?.class_registration_no || registration_no_generate(),
+          registration_no: uniqueRegNum || '',
           student_photo: null,
           student_present_address: student ? student?.student_present_address : '',
           student_permanent_address: student ? student?.student_permanent_address || student?.student_info?.student_permanent_address || '' : '',
@@ -570,7 +579,7 @@ function RegistrationSecondPart({ totalFormData, setTotalFormData, setActiveStep
                         name="registration_no"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        type="text"
+                        type="number"
                         value={values.registration_no}
                         variant="outlined"
                       />

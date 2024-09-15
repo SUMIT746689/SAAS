@@ -19,7 +19,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'admin.edu360.com.bd',
+        hostname: 'coaching.edu360.com.bd',
         port: '',
         pathname: '/api/get_file/**',
       },

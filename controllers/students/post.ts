@@ -258,7 +258,7 @@ const postHandle = async (req, res, refresh_token) => {
       const student = await transaction.student.create({
         data: {
           class_roll_no: fields?.roll_no,
-          class_registration_no: fields?.registration_no,
+          class_registration_no: String(fields?.registration_no),
           // @ts-ignore
           student_photo: filePathQuery?.student_photo_path,
           guardian_name: fields?.guardian_name,
