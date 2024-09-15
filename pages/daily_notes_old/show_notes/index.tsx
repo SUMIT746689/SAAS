@@ -42,7 +42,6 @@ const ShowNotes = ({ classes }) => {
           {/* <PageHeader periods={periods} /> */}
           <Results classes={classes} notes={notes} setNotes={setNotes} />
         </Grid>
-
         <Footer />
       </PageBodyWrapper>
     </>

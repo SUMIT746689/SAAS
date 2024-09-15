@@ -1,10 +1,36 @@
 import { FC, ChangeEvent, MouseEvent, SyntheticEvent, useState, ReactElement, Ref, forwardRef, useEffect, useContext } from 'react';
-
 import PropTypes from 'prop-types';
 import {
-  Avatar, Box, Card, Checkbox, Grid, Slide, Divider, Tooltip, IconButton, InputAdornment, Table,
-  TableBody, TableCell, TableHead, TablePagination, TableContainer, TableRow, ToggleButton, ToggleButtonGroup,
-  Tab, Tabs, TextField, Button, Typography, Dialog, Zoom, styled, Chip, DialogTitle, DialogContent,
+  Avatar,
+  Box,
+  Card,
+  Checkbox,
+  Grid,
+  Slide,
+  Divider,
+  Tooltip,
+  IconButton,
+  InputAdornment,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableContainer,
+  TableRow,
+  ToggleButton,
+  ToggleButtonGroup,
+  Tab,
+  Tabs,
+  TextField,
+  Button,
+  Typography,
+  Dialog,
+  Zoom,
+  styled,
+  Chip,
+  DialogTitle,
+  DialogContent
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import CloseIcon from '@mui/icons-material/Close';
@@ -49,8 +75,6 @@ const AvatarError = styled(Avatar)(
 `
 );
 
-
-
 const ButtonError = styled(Button)(
   ({ theme }) => `
      background: ${theme.colors.error.main};
@@ -62,7 +86,6 @@ const ButtonError = styled(Button)(
     `
 );
 
-
 interface ResultsProps {
   users: User[];
 }
@@ -71,20 +94,11 @@ interface Filters {
   role?: string;
 }
 
-const Transition = forwardRef(function Transition(
-  props: TransitionProps & { children: ReactElement<any, any> },
-  ref: Ref<unknown>
-) {
+const Transition = forwardRef(function Transition(props: TransitionProps & { children: ReactElement<any, any> }, ref: Ref<unknown>) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-
-
-const applyFilters = (
-  users,
-  query,
-  filters
-) => {
+const applyFilters = (users, query, filters) => {
   return users.filter((i) => {
     let matches = true;
 
@@ -92,8 +106,7 @@ const applyFilters = (
       const properties = ['name', 'user.role.title', 'user.username', 'Leave_type'];
       let containsQuery = false;
       for (const property of properties) {
-
-        const queryString = accessNestedProperty(i, property.split('.'))
+        const queryString = accessNestedProperty(i, property.split('.'));
 
         if (queryString?.toLowerCase().includes(query.toLowerCase())) {
           containsQuery = true;
@@ -121,11 +134,7 @@ const applyFilters = (
   });
 };
 
-const applyPagination = (
-  users: User[],
-  page: number,
-  limit: number
-): User[] => {
+const applyPagination = (users: User[], page: number, limit: number): User[] => {
   return users.slice(page * limit, page * limit + limit);
 };
 
@@ -142,8 +151,8 @@ const Results = ({ users, reFetchData }) => {
   const [filters, setFilters] = useState<Filters>({
     role: null
   });
-  const [open, setOpen] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
+  const [open, setOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const { showNotification } = useNotistick();
 
@@ -151,8 +160,6 @@ const Results = ({ users, reFetchData }) => {
     event.persist();
     setQuery(event.target.value);
   };
-
-
 
   const handlePageChange = (_event: any, newPage: number): void => {
     setPage(newPage);
@@ -165,11 +172,7 @@ const Results = ({ users, reFetchData }) => {
   const filteredClasses = applyFilters(users, query, filters);
   const paginatedClasses = applyPagination(filteredClasses, page, limit);
 
-
-
   const [openConfirmDelete, setOpenConfirmDelete] = useState(null);
-
-
 
   const closeConfirmDelete = () => {
     setOpenConfirmDelete(null);
@@ -177,30 +180,25 @@ const Results = ({ users, reFetchData }) => {
 
   const handleDeleteCompleted = () => {
     if (openConfirmDelete && academicYear?.id) {
-      axios.delete(`/api/homework/${openConfirmDelete}?academic_year_id=${academicYear?.id}`)
-        .then(res => {
-          showNotification(res?.data?.message)
+      axios
+        .delete(`/api/homework/${openConfirmDelete}?academic_year_id=${academicYear?.id}`)
+        .then((res) => {
+          showNotification(res?.data?.message);
           setOpenConfirmDelete(null);
-          reFetchData()
+          reFetchData();
         })
-        .catch(err => showNotification(err?.response?.data?.message, 'error'))
+        .catch((err) => showNotification(err?.response?.data?.message, 'error'));
     }
   };
   const handleCreateClassClose = () => {
     setOpen(false);
-    setSelectedUser(null)
+    setSelectedUser(null);
   };
 
   return (
     <>
-
       <Card sx={{ minHeight: 'calc(100vh - 330px) !important' }}>
-        <Box
-          p={1}
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-        >
+        <Box p={1} display="flex" alignItems="center" justifyContent="space-between">
           <Box>
             <Typography component="span" variant="subtitle1">
               {t('Showing')}:
@@ -234,43 +232,34 @@ const Results = ({ users, reFetchData }) => {
           </>
         ) : (
           <>
-
             <TableContainer>
-              <Table size='small'>
+              <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableHeaderCellWrapper >{t('ID')}           </TableHeaderCellWrapper>
-                    <TableHeaderCellWrapper align='center'>{t('Date')}         </TableHeaderCellWrapper>
-                    <TableHeaderCellWrapper align='center'>{t('To Date')}      </TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper>{t('ID')} </TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align="center">{t('Date')} </TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align="center">{t('To Date')} </TableHeaderCellWrapper>
                     <TableHeaderCellWrapper align="center">{t('Applied Date')} </TableHeaderCellWrapper>
-                    <TableHeaderCellWrapper align='center'>{t('Status')}       </TableHeaderCellWrapper>
-
+                    <TableHeaderCellWrapper align="center">{t('Status')} </TableHeaderCellWrapper>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {paginatedClasses.map((i) => {
-
                     return (
                       <TableRow hover key={i.id}>
                         <TableBodyCellWrapper>{i?.id}</TableBodyCellWrapper>
                         <TableBodyCellWrapper align="center">{dayjs(i?.date).format('YYYY-MM-DD')}</TableBodyCellWrapper>
                         <TableBodyCellWrapper align="center">{i?.subject?.name}</TableBodyCellWrapper>
                         <TableBodyCellWrapper align="center">
-                          {i?.file_path && <a
-                            style={{ width: '50px', color: 'blue', textDecoration: 'underline' }}
-                            target="_blank"
-                            href={getFile(i?.file_path)}
-                          >
-                            File link
-                          </a>
-                          }
+                          {i?.file_path && (
+                            <a style={{ width: '50px', color: 'blue', textDecoration: 'underline' }} target="_blank" href={getFile(i?.file_path)}>
+                              File link
+                            </a>
+                          )}
                         </TableBodyCellWrapper>
                         <TableBodyCellWrapper align="center">
                           <Tooltip title={t('Delete')} arrow>
-                            <IconButton
-                              onClick={() => setOpenConfirmDelete(i?.id)}
-                              color="primary"
-                            >
+                            <IconButton onClick={() => setOpenConfirmDelete(i?.id)} color="primary">
                               <DeleteTwoToneIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
@@ -281,8 +270,6 @@ const Results = ({ users, reFetchData }) => {
                 </TableBody>
               </Table>
             </TableContainer>
-
-
           </>
         )}
       </Card>
@@ -295,13 +282,7 @@ const Results = ({ users, reFetchData }) => {
         keepMounted
         onClose={closeConfirmDelete}
       >
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-          p={5}
-        >
+        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" p={5}>
           <AvatarError>
             <CloseIcon />
           </AvatarError>
@@ -314,8 +295,7 @@ const Results = ({ users, reFetchData }) => {
             }}
             variant="h3"
           >
-            {t('Are you sure you want to permanently delete this user account')}
-            ?
+            {t('Are you sure you want to permanently delete this user account')}?
           </Typography>
 
           <Box>
@@ -346,7 +326,6 @@ const Results = ({ users, reFetchData }) => {
     </>
   );
 };
-
 
 Results.propTypes = {
   users: PropTypes.array.isRequired
