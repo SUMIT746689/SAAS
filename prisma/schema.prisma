@@ -234,6 +234,7 @@ model Class {
   tbl_student_sent_sms_queue tbl_student_sent_sms_queue[]
   teacherSalaries            TeacherSalaryStructure[]
   Student                    Student[]
+  Period                     Period[]
 
   @@map("classes")
 }
@@ -445,8 +446,8 @@ model Period {
   school    School      @relation(fields: [school_id], references: [id])
   room      Room?       @relation(fields: [room_id], references: [id])
   DailyNote DailyNote[]
-  routine   Routine?
 
+  // routine Routine?
   @@map("periods")
 }
 
