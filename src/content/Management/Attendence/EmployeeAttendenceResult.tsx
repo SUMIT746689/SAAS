@@ -226,7 +226,7 @@ const Results = ({ selectedClass, setSelectedClass, selectedSection, setSelected
       axios
         .get(`/api/attendance/employee?school_id=${user?.school_id}&role_id=${selectedRole?.id}&date=${date}`)
         .then((response) => {
-          console.log(targetRoleEmployees);
+          console.log({ targetRoleEmployees });
           const temp = targetRoleEmployees?.map((i) => {
             let attendance;
             let remark;
