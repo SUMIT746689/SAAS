@@ -137,6 +137,7 @@ model School {
   studentFeeWiseTeacherPay   studentFeeWiseTeacherPay[]
   websiteMenus               WebsiteMenu[]
   websiteDynamicPages        WebsiteDynamicPage[]
+
   // routines Routine[]
   @@map("schools")
 }
@@ -203,15 +204,15 @@ model Teacher {
   user_id       Int  @unique
   school_id     Int
 
-  my_class        Section[]                @relation("class_teacher")
-  user            User                     @relation(fields: [user_id], references: [id])
-  classes         Section[]                @relation("SectionToTeacher")
-  periods         Period[]
-  school          School                   @relation(fields: [school_id], references: [id])
-  department      Department?              @relation(fields: [department_id], references: [id])
-  seatPlans       seatPlan[]               @relation("teacher_to_seat_plan")
+  my_class                 Section[]                  @relation("class_teacher")
+  user                     User                       @relation(fields: [user_id], references: [id])
+  classes                  Section[]                  @relation("SectionToTeacher")
+  periods                  Period[]
+  school                   School                     @relation(fields: [school_id], references: [id])
+  department               Department?                @relation(fields: [department_id], references: [id])
+  seatPlans                seatPlan[]                 @relation("teacher_to_seat_plan")
   // StudentClassSubjects StudentClassSubjects[]
-  teacherSalaries TeacherSalaryStructure[]
+  teacherSalaries          TeacherSalaryStructure[]
   studentFeeWiseTeacherPay studentFeeWiseTeacherPay[]
 
   @@map("teachers")
@@ -233,6 +234,7 @@ model Class {
   tbl_student_sent_sms_queue tbl_student_sent_sms_queue[]
   teacherSalaries            TeacherSalaryStructure[]
   Student                    Student[]
+  Period                     Period[]
 
   @@map("classes")
 }
@@ -397,15 +399,15 @@ model Subject {
   class_id Int
   class    Class  @relation(fields: [class_id], references: [id])
 
-  exam_details    ExamDetails[]
-  Period          Period[]
-  DailyNote       DailyNote[]
-  Syllabus        Syllabus[]
-  Homework        Homework[]
+  exam_details             ExamDetails[]
+  Period                   Period[]
+  DailyNote                DailyNote[]
+  Syllabus                 Syllabus[]
+  Homework                 Homework[]
   // StudentClassSubjects StudentClassSubjects[]
-  fees            Fee[]
-  teacherSalaries TeacherSalaryStructure[]
-  students        Student[]                @relation("student_subjects")
+  fees                     Fee[]
+  teacherSalaries          TeacherSalaryStructure[]
+  students                 Student[]                  @relation("student_subjects")
   studentFeeWiseTeacherPay studentFeeWiseTeacherPay[]
 
   @@map("subjects")
@@ -427,20 +429,22 @@ model Room {
 
 model Period {
   id         Int      @id @default(autoincrement())
-  room_id    Int
-  day        weekdays
-  start_time DateTime @db.Time()
-  end_time   DateTime @db.Time()
-  teacher_id Int?
-  section_id Int?
-  school_id  Int
+  class_id   Int?
+  section_id Int
+  teacher_id Int
   subject_id Int
+  school_id  Int
+  day        weekdays
+  start_time String
+  end_time   String
+  room_id    Int?
 
-  subject   Subject     @relation(fields: [subject_id], references: [id])
-  room      Room        @relation(fields: [room_id], references: [id])
+  class     Class?      @relation(fields: [class_id], references: [id])
+  section   Section     @relation(fields: [section_id], references: [id])
   teacher   Teacher?    @relation(fields: [teacher_id], references: [id])
-  section   Section?    @relation(fields: [section_id], references: [id])
+  subject   Subject     @relation(fields: [subject_id], references: [id])
   school    School      @relation(fields: [school_id], references: [id])
+  room      Room?       @relation(fields: [room_id], references: [id])
   DailyNote DailyNote[]
 
   // routine Routine?
@@ -1763,22 +1767,23 @@ enum TeacherPayType {
 }
 
 model studentFeeWiseTeacherPay {
-  id               Int            @id @default(autoincrement())
-  student_fee_id   Int            @unique
-  subject_id       Int
-  teacher_pay_type TeacherPayType
-  teacher_id       Int
-  school_id        Int
-  amount           Float
-  collection_date  DateTime
-  created_at       DateTime       @default(now())
+  id                Int            @id @default(autoincrement())
+  student_fee_id    Int            @unique
+  subject_id        Int
+  teacher_pay_type  TeacherPayType
+  teacher_id        Int
+  school_id         Int
+  amount            Float
+  collection_date   DateTime
+  created_at        DateTime       @default(now())
   percentage_amount Int
-  fixed_amount     Int
+  fixed_amount      Int
 
   studentFee StudentFee? @relation(fields: [student_fee_id], references: [id])
   school     School      @relation(fields: [school_id], references: [id])
   teacher    Teacher     @relation(fields: [teacher_id], references: [id])
   subject    Subject     @relation(fields: [subject_id], references: [id])
+
   @@map("student_fee_wise_teacher_pays")
 }
 
@@ -1822,8 +1827,6 @@ model attendence_info {
 
   @@map("attendence_info")
 }
-
-
 
 enum WebsiteMenuStatus {
   publish
