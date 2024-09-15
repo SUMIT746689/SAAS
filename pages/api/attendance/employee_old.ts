@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma_client';
 import { authenticate } from 'middleware/authenticate';
 import { logFile } from 'utilities_api/handleLogFile';
+
 const index = async (req, res, refresh_token) => {
   try {
     const { method } = req;
@@ -48,7 +49,7 @@ const index = async (req, res, refresh_token) => {
             if (req.body.attendence.length !== 0) {
               // created code start
               await Promise.all(
-                req?.body?.attendence?.map(async (status) => {
+                req.body.attendence?.map(async (status) => {
                   const { employee_id } = status;
                   const { status: userStatus } = req.query;
 
