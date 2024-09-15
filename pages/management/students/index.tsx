@@ -30,6 +30,7 @@ import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
 import { read, utils } from 'xlsx';
 import { handleCreateFileObj } from 'utilities_api/handleCreateFileObject';
 import CloseIcon from '@mui/icons-material/Close';
+import { HighestStudentIdContext } from '@/contexts/HighestStudentIdContext';
 
 function ManagementClasses() {
   const [students, setStudents] = useContext<any[]>(Students);
@@ -304,6 +305,7 @@ const BulkStudentUpload = ({ section_id, class_id, open, setOpen }) => {
   const { t }: { t: any } = useTranslation();
   const [failedForUniqueStudentId, setFailedForUniqueStudentId] = useState([]);
   const [faildedCreateStd, setFaildedCreateStd] = useState([]);
+  const { handleFetchHighestStudentId } = useContext(HighestStudentIdContext)
 
   const handleExcelUpload = () => {
     // console.log(excelFileUpload);
@@ -341,6 +343,7 @@ const BulkStudentUpload = ({ section_id, class_id, open, setOpen }) => {
         );
         setFaildedCreateStd(res?.data?.faildedCreateStd || []);
         setFailedForUniqueStudentId(res?.data?.failedForUniqueStudentId || []);
+        handleFetchHighestStudentId();
       })
       .catch((err) => {
         setFailedForUniqueStudentId(err.response?.data?.failedForUniqueStudentId || []);

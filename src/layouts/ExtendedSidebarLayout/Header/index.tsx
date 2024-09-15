@@ -9,7 +9,7 @@ import HeaderButtons from './Buttons';
 import HeaderUserbox from './Userbox';
 import HeaderSearch from './Search';
 import HeaderMenu from './Menu';
-import { AcademicYearContext } from '@/contexts/UtilsContextUse';
+import { AcademicYearContext, MaxStudentId } from '@/contexts/UtilsContextUse';
 import axios from 'axios';
 import { getOneCookies } from '@/utils/utilitY-functions';
 import { useAuth } from '@/hooks/useAuth';
@@ -26,6 +26,7 @@ import { useTranslation } from 'next-i18next';
 import { ModuleContext } from '@/contexts/ModuleContext';
 import { adminModulesList, studentModulesList, teacherModulesList } from '@/utils/moduleLists';
 import Link from 'next/link';
+import { HighestStudentIdContext } from '@/contexts/HighestStudentIdContext';
 
 const HeaderWrapper = styled(Box)(
   ({ theme }) => `
@@ -63,6 +64,7 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
   const [selectedAcademicYear, setSelectedAcademicYear] = useState(null);
   const [academicYear, setAcademicYear] = useContext(AcademicYearContext);
   const { selectModule, handleChangeModule } = useContext(ModuleContext);
+  const { highestStudentId, handleFetchHighestStudentId } = useContext(HighestStudentIdContext)
 
   const [menulist, setMenulist] = useState([]);
   const router = useRouter();
@@ -124,29 +126,31 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
 
   useEffect(() => {
     // @ts-ignore
-    if (auth?.user?.role?.title !== 'SUPER_ADMIN' && auth?.user?.role?.title !== 'ASSIST_SUPER_ADMIN') {
-      const tempMenu = [];
-      for (const i of menuItems[0]?.items) {
-        if (i.items) {
-          for (const j of i.items) {
-            j.link &&
-              tempMenu.push({
-                label: j.name,
-                value: j.link
-              });
-          }
-        } else {
-          tempMenu.push({
-            label: i.name,
-            value: i.link
-          });
+    if (!auth?.user?.user_role?.title || auth?.user?.user_role?.title === 'SUPER_ADMIN' || auth?.user?.user_role?.title === 'ASSIST_SUPER_ADMIN') return;
+
+    const tempMenu = [];
+    for (const i of menuItems[0]?.items) {
+      if (i.items) {
+        for (const j of i.items) {
+          j.link &&
+            tempMenu.push({
+              label: j.name,
+              value: j.link
+            });
         }
+      } else {
+        tempMenu.push({
+          label: i.name,
+          value: i.link
+        });
       }
-
-      setMenulist(tempMenu);
-
-      handleFetchAcademicYear();
     }
+
+    setMenulist(tempMenu);
+
+    handleFetchAcademicYear();
+    handleFetchHighestStudentId();
+
   }, [auth?.user]);
 
   useEffect(() => {
@@ -154,27 +158,6 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
       setAcademicYear(selectedAcademicYear);
     }
   }, [selectedAcademicYear]);
-
-  const [highestStudentId, setHighestStudentId] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('/api/student/highest_student_id');
-        console.log({ response })
-        setHighestStudentId(response.data.highestStudentId);
-      } catch (err) {
-        setError(err);
-        console.error('Error fetching highest student ID:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
 
   const handleAcademicYearChange = async (event: any, newValue: { id: number; label: string } | null) => {
     if (!newValue?.id && !newValue?.label) return showNotification('academic year values not found', 'error');
@@ -331,8 +314,9 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
         </Grid>
       )}
 
-      {auth?.user?.role?.title === 'ADMIN' &&
-        <Grid sx={{ width: 200, p: 1,ml:1, border:"1px solid white" }}>
+      {
+        auth?.user?.role?.title === 'ADMIN' &&
+        <Grid sx={{ width: 200, p: 1, ml: 1, border: "1px solid white" }}>
           <InputLabel sx={{ color: 'white', fontSize: 12, fontWeight: 600 }}>Last Student ID: {highestStudentId}</InputLabel>
         </Grid>
       }

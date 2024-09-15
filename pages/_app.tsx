@@ -25,6 +25,7 @@ import '@fullcalendar/common/main.css'
 import '@fullcalendar/daygrid/main.css'
 import '@fullcalendar/timegrid/main.css'
 import { ModuleProvider } from '@/contexts/ModuleContext';
+import { HighestStudentIdProvider } from '@/contexts/HighestStudentIdContext';
 // import { headers } from 'next/headers';
 
 const clientSideEmotionCache = createEmotionCache();
@@ -90,27 +91,28 @@ function TokyoApp(props: TokyoAppProps) {
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <AuthProvider>
                   <AcademicYearContext.Provider value={[academicYear, setAcademicYear]}>
-                    <Students.Provider value={[students, setStudents]}>
-                      <SnackbarProvider
-                        maxSnack={6}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'right'
-                        }}
-                      >
-                        <CssBaseline />
-                        <AuthConsumer>
-                          {(auth) =>
-                            !auth.isInitialized ? (
-                              <Loader />
-                            ) : (
-                              getLayout(<Component {...pageProps} />)
-                            )
-                          }
-                        </AuthConsumer>
-                      </SnackbarProvider>
-                    </Students.Provider>
-
+                    <HighestStudentIdProvider>
+                      <Students.Provider value={[students, setStudents]}>
+                        <SnackbarProvider
+                          maxSnack={6}
+                          anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right'
+                          }}
+                        >
+                          <CssBaseline />
+                          <AuthConsumer>
+                            {(auth) =>
+                              !auth.isInitialized ? (
+                                <Loader />
+                              ) : (
+                                getLayout(<Component {...pageProps} />)
+                              )
+                            }
+                          </AuthConsumer>
+                        </SnackbarProvider>
+                      </Students.Provider>
+                    </HighestStudentIdProvider>
                   </AcademicYearContext.Provider>
                 </AuthProvider>
               </LocalizationProvider>
