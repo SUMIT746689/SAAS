@@ -114,7 +114,7 @@ const CreateNote = () => {
             label: i.name,
             id: i.id
           };
-        }) || []
+        })
       );
 
       if (!newValue.has_section) {
@@ -237,8 +237,6 @@ const CreateNote = () => {
   //   const startDatePickerHandleChange = (event: ChangeEvent<HTMLInputElement>): void => {
   //     setStartDate(event);
   //   };
-
-  console.log({ subjects, subjectsList });
 
   return (
     <>
