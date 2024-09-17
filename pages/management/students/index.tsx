@@ -84,7 +84,7 @@ function ManagementClasses() {
           console.log('discount__', res.data);
           setDiscount(
             res.data?.map((i) => ({
-              label: `${i?.title} (${i?.amt} ${i?.type})`,
+              label: `${i?.fee?.fees_head?.title}, ${i?.fee?.title}, ${i?.title} (${i?.amt} ${i?.type})`,
               id: i.id
             }))
           );
@@ -95,7 +95,8 @@ function ManagementClasses() {
         .then((res) =>
           setFee(
             res?.data?.data?.map((i) => ({
-              label: i.title,
+              // label: i.title,
+              label: `${i?.fees_head?.title}, ${i?.fees_month}, ${i?.subject?.name || ''}`,
               id: i.id
             }))
           )
@@ -347,7 +348,7 @@ const BulkStudentUpload = ({ section_id, class_id, open, setOpen }) => {
       })
       .catch((err) => {
         setFailedForUniqueStudentId(err.response?.data?.failedForUniqueStudentId || []);
-        console.log({err})
+        console.log({ err })
         handleShowErrMsg(err, showNotification);
       })
       .finally(() => {
@@ -387,7 +388,7 @@ const BulkStudentUpload = ({ section_id, class_id, open, setOpen }) => {
     };
     reader.readAsArrayBuffer(event.target.files[0]);
   };
-  console.log({faildedCreateStd,failedForUniqueStudentId})
+  console.log({ faildedCreateStd, failedForUniqueStudentId })
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={handleModalClose}>
       <DialogTitle display="flex" justifyContent="space-between" sx={{ p: 3 }}>
