@@ -24,6 +24,7 @@ import { registration_no_generate } from '@/utils/utilitY-functions';
 import { handleConvBanNum } from 'utilities_api/convertBanFormatNumber';
 
 function RegistrationFirstPart({
+  totalFormData,
   setTotalFormData,
   setActiveStep,
   handleCreateClassClose,
@@ -32,24 +33,25 @@ function RegistrationFirstPart({
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
 
+  console.log(totalFormData)
   return (
     <>
       <Formik
         initialValues={{
-          first_name: student ? (student?.first_name || student?.student_info?.first_name || '') : undefined,
-          middle_name: student ? (student?.middle_name || student?.student_info?.middle_name || '') : '',
-          last_name: student ? (student?.middle_name || student?.student_info?.last_name || '') : '',
-          student_id: student ? (student?.student_id || student?.student_info?.student_id) : '',
-          admission_no: student ? (student?.admission_no || student?.student_info?.admission_no) : '',
-          admission_date: student ? (student?.admission_date || student?.student_info?.admission_date) : new Date(Date.now()),
-          date_of_birth: student ? (student?.date_of_birth || student?.student_info?.date_of_birth) : null,
-          gender: student ? (student?.gender || student?.student_info?.gender) : 'male',
-          blood_group: student ? (student?.blood_group || student?.student_info?.blood_group || '') : '',
-          religion: student ? (student?.religion || student?.student_info?.religion) : '',
-          phone: student ? (student?.phone || student?.student_info?.phone) : undefined,
-          email: student ? (student?.email || student?.student_info?.email) : '',
-          national_id: student ? (student?.national_id || student?.student_info?.national_id) : '',
-          card_no: student  ? (student?.card_no || student?.student_info?.card_no) : '',
+          first_name: student ? (student?.first_name || student?.student_info?.first_name || '') : totalFormData.first_name || undefined,
+          middle_name: student ? (student?.middle_name || student?.student_info?.middle_name || '') : totalFormData.middle_name  || undefined,
+          last_name: student ? (student?.middle_name || student?.student_info?.last_name || '') : totalFormData.last_name || undefined,
+          student_id: student ? (student?.student_id || student?.student_info?.student_id) : totalFormData.last_name || undefined,
+          admission_no: student ? (student?.admission_no || student?.student_info?.admission_no) : totalFormData.admission_no || undefined,
+          admission_date: student ? (student?.admission_date || student?.student_info?.admission_date) : totalFormData.admission_date,
+          date_of_birth: student ? (student?.date_of_birth || student?.student_info?.date_of_birth) : totalFormData.date_of_birth,
+          gender: student ? (student?.gender || student?.student_info?.gender) : totalFormData.gender || undefined,
+          blood_group: student ? (student?.blood_group || student?.student_info?.blood_group || '') : totalFormData.blood_group || undefined,
+          religion: student ? (student?.religion || student?.student_info?.religion) : totalFormData.religion || undefined,
+          phone: student ? (student?.phone || student?.student_info?.phone) : totalFormData.phone || undefined,
+          email: student ? (student?.email || student?.student_info?.email) : totalFormData.email || undefined,
+          national_id: student ? (student?.national_id || student?.student_info?.national_id) : totalFormData.national_id || undefined,
+          card_no: student  ? (student?.card_no || student?.student_info?.card_no) : totalFormData.card_no || undefined,
           student_photo: null
         }}
         validationSchema={Yup.object().shape({
@@ -58,7 +60,6 @@ function RegistrationFirstPart({
             .required(t('First name field is required')),
           middle_name: Yup.string().max(255).nullable(true),
           last_name: Yup.string().max(255).nullable(true),
-          student_id: Yup.string().max(16).required(t('student id field is required')),
           admission_date: Yup.date().required(t('Admission date is required!')),
           // date_of_birth: Yup.date().required(t('Date of birth is required!')),
           gender: Yup.string().required(t('select a gender')),
@@ -124,7 +125,7 @@ function RegistrationFirstPart({
                         error={Boolean(touched.first_name && errors.first_name)}
                         fullWidth
                         helperText={touched.first_name && errors.first_name}
-                        label={t('First Name')}
+                        label={t('First name')}
                         name="first_name"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -147,7 +148,7 @@ function RegistrationFirstPart({
                         )}
                         fullWidth
                         helperText={touched.middle_name && errors.middle_name}
-                        label={t('Middle Name')}
+                        label={t('Middle name')}
                         name="middle_name"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -167,7 +168,7 @@ function RegistrationFirstPart({
                         error={Boolean(touched.last_name && errors.last_name)}
                         fullWidth
                         helperText={touched.last_name && errors.last_name}
-                        label={t('Last Name')}
+                        label={t('Last name')}
                         name="last_name"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -191,7 +192,7 @@ function RegistrationFirstPart({
                         )}
                         fullWidth
                         helperText={touched.admission_no && errors.admission_no}
-                        label={t('Admission No')}
+                        label={t('Admission no')}
                         name="admission_no"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -200,7 +201,7 @@ function RegistrationFirstPart({
                       />
 
                       <TextField
-                        required
+                        // required
                         size="small"
                         sx={{
                           '& fieldset': {
@@ -221,13 +222,14 @@ function RegistrationFirstPart({
                       />
                     </Grid>
 
+
                     {/* admission_date */}
                     <Grid item xs={12} md={6}>
-
                       <MobileDateTimePicker
-                        label="Admission Date"
+                        label="admission Date"
                         inputFormat='dd/MM/yyyy hh:mm a'
                         value={values.admission_date}
+                        
                         renderInput={(params) => (
                           <TextField
                             required
@@ -239,34 +241,27 @@ function RegistrationFirstPart({
                               '& fieldset': {
                                 borderRadius: '3px'
                               },
-                              // color:"red"
                             }}
                             {...params}
                           />
                         )}
                         onChange={(n: any) => {
-                          const newValue = dayjs(n)
-
-                          // dayjs(newValue).format('H:m:ss')
                           if (n) {
+                            const newValue = dayjs(n)
                             console.log("admission_date__", newValue);
                             //@ts-ignore
                             setFieldValue('admission_date', newValue);
-
                           }
                         }}
-
-
                       />
                       {
                         errors.admission_date && <span style={{ color: 'red' }}> Admission date are required</span>
                       }
                     </Grid>
-
                     {/* date_of_birth */}
                     <Grid item xs={12} md={6}>
                       <MobileDatePicker
-                        label="Date of Birth"
+                        label="Date of birth"
                         inputFormat='dd/MM/yyyy'
                         value={values.date_of_birth}
                         onChange={(n) => {
@@ -274,7 +269,6 @@ function RegistrationFirstPart({
                             // @ts-ignore
                             const newValue = dayjs(n)
                             setFieldValue('date_of_birth', newValue);
-
                           }
                         }}
                         renderInput={(params) => (
@@ -294,7 +288,6 @@ function RegistrationFirstPart({
                       {
                         errors.date_of_birth && <span style={{ color: 'red' }}> Date of birth are required</span>
                       }
-
                     </Grid>
 
                     {/* Gender */}
@@ -311,7 +304,6 @@ function RegistrationFirstPart({
                           onChange={(event) => {
                             setFieldValue('gender', event.target.value);
                           }}
-
                         >
                           <FormControlLabel
                             value="male"
@@ -364,7 +356,7 @@ function RegistrationFirstPart({
                         )}
                         fullWidth
                         helperText={touched.blood_group && errors.blood_group}
-                        label={t('Blood Group')}
+                        label={t('blood Group')}
                         name="blood_group"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -413,9 +405,10 @@ function RegistrationFirstPart({
                         onBlur={handleBlur}
                         onChange={handleChange}
                         type="text"
-                        required
+                        // required
                         value={values.phone}
                         variant="outlined"
+                        required={true}
                       />
                     </Grid>
 
@@ -431,7 +424,7 @@ function RegistrationFirstPart({
                         error={Boolean(touched.email && errors.email)}
                         fullWidth
                         helperText={touched.email && errors.email}
-                        label={t('Email')}
+                        label={t('email')}
                         name="email"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -472,9 +465,11 @@ function RegistrationFirstPart({
                   p: 3
                 }}
               >
+                
                 <Button color="secondary" onClick={handleCreateClassClose}>
                   {t('Cancel')}
                 </Button>
+                
                 <Button
                   type="submit"
                   startIcon={
@@ -486,6 +481,9 @@ function RegistrationFirstPart({
                 >
                   {t('Next')}
                 </Button>
+
+
+
               </DialogActions>
             </form>
           );
