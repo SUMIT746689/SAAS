@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, ReactElement, Ref, forwardRef, useEffect, FC, useCallback } from 'react';
+import { ChangeEvent, useState, ReactElement, Ref, forwardRef, useEffect, FC, useCallback, useContext } from 'react';
 
 import PropTypes from 'prop-types';
 import {
@@ -43,6 +43,7 @@ import BulkActions from '@/components/BulkAction';
 import { TextFieldWrapper } from '@/components/TextFields';
 import { ButtonWrapper, SearchingButtonWrapper } from '@/components/ButtonWrapper';
 import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
+import { HighestStudentIdContext } from '@/contexts/HighestStudentIdContext';
 
 const DialogWrapper = styled(Dialog)(
   () => `
@@ -140,6 +141,7 @@ const Results: FC<{ students: any[]; refetch: () => void; selectedUpdateColumns:
   const [filters, setFilters] = useState<Filters>({
     role: null
   });
+  const { handleFetchHighestStudentId } = useContext(HighestStudentIdContext)
   const [loading, setLoading] = useState(false);
 
   const [allStudents, setAllStudents] = useState([]);
@@ -211,6 +213,7 @@ const Results: FC<{ students: any[]; refetch: () => void; selectedUpdateColumns:
         setOpenConfirmDelete(null);
         refetch();
         showNotification(res.data.message);
+        handleFetchHighestStudentId();
       })
       .catch((err) => {
         setLoading(false);

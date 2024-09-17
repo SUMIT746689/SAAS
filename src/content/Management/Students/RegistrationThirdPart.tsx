@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'src/hooks/useAuth';
 import { Dayjs } from 'dayjs';
-import { Grid, DialogActions, DialogContent, Zoom, TextField, CircularProgress, Button } from '@mui/material';
+import { Grid, DialogActions, DialogContent, CircularProgress, Button } from '@mui/material';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import useNotistick from '@/hooks/useNotistick';
@@ -24,7 +24,8 @@ function RegistrationFirstPart({
   setUsersFlag,
   student,
   onlineAdmission_id,
-  handleClose
+  handleClose,
+  generate_registration_number
 }) {
   const router = useRouter();
   const { t }: { t: any } = useTranslation();
@@ -124,6 +125,7 @@ function RegistrationFirstPart({
               if (res.data.success) {
                 handleSubmitSuccess();
                 showNotification(res.data.success);
+                generate_registration_number();
                 if (onlineAdmission_id) {
                   await axios.delete(`/api/onlineAdmission/${onlineAdmission_id}`);
                   handleClose();

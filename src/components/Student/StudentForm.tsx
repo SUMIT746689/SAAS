@@ -17,6 +17,13 @@ export default function StudentForm({ student = null, handleClose = null, online
   const [academicYears, setacademicYears] = useState([]);
   const [classes, setClasses] = useState([]);
   const [uniqueRegNum, setuniqueRegNum] = useState('');
+
+  const generate_registration_number = () => {
+    axios.get('/api/generate_registration_number')
+      .then(res => { setuniqueRegNum(res.data) })
+      .catch(err => { console.log({ err }) });
+  }
+
   useEffect(() => {
     axios
       .get('/api/academic_years')
@@ -39,9 +46,7 @@ export default function StudentForm({ student = null, handleClose = null, online
       })
       .catch((err) => console.log(err));
 
-    axios.get('/api/generate_registration_number')
-      .then(res => { setuniqueRegNum(res.data) })
-      .catch(err => { console.log({ err }) })
+    generate_registration_number();
 
   }, []);
 
@@ -117,6 +122,7 @@ export default function StudentForm({ student = null, handleClose = null, online
               student={student}
               onlineAdmission_id={onlineAdmission_id}
               handleClose={handleClose}
+              generate_registration_number={generate_registration_number}
             />
           )}
         </Grid>

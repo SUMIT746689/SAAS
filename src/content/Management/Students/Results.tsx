@@ -96,11 +96,7 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const applyFilters = (
-  users,
-  query,
-  filters
-) => {
+const applyFilters = (users, query, filters) => {
   return users?.filter((user) => {
     let matches = true;
 
@@ -375,22 +371,24 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
         maxWidth="md"
         open={discountModal}
         onClose={() => {
-          refetch()
+          refetch();
           setDiscountModal(false);
         }}
         sx={{ paddingX: { xs: 3, md: 0 } }}
       >
         <Grid item container flexDirection={'column'} sx={{ p: 4 }}>
-          <Typography fontSize={20} fontWeight={'bold'}>Discount</Typography>
+          <Typography fontSize={20} fontWeight={'bold'}>Discount [Fee, month, discount title, discount amount, discount type]</Typography>
           <br />
           <Grid item container display={'grid'} p={4} border={'1px solid lightGray'} borderRadius={'8px'} sx={{ gridTemplateColumns: { sm: 'repeat(2, minmax(0, 1fr))', md: 'repeat(3, minmax(0, 1fr))' }, gap: { xs: 1, sm: 2 } }}>
-            {discount?.map((i: any) => (
-              <SingleDiscount
-                key={i.id}
-                selectedUser={selectedStudent}
-                singleDiscount={i}
-              />
-            ))}
+            {
+              discount?.map((i: any) => (
+                <SingleDiscount
+                  key={i.id}
+                  selectedUser={selectedStudent}
+                  singleDiscount={i}
+                />
+              ))
+            }
           </Grid>
           <br />
           <Typography fontSize={20} fontWeight={'bold'}>Waiver fee</Typography>
@@ -730,7 +728,7 @@ const SingleFee = ({ singleFee, selectedUser }) => {
 };
 
 const SingleDiscount = ({ singleDiscount, selectedUser }) => {
-
+  console.log({ singleDiscount })
   const [checked, setChecked] = useState(
     selectedUser && selectedUser?.discount?.length > 0
       ? selectedUser?.discount.find((j) => j.id == singleDiscount.id)
@@ -770,8 +768,8 @@ const SingleDiscount = ({ singleDiscount, selectedUser }) => {
   };
 
   return (
-    <Box display={'flex'} justifyContent="space-between" p={1} borderRadius={0.4} sx={{ backgroundColor: 'lightGray', ":hover": { backgroundColor: 'darkGray' } }} key={singleDiscount.id}>
-      <Typography sx={{ my: 'auto', textTransform: 'capitalize', fontSize: { xs: 10, md: 15 } }}>
+    <Box display={'flex'} justifyContent="space-between" borderRadius={0.4} sx={{ backgroundColor: 'lightGray', ":hover": { backgroundColor: 'darkGray' } }} key={singleDiscount.id}>
+      <Typography sx={{ my: 'auto', textTransform: 'capitalize', fontSize: { xs: 8, md: 12 }, pl: 0.5 }}>
         {singleDiscount?.label}
       </Typography>
       <Switch sx={{ my: 'auto' }} checked={checked} onChange={handleDiscountUpdate} />
