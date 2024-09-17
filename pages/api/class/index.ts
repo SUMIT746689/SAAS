@@ -22,8 +22,9 @@ const index = async (req, res, refresh_token) => {
                 std_exit_time: true
               }
             },
-            Group: true
-          }
+            Group: true,
+            subjects:true
+          },
         });
         res.status(200).json(classes);
         break;
