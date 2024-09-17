@@ -20,6 +20,7 @@ export const Attendance: FC<AttendanceProps> = ({ todayAttendance }) => {
   const date = new Date();
   const currentYear = date.getFullYear();
   const currentMonth = date.getMonth() + 1;
+  // console.log(currentMonth)
   const daysInCurrentMonth = getDaysInMonth(currentYear, currentMonth + 1);
 
 
@@ -31,9 +32,9 @@ export const Attendance: FC<AttendanceProps> = ({ todayAttendance }) => {
   const studentsAttendance = (start_date, end_date) => {
     let url = `/api/attendance/day_wise/students?start_date=${start_date}&end_date=${end_date}`;
     axios.get(url).then((response) => {
-      console.log({ response });
+      // console.log({ "response   ":response });
       if (!Array.isArray(response.data)) setStudentsAttendPercent(0);
-      setStudentsAttendPercent(parseInt(response.data[0]?.attendance_percent) || 0)
+      setStudentsAttendPercent(parseInt(response.data?.attendance_percent) || 0)
 
     }).catch((error) => {
       console.log({ error });
@@ -42,10 +43,10 @@ export const Attendance: FC<AttendanceProps> = ({ todayAttendance }) => {
   }
   const teachersAttendance = (start_date, end_date) => {
     let url = `/api/attendance/day_wise/teachers?start_date=${start_date}&end_date=${end_date}`;
-    axios.get(url).then((response) => {
-      console.log({ response });
-      if (!Array.isArray(response.data)) setTeachersAttendPercent(0);
-      setTeachersAttendPercent(parseInt(response.data[0]?.attendance_percent) || 0)
+    axios.get(url).then((responseByTeacher) => {
+      // console.log("responseByTeacher" ,responseByTeacher );
+      if (!Array.isArray(responseByTeacher.data)) setTeachersAttendPercent(0);
+      setTeachersAttendPercent(parseInt(responseByTeacher.data?.attendance_percent) || 0)
 
     }).catch((error) => {
       console.log({ error });
@@ -56,9 +57,9 @@ export const Attendance: FC<AttendanceProps> = ({ todayAttendance }) => {
     let url = `/api/attendance/day_wise/employees?start_date=${start_date}&end_date=${end_date}`;
 
     axios.get(url).then((response) => {
-      console.log({ response });
+      // console.log({ response });
       if (!Array.isArray(response.data)) setEmployeesAttendPercent(0);
-      setEmployeesAttendPercent(parseInt(response.data[0]?.attendance_percent) || 0)
+      setEmployeesAttendPercent(parseInt(response.data?.attendance_percent) || 0)
 
     }).catch((error) => {
       console.log({ error });
@@ -67,20 +68,31 @@ export const Attendance: FC<AttendanceProps> = ({ todayAttendance }) => {
   }
 
   useEffect(() => {
-    let start_date = new Date(currentYear, currentMonth - 1, 1);
-    let end_date = new Date(currentYear, currentMonth - 1, 1);
+    let start_date = new Date(currentYear, currentMonth - 1, 1).toISOString();
+    let end_date = new Date(currentYear, currentMonth - 1, 1).toISOString();
 
     if (addtedanceFilter === 'Today') {
-      start_date = new Date(Date.now());
-      end_date = new Date(Date.now());
+      start_date = new Date(new Date().setHours(0, 0, 0, 0)).toISOString()
+      end_date = new Date(new Date().setHours(23, 59, 59, 999)).toISOString()
     }
     else if (addtedanceFilter === 'This Week') {
-      start_date = new Date((new Date()).valueOf() - 1000 * 60 * 60 * 24 * 7);
-      end_date = new Date(Date.now());
+      const curr = new Date('Sat, 24 Aug 2024 11:53:52 GMT');
+      const customDay = [1, 2, 3, 4, 5, 6, 0];
+      const first = curr.getDate() - customDay[curr.getDay()];
+      start_date = new Date(curr.setDate(first)).toISOString();
+      end_date = new Date(Date.now()).toISOString();
+
     }
+    // else if (addtedanceFilter === 'This Month') {
+    //   const curr = new Date();
+    //   const firstDayOfMonth = new Date(curr.getFullYear(), curr.getMonth(), 1);
+    //   start_date = new Date(firstDayOfMonth).toISOString();
+    //   end_date = new Date(Date.now()).toISOString();
+    //   console.log({end_date})
+    // }
     else {
-      start_date = new Date(currentYear, currentMonth - 1, 1);
-      end_date = new Date(currentYear, currentMonth - 1, daysInCurrentMonth + 1)
+      start_date = new Date(currentYear, currentMonth - 1, 1).toISOString();
+      end_date = new Date(currentYear, currentMonth - 1, daysInCurrentMonth + 1).toISOString();
     }
     studentsAttendance(start_date, end_date);
     teachersAttendance(start_date, end_date);
