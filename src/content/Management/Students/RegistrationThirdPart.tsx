@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +14,6 @@ import { getFile } from '@/utils/utilitY-functions';
 import { handleConvBanNum } from 'utilities_api/convertBanFormatNumber';
 import { handleFileChange, handleFileRemove } from 'utilities_api/handleFileUpload';
 import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
-import { HighestStudentIdContext } from '@/contexts/HighestStudentIdContext';
 
 function RegistrationFirstPart({
   totalFormData,
@@ -34,8 +33,7 @@ function RegistrationFirstPart({
   const [father_photo, setFather_photo] = useState(null);
   const [mother_photo, setMother_photo] = useState(null);
   const [guardian_photo, setGuardian_photo] = useState(null);
-  const { handleFetchHighestStudentId } = useContext(HighestStudentIdContext)
-
+  console.log({ totalFormData });
   return (
     <>
       <Formik
@@ -116,12 +114,11 @@ function RegistrationFirstPart({
               if (res.data.success) {
                 handleSubmitSuccess();
                 showNotification('Student updated Successfully');
-                handleFetchHighestStudentId();
                 router.back();
               }
             } else {
               const res = await axios.post(`/api/student`, formData);
-              handleFetchHighestStudentId();
+
               if (res.data.success) {
                 handleSubmitSuccess();
                 showNotification(res.data.success);
@@ -144,6 +141,8 @@ function RegistrationFirstPart({
         }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
+          console.log('T__values__', errors);
+
           return (
             <form onSubmit={handleSubmit}>
               <DialogContent
@@ -424,8 +423,9 @@ function RegistrationFirstPart({
                 <Button color="secondary" onClick={handleCreateClassClose}>
                   {t('Cancel')}
                 </Button>
+
                 <Button color="warning" variant="contained" onClick={() => setActiveStep(1)}>
-                  {t('<< Previous')}
+                  {t('Previous')}
                 </Button>
                 <Button
                   type="submit"

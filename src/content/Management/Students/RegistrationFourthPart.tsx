@@ -209,7 +209,7 @@ function RegistrationFirstPart({ setUsersFlag }) {
             phone: Yup.string(),
             email: Yup.string(),
             national_id: Yup.string(),
-            roll_no: Yup.string().required(t('roll no is required!')),
+            // roll_no: Yup.string().required(t('roll no is required!')),
             registration_no: Yup.string().required(
               t('registration no is required!')
             )
