@@ -717,7 +717,12 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   >
                     Payment Status
                   </TableCell>
-
+                </TableRow>
+                <TableRow
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 }
+                  }}
+                >
                   <TableCell
                     align="left"
                     style={{

@@ -633,197 +633,17 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
                   >
                     Payment Status
                   </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow
-                  sx={{
-                    '&:last-child td, &:last-child th': { border: 0 }
-                  }}
-                >
                   <TableCell
                     align="left"
                     style={{
                       border: '1px solid black',
-                      width: '30%',
+                      textTransform: 'capitalize',
+                      fontWeight: 'bold',
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Total Amount to Pay
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalFeeamount?.toFixed(2)}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Total Previous Paid
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalPreAmount?.toFixed(2)}
-                  </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{
-                    '&:last-child td, &:last-child th': { border: 0 }
-                  }}
-                >
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Previous Discount
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalPreviousDiscount?.toFixed(2)}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Discount Amount
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalCurrentDisountAmount?.toFixed(2)}
-                  </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{
-                    '&:last-child td, &:last-child th': { border: 0 }
-                  }}
-                >
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Now Pay Amount
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalPaidAmount?.toFixed(2)}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Total Paid Amount
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {sumPaidAmount}
-                  </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{
-                    '&:last-child td, &:last-child th': { border: 0 }
-                  }}
-                >
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      color: '#000'
                     }}
                   >
                     Total Due
@@ -832,38 +652,25 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
                     align="left"
                     style={{
                       border: '1px solid black',
-                      width: '20%',
+                      textTransform: 'capitalize',
+                      fontWeight: 'bold',
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       paddingTop: '2px',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      color: '#000'
                     }}
                   >
                     {totalDueAmount?.toFixed(2)}
                   </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  ></TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  ></TableCell>
                 </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 }
+                  }}
+                ></TableRow>
               </TableBody>
             </Table>
           </TableContainer>
@@ -1320,197 +1127,17 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
                   >
                     Payment Status
                   </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow
-                  sx={{
-                    '&:last-child td, &:last-child th': { border: 0 }
-                  }}
-                >
                   <TableCell
                     align="left"
                     style={{
                       border: '1px solid black',
-                      width: '30%',
+                      textTransform: 'capitalize',
+                      fontWeight: 'bold',
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Total Amount to Pay
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalFeeamount?.toFixed(2)}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Total Previous Paid
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalPreAmount?.toFixed(2)}
-                  </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{
-                    '&:last-child td, &:last-child th': { border: 0 }
-                  }}
-                >
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Previous Discount
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalPreviousDiscount?.toFixed(2)}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Discount Amount
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalCurrentDisountAmount?.toFixed(2)}
-                  </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{
-                    '&:last-child td, &:last-child th': { border: 0 }
-                  }}
-                >
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Now Pay Amount
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalPaidAmount?.toFixed(2)}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Total Paid Amount
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {sumPaidAmount}
-                  </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{
-                    '&:last-child td, &:last-child th': { border: 0 }
-                  }}
-                >
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      color: '#000'
                     }}
                   >
                     Total Due
@@ -1519,38 +1146,25 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
                     align="left"
                     style={{
                       border: '1px solid black',
-                      width: '20%',
+                      textTransform: 'capitalize',
+                      fontWeight: 'bold',
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       paddingTop: '2px',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      color: '#000'
                     }}
                   >
                     {totalDueAmount?.toFixed(2)}
                   </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  ></TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  ></TableCell>
                 </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 }
+                  }}
+                ></TableRow>
               </TableBody>
             </Table>
           </TableContainer>
