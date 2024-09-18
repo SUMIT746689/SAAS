@@ -6,27 +6,27 @@ const id = async (req, res, refresh_token) => {
     try {
         const { method } = req;
 
-        const id = Number(req.query.id)
-        const academic_year_id = Number(req.query.academic_year_id)
-        const school_id = Number(refresh_token.school_id)
+        const id = req.query.id
+        const academic_year_id = parseInt(req.query.academic_year_id)
+        const school_id = parseInt(refresh_token.school_id)
 
         switch (method) {
             case 'GET':
                 const discount = await prisma.discount.findFirst({
                     where: {
-                        id: (id)
+                        id: parseInt(id)
                     }
                 })
                 res.status(200).json(discount)
                 break;
 
             case 'PATCH':
-                const { fee_id, type, amt } = req.body;
-                const data: any = {}
-                if (fee_id) {
-                    data['fee_id'] = fee_id
+                const { type, amt } = req.body;
+                const data: any = {};
 
-                }
+                // if (fee_id) {
+                //     data['fee_id'] = fee_id
+                // }
                 if (type) {
                     data['type'] = type
                 }
@@ -35,18 +35,19 @@ const id = async (req, res, refresh_token) => {
                 }
                 // console.log(Number(id), Number(academic_year_id), Number(refresh_token.school_id));
 
-                const temp = await prisma.fee.findFirst({
-                    where: {
-                        id: fee_id,
-                        academic_year_id: academic_year_id,
-                        school_id: school_id
-                    }
-                })
-                if (!temp) throw new Error('Bad request !')
+                // const temp = await prisma.fee.findFirst({
+                //     where: {
+                //         id: fee_id,
+                //         academic_year_id: academic_year_id,
+                //         school_id: school_id
+                //     }
+                // })
+                // if (!temp) throw new Error('Bad request !')
 
-                await prisma.discount.update({
+                await prisma.discount.updateMany({
                     where: {
-                        id: id
+                        discount_id: id,
+                        school_id
                     },
                     data
                 })

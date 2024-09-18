@@ -14,7 +14,7 @@ function ManagementClasses() {
   const [editDiscount, setEditDiscount] = useState(null);
   const [academicYear, setAcademicYear] = useContext(AcademicYearContext);
   const { data: classes } = useClientFetch(`/api/class`);
-  const { data: discount, reFetchData } = useClientFetch(`/api/discount?academic_year_id=${academicYear?.id}`);
+  const { data: discount, reFetchData } = useClientFetch(`/api/discount`);
   // const { data: fees } = useClientFetch(`/api/fee?academic_year_id=${academicYear?.id}`);
 
   console.log({ classes });
@@ -33,9 +33,9 @@ function ManagementClasses() {
             classes?.map(i => ({
               label: i?.name,
               value: i.id,
-              sections:i.sections.map(sec=>({
+              sections: i.sections.map(sec => ({
                 label: sec.name,
-                value:sec.id
+                value: sec.id
               }))
             })) || []
           }
@@ -55,7 +55,7 @@ function ManagementClasses() {
         spacing={3}
       >
         <Grid item xs={12}>
-          <Results setEditDiscount={setEditDiscount} discount={discount || []} />
+          <Results setEditDiscount={setEditDiscount} discount={discount || []} reFetchData={reFetchData} />
         </Grid>
       </Grid>
       <Footer />
