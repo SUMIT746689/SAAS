@@ -179,7 +179,7 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
   let sumPaidAmount = Number(calAmount.toFixed(2));
 
   return (
-    <Grid>
+    <Grid px={4}>
       {/* part 1 */}
       <Grid pt={2} height={`${selectedFees.length <= 1 ? '50vh' : '100vh'}`}>
         {/* school information */}

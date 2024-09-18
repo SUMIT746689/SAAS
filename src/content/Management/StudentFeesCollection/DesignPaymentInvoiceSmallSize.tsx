@@ -188,6 +188,8 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
       <Grid pt={2} width={'340px'}>
         {/* school information */}
 
+        <Grid></Grid>
+
         <Grid sx={{ borderBottom: '1px solid #000' }} mb={0.5}>
           <Grid>
             <Typography variant="h4" sx={{ textAlign: 'center' }}>
@@ -272,35 +274,23 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
               <TableHead>
                 <TableRow>
                   <TableCell
+                    colSpan={4}
                     style={{
                       border: '1px solid black',
+                      textTransform: 'capitalize',
+                      // fontWeight: 'bold',
                       paddingLeft: '5px',
                       paddingRight: '5px',
-                      textTransform: 'capitalize',
-                      paddingTop: '2px',
                       fontSize: '0.7rem',
+                      paddingTop: '2px',
                       paddingBottom: '2px'
+                      // color: '#000'
                     }}
                   >
                     Particulars
                   </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      // fontWeight: 'bold',
-                      fontSize: '0.7rem',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {/* {totalDueAmount?.toFixed(2)} */}
-                  </TableCell>
-                  {/* </TableRow>
-                  <TableRow> */}
-
+                </TableRow>
+                <TableRow>
                   {selectedFees.find((item) => item.teacher_name) ? (
                     <TableCell
                       style={{
@@ -655,7 +645,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       paddingBottom: '2px'
                     }}
                   >
-                    Total
+                    Total Due
                   </TableCell>
                   <TableCell
                     align="right"
@@ -775,7 +765,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
           </Grid>
 
           <Grid sx={{ flexGrow: 1, fontSize: '0.6rem' }}>
-            <Grid>Powered By Edu360</Grid>
+            <Grid sx={{ textAlign: 'center' }}>Powered By Edu360</Grid>
           </Grid>
         </Grid>
       </Grid>

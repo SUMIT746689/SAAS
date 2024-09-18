@@ -728,7 +728,7 @@ function Managementschools() {
         </Grid> */}
 
         <Grid sx={{ display: 'none' }}>
-          <Grid px={4} sx={{ backgroundColor: '#fff' }} ref={printPageRef}>
+          <Grid sx={{ backgroundColor: '#fff' }} ref={printPageRef}>
             {isSmallSize ? (
               <DesignPaymentInvoiceSmallSize
                 userInformation={userInformation}
