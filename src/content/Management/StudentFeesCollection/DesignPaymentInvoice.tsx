@@ -209,8 +209,8 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
                 <Image
                   src={getFile(schoolData?.header_image)}
                   alt="photo"
-                  height={80}
-                  width={80}
+                  height={50}
+                  width={50}
                   style={{ width: '100% ', height: '100%', objectFit: 'contain' }}
                 />
               </Avatar>
