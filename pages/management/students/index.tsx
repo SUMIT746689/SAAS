@@ -78,13 +78,14 @@ function ManagementClasses() {
   useEffect(() => {
     if (selectedClass && academicYear) {
       axios
-        .get(`/api/discount?class_id=${selectedClass?.id}&academic_year_id=${academicYear?.id}`)
+        .get(`/api/discount?class_wise=true&class_id=${selectedClass?.id}&academic_year_id=${academicYear?.id}`)
         .then((res) => {
           console.log('discount__', res.data);
           setDiscount(
             res.data?.map((i) => ({
               label: `${i?.fee?.fees_head?.title}, ${i?.fee?.title}, ${i?.title} (${i?.amt} ${i?.type})`,
-              id: i.id
+              id: i.id,
+              subject_id: i.fee?.subject_id
             }))
           );
         })
@@ -182,7 +183,7 @@ function ManagementClasses() {
         setIsDownloadingExcelFile(false);
       });
   };
-
+  console.log({ discount })
   return (
     <>
       <BulkStudentUpload class_id={selectedClass?.id} section_id={selectedSection?.id} open={openBulkStdUpload} setOpen={setOpenBulkStdUpload} />

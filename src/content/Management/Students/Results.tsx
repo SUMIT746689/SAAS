@@ -381,29 +381,35 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
           <br />
           <Grid item container display={'grid'} p={1} border={'1px solid lightGray'} borderRadius={'4px'} sx={{ gridTemplateColumns: { sm: 'repeat(2, minmax(0, 1fr))', md: 'repeat(3, minmax(0, 1fr))' }, gap: { xs: 0.5, sm: 1 } }}>
             {
-              discount?.map((i: any) => (
-                <SingleDiscount
+              discount?.map((i: any) => {
+                const subjects = selectedStudent?.subjects?.map(sub => sub.id);
+                if (i?.subject_id && !subjects?.includes(i.subject_id)) return;
+                return <SingleDiscount
                   key={i.id}
                   selectedUser={selectedStudent}
                   singleDiscount={i}
                 />
-              ))
+              }
+              )
             }
           </Grid>
           <br />
-          <Typography fontSize={20} fontWeight={'bold'}>Waiver fee (Fee, month, subject)</Typography>
+          {/* <Typography fontSize={20} fontWeight={'bold'}>Waiver fee (Fee, month, subject)</Typography>
           <br />
           <Grid item container display={'grid'} p={1} border={'1px solid lightGray'} borderRadius={'4px'} sx={{ gridTemplateColumns: { sm: 'repeat(2, minmax(0, 1fr))', md: 'repeat(3, minmax(0, 1fr))' }, gap: { xs: 0.5, sm: 1 } }}>
             {
-              fee?.map((i: any) => (
-                <SingleFee
+              fee?.map((i: any) => {
+                // const subjects = selectedStudent.subjects.map(sub => sub.id);
+                // if (i?.subject_id && !subjects.includes(i.subject_id)) return;
+                return <SingleFee
                   key={i.id}
                   selectedUser={selectedStudent}
                   singleFee={i}
                 />
-              ))
+              }
+              )
             }
-          </Grid>
+          </Grid> */}
         </Grid>
       </Dialog>
 

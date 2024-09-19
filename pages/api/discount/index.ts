@@ -5,89 +5,94 @@ import { logFile } from 'utilities_api/handleLogFile';
 const index = async (req, res, refresh_token, dcryptAcademicYear) => {
     try {
         const { method } = req;
-        const { class_id } = req.query;
+        const { class_wise, class_id } = req.query;
         const { school_id } = refresh_token;
         const { id: academic_year_id } = dcryptAcademicYear;
 
         switch (method) {
             case 'GET':
                 const query = {}
-                // @ts-ignore
-                // if (class_id) {
-                //     // @ts-ignore
-                //     query['class_id'] = Number(class_id)
-                // }
-                // const discount = await prisma.discount.findMany({
-                //     where: {
-                //         fee: {
-                //             school_id: refresh_token.school_id,
-                //             academic_year_id: academic_year_id,
-                //             ...query
-                //         },
-                //     },
-                //     include: {
-                //         fee: {
-                //             select: {
-                //                 class: {
-                //                     select: {
-                //                         id: true,
-                //                         name: true
-                //                     }
-                //                 },
-                //                 title: true,
-                //                 fees_head: true,
-                //             }
-                //         },
-                //     },
-                // });
+                if (class_wise === "true") {
+                    // @ts-ignore
+                    if (class_id) {
+                        // @ts-ignore
+                        query['class_id'] = parseInt(class_id)
+                    }
+                    const resDiscount = await prisma.discount.findMany({
+                        where: {
+                            fee: {
+                                school_id: refresh_token.school_id,
+                                academic_year_id: academic_year_id,
+                                ...query
+                            },
+                        },
+                        include: {
+                            fee: {
+                                select: {
+                                    class: {
+                                        select: {
+                                            id: true,
+                                            name: true
+                                        }
+                                    },
+                                    title: true,
+                                    fees_head: true,
+                                    subject_id: true,
+                                    subject: true,
+                                }
+                            },
+                        },
+                    });
 
-                // const discount_ = await prisma.feesHaed.findMany({
-                //     where: {
-                //         Fee: {
-                //             some: {
-                //                 school_id: refresh_token.school_id,
-                //                 academic_year_id: academic_year_id,
-                //                 ...query
-                //             }
-                //         },
-                //     },
-                //     include: {
-                //         Fee: {
-                //             select: {
-                //                 title: true,
-                //                 class_id: true,
-                //                 class: true
-                //             }
-                //         }
-                //     },
-                //     // },
+                    // const discount_ = await prisma.feesHaed.findMany({
+                    //     where: {
+                    //         Fee: {
+                    //             some: {
+                    //                 school_id: refresh_token.school_id,
+                    //                 academic_year_id: academic_year_id,
+                    //                 ...query
+                    //             }
+                    //         },
+                    //     },
+                    //     include: {
+                    //         Fee: {
+                    //             select: {
+                    //                 title: true,
+                    //                 class_id: true,
+                    //                 class: true
+                    //             }
+                    //         }
+                    //     },
+                    //     // },
 
-                //     // include: {
-                //     //     fee: {
-                //     //         select: {
-                //     //             class: {
-                //     //                 select: {
-                //     //                     id: true,
-                //     //                     name: true
-                //     //                 }
-                //     //             },
-                //     //             title: true,
-                //     //             fees_head: true,
-                //     //         }
-                //     //     },
-                //     // },
-                // });
+                    //     // include: {
+                    //     //     fee: {
+                    //     //         select: {
+                    //     //             class: {
+                    //     //                 select: {
+                    //     //                     id: true,
+                    //     //                     name: true
+                    //     //                 }
+                    //     //             },
+                    //     //             title: true,
+                    //     //             fees_head: true,
+                    //     //         }
+                    //     //     },
+                    //     // },
+                    // });
 
-                // const dis = await prisma.fee.groupBy({
-                //     by: ['class_id'],
-                //     // _count: {
-                //     //     includes: {
-                //     //         class: true
-                //     //     }
-                //     // }
-                // });
-
-                // console.log(JSON.stringify(dis, null, 3))
+                    // const dis = await prisma.fee.groupBy({
+                    //     by: ['class_id'],
+                    //     // _count: {
+                    //     //     includes: {
+                    //     //         class: true
+                    //     //     }
+                    //     // }
+                    // });
+                    // }
+                    // console.log(JSON.stringify(dis, null, 3))
+                    return res.status(200).json(resDiscount)
+                };
 
                 const discount = await prisma.$queryRaw`
                 SELECT 
@@ -104,7 +109,6 @@ const index = async (req, res, refresh_token, dcryptAcademicYear) => {
                 break;
             case 'POST':
                 const { class_id, fee_id, type, amt, title } = req.body;
-                console.log({ class_id, fee_id, type, amt, title });
 
                 const getMaxDiscountId = await prisma.$queryRaw`
                     SELECT discount_id
@@ -126,7 +130,6 @@ const index = async (req, res, refresh_token, dcryptAcademicYear) => {
                     }
                 });
 
-                console.log(JSON.stringify(temp, null, 3))
 
                 if (!temp) throw new Error('Bad request !')
 
