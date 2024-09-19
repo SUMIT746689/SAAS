@@ -122,7 +122,7 @@ export default async function Home() {
       <About aboutSchool={aboutSchool} />
       <Gallery images={gallaryImages} />
       <VideoGallary />
-      <ImportantLink />
+      <ImportantLink school_info={school_info} />
 
 
       {/* <ImageSlider carousel_image={gallaryImages} /> */}
