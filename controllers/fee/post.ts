@@ -65,7 +65,7 @@ export default async function post(req, res, refresh_token, dcryptAcademicYear) 
         const last_date = lastDateOfMonth({ monthInt: monthIndex, date: today });
 
         const findFee = await prisma.fee.findFirst({ where: { fees_head_id, class_id }, select: { Discount: true } })
-
+        console.log({findFee})
         const fee = await prisma.fee.create({
           data: {
             ...data,
@@ -88,7 +88,7 @@ export default async function post(req, res, refresh_token, dcryptAcademicYear) 
             school_id
           }
         });
-        if (findFee) {
+        if (findFee?.Discount?.length > 0 ) {
           await prisma.discount.create({
             data: {
               fee_id: fee.id,
