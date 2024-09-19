@@ -19,10 +19,15 @@ export default function StudentForm({ student = null, handleClose = null, online
   const [uniqueRegNum, setuniqueRegNum] = useState('');
 
   const generate_registration_number = () => {
-    axios.get('/api/generate_registration_number')
-      .then(res => { setuniqueRegNum(res.data) })
-      .catch(err => { console.log({ err }) });
-  }
+    axios
+      .get('/api/generate_registration_number')
+      .then((res) => {
+        setuniqueRegNum(res?.data);
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
+  };
 
   useEffect(() => {
     axios
@@ -47,7 +52,6 @@ export default function StudentForm({ student = null, handleClose = null, online
       .catch((err) => console.log(err));
 
     generate_registration_number();
-
   }, []);
 
   const handleCreateClassClose = () => {
@@ -55,21 +59,20 @@ export default function StudentForm({ student = null, handleClose = null, online
     else router.push('/management/students');
   };
 
-
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGenerateUserName = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const generateUserName = await generateUsernameNew(totalFormData.first_name);
     setIsLoading(false);
-    setTotalFormData((value) => ({ ...value, username: generateUserName }))
-  }
+    setTotalFormData((value) => ({ ...value, username: generateUserName }));
+  };
 
   useEffect(() => {
     // if (isEdit || !totalFormData?.first_name) return;
     if (student?.student_info?.user?.username || !totalFormData?.first_name) return;
-    handleGenerateUserName()
-  }, [totalFormData?.first_name])
+    handleGenerateUserName();
+  }, [totalFormData?.first_name]);
 
   return (
     <>
@@ -129,5 +132,5 @@ export default function StudentForm({ student = null, handleClose = null, online
         </Grid>
       </Grid>
     </>
-  )
+  );
 }

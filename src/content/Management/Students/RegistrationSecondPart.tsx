@@ -233,7 +233,7 @@ function RegistrationSecondPart({
 
           roll_no: student ? student?.roll_no : totalFormData?.roll_no || undefined,
 
-          registration_no: student?.class_registration_no || uniqueRegNum(),
+          registration_no: student?.class_registration_no || uniqueRegNum,
           student_photo: null,
 
           student_present_address: student ? student?.student_present_address : totalFormData.student_present_address || undefined,
