@@ -434,7 +434,7 @@ function RegistrationSecondPart({
                               error={Boolean(touched.password && errors.password)}
                               helperText={touched.password && errors.password}
                               onBlur={handleBlur}
-                              label={t('Select section')}
+                              label={t('Select Batch')}
                             />
                           )}
                           onChange={(event, value) => {
