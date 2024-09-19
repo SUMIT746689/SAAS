@@ -88,7 +88,7 @@ const Result = ({ menuInfo, setEditData, setOpen, handleDeleteMenu, setMenuItemI
                     <TableBodyCellWrapper>{item.english_title}</TableBodyCellWrapper>
                     <TableBodyCellWrapper>{item.bangla_title}</TableBodyCellWrapper>
                     <TableBodyCellWrapper>{item.link_type}</TableBodyCellWrapper>
-                    <TableBodyCellWrapper>{item.website_link || `${item.websiteDynamicPage?.english_title} ( ${item.websiteDynamicPage?.bangla_title} )`}</TableBodyCellWrapper>
+                    <TableBodyCellWrapper>{item.website_link || (item.link_type === "no link" ? '' : `${item.websiteDynamicPage?.english_title} ( ${item.websiteDynamicPage?.bangla_title} )`)}</TableBodyCellWrapper>
                     <TableBodyCellWrapper>{item.status}</TableBodyCellWrapper>
                     <TableBodyCellWrapper>
                       {' '}

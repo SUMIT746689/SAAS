@@ -64,6 +64,8 @@ export default async function RootLayout({ children }) {
       }
     });
 
+    console.log({resMenus})
+
     return (
       school_info ?
         <html lang="en">
