@@ -23,7 +23,8 @@ export default async function multiplePhotoUpoad(req, res, refresh_token) {
       };
 
       const form = new formidable.IncomingForm(customOptions);
-      form.uploadDir = path.join(process.cwd(), `${process.env.FILESFOLDER}`, 'studentsPhoto');
+      const uploadFolderName = 'studentsPhoto';
+      form.uploadDir = path.join(process.cwd(), `${process.env.FILESFOLDER}`, uploadFolderName);
       form.keepExtensions = true;
 
       form.parse(req, async (err, fields, files) => {
@@ -67,7 +68,7 @@ export default async function multiplePhotoUpoad(req, res, refresh_token) {
               fs.renameSync(oldPath, newPath);
 
               const data: { url: string; studentId?: string } = {
-                url: `/${file.newFilename}.${fileExtension}`
+                url: `${uploadFolderName}/${file.newFilename}.${fileExtension}`
               };
 
               let personObj = {
@@ -111,7 +112,7 @@ export default async function multiplePhotoUpoad(req, res, refresh_token) {
                 }
               }
 
-              const filePath = path.join(process.cwd(), `${process.env.FILESFOLDER}`, 'studentsPhoto', `${photo_url}`);
+              const filePath = path.join(process.cwd(), `${process.env.FILESFOLDER}`, uploadFolderName, `${photo_url}`);
 
               const res = await prisma.student.update({
                 // old

@@ -4,6 +4,7 @@ import { logFile } from 'utilities_api/handleLogFile';
 
 async function post(req, res, refresh_token) {
   try {
+    const { school_id } = refresh_token;
     const { parent_id, english_title, bangla_title, link_type, website_link, dynamic_page_link_id, status } = req.body;
     const data = {};
 
@@ -27,12 +28,12 @@ async function post(req, res, refresh_token) {
     await prisma.websiteMenu.create({
       data: {
         ...data,
-        english_title: english_title.toLowerCase(),
+        english_title,
         link_type: link_type.toLowerCase(),
-        website_link: website_link,
+        website_link,
         status: status.toLowerCase(),
         dynamic_page_id: dynamic_page_link_id,
-        school_id: parseInt(refresh_token.school_id)
+        school_id
       }
     });
 

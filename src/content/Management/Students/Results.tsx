@@ -623,6 +623,7 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
           )}
         </Grid>
       </div>
+      
       <DialogWrapper
         open={openConfirmDelete ? true : false}
         maxWidth="sm"
