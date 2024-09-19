@@ -21,8 +21,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useClientFetch } from '@/hooks/useClientFetch';
 import Footer from '@/components/Footer';
 import { ExportData } from '@/content/Management/Students/ExportData';
-import { FileUploadFieldWrapper, NewFileUploadFieldWrapper } from '@/components/TextFields';
-import dayjs from 'dayjs';
+import { NewFileUploadFieldWrapper } from '@/components/TextFields';
 import useNotistick from '@/hooks/useNotistick';
 import { AutoCompleteWrapper } from '@/components/AutoCompleteWrapper';
 import { ButtonWrapper, SearchingButtonWrapper } from '@/components/ButtonWrapper';
@@ -79,13 +78,14 @@ function ManagementClasses() {
   useEffect(() => {
     if (selectedClass && academicYear) {
       axios
-        .get(`/api/discount?class_id=${selectedClass?.id}&academic_year_id=${academicYear?.id}`)
+        .get(`/api/discount?class_wise=true&class_id=${selectedClass?.id}&academic_year_id=${academicYear?.id}`)
         .then((res) => {
           console.log('discount__', res.data);
           setDiscount(
             res.data?.map((i) => ({
-              label: `${i?.title} (${i?.amt} ${i?.type})`,
-              id: i.id
+              label: `${i?.fee?.fees_head?.title}, ${i?.fee?.title}, ${i?.title} (${i?.amt} ${i?.type})`,
+              id: i.id,
+              subject_id: i.fee?.subject_id
             }))
           );
         })
@@ -95,7 +95,8 @@ function ManagementClasses() {
         .then((res) =>
           setFee(
             res?.data?.data?.map((i) => ({
-              label: i.title,
+              // label: i.title,
+              label: `${i?.fees_head?.title}, ${i?.fees_month}, ${i?.subject?.name || ''}`,
               id: i.id
             }))
           )
@@ -182,7 +183,7 @@ function ManagementClasses() {
         setIsDownloadingExcelFile(false);
       });
   };
-
+  console.log({ discount })
   return (
     <>
       <BulkStudentUpload class_id={selectedClass?.id} section_id={selectedSection?.id} open={openBulkStdUpload} setOpen={setOpenBulkStdUpload} />
@@ -347,7 +348,7 @@ const BulkStudentUpload = ({ section_id, class_id, open, setOpen }) => {
       })
       .catch((err) => {
         setFailedForUniqueStudentId(err.response?.data?.failedForUniqueStudentId || []);
-        console.log({err})
+        console.log({ err })
         handleShowErrMsg(err, showNotification);
       })
       .finally(() => {
@@ -387,7 +388,7 @@ const BulkStudentUpload = ({ section_id, class_id, open, setOpen }) => {
     };
     reader.readAsArrayBuffer(event.target.files[0]);
   };
-  console.log({faildedCreateStd,failedForUniqueStudentId})
+  console.log({ faildedCreateStd, failedForUniqueStudentId })
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={handleModalClose}>
       <DialogTitle display="flex" justifyContent="space-between" sx={{ p: 3 }}>

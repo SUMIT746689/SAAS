@@ -377,31 +377,39 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
         sx={{ paddingX: { xs: 3, md: 0 } }}
       >
         <Grid item container flexDirection={'column'} sx={{ p: 4 }}>
-          <Typography fontSize={20} fontWeight={'bold'}>Discount [Fee, month, discount title, discount amount, discount type]</Typography>
+          <Typography fontSize={20} fontWeight={'bold'}>Discount (Fee, month, discount title (discount amount, discount type))</Typography>
           <br />
-          <Grid item container display={'grid'} p={4} border={'1px solid lightGray'} borderRadius={'8px'} sx={{ gridTemplateColumns: { sm: 'repeat(2, minmax(0, 1fr))', md: 'repeat(3, minmax(0, 1fr))' }, gap: { xs: 1, sm: 2 } }}>
+          <Grid item container display={'grid'} p={1} border={'1px solid lightGray'} borderRadius={'4px'} sx={{ gridTemplateColumns: { sm: 'repeat(2, minmax(0, 1fr))', md: 'repeat(3, minmax(0, 1fr))' }, gap: { xs: 0.5, sm: 1 } }}>
             {
-              discount?.map((i: any) => (
-                <SingleDiscount
+              discount?.map((i: any) => {
+                const subjects = selectedStudent?.subjects?.map(sub => sub.id);
+                if (i?.subject_id && !subjects?.includes(i.subject_id)) return;
+                return <SingleDiscount
                   key={i.id}
                   selectedUser={selectedStudent}
                   singleDiscount={i}
                 />
-              ))
+              }
+              )
             }
           </Grid>
           <br />
-          <Typography fontSize={20} fontWeight={'bold'}>Waiver fee</Typography>
+          {/* <Typography fontSize={20} fontWeight={'bold'}>Waiver fee (Fee, month, subject)</Typography>
           <br />
-          <Grid item container display={'grid'} p={4} border={'1px solid lightGray'} borderRadius={'8px'} sx={{ gridTemplateColumns: { sm: 'repeat(2, minmax(0, 1fr))', md: 'repeat(3, minmax(0, 1fr))' }, gap: { xs: 1, sm: 2 } }}>
-            {fee?.map((i: any) => (
-              <SingleFee
-                key={i.id}
-                selectedUser={selectedStudent}
-                singleFee={i}
-              />
-            ))}
-          </Grid>
+          <Grid item container display={'grid'} p={1} border={'1px solid lightGray'} borderRadius={'4px'} sx={{ gridTemplateColumns: { sm: 'repeat(2, minmax(0, 1fr))', md: 'repeat(3, minmax(0, 1fr))' }, gap: { xs: 0.5, sm: 1 } }}>
+            {
+              fee?.map((i: any) => {
+                // const subjects = selectedStudent.subjects.map(sub => sub.id);
+                // if (i?.subject_id && !subjects.includes(i.subject_id)) return;
+                return <SingleFee
+                  key={i.id}
+                  selectedUser={selectedStudent}
+                  singleFee={i}
+                />
+              }
+              )
+            }
+          </Grid> */}
         </Grid>
       </Dialog>
 
@@ -615,6 +623,7 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
           )}
         </Grid>
       </div>
+      
       <DialogWrapper
         open={openConfirmDelete ? true : false}
         maxWidth="sm"
@@ -716,10 +725,10 @@ const SingleFee = ({ singleFee, selectedUser }) => {
         });
     }
   };
-
+  console.log({ singleFee })
   return (
-    <Box display={'flex'} justifyContent="space-between" p={1} borderRadius={0.4} sx={{ backgroundColor: 'lightGray', ":hover": { backgroundColor: 'darkGray' } }} key={singleFee.id}>
-      <Typography sx={{ my: 'auto', textTransform: 'capitalize', fontSize: { xs: 10, md: 15 } }}>
+    <Box display={'flex'} justifyContent="space-between" borderRadius={0.4} sx={{ backgroundColor: '#f5f5f5', ":hover": { backgroundColor: '#d4d4d4', boxShadow: '1px 1px 1px solid #cbd5e1' } }} key={singleFee.id}>
+      <Typography sx={{ my: 'auto', textTransform: 'capitalize', fontSize: { xs: 7, md: 10 }, pl: 0.5 }}>
         {singleFee?.label}
       </Typography>
       <Switch sx={{ my: 'auto' }} checked={checked} onChange={handleWaiverFeeUpdate} />
@@ -768,8 +777,8 @@ const SingleDiscount = ({ singleDiscount, selectedUser }) => {
   };
 
   return (
-    <Box display={'flex'} justifyContent="space-between" borderRadius={0.4} sx={{ backgroundColor: 'lightGray', ":hover": { backgroundColor: 'darkGray' } }} key={singleDiscount.id}>
-      <Typography sx={{ my: 'auto', textTransform: 'capitalize', fontSize: { xs: 8, md: 12 }, pl: 0.5 }}>
+    <Box display={'flex'} justifyContent="space-between" borderRadius={0.4} sx={{ backgroundColor: '#f5f5f5', ":hover": { backgroundColor: '#d4d4d4', boxShadow: '1px 1px 1px solid #cbd5e1' } }} key={singleDiscount.id}>
+      <Typography sx={{ my: 'auto', textTransform: 'capitalize', fontSize: { xs: 7, md: 10 }, pl: 0.5 }}>
         {singleDiscount?.label}
       </Typography>
       <Switch sx={{ my: 'auto' }} checked={checked} onChange={handleDiscountUpdate} />

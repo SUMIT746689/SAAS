@@ -4,7 +4,8 @@ import {
   useState,
   ReactElement,
   Ref,
-  forwardRef
+  forwardRef,
+  useEffect
 } from 'react';
 
 import PropTypes from 'prop-types';
@@ -28,16 +29,28 @@ import {
   Button,
   Typography,
   Dialog,
-  styled
+  styled,
+  DialogTitle,
+  DialogContent,
+  Grid,
+  DialogActions
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import CloseIcon from '@mui/icons-material/Close';
 import type { User } from 'src/models/user';
 import { useTranslation } from 'react-i18next';
 import LaunchTwoToneIcon from '@mui/icons-material/LaunchTwoTone';
-import BulkActions from './BulkActions';
-import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
+// import BulkActions from './BulkActions';
+// import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import { TableBodyCellWrapper, TableHeaderCellWrapper, TableRowWrapper } from '@/components/Table/Table';
+import UpgradeIcon from '@mui/icons-material/Upgrade';
+import { AutoCompleteWrapper } from '@/components/AutoCompleteWrapper';
+import { DisableTextWrapper, TextFieldWrapper } from '@/components/TextFields';
+import { set } from 'nprogress';
+import axios from 'axios';
+import useNotistick from '@/hooks/useNotistick';
+import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
 
 const DialogWrapper = styled(Dialog)(
   () => `
@@ -131,7 +144,7 @@ const applyPagination = (users, page, limit) => {
   return users.slice(page * limit, page * limit + limit);
 };
 
-const Results = ({ setEditDiscount, discount }) => {
+const Results = ({ setEditDiscount, discount, reFetchData }) => {
   const [selectedItems, setSelectedUsers] = useState<string[]>([]);
   const { t }: { t: any } = useTranslation();
 
@@ -141,6 +154,7 @@ const Results = ({ setEditDiscount, discount }) => {
   const [filters, setFilters] = useState<Filters>({
     role: null
   });
+  const [updateDiscount, setUpdateDiscount] = useState();
 
   const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
     event.persist();
@@ -179,6 +193,8 @@ const Results = ({ setEditDiscount, discount }) => {
 
   return (
     <>
+      <UpdateDiscount discount={updateDiscount} setDiscount={setUpdateDiscount} reFetchData={reFetchData} />
+
       <Card sx={{ minHeight: 'calc(100vh - 330px) !important' }}>
         <Box p={2}>
           <TablePagination
@@ -213,51 +229,52 @@ const Results = ({ setEditDiscount, discount }) => {
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell >{t('Title')}</TableCell>
-                    <TableCell >{t('Fee')}</TableCell>
-                    <TableCell >{t('Class')}</TableCell>
-                    <TableCell >{t('Amount')}</TableCell>
-                    <TableCell >{t('Type')}</TableCell>
-                    <TableCell align="center">{t('Action')}</TableCell>
-
+                    <TableHeaderCellWrapper >{t('Title')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper >{t('Fee')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper >{t('Class')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper >{t('Amount')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper >{t('Type')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align="center" >{t('Action')}</TableHeaderCellWrapper>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {paginatedClasses.map((i) => {
                     const isUserSelected = selectedItems.includes(i.id);
                     return (
-                      <TableRow hover key={i.id} selected={isUserSelected}>
-                        <TableCell>
-                          <Typography variant="h5">{i?.title}</Typography>
-                        </TableCell>
-
-                        <TableCell>
-                          <Typography variant="h5">
-                           {i?.fee?.fees_head?.title} ( {i?.fee?.title} )
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant="h5">
-                            {i?.fee?.class?.name}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant="h5">
-                            {i?.amt?.toFixed(2)}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant="h5">{i?.type}</Typography>
-                        </TableCell>
-
-                        <TableCell align="center" >
+                      <TableRowWrapper hover key={i.discount_id} selected={isUserSelected}>
+                        <TableBodyCellWrapper>
+                          {i?.title}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper>
+                          {i?.fees_heads}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper>
+                          {i?.class_name}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper>
+                          {i?.amt?.toFixed(2)} {i?.type === "percent" ? '%' : ''}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper>
+                          {i?.type}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper align="center" >
                           <Typography noWrap>
-                            <Tooltip title={t('Edit')} arrow>
+
+                            {/* <Tooltip title={t('Edit')} arrow>
                               <IconButton
                                 color="primary"
                                 onClick={() => setEditDiscount(i)}
                               >
                                 <LaunchTwoToneIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip> */}
+
+                            <Tooltip title={t('update')} arrow>
+                              <IconButton
+                                color="primary"
+                                onClick={() => setUpdateDiscount(i)}
+                              >
+                                <UpgradeIcon fontSize='small' />
                               </IconButton>
                             </Tooltip>
 
@@ -270,8 +287,8 @@ const Results = ({ setEditDiscount, discount }) => {
                               </IconButton>
                             </Tooltip>
                           </Typography>
-                        </TableCell>
-                      </TableRow>
+                        </TableBodyCellWrapper>
+                      </TableRowWrapper>
                     );
                   })}
                 </TableBody>
@@ -350,3 +367,130 @@ Results.defaultProps = {
 };
 
 export default Results;
+
+const typeOption = [
+  {
+    label: 'Percent',
+    value: 'percent'
+  },
+  {
+    label: 'Flat',
+    value: 'flat'
+  }
+];
+
+const UpdateDiscount = ({ discount, setDiscount, reFetchData }) => {
+  const [updateDiscount, setUpdateDiscount] = useState({ type: discount?.type, amt: discount?.amt });
+  const { t }: { t: any } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const { showNotification } = useNotistick();
+
+
+  useEffect(() => {
+    if (!discount) return;
+    setOpen(true);
+    setUpdateDiscount({ type: discount?.type, amt: discount?.amt });
+  }, [discount])
+
+  const handleUpdateDiscountClose = () => {
+    setOpen(false);
+    setDiscount(null);
+    setUpdateDiscount({ type: null, amt: null })
+    // setEditDiscount(null);
+  };
+
+  const handleSubmit = () => {
+
+    if (!updateDiscount?.type && !updateDiscount?.amt) return showNotification('no value founds for update', 'error');
+
+    axios.patch(`/api/discount/${discount.discount_id}`, { type: updateDiscount?.type, amt: updateDiscount?.amt })
+      .then(res => {
+        showNotification('successfully updated');
+        reFetchData();
+        handleUpdateDiscountClose();
+      })
+      .catch(err => {
+        handleShowErrMsg(err, showNotification);
+      })
+
+  }
+
+  return (
+    <Dialog
+      fullWidth
+      maxWidth="xs"
+      open={open}
+      onClose={handleUpdateDiscountClose}
+    >
+      <DialogTitle
+        sx={{
+          p: 3
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
+          {t('Update Discount')}
+        </Typography>
+        <Typography variant="subtitle2">
+          {t('Fill in the fields below to create and add a new Discount')}
+        </Typography>
+      </DialogTitle>
+
+      <DialogContent dividers sx={{ p: 3 }}>
+        <Grid container >
+
+          <DisableTextWrapper
+            label="Title"
+            touched={undefined}
+            errors={undefined}
+            value={discount?.title}
+          />
+
+          <AutoCompleteWrapper
+            minWidth="100%"
+            label="Discount type"
+            placeholder="Select Discount type..."
+            value={
+              typeOption.find((i) => i.value === updateDiscount.type)
+            }
+            options={typeOption}
+            required={true}
+            // @ts-ignore
+            handleChange={(event, value) => {
+              setUpdateDiscount(v => ({ ...v, type: value?.value }))
+            }}
+          />
+
+          <TextFieldWrapper
+            errors={null}
+            touched={null}
+            label={t(`Discount ${updateDiscount?.type === 'percent' ? 'percent (%)' : 'amount'}`)}
+            name="amt"
+            value={updateDiscount.amt}
+            handleBlur={undefined}
+            handleChange={(event, value) => {
+              setUpdateDiscount(v => ({ ...v, amt: event.target.value ? parseInt(event.target.value) : null }))
+            }}
+            type='number'
+          />
+
+        </Grid>
+      </DialogContent>
+
+      <DialogActions sx={{ p: 3 }}>
+        <Button color="secondary" onClick={handleUpdateDiscountClose}>
+          {t('Cancel')}
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          // startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
+          //@ts-ignore
+          // disabled={Boolean(errors.submit) || isSubmitting || disabled}
+          variant="contained"
+        >
+          {'Update Discount'}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
+
+}

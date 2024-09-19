@@ -28,6 +28,7 @@ import {
   DisableTextWrapper
 } from '@/components/TextFields';
 import { useState, ChangeEvent, useEffect, useCallback, useContext } from 'react';
+import { getFile } from '@/utils/utilitY-functions';
 const persionNameList = ['Student Photo', 'Guardian Photo', 'Father Photo', 'Mother Photo'];
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -205,7 +206,7 @@ const MultipleStudentPhotoUpload = () => {
             <PreviewImageCardStudentPhotoUpload
               data={{
                 name: item?.student_info?.first_name,
-                src: `studentsPhoto${item?.student_photo}`,
+                src: item?.student_photo,
                 database: true
               }}
               index={item?.student_photo}
@@ -222,7 +223,7 @@ const MultipleStudentPhotoUpload = () => {
             <PreviewImageCardStudentPhotoUpload
               data={{
                 name: item?.student_info?.guardian_name,
-                src: `studentsPhoto${item?.guardian_photo}`,
+                src: item?.guardian_photo,
                 database: true
               }}
               index={item?.guardian_photo}
@@ -239,7 +240,7 @@ const MultipleStudentPhotoUpload = () => {
             <PreviewImageCardStudentPhotoUpload
               data={{
                 name: item?.student_info?.father_name,
-                src: `studentsPhoto${item?.student_info?.father_photo}`,
+                src: item?.student_info?.father_photo,
                 database: true
               }}
               index={item?.student_info?.father_photo}
@@ -256,7 +257,7 @@ const MultipleStudentPhotoUpload = () => {
             <PreviewImageCardStudentPhotoUpload
               data={{
                 name: item?.student_info?.mother_name,
-                src: `studentsPhoto${item?.student_info?.mother_photo}`,
+                src: item?.student_info?.mother_photo,
                 database: true
               }}
               index={item?.student_info?.mother_photo}

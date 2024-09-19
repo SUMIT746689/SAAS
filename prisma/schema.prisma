@@ -137,6 +137,7 @@ model School {
   studentFeeWiseTeacherPay   studentFeeWiseTeacherPay[]
   websiteMenus               WebsiteMenu[]
   websiteDynamicPages        WebsiteDynamicPage[]
+  Discount                   Discount[]
 
   // routines Routine[]
   @@map("schools")
@@ -1254,13 +1255,16 @@ model TeacherRecruitment {
 }
 
 model Discount {
-  id      Int          @id @default(autoincrement())
-  title   String
-  fee_id  Int
-  type    DiscountType
-  amt     Float
-  fee     Fee          @relation(fields: [fee_id], references: [id])
-  student Student[]    @relation("DiscountToStudent")
+  id          Int          @id @default(autoincrement())
+  discount_id String?
+  title       String
+  fee_id      Int
+  type        DiscountType
+  amt         Float
+  school_id   Int?
+  fee         Fee          @relation(fields: [fee_id], references: [id])
+  student     Student[]    @relation("DiscountToStudent")
+  school      School?      @relation(fields: [school_id], references: [id])
 }
 
 enum DiscountType {
