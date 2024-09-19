@@ -203,7 +203,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
         <Grid sx={{ borderBottom: '1px solid #000', alignItems: 'center' }} mb={0.5}>
           <Grid sx={{ display: 'grid', gridTemplateColumns: '1fr 4fr 1fr' }}>
             {/* school logo */}
-            {/* <Grid sx={{ my: 'auto', ml: 'auto' }}>
+            <Grid sx={{ my: 'auto', ml: 'auto' }}>
               {schoolInformation?.header_image ? (
                 <Image
                   src={getFile(schoolInformation?.header_image)}
@@ -214,28 +214,6 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                 />
               ) : (
                 ''
-              )}
-            </Grid> */}
-            <Grid width="80px" height="80px">
-              {schoolData?.header_image && (
-                <Avatar
-                  variant="rounded"
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '50%',
-                    boxShadow: '-2px 0px 20px 0px rgba(173,173,173,1)',
-                    border: '2px solid white'
-                  }}
-                >
-                  <Image
-                    src={getFile(schoolData?.header_image)}
-                    alt="photo"
-                    height={80}
-                    width={80}
-                    style={{ width: '100% ', height: '100%', objectFit: 'contain' }}
-                  />
-                </Avatar>
               )}
             </Grid>
             <Grid sx={{ textAlign: 'center' }}>
