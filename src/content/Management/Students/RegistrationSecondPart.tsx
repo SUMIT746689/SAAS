@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { Grid, DialogActions, DialogContent, TextField, CircularProgress, Autocomplete, Button, Checkbox } from '@mui/material';
 import useNotistick from '@/hooks/useNotistick';
-import { generateUsername, generateUsernameNew, getFile, registration_no_generate, unique_password_generate } from '@/utils/utilitY-functions';
+import { getFile } from '@/utils/utilitY-functions';
 import { FileUploadFieldWrapper } from '@/components/TextFields';
 import Image from 'next/image';
 import axios from 'axios';
@@ -18,7 +18,8 @@ function RegistrationSecondPart({
   student = null,
   classes,
   academicYears,
-  isEdit
+  // isEdit,
+  uniqueRegNum
 }) {
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
@@ -232,7 +233,7 @@ function RegistrationSecondPart({
 
           roll_no: student ? student?.roll_no : totalFormData?.roll_no || undefined,
 
-          registration_no: student?.class_registration_no || registration_no_generate(),
+          registration_no: student?.class_registration_no || uniqueRegNum(),
           student_photo: null,
 
           student_present_address: student ? student?.student_present_address : totalFormData.student_present_address || undefined,

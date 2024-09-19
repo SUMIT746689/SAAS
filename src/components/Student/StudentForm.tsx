@@ -98,6 +98,7 @@ export default function StudentForm({ student = null, handleClose = null, online
               setActiveStep={setActiveStep}
               handleCreateClassClose={handleCreateClassClose}
               student={student}
+              totalFormData={totalFormData}
             />
           )}
           {activeStep === 1 && !isLoading && (
