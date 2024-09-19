@@ -613,7 +613,7 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
           </Grid>
         </Grid>
         {/* table two */}
-        <Grid mt={1} mb={6}>
+        {/* <Grid mt={1} mb={6}>
           <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
             <Table sx={{ minWidth: 650, maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
               <TableHead>
@@ -674,7 +674,7 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
               </TableBody>
             </Table>
           </TableContainer>
-        </Grid>
+        </Grid> */}
         {/* signature  */}
         <Grid sx={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
           <Grid sx={{ flexGrow: 1 }}>
@@ -1107,7 +1107,7 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
           </Grid>
         </Grid>
         {/* table two */}
-        <Grid mt={1} mb={6}>
+        {/* <Grid mt={1} mb={6}>
           <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
             <Table sx={{ minWidth: 650, maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
               <TableHead>
@@ -1168,7 +1168,7 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
               </TableBody>
             </Table>
           </TableContainer>
-        </Grid>
+        </Grid> */}
         {/* signature  */}
         <Grid sx={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
           <Grid sx={{ flexGrow: 1 }}>
