@@ -20,10 +20,11 @@ export default async function get(req, res) {
     );
 
     if (!refresh_token) throw new Error('invalid user');
+    console.log({refresh_token})
     const ui = await prisma.websiteUi.findFirst({
       where: { school_id: refresh_token.school_id }
     });
-
+    console.log({ui})
     res.status(200).json(ui);
 
   } catch (error) {

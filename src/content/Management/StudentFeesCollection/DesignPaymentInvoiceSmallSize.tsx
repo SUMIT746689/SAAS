@@ -8,6 +8,8 @@ import { Data } from '@/models/front_end';
 import Image from 'next/image';
 import { getFile } from '@/utils/utilitY-functions';
 import { BoltRounded } from '@mui/icons-material';
+import axios from 'axios';
+import { red } from '@mui/material/colors';
 
 type PaymentInvoiceType = {
   collectionDate: any;
@@ -56,6 +58,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
   const [totalPreviousDiscount, setTotalPreviousDiscount] = useState(0);
 
   const { username } = user || {};
+
+  const [schoolInformation, setSchoolInformation] = useState(null);
+  // school logo
+  useEffect(() => {
+    axios
+      .get(`/api/front_end`)
+      .then((res) => {
+        setSchoolInformation(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   // date
   let date = dayjs(new Date(collectionDate));
@@ -187,24 +200,37 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
       {/* part 1 */}
       <Grid pt={2} width={'340px'}>
         {/* school information */}
-
-        <Grid></Grid>
-
-        <Grid sx={{ borderBottom: '1px solid #000' }} mb={0.5}>
-          <Grid>
-            <Typography variant="h4" sx={{ textAlign: 'center' }}>
-              {user?.school?.name}
-            </Typography>
-            <Typography variant="body1" sx={{ textAlign: 'center', fontSize: '0.775rem' }}>
-              {user?.school?.address}
-            </Typography>
-            <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>Student Payment Receipt</Typography>
-            <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>
-              Received By: {username}
-            </Typography>
-            <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>
-              Office Copy
-            </Typography>
+        <Grid sx={{ borderBottom: '1px solid #000', alignItems: 'center' }} mb={0.5}>
+          <Grid sx={{ display: 'grid', gridTemplateColumns: '1fr 4fr 1fr' }}>
+            {/* school logo */}
+            <Grid sx={{ my: 'auto', ml: 'auto' }}>
+              {schoolInformation?.header_image ? (
+                <Image
+                  src={getFile(schoolInformation?.header_image)}
+                  width={50}
+                  height={50}
+                  alt="school logo"
+                  // style={{ position: 'relative', bottom: 0 }}
+                />
+              ) : (
+                ''
+              )}
+            </Grid>
+            <Grid sx={{ textAlign: 'center' }}>
+              <Typography variant="h4" sx={{ textAlign: 'center' }}>
+                {user?.school?.name}
+              </Typography>
+              <Typography variant="body1" sx={{ textAlign: 'center', fontSize: '0.775rem' }}>
+                {user?.school?.address}
+              </Typography>
+              <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>Student Payment Receipt</Typography>
+              <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>
+                Received By: {username}
+              </Typography>
+              <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>
+                Office Copy
+              </Typography>
+            </Grid>
           </Grid>
           {/* <Grid width="80px" height="80px"></Grid> */}
         </Grid>
@@ -686,7 +712,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
           </Grid>
         </Grid>
         {/* table two */}
-        <Grid mt={1} mb={6}>
+        {/* <Grid mt={1} mb={6}>
           <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
             <Table sx={{ minWidth: '340px', maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
               <TableHead>
@@ -748,7 +774,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
               <TableBody></TableBody>
             </Table>
           </TableContainer>
-        </Grid>
+        </Grid> */}
         {/* signature  */}
         <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
