@@ -21,7 +21,7 @@ async function post(req, res, refresh_token) {
     if (link_type?.toLowerCase() === 'dynamic page link') {
       if (!dynamic_page_link_id) return res.status(404).send({ message: 'No dynamic page id found!' });
     } else {
-      if (!website_link) return res.status(404).send({ message: 'No website link found!' });
+      if (link_type?.toLowerCase() !== 'no link' && !website_link) return res.status(404).send({ message: 'No website link found!' });
     }
     if (!status) return res.status(404).send({ message: 'No status found!' });
 
@@ -30,7 +30,7 @@ async function post(req, res, refresh_token) {
         ...data,
         english_title,
         link_type: link_type.toLowerCase(),
-        website_link,
+        website_link: website_link || '',
         status: status.toLowerCase(),
         dynamic_page_id: dynamic_page_link_id,
         school_id
@@ -39,6 +39,7 @@ async function post(req, res, refresh_token) {
 
     return res.json({ message: 'website menu created successfully!' });
   } catch (err) {
+    console.log({err})
     logFile.error(err.message);
     res.status(404).json({ error: err.message });
   }

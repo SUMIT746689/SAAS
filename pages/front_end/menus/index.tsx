@@ -99,10 +99,10 @@ const WebsiteMenu = () => {
       label: 'No Link',
       id: 1
     },
-    {
-      label: 'Custom Link',
-      id: 2
-    },
+    // {
+    //   label: 'Custom Link',
+    //   id: 2
+    // },
     {
       label: 'External Link',
       id: 3

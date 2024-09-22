@@ -109,7 +109,10 @@ export default function BottomNavbar({ menus: menuItems }) {
 
     // First, map all menu items by their id
     menuItems.forEach(item => {
-      const website_link = item.link_type !== "dynamic page link" ? item.link_type : `${item.websiteDynamicPage?.id ? `/dynamic-pages/${item.websiteDynamicPage.id}` : '#'}`
+      let website_link = '';
+      if (item.link_type === 'page link' || item.link_type === 'external link') website_link = item.website_link;
+      else if(item.link_type === "dynamic page link") website_link = `/dynamic-pages/${item.websiteDynamicPage.id}`;
+      // item.link_type !== "dynamic page link" ? item.link_type : `${item.websiteDynamicPage?.id ? `/dynamic-pages/${item.websiteDynamicPage.id}` : '#'}`
       menuMap[item.id] = { ...item, website_link, title: item[`${language}_title`], children: [] };
     });
     console.log(menuMap)
