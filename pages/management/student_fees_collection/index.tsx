@@ -98,8 +98,7 @@ function Managementschools() {
       }
     } catch (error) {}
   };
-
-  console.log({ searchOptionData });
+  // console.log({ searchOptionData });
 
   const searchHandleChange = async (event: ChangeEvent<HTMLInputElement>, v) => {
     setSearchValue(v);
@@ -526,6 +525,20 @@ function Managementschools() {
     localStorage.setItem('isSmallSize', JSON.stringify(isSmallSize));
   }, [isSmallSize]);
 
+  const [isOn, setIsOn] = useState(false);
+  useEffect(() => {
+    const storedValue = localStorage.getItem('isOn');
+    console.log(storedValue);
+    if (storedValue !== null) {
+      setIsOn(JSON.parse(storedValue)); // Parse since it's stored as a string
+    }
+  }, []);
+
+  // Save the toggle state in local storage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('setIsOn', JSON.stringify(setIsOn));
+  }, [setIsOn]);
+
   useEffect(() => {
     const temp = datas.filter((i) => {
       const got = printFees.find((j) => j.fee_id === i.fee_id && i.fee_id !== '');
@@ -746,6 +759,7 @@ function Managementschools() {
                 student={selectedStudent}
                 setIsCompleteUpdate={setIsCompleteUpdate}
                 teacherFees={teacherFees}
+                isOn={isOn}
               />
             ) : (
               <DesignPaymentInvoice
@@ -764,6 +778,7 @@ function Managementschools() {
                 student={selectedStudent}
                 setIsCompleteUpdate={setIsCompleteUpdate}
                 teacherFees={teacherFees}
+                isOn={isOn}
               />
             )}
           </Grid>
@@ -888,16 +903,26 @@ function Managementschools() {
             setGatewayOption={setGatewayOption}
             btnHandleClick={btnHandleClick}
           >
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch checked={isSmallSize} onChange={() => setIsSmallSize((value) => !value)} inputProps={{ 'aria-label': 'controlled' }} />
-                }
-                label={`Thermal Print: ${isSmallSize ? 'On' : 'Off'}`}
-                labelPlacement="start"
-                sx={{ mr: 'auto' }}
-              />
-            </FormGroup>
+            <Grid>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Switch checked={isSmallSize} onChange={() => setIsSmallSize((value) => !value)} inputProps={{ 'aria-label': 'controlled' }} />
+                  }
+                  label={`Thermal Print: ${isSmallSize ? 'On' : 'Off'}`}
+                  labelPlacement="start"
+                  sx={{ mr: 'auto' }}
+                />{' '}
+              </FormGroup>
+              <FormGroup>
+                <FormControlLabel
+                  control={<Switch checked={isOn} onChange={() => setIsOn((value) => !value)} inputProps={{ 'aria-label': 'controlled' }} />}
+                  label={`Office Invoice: ${isOn ? 'On' : 'Off'}`}
+                  labelPlacement="start"
+                  sx={{ mr: 'auto' }}
+                />
+              </FormGroup>
+            </Grid>
 
             <Reset_Sent_SMS_Collect_Invoice
               handlePrint={handlePrint}

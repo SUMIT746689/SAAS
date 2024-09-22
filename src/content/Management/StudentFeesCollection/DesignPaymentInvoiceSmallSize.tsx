@@ -27,6 +27,7 @@ type PaymentInvoiceType = {
   schoolData: Data;
   teacherFees: any[];
   userInformation: any;
+  isOn: boolean;
 };
 
 const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
@@ -44,7 +45,8 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
   printFees,
   student,
   setIsCompleteUpdate,
-  teacherFees
+  teacherFees,
+  isOn
 }) => {
   const dueRef = useRef(0);
   const { user } = useAuth();
@@ -198,181 +200,200 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
   return (
     <Grid>
       {/* part 1 */}
-      <Grid pt={2} width={'340px'}>
-        {/* school information */}
-        <Grid sx={{ borderBottom: '1px solid #000', alignItems: 'center' }} mb={0.5}>
-          <Grid sx={{ display: 'grid', gridTemplateColumns: '1fr 4fr 1fr' }}>
-            {/* school logo */}
-            <Grid sx={{ my: 'auto', ml: 'auto' }}>
-              {schoolInformation?.header_image ? (
-                <Image
-                  src={getFile(schoolInformation?.header_image)}
-                  width={50}
-                  height={50}
-                  alt="school logo"
-                  // style={{ position: 'relative', bottom: 0 }}
-                />
-              ) : (
-                ''
-              )}
+      {isOn && (
+        <Grid pt={2} width={'340px'}>
+          {/* school information */}
+          <Grid sx={{ borderBottom: '1px solid #000', alignItems: 'center' }} mb={0.5}>
+            <Grid sx={{ display: 'grid', gridTemplateColumns: '1fr 4fr 1fr' }}>
+              {/* school logo */}
+              <Grid sx={{ my: 'auto', ml: 'auto' }}>
+                {schoolInformation?.header_image ? (
+                  <Image
+                    src={getFile(schoolInformation?.header_image)}
+                    width={50}
+                    height={50}
+                    alt="school logo"
+                    // style={{ position: 'relative', bottom: 0 }}
+                  />
+                ) : (
+                  ''
+                )}
+              </Grid>
+              <Grid sx={{ textAlign: 'center' }}>
+                <Typography variant="h4" sx={{ textAlign: 'center' }}>
+                  {user?.school?.name}
+                </Typography>
+                <Typography variant="body1" sx={{ textAlign: 'center', fontSize: '0.775rem' }}>
+                  {user?.school?.address}
+                </Typography>
+                <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>Student Payment Receipt</Typography>
+                <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>
+                  Received By: {username}
+                </Typography>
+                <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>
+                  Student Copy
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" sx={{ textAlign: 'center' }}>
-                {user?.school?.name}
-              </Typography>
-              <Typography variant="body1" sx={{ textAlign: 'center', fontSize: '0.775rem' }}>
-                {user?.school?.address}
-              </Typography>
-              <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>Student Payment Receipt</Typography>
-              <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>
-                Received By: {username}
-              </Typography>
-              <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>
-                Student Copy
-              </Typography>
-            </Grid>
+            {/* <Grid width="80px" height="80px"></Grid> */}
           </Grid>
-          {/* <Grid width="80px" height="80px"></Grid> */}
-        </Grid>
 
-        {/* student information */}
-        <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Grid sx={{ display: 'flex', gap: '20px' }}>
-            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
-                Rec. No.
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
-                Student Name & Id
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
-                Batch
-              </Typography>
+          {/* student information */}
+          <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Grid sx={{ display: 'flex', gap: '20px' }}>
+              <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                  Rec. No.
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                  Student Name & Id
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                  Batch
+                </Typography>
+              </Grid>
+              <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                  : {selectedFees[0]?.tracking_number}
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                  : {`${[feesUserData?.first_name, feesUserData?.middle_name, feesUserData?.last_name].join(' ')} (${student_id})`}
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                  : {feesUserData?.section_name}
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
-                : {selectedFees[0]?.tracking_number}
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
-                : {`${[feesUserData?.first_name, feesUserData?.middle_name, feesUserData?.last_name].join(' ')} (${student_id})`}
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
-                : {feesUserData?.section_name}
-              </Typography>
+            <Grid sx={{ display: 'flex', gap: '20px' }}>
+              <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                  Date
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                  Class
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                  Roll No
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                  Phone No
+                </Typography>
+              </Grid>
+              <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                  : {formattedDate}
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                  : {feesUserData?.class_name}
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                  : {feesUserData?.class_roll_no}
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                  : {userInformation?.phone}
+                </Typography>
+              </Grid>
             </Grid>
           </Grid>
-          <Grid sx={{ display: 'flex', gap: '20px' }}>
-            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
-                Date
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
-                Class
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
-                Roll No
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
-                Phone No
-              </Typography>
-            </Grid>
-            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
-                : {formattedDate}
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
-                : {feesUserData?.class_name}
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
-                : {feesUserData?.class_roll_no}
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
-                : {userInformation?.phone}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
 
-        {/* table one */}
-        <Grid mt={1}>
-          <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
-            <Table sx={{ minWidth: '340px', maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    style={{
-                      border: '1px solid black',
-                      textTransform: 'capitalize',
-                      // fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      fontSize: '0.7rem',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                      // color: '#000'
-                    }}
-                  >
-                    Particulars
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  {selectedFees.find((item) => item.teacher_name) ? (
+          {/* table one */}
+          <Grid mt={1}>
+            <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
+              <Table sx={{ minWidth: '340px', maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
+                <TableHead>
+                  <TableRow>
                     <TableCell
+                      colSpan={4}
                       style={{
                         border: '1px solid black',
                         textTransform: 'capitalize',
                         // fontWeight: 'bold',
-                        width: '25%',
                         paddingLeft: '5px',
                         paddingRight: '5px',
+                        fontSize: '0.7rem',
                         paddingTop: '2px',
-                        paddingBottom: '2px',
-                        color: '#000'
+                        paddingBottom: '2px'
+                        // color: '#000'
                       }}
                     >
-                      Teacher Name
+                      Particulars
                     </TableCell>
-                  ) : (
-                    ''
-                  )}
-                </TableRow>
-                {selectedFees?.map((payment, index) => {
-                  return (
-                    <TableRow
-                      sx={{
-                        '&:last-child td, &:last-child th': { border: 0 }
-                      }}
-                    >
+                  </TableRow>
+                  <TableRow>
+                    {selectedFees.find((item) => item.teacher_name) ? (
                       <TableCell
-                        component="th"
-                        scope="row"
-                        align="left"
                         style={{
                           border: '1px solid black',
+                          textTransform: 'capitalize',
                           // fontWeight: 'bold',
+                          width: '25%',
                           paddingLeft: '5px',
                           paddingRight: '5px',
                           paddingTop: '2px',
-                          fontSize: '0.7rem',
                           paddingBottom: '2px',
-                          textTransform: 'capitalize'
+                          color: '#000'
                         }}
                       >
-                        {payment?.head_title && payment?.fee_id ? `${payment?.head_title} (${payment?.title})` : payment?.title}
+                        Teacher Name
+                      </TableCell>
+                    ) : (
+                      ''
+                    )}
+                  </TableRow>
+                  {selectedFees?.map((payment, index) => {
+                    return (
+                      <TableRow
+                        sx={{
+                          '&:last-child td, &:last-child th': { border: 0 }
+                        }}
+                      >
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          align="left"
+                          style={{
+                            border: '1px solid black',
+                            // fontWeight: 'bold',
+                            paddingLeft: '5px',
+                            paddingRight: '5px',
+                            paddingTop: '2px',
+                            fontSize: '0.7rem',
+                            paddingBottom: '2px',
+                            textTransform: 'capitalize'
+                          }}
+                        >
+                          {payment?.head_title && payment?.fee_id ? `${payment?.head_title} (${payment?.title})` : payment?.title}
 
-                        {/* {[payment?.head_title, payment?.title, payment?.subject_name].filter(Boolean)[0] +
+                          {/* {[payment?.head_title, payment?.title, payment?.subject_name].filter(Boolean)[0] +
                           ' ' +
                           [payment?.head_title, payment?.title, payment?.subject_name]
                             .filter(Boolean)
                             .slice(1)
                             .map((item) => `(${item})`)
                             .join(' ')} */}
-                      </TableCell>
+                        </TableCell>
 
-                      {selectedFees.find((item) => item.teacher_name) ? (
+                        {selectedFees.find((item) => item.teacher_name) ? (
+                          <TableCell
+                            align="left"
+                            style={{
+                              border: '1px solid black',
+                              // fontWeight: 'bold',
+                              paddingLeft: '5px',
+                              paddingRight: '5px',
+                              paddingTop: '2px',
+                              fontSize: '0.7rem',
+                              paddingBottom: '2px'
+                            }}
+                          >
+                            {payment?.teacher_name ? payment?.teacher_name : ''}
+                          </TableCell>
+                        ) : (
+                          ''
+                        )}
+
                         <TableCell
-                          align="left"
+                          align="right"
                           style={{
                             border: '1px solid black',
                             // fontWeight: 'bold',
@@ -383,27 +404,9 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                             paddingBottom: '2px'
                           }}
                         >
-                          {payment?.teacher_name ? payment?.teacher_name : ''}
+                          {payment?.payableAmount?.toFixed(2)}
                         </TableCell>
-                      ) : (
-                        ''
-                      )}
-
-                      <TableCell
-                        align="right"
-                        style={{
-                          border: '1px solid black',
-                          // fontWeight: 'bold',
-                          paddingLeft: '5px',
-                          paddingRight: '5px',
-                          paddingTop: '2px',
-                          fontSize: '0.7rem',
-                          paddingBottom: '2px'
-                        }}
-                      >
-                        {payment?.payableAmount?.toFixed(2)}
-                      </TableCell>
-                      {/* <TableCell
+                        {/* <TableCell
                         align="left"
                         style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
                       >
@@ -433,286 +436,286 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       >
                         {payment.paidAmount ? formatNumber(payment.due?.toFixed(2)) : 0}
                       </TableCell> */}
-                    </TableRow>
-                  );
-                })}
-
-                <TableRow>
-                  <TableCell
-                    colSpan={selectedFees.find((item) => item.teacher_name) ? 2 : 1}
-                    component="th"
-                    scope="row"
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      // fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      fontSize: '0.7rem',
-                      textTransform: 'capitalize',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Payable Amt.
-                  </TableCell>
-                  {selectedFees?.map((payment, index) => {
-                    return (
-                      // <TableRow
-                      //   sx={{
-                      //     '&:last-child td, &:last-child th': { border: 0 }
-                      //   }}
-                      // >
-                      <TableCell
-                        align="right"
-                        style={{
-                          border: '1px solid black',
-                          // fontWeight: 'bold',
-                          paddingLeft: '5px',
-                          paddingRight: '5px',
-                          textTransform: 'capitalize',
-                          paddingTop: '2px',
-
-                          fontSize: '0.7rem',
-                          paddingBottom: '2px'
-                        }}
-                      >
-                        {/* {totalPreAmount?.toFixed(2)} */}
-                        {payment?.payableAmount?.toFixed(2)}
-                      </TableCell>
+                      </TableRow>
                     );
-                  })}{' '}
-                </TableRow>
+                  })}
 
-                <TableRow>
-                  <TableCell
-                    style={{
-                      border: '1px solid black',
-                      // fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      textTransform: 'capitalize',
-                      paddingTop: '2px',
+                  <TableRow>
+                    <TableCell
+                      colSpan={selectedFees.find((item) => item.teacher_name) ? 2 : 1}
+                      component="th"
+                      scope="row"
+                      align="left"
+                      style={{
+                        border: '1px solid black',
+                        // fontWeight: 'bold',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        paddingTop: '2px',
+                        fontSize: '0.7rem',
+                        textTransform: 'capitalize',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      Payable Amt.
+                    </TableCell>
+                    {selectedFees?.map((payment, index) => {
+                      return (
+                        // <TableRow
+                        //   sx={{
+                        //     '&:last-child td, &:last-child th': { border: 0 }
+                        //   }}
+                        // >
+                        <TableCell
+                          align="right"
+                          style={{
+                            border: '1px solid black',
+                            // fontWeight: 'bold',
+                            paddingLeft: '5px',
+                            paddingRight: '5px',
+                            textTransform: 'capitalize',
+                            paddingTop: '2px',
 
-                      fontSize: '0.7rem',
-                      paddingBottom: '2px'
+                            fontSize: '0.7rem',
+                            paddingBottom: '2px'
+                          }}
+                        >
+                          {/* {totalPreAmount?.toFixed(2)} */}
+                          {payment?.payableAmount?.toFixed(2)}
+                        </TableCell>
+                      );
+                    })}{' '}
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell
+                      style={{
+                        border: '1px solid black',
+                        // fontWeight: 'bold',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        textTransform: 'capitalize',
+                        paddingTop: '2px',
+
+                        fontSize: '0.7rem',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      Prev. Paid
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      style={{
+                        border: '1px solid black',
+                        // fontWeight: 'bold',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        textTransform: 'capitalize',
+                        paddingTop: '2px',
+
+                        fontSize: '0.7rem',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      {totalPreAmount?.toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell
+                      style={{
+                        border: '1px solid black',
+                        // fontWeight: 'bold',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        textTransform: 'capitalize',
+                        paddingTop: '2px',
+
+                        fontSize: '0.7rem',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      Prev. Discount
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      style={{
+                        border: '1px solid black',
+                        // fontWeight: 'bold',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        textTransform: 'capitalize',
+                        paddingTop: '2px',
+
+                        fontSize: '0.7rem',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      {totalPreviousDiscount?.toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell
+                      style={{
+                        border: '1px solid black',
+                        // fontWeight: 'bold',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        textTransform: 'capitalize',
+                        paddingTop: '2px',
+
+                        fontSize: '0.7rem',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      Paid Amt
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      style={{
+                        border: '1px solid black',
+                        // fontWeight: 'bold',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        textTransform: 'capitalize',
+                        paddingTop: '2px',
+
+                        fontSize: '0.7rem',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      {totalPaidAmount?.toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell
+                      style={{
+                        border: '1px solid black',
+                        // fontWeight: 'bold',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        textTransform: 'capitalize',
+                        paddingTop: '2px',
+
+                        fontSize: '0.7rem',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      Discount
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      style={{
+                        border: '1px solid black',
+                        // fontWeight: 'bold',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        textTransform: 'capitalize',
+                        paddingTop: '2px',
+                        fontSize: '0.7rem',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      {totalCurrentDisountAmount?.toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell
+                      style={{
+                        border: '1px solid black',
+                        // fontWeight: 'bold',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        textTransform: 'capitalize',
+                        paddingTop: '2px',
+                        fontSize: '0.7rem',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      Due Amt.
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      style={{
+                        border: '1px solid black',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        textTransform: 'capitalize',
+                        paddingTop: '2px',
+                        fontSize: '0.7rem',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      {totalDueAmount?.toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow
+                    sx={{
+                      '&:last-child td, &:last-child th': { border: 0 }
                     }}
                   >
-                    Prev. Paid
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    style={{
-                      border: '1px solid black',
-                      // fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      textTransform: 'capitalize',
-                      paddingTop: '2px',
-
-                      fontSize: '0.7rem',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalPreAmount?.toFixed(2)}
-                  </TableCell>
-                </TableRow>
-
-                <TableRow>
-                  <TableCell
-                    style={{
-                      border: '1px solid black',
-                      // fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      textTransform: 'capitalize',
-                      paddingTop: '2px',
-
-                      fontSize: '0.7rem',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Prev. Discount
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    style={{
-                      border: '1px solid black',
-                      // fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      textTransform: 'capitalize',
-                      paddingTop: '2px',
-
-                      fontSize: '0.7rem',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalPreviousDiscount?.toFixed(2)}
-                  </TableCell>
-                </TableRow>
-
-                <TableRow>
-                  <TableCell
-                    style={{
-                      border: '1px solid black',
-                      // fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      textTransform: 'capitalize',
-                      paddingTop: '2px',
-
-                      fontSize: '0.7rem',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Paid Amt
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    style={{
-                      border: '1px solid black',
-                      // fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      textTransform: 'capitalize',
-                      paddingTop: '2px',
-
-                      fontSize: '0.7rem',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalPaidAmount?.toFixed(2)}
-                  </TableCell>
-                </TableRow>
-
-                <TableRow>
-                  <TableCell
-                    style={{
-                      border: '1px solid black',
-                      // fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      textTransform: 'capitalize',
-                      paddingTop: '2px',
-
-                      fontSize: '0.7rem',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Discount
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    style={{
-                      border: '1px solid black',
-                      // fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      textTransform: 'capitalize',
-                      paddingTop: '2px',
-                      fontSize: '0.7rem',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalCurrentDisountAmount?.toFixed(2)}
-                  </TableCell>
-                </TableRow>
-
-                <TableRow>
-                  <TableCell
-                    style={{
-                      border: '1px solid black',
-                      // fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      textTransform: 'capitalize',
-                      paddingTop: '2px',
-                      fontSize: '0.7rem',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Due Amt.
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    style={{
-                      border: '1px solid black',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      textTransform: 'capitalize',
-                      paddingTop: '2px',
-                      fontSize: '0.7rem',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalDueAmount?.toFixed(2)}
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow
-                  sx={{
-                    '&:last-child td, &:last-child th': { border: 0 }
-                  }}
-                >
-                  <TableCell
-                    colSpan={selectedFees.find((item) => item.teacher_name) ? 2 : 1}
-                    component="th"
-                    scope="row"
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      fontSize: '0.7rem',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Total Due
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    style={{
-                      border: '1px solid black',
-                      fontSize: '0.7rem',
-                      fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalDueAmount?.toFixed(2)}
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
-        {/* taka in words */}
-        {/* <Typography variant="body1" sx={{ fontWeight: 'bold' }} my={1}>
+                    <TableCell
+                      colSpan={selectedFees.find((item) => item.teacher_name) ? 2 : 1}
+                      component="th"
+                      scope="row"
+                      align="left"
+                      style={{
+                        border: '1px solid black',
+                        fontWeight: 'bold',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        paddingTop: '2px',
+                        fontSize: '0.7rem',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      Total Due
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      style={{
+                        border: '1px solid black',
+                        fontSize: '0.7rem',
+                        fontWeight: 'bold',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        paddingTop: '2px',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      {totalDueAmount?.toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+          {/* taka in words */}
+          {/* <Typography variant="body1" sx={{ fontWeight: 'bold' }} my={1}>
           In Words: One Thousand
         </Typography> */}
-        <Grid container sx={{ gap: '2px', display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem' }} my={1}>
-          <Grid
-            sx={{
-              fontSize: '0.7rem'
-            }}
-          >
-            IN WORD:{' '}
-            <b>
-              {word} {user?.school?.currency} only
-            </b>
+          <Grid container sx={{ gap: '2px', display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem' }} my={1}>
+            <Grid
+              sx={{
+                fontSize: '0.7rem'
+              }}
+            >
+              IN WORD:{' '}
+              <b>
+                {word} {user?.school?.currency} only
+              </b>
+            </Grid>
+            <Grid>
+              Paid: <b>{formatNumber(parseFloat(Number(totalPaidAmount).toFixed(2)))}</b>
+            </Grid>
           </Grid>
-          <Grid>
-            Paid: <b>{formatNumber(parseFloat(Number(totalPaidAmount).toFixed(2)))}</b>
-          </Grid>
-        </Grid>
-        {/* table two */}
-        {/* <Grid mt={1} mb={6}>
+          {/* table two */}
+          {/* <Grid mt={1} mb={6}>
           <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
             <Table sx={{ minWidth: '340px', maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
               <TableHead>
@@ -775,26 +778,29 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
             </Table>
           </TableContainer>
         </Grid> */}
-        {/* signature  */}
-        <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-          <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
-            <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
-            <Grid>Student/Gurdiant Signature </Grid>
-          </Grid>
-          <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
-            <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
-            <Grid>Superintendent Signature </Grid>
-          </Grid>
-          <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
-            <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
-            <Grid>Accounts Officer </Grid>
-          </Grid>
+          {/* signature  */}
+          <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
+              <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
+              <Grid>Student/Gurdiant Signature </Grid>
+            </Grid>
+            <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
+              <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
+              <Grid>Superintendent Signature </Grid>
+            </Grid>
+            <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
+              <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
+              <Grid>Accounts Officer </Grid>
+            </Grid>
 
-          <Grid sx={{ flexGrow: 1, fontSize: '0.6rem' }}>
-            <Grid sx={{ textAlign: 'center' }}>Powered By Edu360</Grid>
+            <Grid sx={{ flexGrow: 1, fontSize: '0.6rem' }}>
+              <Grid sx={{ textAlign: 'center' }}>Powered By Edu360</Grid>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      )}
+
+      {/* part 2 */}
       <Grid pt={2} width={'340px'}>
         {/* school information */}
         <Grid sx={{ borderBottom: '1px solid #000', alignItems: 'center' }} mb={0.5}>
