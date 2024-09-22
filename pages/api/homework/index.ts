@@ -70,7 +70,7 @@ const index = async (req, res, refresh_token) => {
 
                 if (!fields?.subject_id || !fields?.student_id || !fields?.academic_year_id || !homeworkFile || !fields?.date) {
                     unknownFileDelete(files, [])
-                    throw new Error('subject or student or academic_year or homework file missing !!')
+                    throw new Error('subject or student or academic_year or homework field missing !!')
                 }
 
                 unknownFileDelete(files, ['homeworkFile'])
@@ -93,7 +93,7 @@ const index = async (req, res, refresh_token) => {
                 res.status(405).end(`Method ${method} Not Allowed`);
         }
     } catch (err) {
-        console.log(err);
+        console.log({err:err.message});
         logFile.error(err.message)
         res.status(500).json({ message: err.message });
     }
