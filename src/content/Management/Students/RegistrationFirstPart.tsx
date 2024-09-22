@@ -30,9 +30,11 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
           last_name: student ? student?.middle_name || student?.student_info?.last_name || '' : totalFormData?.last_name || undefined,
           student_id: student ? student?.student_id || student?.student_info?.student_id : totalFormData?.student_id || undefined,
           admission_no: student ? student?.admission_no || student?.student_info?.admission_no : totalFormData?.admission_no || undefined,
-          admission_date: student ? student?.admission_date || student?.student_info?.admission_date : totalFormData?.admission_date,
-          date_of_birth: student ? student?.date_of_birth || student?.student_info?.date_of_birth : totalFormData?.date_of_birth,
-          gender: student ? student?.gender || student?.student_info?.gender : totalFormData?.gender || undefined,
+          admission_date: student
+            ? student?.admission_date || student?.student_info?.admission_date
+            : totalFormData?.admission_date || new Date(Date.now()),
+          date_of_birth: student ? student?.date_of_birth || student?.student_info?.date_of_birth : totalFormData?.date_of_birth || null,
+          gender: student ? student?.gender || student?.student_info?.gender : totalFormData?.gender || 'female',
           blood_group: student ? student?.blood_group || student?.student_info?.blood_group || '' : totalFormData?.blood_group || undefined,
           religion: student ? student?.religion || student?.student_info?.religion : totalFormData?.religion || undefined,
           phone: student ? student?.phone || student?.student_info?.phone : totalFormData?.phone || undefined,
@@ -45,7 +47,7 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
           first_name: Yup.string().max(255).required(t('First name field is required')),
           middle_name: Yup.string().max(255).nullable(true),
           last_name: Yup.string().max(255).nullable(true),
-          admission_date: Yup.date().required(t('Admission date is required!')),
+          // admission_date: Yup.date().required(t('Admission date is required!')),
           // date_of_birth: Yup.date().required(t('Date of birth is required!')),
           gender: Yup.string().required(t('select a gender')),
           blood_group: Yup.string().nullable(true),
@@ -91,6 +93,9 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                         sx={{
                           '& fieldset': {
                             borderRadius: '3px'
+                          },
+                          '& .MuiFormLabel-asterisk': {
+                            color: 'red'
                           }
                         }}
                         error={Boolean(touched.first_name && errors.first_name)}
@@ -103,6 +108,9 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                         value={values.first_name}
                         variant="outlined"
                         required={true}
+                        // InputLabelProps={{
+                        //   required: true
+                        // }}
                       />
                     </Grid>
                     {/* middle_name */}
@@ -145,7 +153,6 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                         variant="outlined"
                       />
                     </Grid>
-
                     {/* admission_no   */}
                     <Grid item xs={12} display={'grid'} gridTemplateColumns={{ md: '1fr 1fr' }} gap={2}>
                       <TextField
@@ -186,16 +193,23 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                         variant="outlined"
                       />
                     </Grid>
-
                     {/* admission_date */}
                     <Grid item xs={12} md={6}>
                       <MobileDateTimePicker
                         label="admission Date"
                         inputFormat="dd/MM/yyyy hh:mm a"
                         value={values.admission_date}
+                        onChange={(n: any) => {
+                          if (n) {
+                            const newValue = dayjs(n);
+                            console.log('admission_date__', { newValue });
+                            //@ts-ignore
+                            setFieldValue('admission_date', newValue);
+                          }
+                        }}
                         renderInput={(params) => (
                           <TextField
-                            required
+                            // required
                             fullWidth
                             size="small"
                             name="admission_date"
@@ -208,14 +222,6 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                             {...params}
                           />
                         )}
-                        onChange={(n: any) => {
-                          if (n) {
-                            const newValue = dayjs(n);
-                            console.log('admission_date__', newValue);
-                            //@ts-ignore
-                            setFieldValue('admission_date', newValue);
-                          }
-                        }}
                       />
                       {errors.admission_date && <span style={{ color: 'red' }}> Admission date are required</span>}
                     </Grid>
@@ -246,13 +252,21 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                           />
                         )}
                       />
-                      {errors.date_of_birth && <span style={{ color: 'red' }}> Date of birth are required</span>}
+                      {/* {errors.date_of_birth && <span style={{ color: 'red' }}> Date of birth are required</span>} */}
                     </Grid>
-
                     {/* Gender */}
                     <Grid item xs={12} sm={6} md={6}>
                       <FormControl required>
-                        <FormLabel id="demo-row-radio-buttons-group-label">Select Gender</FormLabel>
+                        <FormLabel
+                          sx={{
+                            '& .MuiFormLabel-asterisk': {
+                              color: 'red'
+                            }
+                          }}
+                          id="demo-row-radio-buttons-group-label"
+                        >
+                          Select Gender
+                        </FormLabel>
                         <RadioGroup
                           aria-labelledby="demo-controlled-radio-buttons-group"
                           name="gender"
@@ -267,7 +281,6 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                         </RadioGroup>
                       </FormControl>
                     </Grid>
-
                     <Grid item xs={12} sm={6} md={6}>
                       <TextField
                         size="small"
@@ -288,7 +301,6 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                         variant="outlined"
                       />
                     </Grid>
-
                     {/* blood_group */}
                     <Grid item xs={12} sm={6} md={6}>
                       <TextField
@@ -310,7 +322,6 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                         variant="outlined"
                       />
                     </Grid>
-
                     {/* religion */}
                     <Grid item xs={12} sm={6} md={6}>
                       <TextField
@@ -332,7 +343,6 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                         variant="outlined"
                       />
                     </Grid>
-
                     {/* phone */}
                     <Grid item xs={12} md={6}>
                       <TextField
@@ -340,6 +350,9 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                         sx={{
                           '& fieldset': {
                             borderRadius: '3px'
+                          },
+                          '& .MuiFormLabel-asterisk': {
+                            color: 'red'
                           }
                         }}
                         error={Boolean(touched.phone && errors.phone)}
@@ -356,7 +369,6 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                         required={true}
                       />
                     </Grid>
-
                     {/* email */}
                     <Grid item xs={12} md={6}>
                       <TextField
@@ -378,7 +390,6 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                         variant="outlined"
                       />
                     </Grid>
-
                     {/* national_id */}
                     <Grid item xs={12}>
                       <TextField

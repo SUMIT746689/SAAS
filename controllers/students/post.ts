@@ -88,7 +88,7 @@ const postHandle = async (req, res, refresh_token) => {
       !fields.class_id ||
       !fields.section_id ||
       !fields.password ||
-      !fields.admission_date ||
+      // !fields.admission_date ||
       // !fields.date_of_birth ||
       !fields.roll_no ||
       !fields.registration_no ||

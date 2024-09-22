@@ -26,7 +26,7 @@ const patchHandle = async (req, res, authenticate_user) => {
         if (
             !fields.first_name ||
             !fields.section_id ||
-            !fields.admission_date ||
+            // !fields.admission_date ||
             // !fields.date_of_birth ||
             !fields.roll_no ||
             !fields.registration_no ||

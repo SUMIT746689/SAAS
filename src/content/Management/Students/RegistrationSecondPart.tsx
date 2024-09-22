@@ -223,7 +223,7 @@ function RegistrationSecondPart({
 
           section_id: student ? (student?.section_id ? Number(student?.section_id) : student?.section_id) : totalFormData?.section_id,
 
-          group_id: student ? (student?.group_id ? Number(student?.group_id) : student?.group?.group_id) : totalFormData?.group_id,
+          group_id: student ? (student?.group_id ? Number(student?.group_id) : student?.group_id) : totalFormData?.group_id,
 
           extra_class_id: student?.extra_section_id ? student?.extra_section?.class_id : undefined,
 
@@ -271,7 +271,7 @@ function RegistrationSecondPart({
                 .required(t('confirm_password field is required'))
                 .oneOf([Yup.ref('password'), null], 'Passwords must match')
             }),
-          // roll_no: Yup.string().required(t('roll no is required!')),
+          roll_no: Yup.string().required(t('roll no is required!')),
           registration_no: Yup.string().required(t('registration no is required!'))
         })}
         onSubmit={async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
@@ -324,6 +324,11 @@ function RegistrationSecondPart({
 
                     <Grid item xs={12}>
                       <NewDebounceInput
+                        sx={{
+                          '& .MuiFormLabel-asterisk': {
+                            color: 'red'
+                          }
+                        }}
                         touched={touched.username}
                         errors={errors.username || isAvailableUsername}
                         label={'username'}
@@ -347,6 +352,9 @@ function RegistrationSecondPart({
                         sx={{
                           '& fieldset': {
                             borderRadius: '3px'
+                          },
+                          '& .MuiFormLabel-asterisk': {
+                            color: 'red'
                           }
                         }}
                         fullWidth
@@ -399,6 +407,9 @@ function RegistrationSecondPart({
                             sx={{
                               '& fieldset': {
                                 borderRadius: '3px'
+                              },
+                              '& .MuiFormLabel-asterisk': {
+                                color: 'red'
                               }
                             }}
                             fullWidth
@@ -428,6 +439,9 @@ function RegistrationSecondPart({
                               sx={{
                                 '& fieldset': {
                                   borderRadius: '3px'
+                                },
+                                '& .MuiFormLabel-asterisk': {
+                                  color: 'red'
                                 }
                               }}
                               fullWidth
@@ -519,6 +533,9 @@ function RegistrationSecondPart({
                         sx={{
                           '& fieldset': {
                             borderRadius: '3px'
+                          },
+                          '& .MuiFormLabel-asterisk': {
+                            color: 'red'
                           }
                         }}
                         error={Boolean(touched.roll_no && errors.roll_no)}
@@ -531,6 +548,7 @@ function RegistrationSecondPart({
                         type="text"
                         value={values.roll_no}
                         variant="outlined"
+                        required={true}
                       />
                     </Grid>
 
