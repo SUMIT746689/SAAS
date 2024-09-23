@@ -19,7 +19,6 @@ import {
   IconButton,
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableContainer,
   TableRow,
@@ -54,6 +53,7 @@ import PageTitleWrapper from '@/components/PageTitleWrapper';
 import { PageHeaderTitleWrapper } from '@/components/PageHeaderTitle';
 import { ButtonWrapper } from '@/components/ButtonWrapper';
 import { customizeDateWithTime } from '@/utils/customizeDate';
+import { TableBodyCellWrapper, TableHeaderCellWrapper } from '@/components/Table/Table';
 
 const DialogWrapper = styled(Dialog)(
   () => `
@@ -313,38 +313,43 @@ const Results = () => {
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell align={'center'}>{t('Class')}</TableCell>
-                    <TableCell align={'center'}>{t('Academic year')}</TableCell>
-                    <TableCell align={'center'}>{t('Submission Time')}</TableCell>
-                    <TableCell align="center">{t('Actions')}</TableCell>
+                    <TableHeaderCellWrapper align={'center'}>{t('ID')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align={'center'}>{t('Name')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align={'center'}>{t('User Name')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align={'center'}>{t('Password')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align={'center'}>{t('Class')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align={'center'}>{t('Academic year')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align={'center'}>{t('Submission Time')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align={'center'}>{t('Actions')}</TableHeaderCellWrapper>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {paginatedClasses.map((i) => {
                     return (
                       <TableRow hover key={i.id} >
+                        <TableBodyCellWrapper align={'center'}>
+                          {i?.id}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper align={'center'}>
+                          {i?.student?.first_name} {i?.student?.middle_name} {i?.student?.last_name}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper align={'center'}>
+                        {i?.student?.username}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper align={'center'}>
+                        {i?.student?.password}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper align={'center'}>
+                          {i?.student?.class_name}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper align={'center'}>
+                          {i?.student?.academic_year_title}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper align={'center'}>
+                          {customizeDateWithTime(i?.student?.admission_date)}
+                        </TableBodyCellWrapper>
 
-                        <TableCell align={'center'}>
-                          <Typography variant="h5">
-                            {i?.student?.class_id}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align={'center'}>
-                          <Typography variant="h5">
-                            {i?.student?.academic_year_id}
-                          </Typography>
-                        </TableCell>
-
-                        <TableCell align={'center'}>
-                          <Typography variant="h5">
-                            {customizeDateWithTime(i?.student?.admission_date)}
-                          </Typography>
-                        </TableCell>
-
-                        <TableCell align={'center'} sx={{
-                          display: 'grid',
-                          gridTemplateColumns: 'auto auto auto auto'
-                        }}>
+                        <TableBodyCellWrapper align={'center'} >
 
                           <Tooltip title={t('Approve')} arrow>
                             <IconButton
@@ -358,7 +363,7 @@ const Results = () => {
                             </IconButton>
                           </Tooltip>
 
-                          <Tooltip title={t('Delete')} arrow>
+                          <Tooltip title={t('Delete')} arrow sx={{ml:1}}>
                             <IconButton
                               onClick={() => handleConfirmDelete(i.id)}
                               color="primary"
@@ -366,7 +371,7 @@ const Results = () => {
                               <DeleteTwoToneIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
-                        </TableCell>
+                        </TableBodyCellWrapper>
                       </TableRow>
                     );
                   })}
