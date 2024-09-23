@@ -34,7 +34,7 @@ function PageHeader({ reFetchData, data, classes, classList, setLeave, userInfo,
   const [subjects, setSubjects] = useState([]);
 
   const [studentList, setStudentList] = useState([]);
-  const [sections, setSections] = useState(null);
+  const [sections, setSections] = useState([]);
 
   // const [selectedClass, setSelectedClass] = useState(null);
   // const [selectedSection, setSelectedSection] = useState(null);
@@ -65,13 +65,18 @@ function PageHeader({ reFetchData, data, classes, classList, setLeave, userInfo,
   const handleCreateClassClose = () => {
     setOpen(false);
     setHomeworkFilePreview(null);
+    setSelectedClass(null);
+    setSelectedSection(null)
+    setSelectedSubject(null);
+    setSections([]);
+    setSubjects([])
   };
 
   const handleFormSubmit = async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
     try {
 
       if (!_values.homeworkFile) {
-        return showNotification("please upload a homework file","error");
+        return showNotification("please upload a homework file", "error");
       }
 
       if (userInfo?.school_id) {
@@ -353,8 +358,8 @@ function PageHeader({ reFetchData, data, classes, classList, setLeave, userInfo,
 
         {selectedClass && selectedClass.has_section && sections && (
           <AutoCompleteWrapper
-            label="Select section"
-            placeholder="Section..."
+            label="Select Batch"
+            placeholder="Batch..."
             options={sections}
             value={selectedSection}
             handleChange={(e, v) => {
@@ -475,8 +480,8 @@ function PageHeader({ reFetchData, data, classes, classList, setLeave, userInfo,
                     {userInfo && (
                       <AutoCompleteWrapperWithoutRenderInput
                         minWidth="100%"
-                        label="Select Section *"
-                        placeholder="Section..."
+                        label="Select Batch *"
+                        placeholder="Batch..."
                         options={sections}
                         value={undefined}
                         name="section_name"
