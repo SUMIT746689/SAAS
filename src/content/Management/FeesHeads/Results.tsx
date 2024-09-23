@@ -70,10 +70,7 @@ interface Filters {
   role?: string;
 }
 
-const Transition = forwardRef(function Transition(
-  props: TransitionProps & { children: ReactElement<any, any> },
-  ref: Ref<unknown>
-) {
+const Transition = forwardRef(function Transition(props: TransitionProps & { children: ReactElement<any, any> }, ref: Ref<unknown>) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
@@ -112,11 +109,7 @@ const applyFilters = (users, query, filters) => {
   });
 };
 
-const applyPagination = (
-  users: User[],
-  page: number,
-  limit: number
-): User[] => {
+const applyPagination = (users: User[], page: number, limit: number): User[] => {
   return users.slice(page * limit, page * limit + limit);
 };
 
@@ -126,7 +119,7 @@ const Results = ({ setEditSubject, users, classList }) => {
 
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
-  const [searchValue, setSearchValue] = useState<string | null>(null)
+  const [searchValue, setSearchValue] = useState<string | null>(null);
   const [query, setQuery] = useState<string>('');
   const [filters, setFilters] = useState<Filters>({
     role: null
@@ -141,16 +134,11 @@ const Results = ({ setEditSubject, users, classList }) => {
     setSelectedUsers(event.target.checked ? users.map((user) => user.id) : []);
   };
 
-  const handleSelectOneUser = (
-    _event: ChangeEvent<HTMLInputElement>,
-    userId: string
-  ): void => {
+  const handleSelectOneUser = (_event: ChangeEvent<HTMLInputElement>, userId: string): void => {
     if (!selectedItems.includes(userId)) {
       setSelectedUsers((prevSelected) => [...prevSelected, userId]);
     } else {
-      setSelectedUsers((prevSelected) =>
-        prevSelected.filter((id) => id !== userId)
-      );
+      setSelectedUsers((prevSelected) => prevSelected.filter((id) => id !== userId));
     }
   };
 
@@ -164,8 +152,7 @@ const Results = ({ setEditSubject, users, classList }) => {
 
   const filteredClasses = applyFilters(users, query, filters);
   const paginatedSubjects = applyPagination(filteredClasses, page, limit);
-  const selectedSomeUsers =
-    selectedItems.length > 0 && selectedItems.length < users.length;
+  const selectedSomeUsers = selectedItems.length > 0 && selectedItems.length < users.length;
   const selectedAllUsers = selectedItems.length === users.length;
 
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
@@ -201,9 +188,7 @@ const Results = ({ setEditSubject, users, classList }) => {
             }}
           />
         </Box>
-
         <Divider />
-
         {paginatedSubjects.length === 0 ? (
           <>
             <Typography
@@ -222,15 +207,11 @@ const Results = ({ setEditSubject, users, classList }) => {
         ) : (
           <>
             <TableContainer>
-              <Table size='small'>
+              <Table size="small">
                 <TableHead>
                   <TableRow>
                     <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={selectedAllUsers}
-                        indeterminate={selectedSomeUsers}
-                        onChange={handleSelectAllUsers}
-                      />
+                      <Checkbox checked={selectedAllUsers} indeterminate={selectedSomeUsers} onChange={handleSelectAllUsers} />
                     </TableCell>
                     <TableCell>{t('Title')}</TableCell>
                     <TableCell>{t('Frequency')}</TableCell>
@@ -243,40 +224,24 @@ const Results = ({ setEditSubject, users, classList }) => {
                     return (
                       <TableRow hover key={i.id} selected={isUserSelected}>
                         <TableCell padding="checkbox">
-                          <Checkbox
-                            checked={isUserSelected}
-                            onChange={(event) =>
-                              handleSelectOneUser(event, i.id)
-                            }
-                            value={isUserSelected}
-                          />
+                          <Checkbox checked={isUserSelected} onChange={(event) => handleSelectOneUser(event, i.id)} value={isUserSelected} />
                         </TableCell>
                         <TableCell>
                           <Typography variant="h5">{i.title}</Typography>
                         </TableCell>
                         <TableCell>
-                          <Typography variant="h5">
-                            {
-                              i.frequency
-                            }
-                          </Typography>
+                          <Typography variant="h5">{i.frequency}</Typography>
                         </TableCell>
 
                         <TableCell align="center">
                           <Typography noWrap>
                             <Tooltip title={t('Edit')} arrow>
-                              <IconButton
-                                color="primary"
-                                onClick={() => setEditSubject(i)}
-                              >
+                              <IconButton color="primary" onClick={() => setEditSubject(i)}>
                                 <LaunchTwoToneIcon fontSize="small" />
                               </IconButton>
                             </Tooltip>
                             <Tooltip title={t('Delete')} arrow>
-                              <IconButton
-                                onClick={handleConfirmDelete}
-                                color="primary"
-                              >
+                              <IconButton onClick={handleConfirmDelete} color="primary">
                                 <DeleteTwoToneIcon fontSize="small" />
                               </IconButton>
                             </Tooltip>
@@ -303,21 +268,8 @@ const Results = ({ setEditSubject, users, classList }) => {
         )}
       </Card>
 
-      <DialogWrapper
-        open={openConfirmDelete}
-        maxWidth="sm"
-        fullWidth
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={closeConfirmDelete}
-      >
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-          p={5}
-        >
+      <DialogWrapper open={openConfirmDelete} maxWidth="sm" fullWidth TransitionComponent={Transition} keepMounted onClose={closeConfirmDelete}>
+        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" p={5}>
           <AvatarError>
             <CloseIcon />
           </AvatarError>
@@ -330,8 +282,7 @@ const Results = ({ setEditSubject, users, classList }) => {
             }}
             variant="h3"
           >
-            {t('Are you sure you want to permanently delete this user account')}
-            ?
+            {t('Are you sure you want to permanently delete this user account')}?
           </Typography>
 
           <Box>

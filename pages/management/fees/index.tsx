@@ -51,7 +51,7 @@ function ManagementFees() {
               value: i.id
             })) || []
           }
-          feesHeads={feesHeads?.map((feesH) => ({ label: feesH.title, value: feesH.id })) || []}
+          feesHeads={feesHeads?.map((feesH) => ({ label: feesH.title, value: feesH.id, frequency: feesH.frequency })) || []}
           editData={editData}
           seteditData={setEditData}
           reFetchData={reFetchData}

@@ -3,13 +3,7 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Grid,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Typography,
-} from '@mui/material';
+import { Grid, Dialog, DialogTitle, DialogContent, Typography } from '@mui/material';
 import axios from 'axios';
 import useNotistick from '@/hooks/useNotistick';
 import { PageHeaderTitleWrapper } from '@/components/PageHeaderTitle';
@@ -18,16 +12,11 @@ import { DialogActionWrapper } from '@/components/DialogWrapper';
 import { AutoCompleteWrapper } from '@/components/AutoCompleteWrapper';
 import { DropDownSelectWrapper } from '@/components/DropDown';
 
-function PageHeader({
-  editSubject,
-  setEditSubject,
-  reFetchSubjects,
-  classList
-}) {
+function PageHeader({ editSubject, setEditSubject, reFetchSubjects, classList }) {
   const { t }: { t: any } = useTranslation();
   const [open, setOpen] = useState(false);
   const { showNotification } = useNotistick();
-  const [selectedClass, setSelectedClass] = useState([])
+  const [selectedClass, setSelectedClass] = useState([]);
 
   useEffect(() => {
     if (editSubject) handleCreateClassOpen();
@@ -39,34 +28,29 @@ function PageHeader({
 
   const handleCreateClassClose = () => {
     setOpen(false);
-    setSelectedClass([])
+    setSelectedClass([]);
     setEditSubject(null);
   };
 
   const handleCreateUserSuccess = (message) => {
     showNotification(message);
-    handleCreateClassClose()
+    handleCreateClassClose();
     reFetchSubjects();
   };
-  const handleFormSubmit = async (
-    _values,
-    { resetForm, setErrors, setStatus, setSubmitting }
-  ) => {
+  const handleFormSubmit = async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
     try {
       if (editSubject) {
-        await axios.patch(`/api/fees_heads/${editSubject.id}`, _values)
+        await axios.patch(`/api/fees_heads/${editSubject.id}`, _values);
         resetForm();
         setStatus({ success: true });
         setSubmitting(false);
         handleCreateUserSuccess(t('The subject was updated successfully'));
-      }
-      else {
+      } else {
         await axios.post(`/api/fees_heads`, _values);
         resetForm();
         setStatus({ success: true });
         setSubmitting(false);
         handleCreateUserSuccess(t('The subject was created successfully'));
-
       }
 
       // await wait(1000);
@@ -82,17 +66,9 @@ function PageHeader({
 
   return (
     <>
-      <PageHeaderTitleWrapper
-        handleCreateClassOpen={handleCreateClassOpen}
-        name="fees heads"
-      />
+      <PageHeaderTitleWrapper handleCreateClassOpen={handleCreateClassOpen} name="fees heads" />
 
-      <Dialog
-        fullWidth
-        maxWidth="xs"
-        open={open}
-        onClose={handleCreateClassClose}
-      >
+      <Dialog fullWidth maxWidth="xs" open={open} onClose={handleCreateClassClose}>
         <DialogTitle
           sx={{
             p: 3
@@ -101,9 +77,7 @@ function PageHeader({
           <Typography variant="h4" gutterBottom>
             {t(editSubject ? 'Edit Fees Heads' : 'Add new Fees Head')}
           </Typography>
-          <Typography variant="subtitle2">
-            {t('Fill in the fields below to create and edit a fees head')}
-          </Typography>
+          <Typography variant="subtitle2">{t('Fill in the fields below to create and edit a fees head')}</Typography>
         </DialogTitle>
         <Formik
           initialValues={{
@@ -111,25 +85,12 @@ function PageHeader({
             frequency: editSubject ? editSubject?.frequency : ''
           }}
           validationSchema={Yup.object().shape({
-            title: Yup.string()
-              .max(255)
-              .required(t('The class name field is required')),
-            frequency: Yup.string()
-              .max(255)
-              .required(t('The class name field is required')),
+            title: Yup.string().max(255).required(t('The class name field is required')),
+            frequency: Yup.string().max(255).required(t('The class name field is required'))
           })}
           onSubmit={handleFormSubmit}
         >
-          {({
-            errors,
-            handleBlur,
-            handleChange,
-            handleSubmit,
-            isSubmitting,
-            touched,
-            values,
-            setFieldValue
-          }) => {
+          {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
             return (
               <form onSubmit={handleSubmit}>
                 <DialogContent
@@ -139,7 +100,6 @@ function PageHeader({
                   }}
                 >
                   <Grid container spacing={1}>
-
                     <TextFieldWrapper
                       errors={errors.name}
                       touched={touched.name}
@@ -153,8 +113,8 @@ function PageHeader({
                     <Grid item minWidth="100%">
                       <DropDownSelectWrapper
                         value={values.frequency}
-                        name='frequency'
-                        label='Frequency'
+                        name="frequency"
+                        label="Frequency"
                         handleChange={handleChange}
                         menuItems={['on_demand', 'half_yearly', 'monthly', 'annual']}
                       />
@@ -180,17 +140,14 @@ function PageHeader({
 
                       }}
                     /> */}
-
-
                   </Grid>
                 </DialogContent>
                 <DialogActionWrapper
-                  title={"Fees Head"}
+                  title={'Fees Head'}
                   editData={editSubject}
                   errors={errors}
                   handleCreateClassClose={handleCreateClassClose}
                   isSubmitting={isSubmitting}
-
                 />
               </form>
             );

@@ -15,6 +15,7 @@ import { DialogActionWrapper, DialogTitleWrapper } from '@/components/DialogWrap
 import { ButtonWrapper } from '@/components/ButtonWrapper';
 import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
 import { label } from 'aws-amplify';
+import { Frequency } from '@prisma/client';
 
 const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((i) => ({
   label: i,
@@ -75,6 +76,7 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
       // old code
       //const class_ids = _values.class_ids.map((cls) => cls.value);
       // dayjs(_values.last_date).format('YYYY-MM-DD')
+      console.log({ editData });
 
       if (editData) {
         const res = await axios.patch(`/api/fee/${editData.id}`, {
@@ -127,6 +129,12 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
         setSubjectList([]);
       });
   };
+  // useEffect(() => {
+  //   if (values.frequency === 'annual') {
+  //     // Automatically set to January and disable month selection
+  //     setFieldValue('months', [{ label: 'January', value: 'january' }]);
+  //   }
+  // }, [values.frequency]);
 
   return (
     <>
@@ -141,6 +149,7 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
             amount: editData?.amount || undefined,
             school_id: user?.school_id || undefined,
             last_date: editData?.last_date || null,
+            frequency: editData?.frequency || undefined,
             _for: editData?.for || undefined,
             academic_year_id: editData?.academic_year_id || academicYear?.id || undefined,
             class_id: editData?.class_id || undefined,
@@ -170,7 +179,17 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
           })}
           onSubmit={handleSubmit}
         >
-          {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
+          {({ validateOnBlur, errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
+            useEffect(() => {
+              // If frequency is 'annual', ensure that the field is disabled and no default month is selected.
+              if (values.frequency === 'annual') {
+                setFieldValue('months', values.months); // Accept the month manually provided for annual frequency.
+              } else {
+                // For other frequencies, enable multiple month selection and reset months if needed.
+                setFieldValue('months', values.months || []);
+              }
+            }, [values.frequency, values.months, setFieldValue]);
+            console.log({ values, touched, errors, validateOnBlur });
             return (
               <form onSubmit={handleSubmit}>
                 <DialogContent
@@ -195,10 +214,27 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
                         error={errors?.fees_head_id}
                         touched={touched?.fees_head_id}
                         // @ts-ignore
-                        handleChange={(e, value: any) => setFieldValue('fees_head_id', value?.value || 0)}
+                        handleChange={(e, value: any) => {
+                          console.log({ value });
+                          setFieldValue('fees_head_id', value?.value || 0);
+                          setFieldValue('frequency', value?.frequency || 0);
+                        }}
                       />
                     </Grid>
 
+                    {/* which month */}
+                    <Grid item xs={12} sm={6}>
+                      <TextFieldWrapper
+                        disabled={true}
+                        name="frequency"
+                        label="Frequency"
+                        errors={errors?.frequency}
+                        touched={touched?.frequency}
+                        handleBlur={handleBlur}
+                        handleChange={handleChange}
+                        value={values.frequency || ''}
+                      />
+                    </Grid>
                     {/* fee's for which month */}
                     <Grid item xs={12} sm={6}>
                       <TextFieldWrapper
@@ -334,16 +370,24 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
                         minWidth="100%"
                         label="Select Month"
                         placeholder="Month..."
-                        multiple
+                        multiple={true}
+                        // multiple={values.frequency !== 'annual' && values.frequency !== 'half-yearly'} // Enable multiple selection only if frequency is not 'annual'
                         value={values.months}
                         options={month}
                         name="month"
                         error={errors?.months}
                         touched={touched?.months}
+                        // disabled={values.frequency === 'annual'} // Disable field if frequency is 'annual'
                         // @ts-ignore
-                        handleChange={(e, value: any) => setFieldValue('months', value)}
+                        handleChange={(e, value: any) => {
+                          console.log({ value });
+                          if (values.frequency === 'annual' && value.length > 1) return;
+                          if (values.frequency === 'half_yearly' && value.length > 2) return;
+                          setFieldValue('months', value);
+                        }}
                       />
-                      {!editData && (
+
+                      {values.frequency !== 'annual' && (
                         <Grid display="flex" justifyContent="start" columnGap={1}>
                           <ButtonWrapper variant="outlined" handleClick={() => handleSelectAllMonths(setFieldValue)}>
                             Select All
