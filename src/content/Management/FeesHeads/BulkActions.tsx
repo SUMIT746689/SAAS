@@ -1,17 +1,6 @@
 import { useState, useRef } from 'react';
 
-import {
-  Box,
-  Menu,
-  Tooltip,
-  IconButton,
-  Button,
-  ListItemText,
-  ListItem,
-  List,
-  Typography,
-  styled
-} from '@mui/material';
+import { Box, Menu, Tooltip, IconButton, Button, ListItemText, ListItem, List, Typography, styled } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
