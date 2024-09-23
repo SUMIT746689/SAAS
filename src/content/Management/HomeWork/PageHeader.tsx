@@ -18,9 +18,12 @@ import { ButtonWrapper } from '@/components/ButtonWrapper';
 // updated code start
 import { useClientFetch } from 'src/hooks/useClientFetch';
 import { AutoCompleteWrapperWithoutRenderInput } from '@/components/AutoCompleteWrapper';
+import { convertUTCDateToIsoLocalDate } from '@/utils/getDay';
 // updated code end
 
-function PageHeader({ reFetchData, data, classes, classList, setLeave, userInfo }) {
+function PageHeader({ reFetchData, data, classes, classList, setLeave, userInfo, selectedClass,
+  setSelectedClass, selectedSection, setSelectedSection, selectedSubject, setSelectedSubject
+}) {
   const { t }: { t: any } = useTranslation();
   const [open, setOpen] = useState(false);
   const { showNotification } = useNotistick();
@@ -33,9 +36,9 @@ function PageHeader({ reFetchData, data, classes, classList, setLeave, userInfo 
   const [studentList, setStudentList] = useState([]);
   const [sections, setSections] = useState(null);
 
-  const [selectedClass, setSelectedClass] = useState(null);
-  const [selectedSection, setSelectedSection] = useState(null);
-  const [selectedSubject, setSelectedSubject] = useState(null);
+  // const [selectedClass, setSelectedClass] = useState(null);
+  // const [selectedSection, setSelectedSection] = useState(null);
+  // const [selectedSubject, setSelectedSubject] = useState(null);
 
   const [selectedStudent, setSelectedStudent] = useState(null);
   // updated code start
@@ -66,6 +69,11 @@ function PageHeader({ reFetchData, data, classes, classList, setLeave, userInfo 
 
   const handleFormSubmit = async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
     try {
+
+      if (!_values.homeworkFile) {
+        return showNotification("please upload a homework file","error");
+      }
+
       if (userInfo?.school_id) {
         _values['school_id'] = userInfo?.school_id;
       }
@@ -85,19 +93,20 @@ function PageHeader({ reFetchData, data, classes, classList, setLeave, userInfo 
 
       const formData = new FormData();
       for (const index in _values) {
-        formData.append(index, _values[index]);
+        if (index === "date") formData.append(index, convertUTCDateToIsoLocalDate(_values[index]));
+        else formData.append(index, _values[index]);
       }
       const res = await axios.post(`/api/homework`, formData);
       setSelectedClass(null);
       // update context code start
-      handleHomeworkInfo(
-        res?.data?.document?.id | 0,
-        _values.school_id,
-        _values.class_id,
-        _values.section_id,
-        _values.academic_year_id,
-        _values.student_id
-      );
+      // handleHomeworkInfo(
+      //   res?.data?.document?.id | 0,
+      //   _values.school_id,
+      //   _values.class_id,
+      //   _values.section_id,
+      //   _values.academic_year_id,
+      //   _values.student_id
+      // );
 
       // update context code end
       showNotification(res.data.message);
@@ -152,6 +161,7 @@ function PageHeader({ reFetchData, data, classes, classList, setLeave, userInfo 
       }
     }
   };
+
   const handleSearch = () => {
     if (academicYear?.id && selectedClass?.id) {
       let url = `/api/homework?academic_year_id=${academicYear?.id}&class_id=${selectedClass?.id}`;
@@ -167,6 +177,7 @@ function PageHeader({ reFetchData, data, classes, classList, setLeave, userInfo 
         .catch((err) => console.log(err));
     }
   };
+
   const gettingStudent = (section_id) => {
     if (section_id) {
       axios
@@ -562,6 +573,7 @@ function PageHeader({ reFetchData, data, classes, classList, setLeave, userInfo 
                         variant="outlined"
                       />
                     </Grid>
+
                     {/* live class link */}
 
                     <Grid container pl={1} py={1}>
@@ -608,7 +620,7 @@ function PageHeader({ reFetchData, data, classes, classList, setLeave, userInfo 
                       )}
                       <FileUploadFieldWrapper
                         htmlFor="homeworkFile"
-                        label="Select Homework File:"
+                        label="Select Homework File:*"
                         name="homeworkFile"
                         accept={'application/pdf'}
                         value={values?.homeworkFile?.name || ''}

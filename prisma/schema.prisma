@@ -138,6 +138,7 @@ model School {
   websiteMenus               WebsiteMenu[]
   websiteDynamicPages        WebsiteDynamicPage[]
   Discount                   Discount[]
+  Homework                   Homework[]
 
   // routines Routine[]
   @@map("schools")
@@ -236,6 +237,7 @@ model Class {
   teacherSalaries            TeacherSalaryStructure[]
   Student                    Student[]
   Period                     Period[]
+  Homework                   Homework[]
 
   @@map("classes")
 }
@@ -264,6 +266,7 @@ model Section {
   extraStudents              Student[]                    @relation("extra_section")
   teacherSalaries            TeacherSalaryStructure[]
   student                    Student[]                    @relation("students_to_batches")
+  Homework                   Homework[]
 
   @@map("sections")
 }
@@ -1501,16 +1504,25 @@ model StudentAddtionalResultDetails {
 }
 
 model Homework {
-  id               Int      @id @default(autoincrement())
-  subject_id       Int
-  student_id       Int
-  date             DateTime @db.Date
-  academic_year_id Int
-  file_path        String
+  id                  Int      @id @default(autoincrement())
+  subject_id          Int
+  student_id          Int?
+  date                DateTime @db.Date
+  academic_year_id    Int
+  file_path           String?
+  description         String?  @db.Text
+  youtuble_class_link String?
+  live_class_link     String?
+  class_id            Int?
+  section_id          Int?
+  school_id           Int?
 
   academicYear AcademicYear @relation(fields: [academic_year_id], references: [id])
   subject      Subject      @relation(fields: [subject_id], references: [id])
-  student      Student      @relation(fields: [student_id], references: [id])
+  student      Student?     @relation(fields: [student_id], references: [id])
+  class        Class?       @relation(fields: [class_id], references: [id])
+  section      Section?     @relation(fields: [section_id], references: [id])
+  school       School?      @relation(fields: [school_id], references: [id])
 
   @@map("homework")
 }

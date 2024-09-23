@@ -80,14 +80,18 @@ function ManagementLeave({ data, userInfo }) {
   const [academicYear, setAcademicYear] = useContext(AcademicYearContext);
   const [classes, setClasses] = useState([]);
   const [classList, setClassList] = useState([]);
+  const [selectedClass, setSelectedClass] = useState(null);
+  const [selectedSection, setSelectedSection] = useState(null);
+  const [selectedSubject, setSelectedSubject] = useState(null);
 
   const reFetchData = () => {
     if (data) {
       // if (academicYear?.id) {
-        axios
-          .get(`/api/homework?class_id=${data?.class_id}&student_id=${data?.id}`)
-          .then((res) => setLeave(res.data))
-          .catch((err) => console.log(err));
+      axios
+        // .get(`/api/homework?class_id=${data?.class_id}&student_id=${data?.id}`)
+        .get(`/api/homework?class_id=${data?.class_id}&section_id=${data?.section_id}`)
+        .then((res) => setLeave(res.data))
+        .catch((err) => console.log(err));
       // }
     } else {
       axios
@@ -110,19 +114,33 @@ function ManagementLeave({ data, userInfo }) {
   }, [data, academicYear]);
 
   console.log({ data });
-  
+
   return (
     <>
       <Head>
         <title>Homework - Management</title>
       </Head>
       <PageTitleWrapper>
-        <PageHeader data={data} classes={classes} classList={classList} setLeave={setLeave} reFetchData={reFetchData} userInfo={userInfo} />
+        <PageHeader
+          data={data}
+          classes={classes}
+          classList={classList}
+          setLeave={setLeave}
+          reFetchData={reFetchData}
+          userInfo={userInfo}
+          selectedClass={selectedClass}
+          setSelectedClass={setSelectedClass}  
+          selectedSection={selectedSection} 
+          setSelectedSection={setSelectedSection}
+          selectedSubject={selectedSubject} 
+          setSelectedSubject={setSelectedSubject}
+      
+        />
       </PageTitleWrapper>
 
       <Grid sx={{ px: 4 }} container direction="row" justifyContent="center" alignItems="stretch" spacing={3}>
         <Grid item xs={12}>
-          <Results userInfo={userInfo} users={leave} reFetchData={reFetchData} />
+          <Results userInfo={userInfo} users={leave} setUsers={setLeave} reFetchData={reFetchData} />
         </Grid>
       </Grid>
       <Footer />

@@ -53,7 +53,7 @@ const WebsiteMenu = async (req, res, refresh_token) => {
             },
             data: {
               ...data,
-              english_title: req.body.english_title?.toLowerCase(),
+              english_title: req.body.english_title,
               bangla_title: req.body.bangla_title,
               link_type: req.body.link_type?.toLowerCase(),
               website_link: req.body.website_link,

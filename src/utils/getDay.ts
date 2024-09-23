@@ -12,6 +12,11 @@ export const lastDateOfMonth = ({ monthInt, date = new Date() }) => new Date(dat
 // console.log(month);
 // console.log(lastDateOfMonth().getMonth(), lastDateOfMonth().getDate())
 // }
+
+export function convertUTCDateToIsoLocalDate(date) {
+  return new Date(date.getTime() - date.getTimezoneOffset()*60*1000).toISOString();   
+}
+
 export type monthListType =
   | 'january'
   | 'february'
