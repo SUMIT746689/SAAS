@@ -23,7 +23,7 @@ export default function ImportantLink({ school_info }) {
             <h1 className="text-xl	font-bold	 text-center mt-2">Facebook Link</h1>
           </Link>
 
-          <Link href={facebook_link || '#'} className="flex flex-col p-8 overflow-hidden rounded-lg shadow-lg bg-[#FFFFFF]">
+          <Link href={youtube_link || '#'} className="flex flex-col p-8 overflow-hidden rounded-lg shadow-lg bg-[#FFFFFF]">
             <div className=" mx-auto">
               <Image src="/youtube.png" width={70} height={70} alt="youtube" className="object-cover  mb-4 " />
             </div>

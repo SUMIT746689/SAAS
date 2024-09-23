@@ -138,7 +138,7 @@ const applyPagination = (users: User[], page: number, limit: number): User[] => 
   return users.slice(page * limit, page * limit + limit);
 };
 
-const Results = ({ userInfo, users, reFetchData }) => {
+const Results = ({ userInfo, users, setUsers, reFetchData }) => {
   const [openDescription, setOpenDescription] = useState(false);
   const [description, setDescription] = useState('');
   const { t }: { t: any } = useTranslation();
@@ -185,6 +185,7 @@ const Results = ({ userInfo, users, reFetchData }) => {
           showNotification(res?.data?.message);
           setOpenConfirmDelete(null);
           reFetchData();
+          setUsers([]);
         })
         .catch((err) => showNotification(err?.response?.data?.message, 'error'));
     }
@@ -202,7 +203,7 @@ const Results = ({ userInfo, users, reFetchData }) => {
             <Typography component="span" variant="subtitle1">
               {t('Showing')}:
             </Typography>{' '}
-            <b>{paginatedClasses.length}</b> <b>{t('Leave')}</b>
+            <b>{paginatedClasses.length}</b> <b>{t('homeworks')}</b>
           </Box>
           <TablePagination
             component="div"
