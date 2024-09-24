@@ -230,17 +230,16 @@ const WebsiteMenu = () => {
     axios
       .get('/api/front_end/website_dynamic_pages')
       .then((res) => {
-        console.log({ dynamicPages: res.data.data })
-        setDynamicPageList(res.data?.data?.map(page => ({ label: `${page.english_title} ( ${page.bangla_title} )`, id: page.id })));
+        console.log({ dynamicPages: res.data.data });
+        setDynamicPageList(res.data?.data?.map((page) => ({ label: `${page.english_title} ( ${page.bangla_title} )`, id: page.id })));
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
 
   useEffect(() => {
     websiteDynamicPageList();
   }, []);
-  useEffect(() => { }, [websiteDynamicPageList]);
-
+  useEffect(() => {}, [websiteDynamicPageList]);
 
   const websiteMenuList = () => {
     axios
@@ -249,13 +248,13 @@ const WebsiteMenu = () => {
         setMenuInfo(res?.data?.result);
         setParentList(res?.data?.menus);
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
 
   useEffect(() => {
     websiteMenuList();
   }, []);
-  useEffect(() => { }, [websiteMenuList]);
+  useEffect(() => {}, [websiteMenuList]);
 
   // Debounce function
   const debounce = (func, delay) => {
@@ -345,7 +344,7 @@ const WebsiteMenu = () => {
                 link_type: _values?.link_type ? _values?.link_type : '',
                 website_link: _values?.website_link ? _values?.website_link : '',
                 status: _values?.status ? _values?.status : '',
-                dynamic_page_link_id: _values?.dynamic_page_link_id,
+                dynamic_page_link_id: _values?.dynamic_page_link_id
               };
 
               let response;
@@ -448,7 +447,7 @@ const WebsiteMenu = () => {
                       name="english_title"
                       placeholder={t('english title here...')}
                       onBlur={handleBlur}
-                      onBlurCapture={async (v) => { }}
+                      onBlurCapture={async (v) => {}}
                       onChange={handleChange}
                       value={values.english_title}
                       variant="outlined"
@@ -469,7 +468,7 @@ const WebsiteMenu = () => {
                       name="bangla_title"
                       placeholder={t('bangla title here...')}
                       onBlur={handleBlur}
-                      onBlurCapture={async (v) => { }}
+                      onBlurCapture={async (v) => {}}
                       onChange={handleChange}
                       value={values.bangla_title}
                       variant="outlined"
@@ -512,7 +511,7 @@ const WebsiteMenu = () => {
                         name="website_link"
                         placeholder={t('website link here...')}
                         onBlur={handleBlur}
-                        onBlurCapture={async (v) => { }}
+                        onBlurCapture={async (v) => {}}
                         onChange={handleChange}
                         value={editData?.link_type === 'custom link' || editData?.link_type === 'external link' ? values.website_link : undefined}
                         variant="outlined"
@@ -551,34 +550,32 @@ const WebsiteMenu = () => {
                     ''
                   )}
 
-                  {
-                    values?.link_type?.toLowerCase() === 'dynamic page link' ? (
-                      <Grid container spacing={3}>
-                        <AutoCompleteWrapperWithoutRenderInput
-                          minWidth="100%"
-                          label="Select Page"
-                          placeholder="Select a Dynamic Page..."
-                          value={values.dynamic_page_link}
-                          options={dynamicPageList}
-                          name="dynamic_page_link_id"
-                          error={errors?.dynamic_page_link_id}
-                          touched={touched?.dynamic_page_link_id}
-                          // @ts-ignore
-                          handleChange={(e, value: any) => {
-                            if (!value) {
-                              setFieldValue('dynamic_page_link', null);
-                              setFieldValue('dynamic_page_link_id', null);
-                              return;
-                            }
-                            setFieldValue('dynamic_page_link', value);
-                            setFieldValue('dynamic_page_link_id', value.id);
-                          }}
-                        />
-                      </Grid>
-                    )
-                      :
-                      ''
-                  }
+                  {values?.link_type?.toLowerCase() === 'dynamic page link' ? (
+                    <Grid container spacing={3}>
+                      <AutoCompleteWrapperWithoutRenderInput
+                        minWidth="100%"
+                        label="Select Page"
+                        placeholder="Select a Dynamic Page..."
+                        value={values.dynamic_page_link}
+                        options={dynamicPageList}
+                        name="dynamic_page_link_id"
+                        error={errors?.dynamic_page_link_id}
+                        touched={touched?.dynamic_page_link_id}
+                        // @ts-ignore
+                        handleChange={(e, value: any) => {
+                          if (!value) {
+                            setFieldValue('dynamic_page_link', null);
+                            setFieldValue('dynamic_page_link_id', null);
+                            return;
+                          }
+                          setFieldValue('dynamic_page_link', value);
+                          setFieldValue('dynamic_page_link_id', value.id);
+                        }}
+                      />
+                    </Grid>
+                  ) : (
+                    ''
+                  )}
 
                   <Grid container spacing={3}>
                     <AutoCompleteWrapperWithoutRenderInput

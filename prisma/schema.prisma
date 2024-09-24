@@ -899,8 +899,9 @@ model WebsiteUi {
   english_assist_principal_speech String? @db.LongText
   bangla_assist_principal_speech  String? @db.LongText
 
-  eiin_number String
-  gallery     Json?
+  eiin_number   String
+  gallery       Json?
+  video_gallery Json?
 
   facebook_link String?
   youtube_link  String?
