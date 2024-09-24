@@ -213,7 +213,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     width={50}
                     height={50}
                     alt="school logo"
-                    // style={{ position: 'relative', bottom: 0 }}
+                  // style={{ position: 'relative', bottom: 0 }}
                   />
                 ) : (
                   ''
@@ -459,32 +459,23 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     >
                       Payable Amt.
                     </TableCell>
-                    {selectedFees?.map((payment, index) => {
-                      return (
-                        // <TableRow
-                        //   sx={{
-                        //     '&:last-child td, &:last-child th': { border: 0 }
-                        //   }}
-                        // >
-                        <TableCell
-                          align="right"
-                          style={{
-                            border: '1px solid black',
-                            // fontWeight: 'bold',
-                            paddingLeft: '5px',
-                            paddingRight: '5px',
-                            textTransform: 'capitalize',
-                            paddingTop: '2px',
+                    <TableCell
+                      align="right"
+                      style={{
+                        border: '1px solid black',
+                        // fontWeight: 'bold',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        textTransform: 'capitalize',
+                        paddingTop: '2px',
 
-                            fontSize: '0.7rem',
-                            paddingBottom: '2px'
-                          }}
-                        >
-                          {/* {totalPreAmount?.toFixed(2)} */}
-                          {payment?.payableAmount?.toFixed(2)}
-                        </TableCell>
-                      );
-                    })}{' '}
+                        fontSize: '0.7rem',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      {/* {totalPreAmount?.toFixed(2)} */}
+                      {selectedFees?.reduce((prev, payment) => prev + (payment?.payableAmount || 0), 0)?.toFixed(2)}
+                    </TableCell>
                   </TableRow>
 
                   <TableRow>
@@ -779,10 +770,10 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
           </TableContainer>
         </Grid> */}
           {/* signature  */}
-          <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 3 }}>
             <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
               <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
-              <Grid>Student/Gurdiant Signature </Grid>
+              <Grid>Student/Guardian Signature </Grid>
             </Grid>
             <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
               <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
@@ -813,7 +804,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   width={50}
                   height={50}
                   alt="school logo"
-                  // style={{ position: 'relative', bottom: 0 }}
+                // style={{ position: 'relative', bottom: 0 }}
                 />
               ) : (
                 ''
@@ -1059,32 +1050,24 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   >
                     Payable Amt.
                   </TableCell>
-                  {selectedFees?.map((payment, index) => {
-                    return (
-                      // <TableRow
-                      //   sx={{
-                      //     '&:last-child td, &:last-child th': { border: 0 }
-                      //   }}
-                      // >
-                      <TableCell
-                        align="right"
-                        style={{
-                          border: '1px solid black',
-                          // fontWeight: 'bold',
-                          paddingLeft: '5px',
-                          paddingRight: '5px',
-                          textTransform: 'capitalize',
-                          paddingTop: '2px',
 
-                          fontSize: '0.7rem',
-                          paddingBottom: '2px'
-                        }}
-                      >
-                        {/* {totalPreAmount?.toFixed(2)} */}
-                        {payment?.payableAmount?.toFixed(2)}
-                      </TableCell>
-                    );
-                  })}{' '}
+                  <TableCell
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
+
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {/* {totalPreAmount?.toFixed(2)} */}
+                    {selectedFees?.reduce((prev, payment) => prev + (payment?.payableAmount || 0), 0)?.toFixed(2)}
+                  </TableCell>
                 </TableRow>
 
                 <TableRow>
@@ -1379,10 +1362,10 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
           </TableContainer>
         </Grid> */}
         {/* signature  */}
-        <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 3 }}>
           <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
             <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
-            <Grid>Student/Gurdiant Signature </Grid>
+            <Grid>Student/Guardian Signature </Grid>
           </Grid>
           <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
             <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>

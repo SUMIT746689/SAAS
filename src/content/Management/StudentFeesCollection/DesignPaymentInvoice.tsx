@@ -184,7 +184,7 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
     <Grid px={4}>
       {/* part 1 */}
       {isOn && (
-        <Grid pt={2} height={`${selectedFees.length <= 1 ? '50vh' : '100vh'}`}>
+        <Grid pt={2} height={`${selectedFees.length <= 5 ? '50vh' : '100vh'}`}>
           {/* school information */}
 
           <Grid
@@ -679,10 +679,10 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
           </TableContainer>
         </Grid> */}
           {/* signature  */}
-          <Grid sx={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+          <Grid sx={{ display: 'flex', justifyContent: 'space-between', gap: 8, pt: 3 }}>
             <Grid sx={{ flexGrow: 1 }}>
               <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
-              <Grid textAlign="center">Student/Gurdiant Signature </Grid>
+              <Grid textAlign="center">Student/Guardian Signature </Grid>
             </Grid>
             <Grid sx={{ flexGrow: 1 }}>
               <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
@@ -1174,10 +1174,10 @@ const DesignPaymentInvoice: FC<PaymentInvoiceType> = ({
           </TableContainer>
         </Grid> */}
         {/* signature  */}
-        <Grid sx={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+        <Grid sx={{ display: 'flex', justifyContent: 'space-between', gap: 8, pt: 3 }}>
           <Grid sx={{ flexGrow: 1 }}>
             <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
-            <Grid textAlign="center">Student/Gurdiant Signature </Grid>
+            <Grid textAlign="center">Student/Guardian Signature </Grid>
           </Grid>
           <Grid sx={{ flexGrow: 1 }}>
             <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>

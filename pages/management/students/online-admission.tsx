@@ -264,7 +264,7 @@ const Results = () => {
 
       </Dialog>
 
-      <Card sx={{ minHeight: 'calc(100vh - 215px)' }}>
+      <Card sx={{ minHeight: 'calc(100vh - 215px)',mx:0.5 }}>
 
 
         {!selectedBulkActions && (

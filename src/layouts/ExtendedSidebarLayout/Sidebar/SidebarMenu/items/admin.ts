@@ -194,11 +194,6 @@ const students: MenuItems[] = [
         link: '/management/period'
       },
       {
-        name: 'Home work',
-        link: '/management/homework',
-        icon: SummarizeIcon
-      },
-      {
         name: 'Holidays',
         link: '/management/holidays',
         icon: HolidayVillageIcon
@@ -208,22 +203,22 @@ const students: MenuItems[] = [
         link: '/admit_card',
         icon: DesignServicesIcon
       },
-      {
-        name: 'Daily Notes',
-        icon: NotesIcon,
-        items: [
-          {
-            name: 'Entry Notes',
-            link: '/daily_notes/entry_notes',
-            icon: NoteAddIcon
-          },
-          {
-            name: 'Show Notes',
-            link: '/daily_notes/show_notes',
-            icon: FormatListBulletedIcon
-          }
-        ]
-      },
+      // {
+      //   name: 'Daily Notes',
+      //   icon: NotesIcon,
+      //   items: [
+      //     {
+      //       name: 'Entry Notes',
+      //       link: '/daily_notes/entry_notes',
+      //       icon: NoteAddIcon
+      //     },
+      //     {
+      //       name: 'Show Notes',
+      //       link: '/daily_notes/show_notes',
+      //       icon: FormatListBulletedIcon
+      //     }
+      //   ]
+      // },
       {
         name: 'Certificate',
         icon: WorkspacePremiumIcon,
@@ -657,6 +652,11 @@ const sms: MenuItems[] = [
 const study_materials: MenuItems[] = [
   {
     items: [
+      {
+        name: 'Home work',
+        link: '/management/homework',
+        icon: SummarizeIcon
+      },
       {
         name: 'Certificate',
         icon: WorkspacePremiumIcon,
