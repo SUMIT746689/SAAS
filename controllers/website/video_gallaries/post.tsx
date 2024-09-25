@@ -5,8 +5,7 @@ async function post(req, res, refresh_token) {
   try {
     const { school_id } = refresh_token;
     const { youtube_link, english_title, bangla_title } = req.body;
-    const data = {};
-
+    console.log({ youtube_link, english_title, bangla_title });
     const resWebsiteUi = await prisma.websiteUi.findFirst({
       where: {
         school_id
@@ -16,9 +15,9 @@ async function post(req, res, refresh_token) {
         video_gallery: true
       }
     });
+    console.log({ resWebsiteUi });
     if (resWebsiteUi) {
       const updatedVideoGallery = resWebsiteUi.video_gallery && Array.isArray(resWebsiteUi) ? resWebsiteUi.video_gallery : [];
-
       updatedVideoGallery.push({
         id: new Date().getTime(),
         youtube_link,
@@ -26,6 +25,8 @@ async function post(req, res, refresh_token) {
         bangla_title,
         created_at: new Date(Date.now())
       });
+
+      console.log({ updatedVideoGallery });
 
       await prisma.websiteUi.update({
         where: {
@@ -37,6 +38,7 @@ async function post(req, res, refresh_token) {
           school_id
         }
       });
+      return res.json({ message: 'Video Gallary created successfully!' });
     }
 
     await prisma.websiteUi.create({

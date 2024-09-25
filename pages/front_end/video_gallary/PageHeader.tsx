@@ -38,7 +38,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   const handleFormSubmit = async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
     try {
       const successResponse = (message) => {
-        showNotification('sms template' + message + ' successfully');
+        showNotification('Video Gallary ' + message + ' successfully');
         resetForm();
         setStatus({ success: true });
         setSubmitting(false);
@@ -46,30 +46,15 @@ function PageHeader({ editData, setEditData, reFetchData }) {
         handleCreateClassClose();
       };
       console.log('_values__', _values);
-
-      // if (editData) {
-      // const res = await axios.patch(`/api//${editData.id}`, _values);
-      // successResponse('updated');
-      // } else {
-      const formData = new FormData();
-      for (const [key, value] of Object.entries(_values)) {
-        console.log(`${key}: ${value}`);
-        if (key === 'feature_photo') {
-          formData.append(key, value[0]);
-          continue;
-        }
-        // @ts-ignore
-        formData.append(key, value);
-      }
       if (editData) {
-        const res = await axios.patch(`/api/front_end/website_dynamic_pages/${editData.id}`, formData);
+        const res = await axios.patch(`/api/front_end/video_gallaries/${editData.id}`, _values);
         // fetchData('')
         console.log({ res });
         successResponse(' updated ');
         return;
       }
 
-      const res = await axios.post(`/api/front_end/video_gallaries`, formData);
+      const res = await axios.post(`/api/website/video_gallaries`, _values);
       console.log({ res });
       successResponse('created');
       // }
@@ -82,12 +67,6 @@ function PageHeader({ editData, setEditData, reFetchData }) {
       setSubmitting(false);
     }
   };
-
-  const handleDynamicContent = async (userType) => {
-    const [err, res] = await fetchData('/api/certificate_templates/dynamic_content', 'get', {});
-    setDynamicContent(() => (!err && res.success ? res.data : []));
-  };
-
   return (
     <>
       {/* page head title and create button ui */}
