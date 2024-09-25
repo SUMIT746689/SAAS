@@ -287,7 +287,7 @@ const teachers: MenuItems[] = [
   }
 ];
 
-const other_users: MenuItems[] = [
+const staffs: MenuItems[] = [
   {
     items: [
       {
@@ -296,7 +296,7 @@ const other_users: MenuItems[] = [
         link: '/management/users'
       },
       {
-        name: 'Other Users',
+        name: 'Staffs',
         icon: AssignmentIndTwoToneIcon,
         link: '/management/users/entry_other_users'
       },
@@ -924,7 +924,7 @@ export default {
   online_addmission,
   students,
   teachers,
-  other_users,
+  staffs,
   attendance,
   accounting,
   notice,

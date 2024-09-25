@@ -647,7 +647,7 @@ const reduceChildRoutes = ({
       item.name === 'Pending Package' ||
       item.name === 'Pending Buy Sms' ||
       item.name === 'Users' ||
-      item.name === 'Other Users' ||
+      item.name === 'Staffs' ||
       item.name === 'Students Attendence' ||
       item.name === 'Exam Attendence' ||
       item.name === 'Employee Attendence' ||
@@ -816,7 +816,7 @@ const reduceChildRoutes = ({
 
       // admistrator
       if (
-        item.name === 'Other Users' &&
+        item.name === 'Staffs' &&
         permissionVerify(permissions, [
           'create_staff',
           'create_accountant',
