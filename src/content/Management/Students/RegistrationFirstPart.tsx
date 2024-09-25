@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 import { Grid, DialogActions, DialogContent, TextField, CircularProgress, Button } from '@mui/material';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -20,7 +19,6 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
 
-  console.log(totalFormData);
   return (
     <>
       <Formik
@@ -47,6 +45,8 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
           first_name: Yup.string().max(255).required(t('First name field is required')),
           middle_name: Yup.string().max(255).nullable(true),
           last_name: Yup.string().max(255).nullable(true),
+          student_id: Yup.string().max(255).required(t('Student id field is required')),
+
           // admission_date: Yup.date().required(t('Admission date is required!')),
           // date_of_birth: Yup.date().required(t('Date of birth is required!')),
           gender: Yup.string().required(t('select a gender')),
@@ -88,7 +88,6 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                     {/* first_name */}
                     <Grid item xs={12} sm={6} md={4}>
                       <TextField
-                        // required
                         size="small"
                         sx={{
                           '& fieldset': {
@@ -108,9 +107,6 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                         value={values.first_name}
                         variant="outlined"
                         required={true}
-                        // InputLabelProps={{
-                        //   required: true
-                        // }}
                       />
                     </Grid>
                     {/* middle_name */}
@@ -180,6 +176,9 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                         sx={{
                           '& fieldset': {
                             borderRadius: '3px'
+                          },
+                          '& .MuiFormLabel-asterisk': {
+                            color: 'red'
                           }
                         }}
                         error={Boolean(touched.student_id && errors.student_id)}
@@ -191,6 +190,7 @@ function RegistrationFirstPart({ totalFormData, setTotalFormData, setActiveStep,
                         onChange={handleChange}
                         value={values.student_id}
                         variant="outlined"
+                        required={true}
                       />
                     </Grid>
                     {/* admission_date */}

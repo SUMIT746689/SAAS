@@ -25,6 +25,9 @@ export const TextFieldWrapper = ({
         sx={{
           [`& fieldset`]: {
             borderRadius: 0.4
+          },
+          '& .MuiFormLabel-asterisk': {
+            color: 'red'
           }
         }}
         id="outlined-basic"
@@ -88,7 +91,7 @@ export const DisableTextWrapper = ({ label, touched, errors, value }) => {
         fullWidth
         helperText={touched && errors}
         disabled
-        // focused={focused}
+      // focused={focused}
       />
     </Grid>
   );
@@ -113,6 +116,9 @@ export const TextAreaWrapper = ({
           maxlength: 10,
           [`& fieldset`]: {
             borderRadius: 0.4
+          },
+          '& .MuiFormLabel-asterisk': {
+            color: 'red'
           }
         }}
         id="outlined-multiline-static"
@@ -155,6 +161,9 @@ export const FileUploadFieldWrapper = ({ htmlFor, label, name, value, accept = '
             // borderBottomRightRadius:0.6,
             // borderBottomLeftRadius:0.6,
             // fontSize: 0.2
+          },
+          '& .MuiFormLabel-asterisk': {
+            color: 'red'
           }
         }}
         disabled

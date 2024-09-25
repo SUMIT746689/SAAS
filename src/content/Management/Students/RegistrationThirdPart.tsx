@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,7 @@ import { getFile } from '@/utils/utilitY-functions';
 import { handleConvBanNum } from 'utilities_api/convertBanFormatNumber';
 import { handleFileChange, handleFileRemove } from 'utilities_api/handleFileUpload';
 import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
+import { HighestStudentIdContext } from '@/contexts/HighestStudentIdContext';
 
 function RegistrationFirstPart({
   totalFormData,
@@ -33,6 +34,7 @@ function RegistrationFirstPart({
   const [father_photo, setFather_photo] = useState(null);
   const [mother_photo, setMother_photo] = useState(null);
   const [guardian_photo, setGuardian_photo] = useState(null);
+  const { handleFetchHighestStudentId } = useContext(HighestStudentIdContext)
   console.log({ totalFormData });
   return (
     <>
@@ -95,9 +97,9 @@ function RegistrationFirstPart({
             const formData = new FormData();
 
             for (let i in _values) {
-              if (['preview_mother_photo', 'preview_father_photo', 'preview_guardian_photo'].includes(i)) {
-              } else if (['mother_photo', 'father_photo', 'guardian_photo'].includes(i)) _values[i] && formData.append(`${i}`, _values[i][0]);
-              else if (i == 'filePathQuery') formData.append(`${i}`, JSON.stringify(_values[i]));
+              if (['preview_mother_photo', 'preview_father_photo', 'preview_guardian_photo'].includes(i)) {} 
+              else if (['mother_photo', 'father_photo', 'guardian_photo'].includes(i)) _values[i] && formData.append(`${i}`, _values[i][0]);
+              else if (i === 'filePathQuery') formData.append(`${i}`, JSON.stringify(_values[i]));
               else if (_values[i]) formData.append(`${i}`, _values[i]);
             }
             const handleSubmitSuccess = () => {
@@ -114,6 +116,7 @@ function RegistrationFirstPart({
               if (res.data.success) {
                 handleSubmitSuccess();
                 showNotification('Student updated Successfully');
+                handleFetchHighestStudentId();
                 router.back();
               }
             } else {
@@ -123,6 +126,7 @@ function RegistrationFirstPart({
                 handleSubmitSuccess();
                 showNotification(res.data.success);
                 generate_registration_number();
+                handleFetchHighestStudentId();
                 if (onlineAdmission_id) {
                   await axios.delete(`/api/onlineAdmission/${onlineAdmission_id}`);
                   handleClose();
