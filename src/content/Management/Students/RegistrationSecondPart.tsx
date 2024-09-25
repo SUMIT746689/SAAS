@@ -36,6 +36,8 @@ function RegistrationSecondPart({
   const [sectionsForSelectedXtraCls, setSectionsForSelectedXtraCls] = useState([]);
   const [selectedXtraClsSection, setSelectedXtraClsSection] = useState(null);
   const [academicYearValue] = useContext(AcademicYearContext);
+  const [classSubjects, setClassSubjects] = useState([]);
+  const [selectedClassSubjects, setSelectedClassSubjects] = useState([]);
 
   const handleGetGroupsClsWise = (class_id: number) => {
     if (!class_id) return;
@@ -58,7 +60,8 @@ function RegistrationSecondPart({
       const customCls = {
         label: class_.name,
         id: class_.id,
-        has_section: class_.has_section
+        has_section: class_.has_section,
+        subjects: class_.subjects
       };
       if (class_.is_extra) return extraClasses.push(customCls);
       classes_.push(customCls);
@@ -69,10 +72,15 @@ function RegistrationSecondPart({
 
   useEffect(() => {
     if (classesOptions && student) {
-      // console.log({ classesOptions, student });
-      // console.log("test...............", classesOptions?.find((i) => i.id === (parseInt(student?.class_id) || student?.section?.class_id)));
 
-      setselectedClass(classesOptions?.find((i) => i.id == (parseInt(student?.class_id) || student?.section?.class_id)));
+      setselectedClass(classesOptions?.find((i) => i.id === (parseInt(student?.class_id) || student?.section?.class_id)));
+
+      // if (Array.isArray(student.batches) && student?.batches?.length > 0) {
+      //   const selectBatch = { label: student.batches[0].name, id: student.batches[0].id };
+      //   console.log('TEST', selectBatch)
+
+      //   setSelecetedSection(selectBatch);
+      // }
 
       handleGetGroupsClsWise(student?.section?.class_id);
     }
@@ -90,10 +98,28 @@ function RegistrationSecondPart({
     const findgroup = selectedCls.Group.find((group) => group.id === totalFormData?.group_id);
     setSelectedGroup({ label: findgroup?.title, id: findgroup?.id });
   }, []);
-  console.log({ totalFormData })
+
+  // const handleGetClassSubjects = (class_id) => {
+  //   axios
+  //     .get(`/api/subject?class_id=${class_id}`)
+  //     .then((res) => {
+  //       setClassSubjects(res.data.map((subject) => ({ id: subject.id, label: subject.name })));
+  //     })
+  //     .catch((getClsSubjectsError) => {
+  //       console.log({ getClsSubjectsError });
+  //     });
+  // };
+
   useEffect(() => {
     if (student) {
-      const targetClassSections = classes?.find((i) => i.id == (Number(student?.class_id) || student?.section?.class_id));
+      const targetClassSections = classes?.find((i) => i.id == (parseInt(student?.class_id) || student?.section?.class_id));
+      console.log({ targetClassSections })
+
+      // class subjects
+      // handleGetClassSubjects(targetClassSections.id);
+      setSelectedClassSubjects(student?.subjects?.map((subject) => ({ id: subject.id, label: subject.name })) || []);
+
+      // class section
       setSectionsForSelectedClass(
         targetClassSections?.sections?.map((i) => {
           return {
@@ -103,7 +129,7 @@ function RegistrationSecondPart({
         })
       );
 
-      const targetExtraClassSections = classes?.find((i) => i.id == Number(student?.extra_section?.class_id));
+      const targetExtraClassSections = classes?.find((i) => i.id == parseInt(student?.extra_section?.class_id));
       if (targetExtraClassSections) {
         setIsExtraClass(true);
         setSelectedXtraCls({
@@ -130,13 +156,22 @@ function RegistrationSecondPart({
 
   useEffect(() => {
     if (student && sectionsForSelectedClass?.length > 0) {
+
+      if (Array.isArray(student.batches) && student?.batches?.length > 0) {
+        return setSelecetedSection(sectionsForSelectedClass.find((i) => i.id === student.batches[0].id));
+      }
+
       setSelecetedSection(sectionsForSelectedClass.find((i) => i.id == (Number(student?.section_id) || student?.section?.id)));
     }
   }, [sectionsForSelectedClass, student]);
 
   const handleClassSelect = (event, value, setFieldValue) => {
+    console.log({ value })
     setFieldValue('class_id', value?.id);
     setselectedClass(value);
+    // class subjects 
+    setClassSubjects(value?.subjects?.map((subject) => ({ id: subject.id, label: subject.name })) || []);
+
     if (value) {
       axios
         .get(`/api/group?class_id=${value.id}`)
@@ -214,6 +249,16 @@ function RegistrationSecondPart({
     }
   };
   console.log({ student })
+
+  const handleClsSubjectSelect = (event, value, setFieldValue) => {
+    setSelectedClassSubjects(value);
+    setFieldValue(
+      'subject_ids',
+      value?.map((sub) => sub.id)
+    );
+  };
+  console.log({ student });
+
   return (
     <>
       <Formik
@@ -224,7 +269,8 @@ function RegistrationSecondPart({
 
           class_id: student ? (student?.class_id ? parseInt(student?.class_id) : student?.section?.class_id) : totalFormData?.class_id,
 
-          section_id: student ? (student?.section_id ? parseInt(student?.section_id) : student?.section_id) : totalFormData?.section_id,
+          section_id: student ? (student?.section_id ? parseInt(student?.section_id) : (Array.isArray(student?.batches) && student.batches.length > 0) ? student.batches[0].id : null) : totalFormData?.section_id,
+          subject_ids: [],
 
           group_id: student ? (student?.group_id ? parseInt(student?.group_id) : student?.group_id) : totalFormData?.group_id,
 
@@ -468,6 +514,34 @@ function RegistrationSecondPart({
                       )}
                     </Grid>
 
+                    {/* subjects */}
+                    <Grid item xs={12} md={6}>
+                      <Autocomplete
+                        disablePortal
+                        multiple={true}
+                        options={classSubjects}
+                        value={selectedClassSubjects}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            // required
+                            size="small"
+                            sx={{
+                              '& fieldset': {
+                                borderRadius: '3px'
+                              }
+                            }}
+                            fullWidth
+                            error={Boolean(touched.subject_ids && errors.subject_ids)}
+                            helperText={touched.subject_ids && errors.subject_ids}
+                            onBlur={handleBlur}
+                            label={t('Select Subjects')}
+                          />
+                        )}
+                        onChange={(event, value) => handleClsSubjectSelect(event, value, setFieldValue)}
+                      />
+                    </Grid>
+
                     {/* Group  */}
                     <Grid item xs={12} md={6}>
                       {selectedClass && selectedClass.has_section && (
@@ -572,7 +646,7 @@ function RegistrationSecondPart({
                         name="registration_no"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        type="text"
+                        type="number"
                         value={values.registration_no}
                         variant="outlined"
                       />
@@ -599,9 +673,6 @@ function RegistrationSecondPart({
                         variant="outlined"
                       />
                     </Grid>
-
-                    {/* dummy  */}
-                    <Grid item xs={0} md={6}></Grid>
 
                     {/* student_present_address */}
                     <Grid item xs={12} md={6}>
@@ -652,7 +723,7 @@ function RegistrationSecondPart({
                     </Grid>
 
                     {/* extra info */}
-                    <Grid
+                    {/* <Grid
                       item
                       xs={12}
                       display="flex"
@@ -663,76 +734,77 @@ function RegistrationSecondPart({
                         {' '}
                         <Checkbox name="is_extra" checked={isExtraClass} onChange={() => setIsExtraClass((value) => !value)} /> Add Extra Class ?{' '}
                       </Grid>
-                    </Grid>
+                    </Grid> */}
 
                     {isExtraClass && (
-                      <>
-                        {/* extra classes */}
-                        <Grid item xs={12} md={6}>
-                          <Autocomplete
-                            disablePortal
-                            options={extraClassesOptions}
-                            value={selectedXtraCls}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                required
-                                size="small"
-                                sx={{
-                                  '& fieldset': {
-                                    borderRadius: '3px'
-                                  }
-                                }}
-                                fullWidth
-                                error={Boolean(touched.extra_class_id && errors.extra_class_id)}
-                                helperText={touched.extra_class_id && errors.extra_class_id}
-                                onBlur={handleBlur}
-                                label={t('Select Extra class')}
-                              />
-                            )}
-                            onChange={(event, value) => handleExtraClassSelect(event, value, setFieldValue)}
-                          />
-                        </Grid>
+                      <></>
+                      // <>
+                      //   {/* extra classes */}
+                      //   <Grid item xs={12} md={6}>
+                      //     <Autocomplete
+                      //       disablePortal
+                      //       options={extraClassesOptions}
+                      //       value={selectedXtraCls}
+                      //       renderInput={(params) => (
+                      //         <TextField
+                      //           {...params}
+                      //           required
+                      //           size="small"
+                      //           sx={{
+                      //             '& fieldset': {
+                      //               borderRadius: '3px'
+                      //             }
+                      //           }}
+                      //           fullWidth
+                      //           error={Boolean(touched.extra_class_id && errors.extra_class_id)}
+                      //           helperText={touched.extra_class_id && errors.extra_class_id}
+                      //           onBlur={handleBlur}
+                      //           label={t('Select Extra class')}
+                      //         />
+                      //       )}
+                      //       onChange={(event, value) => handleExtraClassSelect(event, value, setFieldValue)}
+                      //     />
+                      //   </Grid>
 
-                        {/* extra section */}
-                        <Grid item xs={12} md={6}>
-                          {selectedXtraCls && selectedXtraCls.has_section && (
-                            <Autocomplete
-                              size="small"
-                              disablePortal
-                              options={sectionsForSelectedXtraCls}
-                              value={selectedXtraClsSection}
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  required
-                                  size="small"
-                                  sx={{
-                                    '& fieldset': {
-                                      borderRadius: '3px'
-                                    }
-                                  }}
-                                  fullWidth
-                                  error={Boolean(touched.password && errors.password)}
-                                  helperText={touched.password && errors.password}
-                                  onBlur={handleBlur}
-                                  label={t('Select Extra section')}
-                                />
-                              )}
-                              onChange={(event, value) => {
-                                console.log('selected sections__', {
-                                  event,
-                                  value
-                                });
-                                setSelectedXtraClsSection(value);
-                                // @ts-ignore
+                      //   {/* extra section */}
+                      //   <Grid item xs={12} md={6}>
+                      //     {selectedXtraCls && selectedXtraCls.has_section && (
+                      //       <Autocomplete
+                      //         size="small"
+                      //         disablePortal
+                      //         options={sectionsForSelectedXtraCls}
+                      //         value={selectedXtraClsSection}
+                      //         renderInput={(params) => (
+                      //           <TextField
+                      //             {...params}
+                      //             required
+                      //             size="small"
+                      //             sx={{
+                      //               '& fieldset': {
+                      //                 borderRadius: '3px'
+                      //               }
+                      //             }}
+                      //             fullWidth
+                      //             error={Boolean(touched.password && errors.password)}
+                      //             helperText={touched.password && errors.password}
+                      //             onBlur={handleBlur}
+                      //             label={t('Select Extra section')}
+                      //           />
+                      //         )}
+                      //         onChange={(event, value) => {
+                      //           console.log('selected sections__', {
+                      //             event,
+                      //             value
+                      //           });
+                      //           setSelectedXtraClsSection(value);
+                      //           // @ts-ignore
 
-                                setFieldValue('extra_section_id', value?.id);
-                              }}
-                            />
-                          )}
-                        </Grid>
-                      </>
+                      //           setFieldValue('extra_section_id', value?.id);
+                      //         }}
+                      //       />
+                      //     )}
+                      //   </Grid>
+                      // </>
                     )}
 
                     {/* student photo */}
@@ -740,7 +812,7 @@ function RegistrationSecondPart({
                     <Grid container p={1} gap={1} xs={12}>
                       <Grid item>
                         <Image
-                          src={student_photo ? student_photo : getFile(student?.student_photo || student?.filePathQuery?.student_photo_path)}
+                          src={student_photo ? student_photo : getFile(student?.student_photo || student?.filePathQuery?.student_photo_path || '')}
                           height={150}
                           width={150}
                           alt="Student photo"
