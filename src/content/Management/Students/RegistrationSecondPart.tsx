@@ -38,6 +38,7 @@ function RegistrationSecondPart({
   const [academicYearValue] = useContext(AcademicYearContext);
 
   const handleGetGroupsClsWise = (class_id: number) => {
+    if (!class_id) return;
     axios.get(`/api/group?class_id=${class_id}`).then((res) => {
       // console.log('res?.data__', res?.data);
       setGroup(
@@ -65,13 +66,18 @@ function RegistrationSecondPart({
     setClassesOptions(() => classes_);
     setExtraClassesOptions(() => extraClasses);
   }, [classes]);
+
   useEffect(() => {
     if (classesOptions && student) {
-      setselectedClass(classesOptions?.find((i) => i.id == (Number(student?.class_id) || student?.section?.class_id)));
+      // console.log({ classesOptions, student });
+      // console.log("test...............", classesOptions?.find((i) => i.id === (parseInt(student?.class_id) || student?.section?.class_id)));
+
+      setselectedClass(classesOptions?.find((i) => i.id == (parseInt(student?.class_id) || student?.section?.class_id)));
+
       handleGetGroupsClsWise(student?.section?.class_id);
     }
   }, [classesOptions, student]);
-  console.log(student);
+
   useEffect(() => {
     const selectedCls = classes?.find((i) => i.id === Number(totalFormData?.class_id)); //class single
     if (!selectedCls) return;
@@ -82,11 +88,9 @@ function RegistrationSecondPart({
     setSelecetedSection({ label: findSection.name, id: findSection.id });
 
     const findgroup = selectedCls.Group.find((group) => group.id === totalFormData?.group_id);
-    console.log({ findgroup });
-    console.log('hiiiii');
     setSelectedGroup({ label: findgroup?.title, id: findgroup?.id });
   }, []);
-  console.log({ selectedGroup, selectedClass });
+  console.log({ totalFormData })
   useEffect(() => {
     if (student) {
       const targetClassSections = classes?.find((i) => i.id == (Number(student?.class_id) || student?.section?.class_id));
@@ -148,7 +152,7 @@ function RegistrationSecondPart({
         .catch((err) => console.log(err));
 
       const targetClassSections = classes?.find((i) => i.id == value.id);
-      console.log(targetClassSections);
+
       setSectionsForSelectedClass(
         targetClassSections?.sections?.map((i) => {
           return {
@@ -193,7 +197,7 @@ function RegistrationSecondPart({
       setSelectedXtraClsSection(null);
     }
   };
-  console.log({ classes });
+
   const [isAvailableUsername, setIsAvailableUsername] = useState();
 
   const handleDebounce = (value) => {
@@ -209,8 +213,7 @@ function RegistrationSecondPart({
         });
     }
   };
-  // console.log({"rrrrrrrrrrrrrrrrr":totalFormData})
-
+  console.log({ student })
   return (
     <>
       <Formik
@@ -219,11 +222,11 @@ function RegistrationSecondPart({
           password: student ? student?.password || '' : totalFormData?.phone,
           confirm_password: student ? student?.password || '' : totalFormData?.phone,
 
-          class_id: student ? (student?.class_id ? Number(student?.class_id) : student?.section?.class_id) : totalFormData?.class_id,
+          class_id: student ? (student?.class_id ? parseInt(student?.class_id) : student?.section?.class_id) : totalFormData?.class_id,
 
-          section_id: student ? (student?.section_id ? Number(student?.section_id) : student?.section_id) : totalFormData?.section_id,
+          section_id: student ? (student?.section_id ? parseInt(student?.section_id) : student?.section_id) : totalFormData?.section_id,
 
-          group_id: student ? (student?.group_id ? Number(student?.group_id) : student?.group_id) : totalFormData?.group_id,
+          group_id: student ? (student?.group_id ? parseInt(student?.group_id) : student?.group_id) : totalFormData?.group_id,
 
           extra_class_id: student?.extra_section_id ? student?.extra_section?.class_id : undefined,
 
@@ -516,8 +519,8 @@ function RegistrationSecondPart({
                             name="academic_year_id"
                             {...params}
                             label={t('Select Academic Year')}
-                            //  error={Boolean(touched.academic_year_id && errors.academic_year_id)}
-                            //  helperText={'The session is required'}
+                          //  error={Boolean(touched.academic_year_id && errors.academic_year_id)}
+                          //  helperText={'The session is required'}
                           />
                         )}
                         onChange={(event, value) => {
@@ -654,7 +657,7 @@ function RegistrationSecondPart({
                       xs={12}
                       display="flex"
                       justifyItems="center"
-                      // bgcolor={"red"}
+                    // bgcolor={"red"}
                     >
                       <Grid item>
                         {' '}

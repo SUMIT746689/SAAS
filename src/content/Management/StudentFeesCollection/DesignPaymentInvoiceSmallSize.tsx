@@ -213,7 +213,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     width={50}
                     height={50}
                     alt="school logo"
-                    // style={{ position: 'relative', bottom: 0 }}
+                  // style={{ position: 'relative', bottom: 0 }}
                   />
                 ) : (
                   ''
@@ -319,7 +319,8 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       Particulars
                     </TableCell>
                   </TableRow>
-                  <TableRow>
+
+                  {/* <TableRow>
                     {selectedFees.find((item) => item.teacher_name) ? (
                       <TableCell
                         style={{
@@ -339,7 +340,8 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     ) : (
                       ''
                     )}
-                  </TableRow>
+                  </TableRow> */}
+
                   {selectedFees?.map((payment, index) => {
                     return (
                       <TableRow
@@ -362,7 +364,11 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                             textTransform: 'capitalize'
                           }}
                         >
-                          {payment?.head_title && payment?.fee_id ? `${payment?.head_title} (${payment?.title})` : payment?.title}
+                          {payment?.head_title && payment?.fee_id ? `${payment?.head_title} (${payment?.title})` : payment?.title} <br />
+
+                          {/* {selectedFees.find((item) => item.teacher_name) ? `Teacher Name: ${payment?.teacher_name ? payment?.teacher_name : ''}` : ''} */}
+
+                          {payment?.teacher_name ? `Teacher Name: ${payment?.teacher_name}` : ''}
 
                           {/* {[payment?.head_title, payment?.title, payment?.subject_name].filter(Boolean)[0] +
                           ' ' +
@@ -373,7 +379,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                             .join(' ')} */}
                         </TableCell>
 
-                        {selectedFees.find((item) => item.teacher_name) ? (
+                        {/* {selectedFees.find((item) => item.teacher_name) ? (
                           <TableCell
                             align="left"
                             style={{
@@ -390,7 +396,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                           </TableCell>
                         ) : (
                           ''
-                        )}
+                        )} */}
 
                         <TableCell
                           align="right"
@@ -442,7 +448,8 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
 
                   <TableRow>
                     <TableCell
-                      colSpan={selectedFees.find((item) => item.teacher_name) ? 2 : 1}
+                      // colSpan={selectedFees.find((item) => item.teacher_name) ? 2 : 1}
+                      colSpan={1}
                       component="th"
                       scope="row"
                       align="left"
@@ -459,32 +466,23 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     >
                       Payable Amt.
                     </TableCell>
-                    {selectedFees?.map((payment, index) => {
-                      return (
-                        // <TableRow
-                        //   sx={{
-                        //     '&:last-child td, &:last-child th': { border: 0 }
-                        //   }}
-                        // >
-                        <TableCell
-                          align="right"
-                          style={{
-                            border: '1px solid black',
-                            // fontWeight: 'bold',
-                            paddingLeft: '5px',
-                            paddingRight: '5px',
-                            textTransform: 'capitalize',
-                            paddingTop: '2px',
+                    <TableCell
+                      align="right"
+                      style={{
+                        border: '1px solid black',
+                        // fontWeight: 'bold',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        textTransform: 'capitalize',
+                        paddingTop: '2px',
 
-                            fontSize: '0.7rem',
-                            paddingBottom: '2px'
-                          }}
-                        >
-                          {/* {totalPreAmount?.toFixed(2)} */}
-                          {payment?.payableAmount?.toFixed(2)}
-                        </TableCell>
-                      );
-                    })}{' '}
+                        fontSize: '0.7rem',
+                        paddingBottom: '2px'
+                      }}
+                    >
+                      {/* {totalPreAmount?.toFixed(2)} */}
+                      {selectedFees?.reduce((prev, payment) => prev + (payment?.payableAmount || 0), 0)?.toFixed(2)}
+                    </TableCell>
                   </TableRow>
 
                   <TableRow>
@@ -660,7 +658,8 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     }}
                   >
                     <TableCell
-                      colSpan={selectedFees.find((item) => item.teacher_name) ? 2 : 1}
+                      // colSpan={selectedFees.find((item) => item.teacher_name) ? 2 : 1}
+                      colSpan={1}
                       component="th"
                       scope="row"
                       align="left"
@@ -779,10 +778,10 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
           </TableContainer>
         </Grid> */}
           {/* signature  */}
-          <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 3 }}>
             <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
               <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
-              <Grid>Student/Gurdiant Signature </Grid>
+              <Grid>Student/Guardian Signature </Grid>
             </Grid>
             <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
               <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
@@ -813,7 +812,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   width={50}
                   height={50}
                   alt="school logo"
-                  // style={{ position: 'relative', bottom: 0 }}
+                // style={{ position: 'relative', bottom: 0 }}
                 />
               ) : (
                 ''
@@ -919,27 +918,29 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     Particulars
                   </TableCell>
                 </TableRow>
-                <TableRow>
-                  {selectedFees.find((item) => item.teacher_name) ? (
-                    <TableCell
-                      style={{
-                        border: '1px solid black',
-                        textTransform: 'capitalize',
-                        // fontWeight: 'bold',
-                        width: '25%',
-                        paddingLeft: '5px',
-                        paddingRight: '5px',
-                        paddingTop: '2px',
-                        paddingBottom: '2px',
-                        color: '#000'
-                      }}
-                    >
-                      Teacher Name
-                    </TableCell>
-                  ) : (
-                    ''
-                  )}
-                </TableRow>
+
+                {/* <TableRow>
+                    {selectedFees.find((item) => item.teacher_name) ? (
+                      <TableCell
+                        style={{
+                          border: '1px solid black',
+                          textTransform: 'capitalize',
+                          // fontWeight: 'bold',
+                          width: '25%',
+                          paddingLeft: '5px',
+                          paddingRight: '5px',
+                          paddingTop: '2px',
+                          paddingBottom: '2px',
+                          color: '#000'
+                        }}
+                      >
+                        Teacher Name
+                      </TableCell>
+                    ) : (
+                      ''
+                    )}
+                  </TableRow> */}
+
                 {selectedFees?.map((payment, index) => {
                   return (
                     <TableRow
@@ -962,7 +963,11 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                           textTransform: 'capitalize'
                         }}
                       >
-                        {payment?.head_title && payment?.fee_id ? `${payment?.head_title} (${payment?.title})` : payment?.title}
+                        {payment?.head_title && payment?.fee_id ? `${payment?.head_title} (${payment?.title})` : payment?.title} <br />
+
+                        {/* {selectedFees.find((item) => item.teacher_name) ? `Teacher Name: ${payment?.teacher_name ? payment?.teacher_name : ''}` : ''} */}
+
+                        {payment?.teacher_name ? `Teacher Name: ${payment?.teacher_name}` : ''}
 
                         {/* {[payment?.head_title, payment?.title, payment?.subject_name].filter(Boolean)[0] +
                           ' ' +
@@ -973,24 +978,24 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                             .join(' ')} */}
                       </TableCell>
 
-                      {selectedFees.find((item) => item.teacher_name) ? (
-                        <TableCell
-                          align="left"
-                          style={{
-                            border: '1px solid black',
-                            // fontWeight: 'bold',
-                            paddingLeft: '5px',
-                            paddingRight: '5px',
-                            paddingTop: '2px',
-                            fontSize: '0.7rem',
-                            paddingBottom: '2px'
-                          }}
-                        >
-                          {payment?.teacher_name ? payment?.teacher_name : ''}
-                        </TableCell>
-                      ) : (
-                        ''
-                      )}
+                      {/* {selectedFees.find((item) => item.teacher_name) ? (
+                          <TableCell
+                            align="left"
+                            style={{
+                              border: '1px solid black',
+                              // fontWeight: 'bold',
+                              paddingLeft: '5px',
+                              paddingRight: '5px',
+                              paddingTop: '2px',
+                              fontSize: '0.7rem',
+                              paddingBottom: '2px'
+                            }}
+                          >
+                            {payment?.teacher_name ? payment?.teacher_name : ''}
+                          </TableCell>
+                        ) : (
+                          ''
+                        )} */}
 
                       <TableCell
                         align="right"
@@ -1042,7 +1047,8 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
 
                 <TableRow>
                   <TableCell
-                    colSpan={selectedFees.find((item) => item.teacher_name) ? 2 : 1}
+                    // colSpan={selectedFees.find((item) => item.teacher_name) ? 2 : 1}
+                    colSpan={1}
                     component="th"
                     scope="row"
                     align="left"
@@ -1059,32 +1065,23 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   >
                     Payable Amt.
                   </TableCell>
-                  {selectedFees?.map((payment, index) => {
-                    return (
-                      // <TableRow
-                      //   sx={{
-                      //     '&:last-child td, &:last-child th': { border: 0 }
-                      //   }}
-                      // >
-                      <TableCell
-                        align="right"
-                        style={{
-                          border: '1px solid black',
-                          // fontWeight: 'bold',
-                          paddingLeft: '5px',
-                          paddingRight: '5px',
-                          textTransform: 'capitalize',
-                          paddingTop: '2px',
+                  <TableCell
+                    align="right"
+                    style={{
+                      border: '1px solid black',
+                      // fontWeight: 'bold',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
+                      textTransform: 'capitalize',
+                      paddingTop: '2px',
 
-                          fontSize: '0.7rem',
-                          paddingBottom: '2px'
-                        }}
-                      >
-                        {/* {totalPreAmount?.toFixed(2)} */}
-                        {payment?.payableAmount?.toFixed(2)}
-                      </TableCell>
-                    );
-                  })}{' '}
+                      fontSize: '0.7rem',
+                      paddingBottom: '2px'
+                    }}
+                  >
+                    {/* {totalPreAmount?.toFixed(2)} */}
+                    {selectedFees?.reduce((prev, payment) => prev + (payment?.payableAmount || 0), 0)?.toFixed(2)}
+                  </TableCell>
                 </TableRow>
 
                 <TableRow>
@@ -1260,7 +1257,8 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   }}
                 >
                   <TableCell
-                    colSpan={selectedFees.find((item) => item.teacher_name) ? 2 : 1}
+                    // colSpan={selectedFees.find((item) => item.teacher_name) ? 2 : 1}
+                    colSpan={1}
                     component="th"
                     scope="row"
                     align="left"
@@ -1379,10 +1377,10 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
           </TableContainer>
         </Grid> */}
         {/* signature  */}
-        <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 3 }}>
           <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
             <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
-            <Grid>Student/Gurdiant Signature </Grid>
+            <Grid>Student/Guardian Signature </Grid>
           </Grid>
           <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
             <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>

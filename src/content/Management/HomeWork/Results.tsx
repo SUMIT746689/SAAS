@@ -53,6 +53,8 @@ import ApprovalIcon from '@mui/icons-material/Approval';
 import { useAuth } from '@/hooks/useAuth';
 import { AcademicYearContext } from '@/contexts/UtilsContextUse';
 import { accessNestedProperty, getFile } from '@/utils/utilitY-functions';
+import { TableBodyCellWrapper, TableHeaderCellWrapper } from '@/components/Table/Table';
+import Link from 'next/link';
 
 const DialogWrapper = styled(Dialog)(
   () => `
@@ -197,8 +199,8 @@ const Results = ({ userInfo, users, setUsers, reFetchData }) => {
 
   return (
     <>
-      <Card sx={{ minHeight: 'calc(100vh - 330px) !important' }}>
-        <Box p={2} display="flex" alignItems="center" justifyContent="space-between">
+      <Card sx={{ minHeight: 'calc(100vh - 330px) !important',borderRadius:0.5 }}>
+        <Box px={2} display="flex" alignItems="center" justifyContent="space-between">
           <Box>
             <Typography component="span" variant="subtitle1">
               {t('Showing')}:
@@ -236,29 +238,26 @@ const Results = ({ userInfo, users, setUsers, reFetchData }) => {
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">{t('Sl')}</TableCell>
-                    <TableCell align="center">{t('Date')}</TableCell>
-                    <TableCell align="center">{t('Description')}</TableCell>
-                    <TableCell align="center">{t('Url')}</TableCell>
-                    <TableCell align="center">{t('Youtube Class Url')}</TableCell>
-                    <TableCell align="center">{t('Live Class Url')}</TableCell>
-                    {userInfo && <TableCell align="center">{t('Action')}</TableCell>}
+                    <TableHeaderCellWrapper align="center">{t('Sl')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align="center">{t('Date')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align="center">{t('Description')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align="center">{t('Url')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align="center">{t('Youtube Class Url')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align="center">{t('Live Class Url')}</TableHeaderCellWrapper>
+                    {userInfo && <TableHeaderCellWrapper align="center">{t('Action')}</TableHeaderCellWrapper>}
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {paginatedClasses.map((i, index) => {
                     return (
                       <TableRow hover key={i.id}>
-                        <TableCell align="center">
-                          <Typography variant="h5">{index + 1}</Typography>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Typography variant="h5">{dayjs(i?.date).format('YYYY-MM-DD')}</Typography>
-                        </TableCell>
+                        <TableBodyCellWrapper align="center">{index + 1}</TableBodyCellWrapper>
+                        <TableBodyCellWrapper align="center">{dayjs(i?.date).format('YYYY-MM-DD')}</TableBodyCellWrapper>
 
-                        <TableCell align="center">
+                        <TableBodyCellWrapper>
                           <Typography
-                            variant="h5"
+                            align='center'
+                            variant="h6"
                             sx={{ cursor: 'pointer' }}
                             onClick={() => {
                               setOpenDescription(true);
@@ -266,34 +265,26 @@ const Results = ({ userInfo, users, setUsers, reFetchData }) => {
                               // {i?.description}
                             }}
                           >
-                            Description
+                            Show Description
                           </Typography>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Typography variant="h5">
-                            <Typography noWrap variant="h5" py={0}>
-                              {i?.file_path && (
-                                <a style={{ width: '50px', color: 'blue', textDecoration: 'underline' }} target="_blank" href={getFile(i?.file_path)}>
-                                  File link
-                                </a>
-                              )}
-                            </Typography>
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Typography variant="h5">
-                            <a style={{ width: '50px', color: 'blue', textDecoration: 'underline' }} target="_blank" href={i?.youtuble_class_link}>
-                              Youtube link
-                            </a>
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Typography variant="h5">
-                            <a style={{ width: '50px', color: 'blue', textDecoration: 'underline' }} target="_blank" href={i?.live_class_link}>
-                              Live link
-                            </a>
-                          </Typography>
-                        </TableCell>
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper align="center">
+                          {i?.file_path && (
+                            <Link style={{ width: '50px', color: 'blue', textDecoration: 'underline' }} target="_blank" href={getFile(i?.file_path)}>
+                              File link
+                            </Link>
+                          )}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper align="center">
+                          <Link style={{ width: '50px', color: 'blue', textDecoration: 'underline' }} target="_blank" href={i?.youtuble_class_link || ''}>
+                            Youtube link
+                          </Link>
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper align="center">
+                          <Link style={{ width: '50px', color: 'blue', textDecoration: 'underline' }} target="_blank" href={i?.live_class_link || ''}>
+                            Live link
+                          </Link>
+                        </TableBodyCellWrapper>
                         {userInfo && (
                           <TableCell align="center">
                             <Typography variant="h5">

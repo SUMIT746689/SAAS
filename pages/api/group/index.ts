@@ -10,7 +10,7 @@ const index = async (req, res, refresh_token) => {
       case 'GET':
         let query = {}
         if (req.query.class_id) {
-          query = { class_id: parseInt(req.query.class_id) }
+          query = { class_id: { equals: parseInt(req.query.class_id) } }
         }
         const groups = await prisma.group.findMany({
           where: {
@@ -22,7 +22,6 @@ const index = async (req, res, refresh_token) => {
           include: {
             class: true
           }
-
         });
         res.status(200).json(groups);
         break;
