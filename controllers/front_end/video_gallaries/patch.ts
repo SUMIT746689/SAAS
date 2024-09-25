@@ -34,16 +34,17 @@ async function post(req, res, refresh_token) {
     const { youtube_link, english_title, bangla_title} = fields;
     // if (!english_title || !bangla_title || !english_description || !bangla_description || !status) throw new Error('provide all required fields')
 
-    const response = await prisma.resWebsiteUi.update({
+    const response = await prisma.websiteUi.update({
       where: {
         id,
         school_id
       },
       data: {
+        video_gallery: [{
         youtube_link: youtube_link || undefined,
         english_title: english_title || undefined,
         bangla_title: bangla_title || undefined,
-       
+        }]
       }
     })
 

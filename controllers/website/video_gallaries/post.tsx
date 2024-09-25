@@ -17,7 +17,7 @@ async function post(req, res, refresh_token) {
     });
     console.log({ resWebsiteUi });
     if (resWebsiteUi) {
-      const updatedVideoGallery = resWebsiteUi.video_gallery && Array.isArray(resWebsiteUi) ? resWebsiteUi.video_gallery : [];
+      const updatedVideoGallery: any = resWebsiteUi.video_gallery && Array.isArray(resWebsiteUi) ? resWebsiteUi.video_gallery : [];
       updatedVideoGallery.push({
         id: new Date().getTime(),
         youtube_link,
