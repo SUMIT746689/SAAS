@@ -129,12 +129,6 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
         setSubjectList([]);
       });
   };
-  // useEffect(() => {
-  //   if (values.frequency === 'annual') {
-  //     // Automatically set to January and disable month selection
-  //     setFieldValue('months', [{ label: 'January', value: 'january' }]);
-  //   }
-  // }, [values.frequency]);
 
   return (
     <>

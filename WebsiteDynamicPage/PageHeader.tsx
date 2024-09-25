@@ -24,7 +24,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
 
   useEffect(() => {
     if (editData) setOpen(true);
-  }, [editData])
+  }, [editData]);
 
   const handleCreateClassOpen = () => {
     setOpen(true);
@@ -35,10 +35,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
     setEditData(null);
   };
 
-  const handleFormSubmit = async (
-    _values,
-    { resetForm, setErrors, setStatus, setSubmitting }
-  ) => {
+  const handleFormSubmit = async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
     try {
       const successResponse = (message) => {
         showNotification('sms template' + message + ' successfully');
@@ -48,7 +45,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
         reFetchData();
         handleCreateClassClose();
       };
-      console.log("_values__", _values);
+      console.log('_values__', _values);
 
       // if (editData) {
       // const res = await axios.patch(`/api//${editData.id}`, _values);
@@ -57,7 +54,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
       const formData = new FormData();
       for (const [key, value] of Object.entries(_values)) {
         console.log(`${key}: ${value}`);
-        if (key === "feature_photo") {
+        if (key === 'feature_photo') {
           formData.append(key, value[0]);
           continue;
         }
@@ -67,13 +64,13 @@ function PageHeader({ editData, setEditData, reFetchData }) {
       if (editData) {
         const res = await axios.patch(`/api/front_end/website_dynamic_pages/${editData.id}`, formData);
         // fetchData('')
-        console.log({ res })
+        console.log({ res });
         successResponse(' updated ');
         return;
       }
 
       const res = await axios.post(`/api/front_end/website_dynamic_pages`, formData);
-      console.log({ res })
+      console.log({ res });
       successResponse('created');
       // }
     } catch (err) {
@@ -87,9 +84,9 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   };
 
   const handleDynamicContent = async (userType) => {
-    const [err, res] = await fetchData('/api/certificate_templates/dynamic_content', 'get', {})
-    setDynamicContent(() => (!err && res.success) ? res.data : []);
-  }
+    const [err, res] = await fetchData('/api/certificate_templates/dynamic_content', 'get', {});
+    setDynamicContent(() => (!err && res.success ? res.data : []));
+  };
 
   // const handleFileChange = (e, setFieldValue, field, preview_field, student_id, id) => {
   //   if (e?.target?.files?.length === 0) {
@@ -143,21 +140,14 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   // ]);
   // };
 
-
-
   return (
     <>
       {/* page head title and create button ui */}
       <PageHeaderTitleWrapper name="Website Dynamic Page" handleCreateClassOpen={handleCreateClassOpen} />
 
-      <Dialog
-        fullWidth
-        maxWidth="md"
-        open={open}
-        onClose={handleCreateClassClose}
-      >
+      <Dialog fullWidth maxWidth="md" open={open} onClose={handleCreateClassClose}>
         {/* dialog title */}
-        <DialogTitleWrapper name={"Website Dynamic Page"} editData={editData} />
+        <DialogTitleWrapper name={'Website Dynamic Page'} editData={editData} />
 
         <Formik
           initialValues={{
@@ -174,20 +164,16 @@ function PageHeader({ editData, setEditData, reFetchData }) {
             bangla_title: Yup.string().max(255).required(t('The bangla title field is required')),
             english_description: Yup.string().required(t('The english description field is required')),
             bangla_description: Yup.string().required(t('The bangla description field is required')),
-            status: Yup.string().required(t('select a status')),
+            status: Yup.string().required(t('select a status'))
           })}
           onSubmit={handleFormSubmit}
         >
-          {({
-            errors, handleBlur, handleChange, handleSubmit,
-            isSubmitting, touched, values,
-            setFieldValue
-          }) => {
-            console.log({ values, errors })
+          {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
+            console.log({ values, errors });
             return (
               <form onSubmit={handleSubmit}>
                 <DialogContent dividers sx={{ p: 3 }}>
-                  <Grid container gap={1} >
+                  <Grid container gap={1}>
                     {/* english title */}
                     <TextFieldWrapper
                       label="Title (English)"
@@ -214,9 +200,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
 
                     {/* english description */}
                     <Grid container pb={5}>
-                      <Grid>
-                        Description (English): *
-                      </Grid>
+                      <Grid>Description (English): *</Grid>
                       <RichTextEditorWrapper
                         // height='200px'
                         value={values.english_description}
@@ -226,18 +210,15 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                           // setText(editor.getContent({ format: 'text' }));
                           // editor.getContent({ format: 'text' });
                         }}
-
                       />
                       {/* <Grid display="flex" flexWrap="wrap" gap={1} mt={1} >
                         {dynamicContent?.map((content, index) => <Button key={index} variant="contained" sx={{ borderRadius: 0.4, fontSize: 12, fontWeight: 400, py: 0.4, px: 1 }} onClick={() => { setFieldValue('content', values.content + content) }} >{content}</Button>)}
                       </Grid> */}
                     </Grid>
-                    
+
                     {/* bangla description */}
                     <Grid container pb={6}>
-                      <Grid>
-                        Description (বাংলা): *
-                      </Grid>
+                      <Grid>Description (বাংলা): *</Grid>
                       <RichTextEditorWrapper
                         // height='200px'
                         value={values.bangla_description}
@@ -247,7 +228,6 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                           // setText(editor.getContent({ format: 'text' }));
                           // editor.getContent({ format: 'text' });
                         }}
-
                       />
                       {/* <Grid display="flex" flexWrap="wrap" gap={1} mt={1} >
                         {dynamicContent?.map((content, index) => <Button key={index} variant="contained" sx={{ borderRadius: 0.4, fontSize: 12, fontWeight: 400, py: 0.4, px: 1 }} onClick={() => { setFieldValue('content', values.content + content) }} >{content}</Button>)}
@@ -260,35 +240,33 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                         <NewFileUploadFieldWrapper
                           htmlFor="feature_photo"
                           accept="image/*"
-                          handleChangeFile={(e) => handleFileChange(e, setFieldValue, "feature_photo", "preview_feature_photo")}
-                          label='Feature Photo'
+                          handleChangeFile={(e) => handleFileChange(e, setFieldValue, 'feature_photo', 'preview_feature_photo')}
+                          label="Feature Photo"
                         />
                       </Grid>
                       <Grid item>
-                        {
-                          values?.preview_feature_photo?.map((image, index) => (
-                            <>
-                              <PreviewImageCard
-                                data={image}
-                                index={index}
-                                key={index}
-                                handleRemove={() => handleFileRemove(setFieldValue, "feature_photo", "preview_feature_photo")}
-                              />
-                            </>
-                          ))
-                        }
+                        {values?.preview_feature_photo?.map((image, index) => (
+                          <>
+                            <PreviewImageCard
+                              data={image}
+                              index={index}
+                              key={index}
+                              handleRemove={() => handleFileRemove(setFieldValue, 'feature_photo', 'preview_feature_photo')}
+                            />
+                          </>
+                        ))}
                       </Grid>
                       <Grid item>
-                        {
-                          editData?.feature_photo &&
-                          <Image src={getFile(editData?.feature_photo)}
+                        {editData?.feature_photo && (
+                          <Image
+                            src={getFile(editData?.feature_photo)}
                             height={200}
                             width={200}
-                            alt='feature photo'
-                            loading='lazy'
-                            style={{ width: 150, height: 150, objectFit: "contain" }}
+                            alt="feature photo"
+                            loading="lazy"
+                            style={{ width: 150, height: 150, objectFit: 'contain' }}
                           />
-                        }
+                        )}
                       </Grid>
                     </Grid>
 
@@ -318,8 +296,8 @@ function PageHeader({ editData, setEditData, reFetchData }) {
               </form>
             );
           }}
-        </Formik >
-      </Dialog >
+        </Formik>
+      </Dialog>
     </>
   );
 }

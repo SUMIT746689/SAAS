@@ -30,7 +30,14 @@ export default function VideoGallary() {
                                 >
                                 </iframe> */}
 
-                                <Image src='/gallary.jpg' width={400} height={300} alt="vedio gellery" className="object-cover  mb-4  dark:bg-gray-500" />
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/UUWBFavzDJM?si=Pfr5iAd6o--Pq5el" 
+                            title="YouTube video player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            referrerpolicy="strict-origin-when-cross-origin" 
+                            allowfullscreen>
+                            </iframe>
+                                {/* <Image src='/gallary.jpg' width={400} height={300} alt="vedio gellery" className="object-cover  mb-4  dark:bg-gray-500" /> */}
                             </div>
                             <h1 className="text-xl text-center mt-4"> {handleTextChangeLangWise(language, 'Content Name', 'ভিডিও নাম')}</h1>
                         </div>
