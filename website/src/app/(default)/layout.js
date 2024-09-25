@@ -39,10 +39,11 @@ export default async function RootLayout({ children }) {
         twitter_link: true,
         google_link: true,
         linkedin_link: true,
-        youtube_link: true
+        youtube_link: true,
       }
     })
-    console.log({ domain })
+    console.log({school_info})
+    // console.log({ domain })
 
     const navarDatas = {
       name: school_info?.school?.name,
@@ -64,7 +65,7 @@ export default async function RootLayout({ children }) {
       }
     });
 
-    console.log({resMenus})
+    // console.log({resMenus})
 
     return (
       school_info ?
