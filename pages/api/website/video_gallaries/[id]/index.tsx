@@ -3,7 +3,7 @@ import deletePeriod from 'controllers/period/deletePeriod';
 import { authenticate } from 'middleware/authenticate';
 import { logFile } from 'utilities_api/handleLogFile';
 
-const WebsiteMenu = async (req, res, refresh_token) => {
+const websiteGallary = async (req, res, refresh_token) => {
   try {
     const { method } = req;
     const data = {};
@@ -17,7 +17,7 @@ const WebsiteMenu = async (req, res, refresh_token) => {
 
     switch (method) {
       case 'DELETE':
-        await prisma.websiteMenu.delete({
+        await prisma.websiteUi.delete({
           where: {
             id: parseInt(req.query.id)
           }
@@ -36,30 +36,29 @@ const WebsiteMenu = async (req, res, refresh_token) => {
             return res.status(400).send({ message: "Missing 'id' in request." });
           }
 
-          const menuInfo = await prisma.websiteMenu.findFirst({
+          const gallaryInfo = await prisma.websiteUi.findFirst({
             where: {
               id: parseInt(id)
             }
           });
 
-          if (!menuInfo) {
+          if (!gallaryInfo) {
             logFile.error('Invalid id !');
             return res.status(400).send({ message: `Document is not found.` });
           }
 
-          await prisma.websiteMenu.update({
+          await prisma.websiteUi.update({
             where: {
               id: parseInt(id)
             },
             data: {
-              ...data,
-              youtube_link: req.body.youtube_link,
-              english_title: req.body.english_title,
-              bangla_title: req.body.bangla_title
+              eiin_number: '',
+              video_gallery: updatedVideoGallery,
+              school_id
             }
           });
 
-          res.status(200).json({ message: 'website menu updated successfull!!' });
+          res.status(200).json({ message: 'Vidoe Gallary updated successfull!!' });
           // updated code end
         } catch (err) {
           logFile.error(err.message);
@@ -79,4 +78,4 @@ const WebsiteMenu = async (req, res, refresh_token) => {
   }
 };
 
-export default authenticate(WebsiteMenu);
+export default authenticate(websiteGallary);

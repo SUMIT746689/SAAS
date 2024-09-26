@@ -51,6 +51,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
       // const res = await axios.patch(`/api//${editData.id}`, _values);
       // successResponse('updated');
       // } else {
+
       const formData = new FormData();
       for (const [key, value] of Object.entries(_values)) {
         console.log(`${key}: ${value}`);
@@ -61,6 +62,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
         // @ts-ignore
         formData.append(key, value);
       }
+
       if (editData) {
         const res = await axios.patch(`/api/front_end/website_dynamic_pages/${editData.id}`, formData);
         // fetchData('')

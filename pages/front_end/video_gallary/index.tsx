@@ -7,8 +7,8 @@ import Head from 'next/head';
 import PageBodyWrapper from '@/components/PageBodyWrapper';
 import { useState } from 'react';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
-import Results from 'WebsiteDynamicPage/Results';
 import PageHeader from './PageHeader';
+import Results from './Results';
 
 const EmailTemplates = () => {
   const [editData, setEditData] = useState();
@@ -30,7 +30,7 @@ const EmailTemplates = () => {
             <PageHeader editData={editData} setEditData={setEditData} reFetchData={reFetchData} />
           </PageTitleWrapper>
 
-          <Results sessions={emailTemplates?.data || []} setEditData={setEditData} reFetchData={reFetchData} />
+          <Results sessions={emailTemplates?.data || []} setEditData={setEditData} editData={editData} reFetchData={reFetchData} />
         </Grid>
         <Footer />
       </PageBodyWrapper>
