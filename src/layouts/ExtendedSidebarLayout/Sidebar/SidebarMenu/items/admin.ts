@@ -198,11 +198,6 @@ const students: MenuItems[] = [
         link: '/management/holidays',
         icon: HolidayVillageIcon
       },
-      {
-        name: 'Admit Card',
-        link: '/admit_card',
-        icon: DesignServicesIcon
-      },
       // {
       //   name: 'Daily Notes',
       //   icon: NotesIcon,
@@ -287,7 +282,7 @@ const teachers: MenuItems[] = [
   }
 ];
 
-const other_users: MenuItems[] = [
+const staffs: MenuItems[] = [
   {
     items: [
       {
@@ -296,7 +291,7 @@ const other_users: MenuItems[] = [
         link: '/management/users'
       },
       {
-        name: 'Other Users',
+        name: 'Staffs',
         icon: AssignmentIndTwoToneIcon,
         link: '/management/users/entry_other_users'
       },
@@ -656,6 +651,24 @@ const study_materials: MenuItems[] = [
         name: 'Home work',
         link: '/management/homework',
         icon: SummarizeIcon
+      }
+    ]
+  }
+];
+
+const card_generate: MenuItems[] = [
+  {
+
+    items: [
+      {
+        name: 'Student Id Card',
+        link: '/management/students',
+        icon: SummarizeIcon
+      },
+      {
+        name: 'Admit Card',
+        link: '/admit_card',
+        icon: DesignServicesIcon
       },
       {
         name: 'Certificate',
@@ -686,6 +699,7 @@ const study_materials: MenuItems[] = [
     ]
   }
 ];
+
 
 const website_settings: MenuItems[] = [
   {
@@ -924,13 +938,14 @@ export default {
   online_addmission,
   students,
   teachers,
-  other_users,
+  staffs,
   attendance,
   accounting,
   notice,
   routine,
   sms,
   study_materials,
+  card_generate,
   website_settings,
   report,
   examination,
