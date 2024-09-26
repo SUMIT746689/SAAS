@@ -198,11 +198,6 @@ const students: MenuItems[] = [
         link: '/management/holidays',
         icon: HolidayVillageIcon
       },
-      {
-        name: 'Admit Card',
-        link: '/admit_card',
-        icon: DesignServicesIcon
-      },
       // {
       //   name: 'Daily Notes',
       //   icon: NotesIcon,
@@ -656,6 +651,24 @@ const study_materials: MenuItems[] = [
         name: 'Home work',
         link: '/management/homework',
         icon: SummarizeIcon
+      }
+    ]
+  }
+];
+
+const card_generate: MenuItems[] = [
+  {
+
+    items: [
+      {
+        name: 'Student Id Card',
+        link: '/management/students',
+        icon: SummarizeIcon
+      },
+      {
+        name: 'Admit Card',
+        link: '/admit_card',
+        icon: DesignServicesIcon
       },
       {
         name: 'Certificate',
@@ -686,6 +699,7 @@ const study_materials: MenuItems[] = [
     ]
   }
 ];
+
 
 const website_settings: MenuItems[] = [
   {
@@ -931,6 +945,7 @@ export default {
   routine,
   sms,
   study_materials,
+  card_generate,
   website_settings,
   report,
   examination,

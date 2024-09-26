@@ -64,6 +64,7 @@ const quickLinks = [
     { color: quickLinksColors[0], linkUrl: "dashboards/modules/admin", icon: < NoticeIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "Notice" },
     { color: quickLinksColors[1], linkUrl: "dashboards/modules/admin", icon: <RoutineIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />, name: "Routine" },
     { color: quickLinksColors[2], linkUrl: "dashboards/modules/admin", icon: <StudyMaterialsIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />, name: "Study Materials" },
+    { color: quickLinksColors[1], linkUrl: "dashboards/modules/admin", icon: <StudyMaterialsIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />, name: "Card Generate" },
     { color: quickLinksColors[0], linkUrl: "dashboards/modules/admin", icon: <SmsIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "Sms" },
 
     { color: quickLinksColors[1], linkUrl: "dashboards/modules/admin", icon: <WebsiteSettingsIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />, name: "Website Settings" },
