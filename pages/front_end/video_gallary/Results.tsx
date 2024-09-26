@@ -65,7 +65,7 @@ const applyPagination = (sessions: Project[], page: number, limit: number): Proj
   return sessions.slice(page * limit, page * limit + limit);
 };
 
-const Results: FC<ResultsProps> = ({ sessions, editData, setEditData, reFetchData }) => {
+const Results: FC<ResultsProps> = ({ sessions, setEditData, reFetchData }) => {
   const [selectedItems, setSelectedschools] = useState<string[]>([]);
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
@@ -170,10 +170,7 @@ const Results: FC<ResultsProps> = ({ sessions, editData, setEditData, reFetchDat
                   <TableCell>{t('id')}</TableCell>
                   <TableCell>{t('title (english)')}</TableCell>
                   <TableCell>{t('title ( বাংলা )')}</TableCell>
-                  <TableCell>{t('description (english)')}</TableCell>
-                  <TableCell>{t('description ( বাংলা )')}</TableCell>
-                  <TableCell>{t('status')}</TableCell>
-                  <TableCell>{t('feature photo')}</TableCell>
+                  <TableCell>{t('youtube link ')}</TableCell>
                   <TableCell align="center">{t('Actions')}</TableCell>
                 </TableRow>
               }
@@ -183,15 +180,6 @@ const Results: FC<ResultsProps> = ({ sessions, editData, setEditData, reFetchDat
                     const isschoolselected = selectedItems.includes(dynamicPage.id);
                     return (
                       <TableRow hover key={dynamicPage.id} selected={isschoolselected}>
-                        {/* <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isschoolselected}
-                              onChange={(event) =>
-                                handleSelectOneProject(event, dynamicPage.id)
-                              }
-                              value={isschoolselected}
-                            />
-                          </TableCell> */}
                         <TableCell>
                           <Typography noWrap variant="h5">
                             {dynamicPage.id}
@@ -208,28 +196,8 @@ const Results: FC<ResultsProps> = ({ sessions, editData, setEditData, reFetchDat
                           </Typography>
                         </TableCell>
                         <TableCell>
-                          <Typography noWrap variant="h5" sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 200 }}>
-                            {dynamicPage.english_description}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography noWrap variant="h5" sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 200 }}>
-                            {dynamicPage.bangla_description}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
                           <Typography noWrap variant="h5">
-                            {dynamicPage.status}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography noWrap variant="h5">
-                            {/* @ts-ignore */}
-                            {dynamicPage.feature_photo ? (
-                              <Image width={250} height={250} src={getFile(dynamicPage.feature_photo)} className="w-fit h-10" alt="feature photo" />
-                            ) : (
-                              'N/A'
-                            )}
+                            {dynamicPage.youtube_link}
                           </Typography>
                         </TableCell>
 

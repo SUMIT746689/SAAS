@@ -12,25 +12,20 @@ import Results from './Results';
 
 const EmailTemplates = () => {
   const [editData, setEditData] = useState();
-  const { data: emailTemplates, reFetchData } = useClientFetch('/api/front_end/website_dynamic_pages');
-
+  const { data: emailTemplates, reFetchData } = useClientFetch('/api/front_end/video_gallaries');
+  // console.log({ emailTemplates: emailTemplates.result });
   return (
     <>
       <Head>
         <title>Video Gallary Dynamic Pages</title>
       </Head>
       <PageBodyWrapper>
-        <Grid
-          // sx={{ display: 'flex', marginX: 'auto' }}
-          // justifyContent="center"
-          gap={2}
-          px={1}
-        >
+        <Grid gap={2} px={1}>
           <PageTitleWrapper>
             <PageHeader editData={editData} setEditData={setEditData} reFetchData={reFetchData} />
           </PageTitleWrapper>
 
-          <Results sessions={emailTemplates?.data || []} setEditData={setEditData} editData={editData} reFetchData={reFetchData} />
+          <Results sessions={emailTemplates?.result || []} setEditData={setEditData} reFetchData={reFetchData} />
         </Grid>
         <Footer />
       </PageBodyWrapper>
