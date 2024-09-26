@@ -21,6 +21,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   const [open, setOpen] = useState(false);
   const { showNotification } = useNotistick();
   const [dynamicContent, setDynamicContent] = useState([]);
+  const [videoGallariesInfo, setVideoGallariesInfo] = useState([]);
 
   useEffect(() => {
     if (editData) setOpen(true);
@@ -67,6 +68,20 @@ function PageHeader({ editData, setEditData, reFetchData }) {
       setSubmitting(false);
     }
   };
+  const videoGallaryList = () => {
+    axios
+      .get('/api/website/video_gallaries')
+      .then((res) => {
+        setVideoGallariesInfo(res?.data?.result);
+        // setParentList(res?.data?.menus);
+      })
+      .catch((error) => {});
+  };
+
+  useEffect(() => {
+    videoGallaryList();
+  }, []);
+  useEffect(() => {}, [videoGallaryList]);
   return (
     <>
       {/* page head title and create button ui */}

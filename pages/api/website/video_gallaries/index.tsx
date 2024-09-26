@@ -1,7 +1,6 @@
 import { logFile } from 'utilities_api/handleLogFile';
-// import post from '../../../../controllers/website/;
-import get from '../../../../controllers/website/menu/get';
 import post from 'controllers/website/video_gallaries/post';
+import get from 'controllers/website/video_gallaries/get';
 
 const userHandler = (req, res) => {
   const { method } = req;
