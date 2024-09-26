@@ -8,7 +8,6 @@ import { logFile } from 'utilities_api/handleLogFile';
 
 async function put(req, res, refresh_token) {
     const uploadFolderName = "frontendPhoto";
-
     const fileType = ['image/jpeg', 'image/jpg', 'image/png'];
     const filterFiles = {
         gallery_image: fileType,

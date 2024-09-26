@@ -50,14 +50,12 @@ function PageHeader({ editData, setEditData, reFetchData }) {
 
       if (editData) {
         const res = await axios.patch(`/api/front_end/video_gallaries/${editData.id}`, _values);
-        // fetchData('')
-        console.log({ res });
+        console.log('res...............', { res });
         successResponse(' updated ');
         return;
       }
 
       const res = await axios.post(`/api/front_end/video_gallaries`, _values);
-      console.log({ res });
       successResponse('created');
       // }
     } catch (err) {
