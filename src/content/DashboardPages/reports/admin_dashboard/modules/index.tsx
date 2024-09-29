@@ -20,7 +20,7 @@ const ModulesAdminDashboard = () => {
                     {t(`${selectModule.split('_').join(' ')} Dashboard`)}
                 </Typography>
                 <Typography variant="subtitle2" >
-                    {t('This is ' + selectModule + ' dashboard page')}
+                    {t('This is ' + selectModule.split('_').join(' ') + ' dashboard page')}
                 </Typography>
             </DialogTitle>
 

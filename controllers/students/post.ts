@@ -321,6 +321,14 @@ const postHandle = async (req, res, refresh_token) => {
     // res.status(200).json({ success: 'student created successfully but sms sending failed' });
   } catch (err) {
     logFile.error(err.message)
+    
+    if(err.message.includes('Unique constraint failed on the constraint: `student_informations_student_id_school_id_key`')){
+      return res.status(404).json({error:"Student id is already used, use a unique student id"})
+    }
+    if(err.message.includes('`students_class_registration_no_key`')){
+      return res.status(404).json({error:"Student registration number is already used, use a unique class registration number"})
+    }
+    logFile.error(err.message)
     res.status(404).json({ error: err.message });
   }
 };

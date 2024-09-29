@@ -177,7 +177,6 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
   //   : [];
 
   const permissionsArray_ = auth?.user?.permissions?.length > 0 ? auth?.user?.permissions?.map((permission: any) => permission.value) : [];
-
   return (
     <HeaderWrapper
       display="flex"
@@ -262,6 +261,7 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
             sx={{
               minWidth: '100%',
               color: 'white',
+              textTransform: 'capitalize',
               '& fieldset': {
                 borderRadius: '3px',
                 color: 'white'
@@ -294,7 +294,7 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
           >
             {auth?.user?.role?.title === 'ADMIN' &&
               adminModulesList.map((module, index) => (
-                <MenuItem key={index} value={module}>
+                <MenuItem key={index} value={module} sx={{ textTransform: 'capitalize' }}>
                   {module.split('_').join(' ')}
                 </MenuItem>
               ))}
