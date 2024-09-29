@@ -1,14 +1,6 @@
-import patch from "controllers/front_end/video_gallaries/patch";
 import { logFile } from "utilities_api/handleLogFile";
-// import patch from 'controllers/front_end/website_dynamic_pages/patch';
-// import delete_ from 'controllers/front_end/website_dynamic_pages/delete';
-
-export const config = {
-    api: {
-      bodyParser: false,
-    },
-  };  
-
+import patch from 'controllers/front_end/video_gallaries/patch';
+import delete_ from 'controllers/front_end/video_gallaries/delete'; 
 const id = async (req, res) => {
     try {
         const { method } = req;
@@ -20,13 +12,12 @@ const id = async (req, res) => {
                 patch(req, res);
                 break;
 
-            // case 'DELETE':
-            //     delete_(req, res)
-            //     break;
+            case 'DELETE':
+                delete_(req, res)
+                break;
 
             default:
-                res.setHeader('Allow', ['PATCH']);
-                // res.setHeader('Allow', ['PATCH', 'DELETE']);
+                res.setHeader('Allow', ['PATCH', 'DELETE']);
                 logFile.error(`Method ${method} Not Allowed`);
                 res.status(405).end(`Method ${method} Not Allowed`);
         }

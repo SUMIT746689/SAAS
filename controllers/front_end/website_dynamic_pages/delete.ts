@@ -9,13 +9,13 @@ async function delete_(req, res, refresh_token) {
 
         const { school_id } = refresh_token;
 
-        await prisma.websiteDynamicPage.delete({
+        await prisma.websiteUi.delete({
             where: {
                 id,
                 school_id
             }
         });
-        res.status(200).json({ success: 'Website page deleted successfully!' });
+        res.status(200).json({ success: 'Video Gallary deleted successfully!' });
 
     } catch (err) {
         logFile.error(err.message)

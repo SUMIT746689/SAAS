@@ -47,16 +47,15 @@ function PageHeader({ editData, setEditData, reFetchData }) {
         handleCreateClassClose();
       };
       console.log('_values__', _values);
+
       if (editData) {
         const res = await axios.patch(`/api/front_end/video_gallaries/${editData.id}`, _values);
-        // fetchData('')
-        console.log({ res });
+        console.log('res...............', { res });
         successResponse(' updated ');
         return;
       }
 
-      const res = await axios.post(`/api/website/video_gallaries`, _values);
-      console.log({ res });
+      const res = await axios.post(`/api/front_end/video_gallaries`, _values);
       successResponse('created');
       // }
     } catch (err) {
@@ -68,9 +67,10 @@ function PageHeader({ editData, setEditData, reFetchData }) {
       setSubmitting(false);
     }
   };
+
   const videoGallaryList = () => {
     axios
-      .get('/api/website/video_gallaries')
+      .get('/api/front_end/video_gallaries')
       .then((res) => {
         setVideoGallariesInfo(res?.data?.result);
         // setParentList(res?.data?.menus);
@@ -82,6 +82,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
     videoGallaryList();
   }, []);
   useEffect(() => {}, [videoGallaryList]);
+
   return (
     <>
       {/* page head title and create button ui */}
@@ -107,6 +108,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
         >
           {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
             console.log({ values, errors });
+
             return (
               <form onSubmit={handleSubmit}>
                 <DialogContent dividers sx={{ p: 3 }}>

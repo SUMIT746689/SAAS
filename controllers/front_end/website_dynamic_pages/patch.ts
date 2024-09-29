@@ -6,7 +6,6 @@ import { logFile } from 'utilities_api/handleLogFile';
 
 async function post(req, res, refresh_token) {
   try {
-
     const id = parseInt(req.query.id);
     if (Number.isNaN(id)) throw new Error('Provide invalid id ');
     const { school_id } = refresh_token;
