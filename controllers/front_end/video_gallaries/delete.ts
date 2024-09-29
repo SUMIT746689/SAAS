@@ -5,7 +5,6 @@ async function delete_(req, res, refresh_token) {
     try {
         const {school_id} = refresh_token;
         const id = parseInt(req.query.id);
-        console.log({id})
         if (Number.isNaN(id)) throw new Error('Provide invalid id ');
 
         const resWebsiteUi = await prisma.websiteUi.findFirst({
@@ -26,7 +25,6 @@ async function delete_(req, res, refresh_token) {
             if(vg.id !== id ) return updatedVedioGallery.push(vg);
         });
 
-        console.log({updatedVedioGallery});
 
         await prisma.websiteUi.updateMany({
             where: {
