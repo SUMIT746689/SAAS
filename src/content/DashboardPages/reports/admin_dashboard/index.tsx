@@ -22,7 +22,6 @@ import {
   WebsiteSettingsIcon
 } from '@/components/Icon';
 import Notices from '../../admin_notices';
-import { Attendance } from '../../attendance';
 import ImageSlider from '@/components/ImageSlider/ImageSlider';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/numberFormat';
@@ -31,6 +30,7 @@ import { adminModulesList } from '@/utils/moduleLists';
 import { useContext } from 'react';
 import { ModuleContext } from '@/contexts/ModuleContext';
 import { DashboardQuickLinkButtonWrapper } from '@/components/DashboardQuickLinkButtonWrapper';
+import { Attendance } from '../../attendance';
 
 const colorBlue = '#0052B4';
 const colorLightRed = '#FFE6E2';
