@@ -264,7 +264,7 @@ const Results = () => {
 
       </Dialog>
 
-      <Card sx={{ minHeight: 'calc(100vh - 215px)',mx:0.5 }}>
+      <Card sx={{ minHeight: 'calc(100vh - 215px)', mx: 0.5 }}>
 
 
         {!selectedBulkActions && (
@@ -334,10 +334,10 @@ const Results = () => {
                           {i?.student?.first_name} {i?.student?.middle_name} {i?.student?.last_name}
                         </TableBodyCellWrapper>
                         <TableBodyCellWrapper align={'center'}>
-                        {i?.student?.username}
+                          {i?.student?.username}
                         </TableBodyCellWrapper>
                         <TableBodyCellWrapper align={'center'}>
-                        {i?.student?.password}
+                          {i?.student?.password}
                         </TableBodyCellWrapper>
                         <TableBodyCellWrapper align={'center'}>
                           {i?.student?.class_name}
@@ -363,7 +363,7 @@ const Results = () => {
                             </IconButton>
                           </Tooltip>
 
-                          <Tooltip title={t('Delete')} arrow sx={{ml:1}}>
+                          <Tooltip title={t('Delete')} arrow sx={{ ml: 1 }}>
                             <IconButton
                               onClick={() => handleConfirmDelete(i.id)}
                               color="primary"

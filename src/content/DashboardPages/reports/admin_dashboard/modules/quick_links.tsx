@@ -58,12 +58,16 @@ const routine = [
     { color: quickLinksColors[0], linkUrl: "/management/routine/exam_routine", icon: <RoutineIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "Exam Routine" },
 ]
 const study_materials = [
+    { color: quickLinksColors[0], linkUrl: "/management/homework", icon: <WebsiteSettingsIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "homework" },
+]
+const card_generate = [
+    { color: quickLinksColors[0], linkUrl: "/admit_card", icon: <TeacherRoutineIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "Admit Card" },
     { color: quickLinksColors[2], linkUrl: "/certificate/certificate_template", icon: <TeacherRoutineIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />, name: "Certificate Templates" },
     { color: quickLinksColors[1], linkUrl: "/certificate/student_certificate", icon: <TeacherRoutineIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />, name: "Student Certificates" },
     { color: quickLinksColors[0], linkUrl: "/certificate/teacher_certificate", icon: <TeacherRoutineIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "Teacher Certificates" },
     { color: quickLinksColors[2], linkUrl: "/certificate/employee_certificate", icon: <TeacherRoutineIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />, name: "Employee Certificates" },
-
 ]
+
 const sms = [
     { color: quickLinksColors[0], linkUrl: "/bulk_sms_and_email/send_sms", icon: <SmsIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "Send Sms" },
     { color: quickLinksColors[1], linkUrl: "/voice_msg/send_voice_msg", icon: <SmsIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />, name: "Send Voice Sms" },
@@ -116,6 +120,6 @@ const examination = [
 
 export default {
     all_users, online_addmission, students, teachers,
-    other_users, attendance, accounting, notice, routine, sms,
+    other_users, attendance, accounting, notice, routine, sms, card_generate,
     study_materials, website_settings, report, examination
 }
