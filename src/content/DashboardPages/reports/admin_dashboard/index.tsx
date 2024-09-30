@@ -376,7 +376,7 @@ function AdminDashboardContent({ blockCount = null }) {
               <StaffsIcon fillColor="white" />
               <Grid fontWeight={700} fontSize={{ xs: 12, xl: 16 }}>
                 <Grid sx={{}}>Total Staffs</Grid>
-                <Grid>{blockCount?.total_staffs}</Grid>
+                <Grid>{blockCount?.total_staff?.count}</Grid>
               </Grid>
             </Card>
           </Grid>

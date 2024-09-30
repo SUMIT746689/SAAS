@@ -100,6 +100,11 @@ export async function getServerSideProps(context: any) {
             where: { school_id: refresh_token?.school_id, deleted_at: null }
           })
         };
+        blockCount['total_staff'] = {
+          count: await prisma.user.count({
+            where: { school_id: refresh_token?.school_id, deleted_at: null, user_role: { title: { not: 'STUDENT' } } }
+          })
+        };
         blockCount['school'] = school;
         blockCount['banners'] = await prisma.banners.findFirst({});
 
@@ -173,6 +178,7 @@ export async function getServerSideProps(context: any) {
 }
 
 function MainDashboard({ blockCount }) {
+  console.log({ blockCount });
   switch (blockCount?.role) {
     case 'teacher':
       return (
