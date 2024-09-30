@@ -155,30 +155,30 @@ const quickLinks = [
     name: 'Examinations'
   },
 
-  {
-    color: quickLinksColors[1],
-    linkUrl: 'dashboards/modules/admin',
-    icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />,
-    name: 'Inventory Management'
-  },
-  {
-    color: quickLinksColors[2],
-    linkUrl: 'dashboards/modules/admin',
-    icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />,
-    name: 'Hostel Managment'
-  },
-  {
-    color: quickLinksColors[0],
-    linkUrl: 'dashboards/modules/admin',
-    icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />,
-    name: 'Library Managment'
-  },
-  {
-    color: quickLinksColors[2],
-    linkUrl: 'dashboards/modules/admin',
-    icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />,
-    name: 'E-Learning Management'
-  }
+  // {
+  //   color: quickLinksColors[1],
+  //   linkUrl: 'dashboards/modules/admin',
+  //   icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />,
+  //   name: 'Inventory Management'
+  // },
+  // {
+  //   color: quickLinksColors[2],
+  //   linkUrl: 'dashboards/modules/admin',
+  //   icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />,
+  //   name: 'Hostel Managment'
+  // },
+  // {
+  //   color: quickLinksColors[0],
+  //   linkUrl: 'dashboards/modules/admin',
+  //   icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />,
+  //   name: 'Library Managment'
+  // },
+  // {
+  //   color: quickLinksColors[2],
+  //   linkUrl: 'dashboards/modules/admin',
+  //   icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />,
+  //   name: 'E-Learning Management'
+  // }
 
   // { color: quickLinksColors[2], linkUrl: "#", icon: <TeacherRoutineIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />, name: "Teacher Routine" },
   // { color: quickLinksColors[0], linkUrl: "/management/exam", icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "Exam" },
