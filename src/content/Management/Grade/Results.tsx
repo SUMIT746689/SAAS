@@ -1,12 +1,4 @@
-import {
-  FC,
-  ChangeEvent,
-  MouseEvent,
-  useState,
-  ReactElement,
-  Ref,
-  forwardRef
-} from 'react';
+import { FC, ChangeEvent, MouseEvent, useState, ReactElement, Ref, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   Avatar,
@@ -76,8 +68,6 @@ const ButtonError = styled(Button)(
     `
 );
 
-
-
 interface ResultsProps {
   grade: Project[];
   editGrade: object;
@@ -89,28 +79,19 @@ interface Filters {
   status?: ProjectStatus;
 }
 
-const Transition = forwardRef(function Transition(
-  props: TransitionProps & { children: ReactElement<any, any> },
-  ref: Ref<unknown>
-) {
+const Transition = forwardRef(function Transition(props: TransitionProps & { children: ReactElement<any, any> }, ref: Ref<unknown>) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-
-const applyFilters = (
-  rooms: Project[],
-  query: string,
-  filters: Filters
-): Project[] => {
+const applyFilters = (rooms: Project[], query: string, filters: Filters): Project[] => {
   return rooms.filter((project) => {
     let matches = true;
 
     if (query) {
-      const properties = ['lower_mark','upper_mark','grade'];
+      const properties = ['lower_mark', 'upper_mark', 'grade'];
       let containsQuery = false;
 
       properties.forEach((property) => {
-        
         if (project[property]?.toString().toLowerCase().includes(query.toLowerCase())) {
           containsQuery = true;
         }
@@ -137,11 +118,7 @@ const applyFilters = (
   });
 };
 
-const applyPagination = (
-  rooms: Project[],
-  page: number,
-  limit: number
-): Project[] => {
+const applyPagination = (rooms: Project[], page: number, limit: number): Project[] => {
   return rooms.slice(page * limit, page * limit + limit);
 };
 
@@ -151,12 +128,11 @@ const Results: FC<ResultsProps> = ({ grade, setEditGrade, editGrade, reFetchData
 
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
-  const [searchValue, setSearchValue] = useState<string | null>(null)
+  const [searchValue, setSearchValue] = useState<string | null>(null);
   const [query, setQuery] = useState<string>('');
   const [filters, setFilters] = useState<Filters>({
     status: null
   });
-
 
   const handlePageChange = (_event: any, newPage: number): void => {
     setPage(newPage);
@@ -168,9 +144,6 @@ const Results: FC<ResultsProps> = ({ grade, setEditGrade, editGrade, reFetchData
 
   const filteredGrades = applyFilters(grade, query, filters);
   const paginatedGrades = applyPagination(filteredGrades, page, limit);
-
- 
- 
 
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [deleteSchoolId, setDeleteSchoolId] = useState(null);
@@ -188,8 +161,8 @@ const Results: FC<ResultsProps> = ({ grade, setEditGrade, editGrade, reFetchData
   const handleDeleteCompleted = async () => {
     try {
       await axios.delete(`/api/grade/${deleteSchoolId}`);
-      closeConfirmDelete()
-      reFetchData()
+      closeConfirmDelete();
+      reFetchData();
       showNotification('The grade has been deleted successfully');
     } catch (err) {
       setOpenConfirmDelete(false);
@@ -209,10 +182,10 @@ const Results: FC<ResultsProps> = ({ grade, setEditGrade, editGrade, reFetchData
           <Grid item xs={12}>
             <Box>
               <DebounceInput
-              debounceTimeout={500}
-              handleDebounce={(v) => setQuery(v)}
-              value={searchValue}
-              handleChange={(v) => setSearchValue(v.target?.value)}
+                debounceTimeout={500}
+                handleDebounce={(v) => setQuery(v)}
+                value={searchValue}
+                handleChange={(v) => setSearchValue(v.target?.value)}
                 label={'Search by grade name...'}
                 InputProps={{
                   startAdornment: (
@@ -227,31 +200,24 @@ const Results: FC<ResultsProps> = ({ grade, setEditGrade, editGrade, reFetchData
         </Grid>
       </Card>
       <Card sx={{ minHeight: 'calc(100vh - 450px) !important' }}>
-
-     
-          <Box
-            p={1}
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Box>
-              <Typography component="span" variant="subtitle1">
-                {t('Showing')}:
-              </Typography>{' '}
-              <b>{paginatedGrades.length}</b> <b>{t('grades')}</b>
-            </Box>
-            <TablePagination
-              component="div"
-              count={filteredGrades.length}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleLimitChange}
-              page={page}
-              rowsPerPage={limit}
-              rowsPerPageOptions={[5, 10, 15]}
-            />
+        <Box p={1} display="flex" alignItems="center" justifyContent="space-between">
+          <Box>
+            <Typography component="span" variant="subtitle1">
+              {t('Showing')}:
+            </Typography>{' '}
+            <b>{paginatedGrades.length}</b> <b>{t('grades')}</b>
           </Box>
-        
+          <TablePagination
+            component="div"
+            count={filteredGrades.length}
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleLimitChange}
+            page={page}
+            rowsPerPage={limit}
+            rowsPerPageOptions={[5, 10, 15]}
+          />
+        </Box>
+
         <Divider />
 
         {paginatedGrades.length === 0 ? (
@@ -266,9 +232,7 @@ const Results: FC<ResultsProps> = ({ grade, setEditGrade, editGrade, reFetchData
               color="text.secondary"
               align="center"
             >
-              {t(
-                "We couldn't find any rooms matching your search criteria"
-              )}
+              {t("We couldn't find any rooms matching your search criteria")}
             </Typography>
           </>
         ) : (
@@ -279,21 +243,15 @@ const Results: FC<ResultsProps> = ({ grade, setEditGrade, editGrade, reFetchData
                   <TableRow>
                     <TableHeaderCellWrapper>{t('Lower mark')}</TableHeaderCellWrapper>
                     <TableHeaderCellWrapper>{t('Upper mark')}</TableHeaderCellWrapper>
-                    <TableHeaderCellWrapper>{t('Point')}     </TableHeaderCellWrapper>
-                    <TableHeaderCellWrapper>{t('Grade')}     </TableHeaderCellWrapper>
-                    <TableHeaderCellWrapper>{t('Actions')}   </TableHeaderCellWrapper>
-
+                    <TableHeaderCellWrapper>{t('Point')} </TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper>{t('Grade')} </TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper>{t('Actions')} </TableHeaderCellWrapper>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {paginatedGrades.map((singleGrade) => {
-                   
                     return (
-                      <TableRow
-                        hover
-                        key={singleGrade.id}
-                      >
-
+                      <TableRow hover key={singleGrade.id}>
                         <TableBodyCellWrapper>{singleGrade?.lower_mark}</TableBodyCellWrapper>
                         <TableBodyCellWrapper>{singleGrade?.upper_mark}</TableBodyCellWrapper>
                         <TableBodyCellWrapper>{singleGrade?.point}</TableBodyCellWrapper>
@@ -302,20 +260,12 @@ const Results: FC<ResultsProps> = ({ grade, setEditGrade, editGrade, reFetchData
                         <TableBodyCellWrapper>
                           <Typography noWrap>
                             <Tooltip title={t('Edit')} arrow>
-                              <IconButton
-                                onClick={() => setEditGrade(singleGrade)}
-                                color="primary"
-                              >
+                              <IconButton onClick={() => setEditGrade(singleGrade)} color="primary">
                                 <LaunchTwoToneIcon fontSize="small" />
                               </IconButton>
                             </Tooltip>
                             <Tooltip title={t('Delete')} arrow>
-                              <IconButton
-                                onClick={() =>
-                                  handleConfirmDelete(singleGrade.id)
-                                }
-                                color="primary"
-                              >
+                              <IconButton onClick={() => handleConfirmDelete(singleGrade.id)} color="primary">
                                 <DeleteTwoToneIcon fontSize="small" />
                               </IconButton>
                             </Tooltip>
@@ -331,22 +281,8 @@ const Results: FC<ResultsProps> = ({ grade, setEditGrade, editGrade, reFetchData
         )}
       </Card>
 
-
-      <DialogWrapper
-        open={openConfirmDelete}
-        maxWidth="sm"
-        fullWidth
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={closeConfirmDelete}
-      >
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-          p={5}
-        >
+      <DialogWrapper open={openConfirmDelete} maxWidth="sm" fullWidth TransitionComponent={Transition} keepMounted onClose={closeConfirmDelete}>
+        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" p={5}>
           <AvatarError>
             <CloseIcon />
           </AvatarError>

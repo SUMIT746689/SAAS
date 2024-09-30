@@ -127,10 +127,7 @@ const SubMenuWrapper = styled(Box)(
                 content: ' ';
                 background: ${theme.colors.alpha.trueWhite[100]};
                 opacity: 0;
-                transition: ${theme.transitions.create([
-                  'transform',
-                  'opacity'
-                ])};
+                transition: ${theme.transitions.create(['transform', 'opacity'])};
                 width: 6px;
                 height: 6px;
                 transform: scale(0);
@@ -155,22 +152,9 @@ const SubMenuWrapper = styled(Box)(
 `
 );
 
-const renderSidebarMenuItems = ({
-  permissions = [],
-  items,
-  path
-}: {
-  permissions: any;
-  items: MenuItem[];
-  path: string;
-}): JSX.Element => (
+const renderSidebarMenuItems = ({ permissions = [], items, path }: { permissions: any; items: MenuItem[]; path: string }): JSX.Element => (
   <SubMenuWrapper>
-    <List component="div">
-      {items?.reduce(
-        (ev, item) => reduceChildRoutes({ permissions, ev, item, path }),
-        []
-      )}
-    </List>
+    <List component="div">{items?.reduce((ev, item) => reduceChildRoutes({ permissions, ev, item, path }), [])}</List>
   </SubMenuWrapper>
 );
 
@@ -310,10 +294,7 @@ const reduceChildRoutes = ({
           </SidebarMenuItem>
         );
     } else if (item.name === 'Attendence') {
-      if (
-        permissions.findIndex((i) => i.group == 'attendence') > -1 ||
-        permissionVerify(permissions, ['show_student_exam_attendence'])
-      )
+      if (permissions.findIndex((i) => i.group == 'attendence') > -1 || permissionVerify(permissions, ['show_student_exam_attendence']))
         ev.push(
           <SidebarMenuItem
             key={key}
@@ -383,14 +364,7 @@ const reduceChildRoutes = ({
           </SidebarMenuItem>
         );
     } else if (item.name === 'Result') {
-      if (
-        permissionVerify(permissions, [
-          'create_result',
-          'show_section_wise_result',
-          'show_student_wise_result',
-          'show_student_result'
-        ])
-      )
+      if (permissionVerify(permissions, ['create_result', 'show_section_wise_result', 'show_student_wise_result', 'show_student_result']))
         ev.push(
           <SidebarMenuItem
             key={key}
@@ -482,15 +456,7 @@ const reduceChildRoutes = ({
           </SidebarMenuItem>
         );
     } else if (item.name === 'Fees') {
-      if (
-        permissionVerify(permissions, [
-          'create_fee',
-          'show_fee',
-          'collect_fee',
-          'student_fee_payment',
-          'student_fee_payment_history'
-        ])
-      )
+      if (permissionVerify(permissions, ['create_fee', 'show_fee', 'collect_fee', 'student_fee_payment', 'student_fee_payment_history']))
         ev.push(
           <SidebarMenuItem
             key={key}
@@ -511,12 +477,7 @@ const reduceChildRoutes = ({
           </SidebarMenuItem>
         );
     } else if (item.name === 'Routine') {
-      if (
-        permissionVerify(permissions, [
-          'show_class_routine',
-          'show_exam_routine'
-        ])
-      )
+      if (permissionVerify(permissions, ['show_class_routine', 'show_exam_routine']))
         ev.push(
           <SidebarMenuItem
             key={key}
@@ -537,13 +498,7 @@ const reduceChildRoutes = ({
           </SidebarMenuItem>
         );
     } else if (item.name === 'Daily Notes') {
-      if (
-        permissionVerify(permissions, [
-          'create_note',
-          'update_note',
-          'show_note'
-        ])
-      )
+      if (permissionVerify(permissions, ['create_note', 'update_note', 'show_note']))
         ev.push(
           <SidebarMenuItem
             key={key}
@@ -680,351 +635,101 @@ const reduceChildRoutes = ({
       //     sub_menu();
       //     break;
       // }
-      if (
-        item.name === 'Sections' &&
-        permissions?.findIndex((i) => i.group == 'section') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Leave Application' &&
-        permissions?.findIndex((i) => i.group == 'leave') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Subjects' &&
-        permissions?.findIndex((i) => i.group == 'subject') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Schools' &&
-        permissions?.findIndex((i) => i.group == 'school') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Teachers' &&
-        permissions?.findIndex((i) => i.group == 'teacher') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Students' &&
-        permissions?.findIndex((i) => i.group == 'student') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Sessions' &&
-        permissions?.findIndex((i) => i.group == 'session') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Period' &&
-        permissions?.findIndex((i) => i.group == 'period') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Discount' &&
-        permissions?.findIndex((i) => i.group == 'discount') > -1
-      )
-        sub_menu();
+      if (item.name === 'Sections' && permissions?.findIndex((i) => i.group == 'section') > -1) sub_menu();
+      if (item.name === 'Leave Application' && permissions?.findIndex((i) => i.group == 'leave') > -1) sub_menu();
+      if (item.name === 'Subjects' && permissions?.findIndex((i) => i.group == 'subject') > -1) sub_menu();
+      if (item.name === 'Schools' && permissions?.findIndex((i) => i.group == 'school') > -1) sub_menu();
+      if (item.name === 'Teachers' && permissions?.findIndex((i) => i.group == 'teacher') > -1) sub_menu();
+      if (item.name === 'Students' && permissions?.findIndex((i) => i.group == 'student') > -1) sub_menu();
+      if (item.name === 'Sessions' && permissions?.findIndex((i) => i.group == 'session') > -1) sub_menu();
+      if (item.name === 'Period' && permissions?.findIndex((i) => i.group == 'period') > -1) sub_menu();
+      if (item.name === 'Discount' && permissions?.findIndex((i) => i.group == 'discount') > -1) sub_menu();
 
       // if (item.name === 'Routine' && permissions?.findIndex(i => i.group == 'routine') > -1) sub_menu();
 
-      if (
-        item.name === 'Classes' &&
-        permissions?.findIndex((i) => i.group == 'class') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Rooms' &&
-        permissions?.findIndex((i) => i.group == 'room') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Grading system' &&
-        permissions?.findIndex((i) => i.group == 'grade') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Exam' &&
-        permissions?.findIndex((i) => i.group == 'exam') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'CollectFee' &&
-        permissions?.findIndex((i) => i.group == 'collect_fee') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Holidays' &&
-        permissions?.findIndex((i) => i.group == 'holiday') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Academic Years' &&
-        permissions?.findIndex((i) => i.group == 'academic_years') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Department' &&
-        permissions?.findIndex((i) => i.group == 'department') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Users' &&
-        permissions?.findIndex((i) => i.group == 'user') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Package' &&
-        permissions?.findIndex((i) => i.group == 'package') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Front End' &&
-        permissions?.findIndex((i) => i.group == 'front_end') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Notice' &&
-        permissions?.findIndex((i) => i.group === 'notice') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Pending Package' &&
-        permissions?.findIndex((i) => i.group == 'pending_package') > -1
-      )
-        sub_menu();
+      if (item.name === 'Classes' && permissions?.findIndex((i) => i.group == 'class') > -1) sub_menu();
+      if (item.name === 'Rooms' && permissions?.findIndex((i) => i.group == 'room') > -1) sub_menu();
+      if (item.name === 'Grading system' && permissions?.findIndex((i) => i.group == 'grade') > -1) sub_menu();
+      if (item.name === 'Exam' && permissions?.findIndex((i) => i.group == 'exam') > -1) sub_menu();
+      if (item.name === 'CollectFee' && permissions?.findIndex((i) => i.group == 'collect_fee') > -1) sub_menu();
+      if (item.name === 'Holidays' && permissions?.findIndex((i) => i.group == 'holiday') > -1) sub_menu();
+      if (item.name === 'Academic Years' && permissions?.findIndex((i) => i.group == 'academic_years') > -1) sub_menu();
+      if (item.name === 'Department' && permissions?.findIndex((i) => i.group == 'department') > -1) sub_menu();
+      if (item.name === 'Users' && permissions?.findIndex((i) => i.group == 'user') > -1) sub_menu();
+      if (item.name === 'Package' && permissions?.findIndex((i) => i.group == 'package') > -1) sub_menu();
+      if (item.name === 'Front End' && permissions?.findIndex((i) => i.group == 'front_end') > -1) sub_menu();
+      if (item.name === 'Notice' && permissions?.findIndex((i) => i.group === 'notice') > -1) sub_menu();
+      if (item.name === 'Pending Package' && permissions?.findIndex((i) => i.group == 'pending_package') > -1) sub_menu();
 
-      if (
-        item.name === 'Students Attendence' &&
-        permissions?.findIndex((i) => i.value == 'create_student_attendence') >
-          -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Exam Attendence' &&
-        permissions?.findIndex((i) => i.value == 'create_exam_attendence') > -1
-      )
-        sub_menu();
-      if (
-        item.name === 'Employee Attendence' &&
-        permissions?.findIndex((i) => i.value == 'create_employee_attendence') >
-          -1
-      )
-        sub_menu();
+      if (item.name === 'Students Attendence' && permissions?.findIndex((i) => i.value == 'create_student_attendence') > -1) sub_menu();
+      if (item.name === 'Exam Attendence' && permissions?.findIndex((i) => i.value == 'create_exam_attendence') > -1) sub_menu();
+      if (item.name === 'Employee Attendence' && permissions?.findIndex((i) => i.value == 'create_employee_attendence') > -1) sub_menu();
 
       //validate using permissions values
 
       // admistrator
-      if (
-        item.name === 'Staffs' &&
-        permissionVerify(permissions, [
-          'create_staff',
-          'create_accountant',
-          'create_librarian',
-          'create_receptionist'
-        ])
-      )
+      if (item.name === 'Staffs' && permissionVerify(permissions, ['create_staff', 'create_accountant', 'create_librarian', 'create_receptionist']))
         sub_menu();
 
       //buy sms
-      if (
-        item.name === 'Pending Buy Sms' &&
-        permissionVerify(permissions, ['pending_buy_sms'])
-      )
-        sub_menu();
+      if (item.name === 'Pending Buy Sms' && permissionVerify(permissions, ['pending_buy_sms'])) sub_menu();
 
       // attendence
-      if (
-        item.name === 'Student Exam Attendence' &&
-        permissionVerify(permissions, [item.value])
-      )
-        sub_menu();
+      if (item.name === 'Student Exam Attendence' && permissionVerify(permissions, [item.value])) sub_menu();
 
       //Routine
-      if (
-        item.name === 'Class Routine' &&
-        permissionVerify(permissions, ['show_class_routine'])
-      )
-        sub_menu();
-      if (
-        item.name === 'Exam Routine' &&
-        permissionVerify(permissions, ['show_exam_routine'])
-      )
-        sub_menu();
+      if (item.name === 'Class Routine' && permissionVerify(permissions, ['show_class_routine'])) sub_menu();
+      if (item.name === 'Exam Routine' && permissionVerify(permissions, ['show_exam_routine'])) sub_menu();
 
       //result section
-      if (
-        item.name === 'Section Wise Result' &&
-        permissionVerify(permissions, [
-          'create_result',
-          'show_section_wise_result'
-        ])
-      )
-        sub_menu();
-      if (
-        item.name === 'Exam Addtional Marks' &&
-        permissionVerify(permissions, [
-          'create_result',
-          'show_section_wise_result'
-        ])
-      )
-        sub_menu();
-      if (
-        item.name === 'Student Wise Result' &&
-        permissionVerify(permissions, ['show_student_wise_result'])
-      )
-        sub_menu();
-      if (
-        item.name === 'Student Result' &&
-        permissionVerify(permissions, ['show_student_result'])
-      )
-        sub_menu();
+      if (item.name === 'Section Wise Result' && permissionVerify(permissions, ['create_result', 'show_section_wise_result'])) sub_menu();
+      if (item.name === 'Exam Addtional Marks' && permissionVerify(permissions, ['create_result', 'show_section_wise_result'])) sub_menu();
+      if (item.name === 'Student Wise Result' && permissionVerify(permissions, ['show_student_wise_result'])) sub_menu();
+      if (item.name === 'Student Result' && permissionVerify(permissions, ['show_student_result'])) sub_menu();
 
       //fees
-      if (
-        item.name === 'Fees' &&
-        permissionVerify(permissions, ['create_fee', 'show_fee'])
-      )
-        sub_menu();
-      if (
-        item.name === 'Collect Fee' &&
-        permissionVerify(permissions, ['collect_fee'])
-      )
-        sub_menu();
-      if (
-        item.name === 'Payment' &&
-        permissionVerify(permissions, ['student_fee_payment'])
-      )
-        sub_menu();
-      if (
-        item.name === 'Payment History' &&
-        permissionVerify(permissions, ['student_fee_payment_history'])
-      )
-        sub_menu();
+      if (item.name === 'Fees' && permissionVerify(permissions, ['create_fee', 'show_fee'])) sub_menu();
+      if (item.name === 'Collect Fee' && permissionVerify(permissions, ['collect_fee'])) sub_menu();
+      if (item.name === 'Payment' && permissionVerify(permissions, ['student_fee_payment'])) sub_menu();
+      if (item.name === 'Payment History' && permissionVerify(permissions, ['student_fee_payment_history'])) sub_menu();
 
       // certificates
-      if (
-        item.name === 'Certificate Template' &&
-        permissionVerify(permissions, ['create_certificate_template'])
-      )
-        sub_menu();
-      if (
-        item.name === 'Student Certificate' &&
-        permissionVerify(permissions, ['show_student_certificate'])
-      )
-        sub_menu();
-      if (
-        item.name === 'Teacher Certificate' &&
-        permissionVerify(permissions, ['show_teacher_certificate'])
-      )
-        sub_menu();
-      if (
-        item.name === 'Employee Certificate' &&
-        permissionVerify(permissions, ['show_employee_certificate'])
-      )
-        sub_menu();
+      if (item.name === 'Certificate Template' && permissionVerify(permissions, ['create_certificate_template'])) sub_menu();
+      if (item.name === 'Student Certificate' && permissionVerify(permissions, ['show_student_certificate'])) sub_menu();
+      if (item.name === 'Teacher Certificate' && permissionVerify(permissions, ['show_teacher_certificate'])) sub_menu();
+      if (item.name === 'Employee Certificate' && permissionVerify(permissions, ['show_employee_certificate'])) sub_menu();
 
       // student class notes
-      if (
-        item.name === 'Entry Notes' &&
-        permissionVerify(permissions, ['create_note', 'update_note'])
-      )
-        sub_menu();
-      if (
-        item.name === 'Show Notes' &&
-        permissionVerify(permissions, ['show_note'])
-      )
-        sub_menu();
+      if (item.name === 'Entry Notes' && permissionVerify(permissions, ['create_note', 'update_note'])) sub_menu();
+      if (item.name === 'Show Notes' && permissionVerify(permissions, ['show_note'])) sub_menu();
 
       // syllebus
-      if (
-        item.name === 'Syllabus' &&
-        permissionVerify(permissions, ['show_syllabus'])
-      )
-        sub_menu();
+      if (item.name === 'Syllabus' && permissionVerify(permissions, ['show_syllabus'])) sub_menu();
 
       //teacher
-      if (
-        item.name === 'Teacher Exam Routine' &&
-        permissionVerify(permissions, ['show_teacher_exam_routine'])
-      )
-        sub_menu();
+      if (item.name === 'Teacher Exam Routine' && permissionVerify(permissions, ['show_teacher_exam_routine'])) sub_menu();
       // homework
-      if (
-        item.name === 'Home work' &&
-        permissionVerify(permissions, ['homework'])
-      )
-        sub_menu();
+      if (item.name === 'Home work' && permissionVerify(permissions, ['homework'])) sub_menu();
       // banners
-      if (
-        item.name === 'Banners' &&
-        permissionVerify(permissions, ['create_banner'])
-      )
-        sub_menu();
+      if (item.name === 'Banners' && permissionVerify(permissions, ['create_banner'])) sub_menu();
 
       //package
-      if (
-        item.name === 'Package payment history' &&
-        permissionVerify(permissions, ['package_payment_history'])
-      )
-        sub_menu();
+      if (item.name === 'Package payment history' && permissionVerify(permissions, ['package_payment_history'])) sub_menu();
 
       //settings
-      if (
-        item.name === 'Package Request' &&
-        permissionVerify(permissions, ['package_request'])
-      )
-        sub_menu();
-      if (
-        item.name === 'Payment Gateway' &&
-        permissionVerify(permissions, ['add_payment_gateway_credentials'])
-      )
-        sub_menu();
-      if (
-        item.name === 'Sms Request' &&
-        permissionVerify(permissions, ['request_buy_sms'])
-      )
-        sub_menu();
-      if (
-        item.name === 'SMS' &&
-        permissionVerify(permissions, ['create_sms_gateway'])
-      )
-        sub_menu();
-      if (
-        item.name === 'Student Auto Sent Sms' &&
-        permissionVerify(permissions, ['modify_student_auto_sent_sms'])
-      )
-        sub_menu();
+      if (item.name === 'Package Request' && permissionVerify(permissions, ['package_request'])) sub_menu();
+      if (item.name === 'Payment Gateway' && permissionVerify(permissions, ['add_payment_gateway_credentials'])) sub_menu();
+      if (item.name === 'Sms Request' && permissionVerify(permissions, ['request_buy_sms'])) sub_menu();
+      if (item.name === 'SMS' && permissionVerify(permissions, ['create_sms_gateway'])) sub_menu();
+      if (item.name === 'Student Auto Sent Sms' && permissionVerify(permissions, ['modify_student_auto_sent_sms'])) sub_menu();
 
       // all sms gateways
-      if (
-        item.name === 'All SMS Gateways' &&
-        permissionVerify(permissions, ['add_all_sms_gateways'])
-      )
-        sub_menu();
+      if (item.name === 'All SMS Gateways' && permissionVerify(permissions, ['add_all_sms_gateways'])) sub_menu();
 
       // voice sms
-      if (
-        item.name === 'Send Voice' &&
-        permissionVerify(permissions, ['send_voice_sms'])
-      )
-        sub_menu();
-      if (
-        item.name === 'Gateway' &&
-        permissionVerify(permissions, [
-          'create_voice_sms_gateway',
-          'show_voice_sms_gateway'
-        ])
-      )
-        sub_menu();
-      if (
-        item.name === 'Template' &&
-        permissionVerify(permissions, [
-          'show_voice_sms_templates',
-          'create_voice_sms_template'
-        ])
-      )
-        sub_menu();
+      if (item.name === 'Send Voice' && permissionVerify(permissions, ['send_voice_sms'])) sub_menu();
+      if (item.name === 'Gateway' && permissionVerify(permissions, ['create_voice_sms_gateway', 'show_voice_sms_gateway'])) sub_menu();
+      if (item.name === 'Template' && permissionVerify(permissions, ['show_voice_sms_templates', 'create_voice_sms_template'])) sub_menu();
     } else sub_menu();
     // {
     // if (!permissions?.includes('create_admin')) sub_menu();
@@ -1053,9 +758,7 @@ function SidebarMenu() {
         {({ user }) => {
           const permissions = [];
           if (user?.permissions?.length > 0) {
-            user.permissions.map((permission: any) =>
-              permissions.push(permission)
-            );
+            user.permissions.map((permission: any) => permissions.push(permission));
           }
           // @ts-ignore
           const roleTitle = user?.role?.title;
@@ -1069,84 +772,79 @@ function SidebarMenu() {
           const selectRoleWiseMenuItems = allItems[`${roleLower}Items`];
           const selectModuleFromRoleWiseMenuItems = selectRoleWiseMenuItems ? selectRoleWiseMenuItems[selectModule] : [{ items: [] }];
           const showMenuItems = [{ items: [] }];
-          if (Array.isArray(selectModuleFromRoleWiseMenuItems) && selectModuleFromRoleWiseMenuItems[0]?.items && selectRoleWiseMenuItems?.module_dashboard) {
-            showMenuItems[0].items = [
-              selectRoleWiseMenuItems.module_dashboard,
-              ...selectModuleFromRoleWiseMenuItems[0]?.items
-            ];
+          if (
+            Array.isArray(selectModuleFromRoleWiseMenuItems) &&
+            selectModuleFromRoleWiseMenuItems[0]?.items &&
+            selectRoleWiseMenuItems?.module_dashboard
+          ) {
+            showMenuItems[0].items = [selectRoleWiseMenuItems.module_dashboard, ...selectModuleFromRoleWiseMenuItems[0]?.items];
           }
           if (!['ADMIN', 'TEACHER', 'STUDENT'].includes(roleTitle))
             return (
               <>
-                {
-                  allUserMenuItems?.map((section: any) => (
-                    <MenuWrapper key={section.heading}>
-                      <List
-                        component="div"
-                        subheader={
-                          <ListSubheader component="div" disableSticky>
-                            {t(section.heading)}
-                          </ListSubheader>
-                        }
-                      >
-                        {renderSidebarMenuItems({
-                          permissions: permissions,
-                          items: section.items,
-                          path: router.asPath
-                        })}
-                      </List>
-                    </MenuWrapper>
-                  ))
-                }
+                {allUserMenuItems?.map((section: any) => (
+                  <MenuWrapper key={section.heading}>
+                    <List
+                      component="div"
+                      subheader={
+                        <ListSubheader component="div" disableSticky>
+                          {t(section.heading)}
+                        </ListSubheader>
+                      }
+                    >
+                      {renderSidebarMenuItems({
+                        permissions: permissions,
+                        items: section.items,
+                        path: router.asPath
+                      })}
+                    </List>
+                  </MenuWrapper>
+                ))}
               </>
             );
 
           return (
             <>
-              {
-                dashboardMenuItem.map((section: any) => (
-                  <MenuWrapper key={section.heading}>
-                    <List
-                      component="div"
-                      subheader={
-                        <ListSubheader component="div" disableSticky>
-                          {t(section.heading)}
-                        </ListSubheader>
-                      }
-                    >
-                      {renderSidebarMenuItems({
-                        permissions: permissions,
-                        items: section.items,
-                        path: router.asPath
-                      })}
-                    </List>
-                  </MenuWrapper>
-                ))
-              }
-              <Grid textTransform={"uppercase"} pl={2} fontWeight={700} sx={{ color: theme => theme.colors.alpha.white[70] }}>
+              {dashboardMenuItem.map((section: any) => (
+                <MenuWrapper key={section.heading}>
+                  <List
+                    component="div"
+                    subheader={
+                      <ListSubheader component="div" disableSticky>
+                        {t(section.heading)}
+                      </ListSubheader>
+                    }
+                  >
+                    {renderSidebarMenuItems({
+                      permissions: permissions,
+                      items: section.items,
+                      path: router.asPath
+                    })}
+                  </List>
+                </MenuWrapper>
+              ))}
+              <Grid textTransform={'uppercase'} pl={2} fontWeight={700} sx={{ color: (theme) => theme.colors.alpha.white[70] }}>
                 {selectModule && `${selectModule.split('_').join(' ')} Module :`}
               </Grid>
               {/* selected nav for users */}
-              {
-                showMenuItems?.map((section: any) => (
-                  <MenuWrapper key={section.heading}>
-                    <List
-                      component="div"
-                      subheader={
-                        <ListSubheader component="div" disableSticky>
-                          {t(section.heading)}
-                        </ListSubheader>
-                      }
-                    >
-                      {renderSidebarMenuItems({
-                        permissions: permissions,
-                        items: section.items,
-                        path: router.asPath
-                      })}
-                    </List>
-                  </MenuWrapper>
-                ))
-              }
+              {showMenuItems?.map((section: any) => (
+                <MenuWrapper key={section.heading}>
+                  <List
+                    component="div"
+                    subheader={
+                      <ListSubheader component="div" disableSticky>
+                        {t(section.heading)}
+                      </ListSubheader>
+                    }
+                  >
+                    {renderSidebarMenuItems({
+                      permissions: permissions,
+                      items: section.items,
+                      path: router.asPath
+                    })}
+                  </List>
+                </MenuWrapper>
+              ))}
             </>
           );
         }}
