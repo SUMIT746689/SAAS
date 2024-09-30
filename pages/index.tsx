@@ -33,11 +33,11 @@ export async function getServerSideProps(context: any) {
         where: { school_id: refresh_token.school_id }
       });
 
-      blockCount.holidays = resHolidays.map(holiday => ({
+      blockCount.holidays = resHolidays.map((holiday) => ({
         title: holiday.title,
         date: dayjs(holiday.date).format('YYYY-MM-DD')
-      }))
-    }
+      }));
+    };
 
     switch (refresh_token.role.title) {
       case 'ASSIST_SUPER_ADMIN':
@@ -66,9 +66,9 @@ export async function getServerSideProps(context: any) {
           }
         });
 
-        blockCount.holidays = resSubscription.map(sub => ({
+        blockCount.holidays = resSubscription.map((sub) => ({
           title: `${sub?.school?.name} subscription ending`,
-          date: dayjs(sub.end_date).format('YYYY-MM-DD'),
+          date: dayjs(sub.end_date).format('YYYY-MM-DD')
         }));
         break;
 
@@ -81,7 +81,7 @@ export async function getServerSideProps(context: any) {
         };
         const school = await prisma.school.findFirst({
           where: {
-            id: refresh_token?.school_id,
+            id: refresh_token?.school_id
           },
           include: {
             subscription: {
@@ -100,8 +100,13 @@ export async function getServerSideProps(context: any) {
             where: { school_id: refresh_token?.school_id, deleted_at: null }
           })
         };
-        blockCount["school"] = school;
-        blockCount["banners"] = await prisma.banners.findFirst({});
+        blockCount['total_staff'] = {
+          count: await prisma.user.count({
+            where: { school_id: refresh_token?.school_id, deleted_at: null, user_role: { title: { not: 'STUDENT' } } }
+          })
+        };
+        blockCount['school'] = school;
+        blockCount['banners'] = await prisma.banners.findFirst({});
 
         await updateHolidays();
         break;
@@ -124,9 +129,9 @@ export async function getServerSideProps(context: any) {
               }
             }
           }
-        })
-        blockCount['notices'] = await prisma.notice.findMany({ where: { school_id: refresh_token.school_id }, orderBy: { created_at: "desc" } });
-        blockCount["banners"] = await prisma.banners.findFirst({});
+        });
+        blockCount['notices'] = await prisma.notice.findMany({ where: { school_id: refresh_token.school_id }, orderBy: { created_at: 'desc' } });
+        blockCount['banners'] = await prisma.banners.findFirst({});
 
         await updateHolidays();
         break;
@@ -139,11 +144,10 @@ export async function getServerSideProps(context: any) {
           },
           select: {
             class_roll_no: true,
-            class:true,
-            batches:{
-              select:{
-                name:true,
-                
+            class: true,
+            batches: {
+              select: {
+                name: true
               }
             },
             // section: {
@@ -156,14 +160,13 @@ export async function getServerSideProps(context: any) {
               select: {
                 first_name: true,
                 middle_name: true,
-                last_name: true,
+                last_name: true
               }
             }
           }
-
         });
-        blockCount['notices'] = await prisma.notice.findMany({ where: { school_id: refresh_token.school_id }, orderBy: { created_at: "desc" } });
-        blockCount["banners"] = await prisma.banners.findFirst({});
+        blockCount['notices'] = await prisma.notice.findMany({ where: { school_id: refresh_token.school_id }, orderBy: { created_at: 'desc' } });
+        blockCount['banners'] = await prisma.banners.findFirst({});
 
         await updateHolidays();
         break;
@@ -171,46 +174,53 @@ export async function getServerSideProps(context: any) {
       default:
       // return { redirect: {destination: '/status/404'}}
     }
-
   } catch (err) {
-    console.log({ err })
+    console.log({ err });
   }
   const parseJson = JSON.parse(JSON.stringify(blockCount));
 
-  return { props: { blockCount: parseJson } }
+  return { props: { blockCount: parseJson } };
 }
 
 function MainDashboard({ blockCount }) {
-
   switch (blockCount?.role) {
     case 'teacher':
       return (
         <>
-          <Head> <title>Teacher Dashboard</title> </Head>
+          <Head>
+            {' '}
+            <title>Teacher Dashboard</title>{' '}
+          </Head>
           <TeacherDashboardReportsContent blockCount={blockCount} />
         </>
-      )
+      );
     case 'student':
       return (
         <>
-          <Head><title>Student Dashboard</title></Head>
+          <Head>
+            <title>Student Dashboard</title>
+          </Head>
           <StudentDashboardReportsContent blockCount={blockCount} />
         </>
-      )
+      );
     case 'admin':
       return (
         <>
-          <Head><title>Dashboard</title></Head>
+          <Head>
+            <title>Dashboard</title>
+          </Head>
           <AdminDashboardReportsContent blockCount={blockCount} />
         </>
-      )
+      );
     default:
       return (
         <>
-          <Head><title>Dashboard</title></Head>
+          <Head>
+            <title>Dashboard</title>
+          </Head>
           <DashboardReportsContent blockCount={blockCount} />
         </>
-      )
+      );
   }
 }
 
