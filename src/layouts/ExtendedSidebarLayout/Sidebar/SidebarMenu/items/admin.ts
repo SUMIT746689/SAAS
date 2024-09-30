@@ -843,6 +843,11 @@ const examination: MenuItems[] = [
         ]
       },
       {
+        name: 'Grading system',
+        link: '/management/grade',
+        icon: GradeIcon
+      },
+      {
         name: 'Report card',
         link: '/reports/exam/report_card',
         icon: DescriptionIcon
