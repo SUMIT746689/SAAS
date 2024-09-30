@@ -7,7 +7,7 @@ async function put(req, res, refresh_token) {
   try {
     const id = parseInt(req.query.id);
     if (Number.isNaN(id)) throw new Error('Provided invalid id');
-    
+
     const { school_id } = refresh_token;
     const { youtube_link, english_title, bangla_title } = req.body;
     const resWebsiteUi = await prisma.websiteUi.findFirst({
@@ -16,20 +16,19 @@ async function put(req, res, refresh_token) {
       }
     });
 
-    if (!resWebsiteUi) {
-      throw new Error(`school_id ${school_id} not found`);
-    }
-    const updatedVedioGallery = resWebsiteUi.video_gallery?.map(vg => {
-      if (vg.id === id) {
-        return {
-          ...vg,
-          youtube_link: youtube_link || vg.youtube_link,
-          english_title: english_title || vg.english_title,
-          bangla_title: bangla_title || vg.bangla_title
-        };
-      }
-      return vg;
+    if (!resWebsiteUi) throw new Error(`school_id ${school_id} not found`);
+    if (!Array.isArray(resWebsiteUi.video_gallery)) throw new Error('video gallery is empty');
+
+    const updatedVedioGallery = resWebsiteUi.video_gallery?.map((vg: any) => {
+      if (vg.id !== id) return vg;
+      return {
+        ...vg,
+        youtube_link: youtube_link || vg.youtube_link,
+        english_title: english_title || vg.english_title,
+        bangla_title: bangla_title || vg.bangla_title
+      };
     });
+    
     const updatedRecord = await prisma.websiteUi.updateMany({
       where: {
         school_id

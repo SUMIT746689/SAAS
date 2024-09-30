@@ -3,26 +3,27 @@ import { authenticate } from 'middleware/authenticate';
 import { logFile } from 'utilities_api/handleLogFile';
 async function delete_(req, res, refresh_token) {
     try {
-        const {school_id} = refresh_token;
+        const { school_id } = refresh_token;
         const id = parseInt(req.query.id);
         if (Number.isNaN(id)) throw new Error('Provide invalid id ');
 
         const resWebsiteUi = await prisma.websiteUi.findFirst({
-            where:{
+            where: {
                 school_id
             },
-            select:{
-                video_gallery:true
+            select: {
+                video_gallery: true
             }
         })
-        
-        if(!resWebsiteUi) throw new Error('website ui not founds');
 
-        const updatedVedioGallery =[] ;
-        
-        if(!Array.isArray(resWebsiteUi.video_gallery)) throw new Error("Nothing to update") 
-        resWebsiteUi.video_gallery?.forEach(vg=> {
-            if(vg.id !== id ) return updatedVedioGallery.push(vg);
+        if (!resWebsiteUi) throw new Error('website ui not founds');
+        if (!Array.isArray(resWebsiteUi.video_gallery)) throw new Error('video gallery is empty');
+
+        const updatedVedioGallery = [];
+
+        if (!Array.isArray(resWebsiteUi.video_gallery)) throw new Error("Nothing to update")
+        resWebsiteUi.video_gallery?.forEach((vg: any) => {
+            if (vg.id !== id) return updatedVedioGallery.push(vg);
         });
 
 
