@@ -10,6 +10,7 @@ import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 // import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 // import axios from 'axios';
 import useNotistick from '@/hooks/useNotistick';
+import { TableBodyCellWrapper, TableHeaderCellWrapper } from '@/components/Table/Table';
 // import ClearIcon from '@mui/icons-material/Clear';
 // import CheckIcon from '@mui/icons-material/Check';
 // import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
@@ -155,7 +156,7 @@ const Results: FC<ResultsProps> = ({
     <>
       <Card
         sx={{
-          p: 1,
+          p: 0.5,
           mb: 1
         }}
       >
@@ -166,6 +167,7 @@ const Results: FC<ResultsProps> = ({
                 sx={{
                   m: 0
                 }}
+                size='small'
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -186,7 +188,7 @@ const Results: FC<ResultsProps> = ({
 
       <Card sx={{ minHeight: 'calc(100vh - 428px) !important' }}>
         <Box
-          p={2}
+          p={1}
           display="flex"
           alignItems="center"
           justifyContent="space-between"
@@ -232,10 +234,11 @@ const Results: FC<ResultsProps> = ({
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">{t('Id')}</TableCell>
-                    <TableCell align="center">{t('Sender Id')}</TableCell>
-                    <TableCell align="center">{t('Sms Api Key')}</TableCell>
-                    <TableCell align="center">{t('Actions')}</TableCell>
+                    <TableHeaderCellWrapper align="center">{t('Id')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align="center">{t('School Name')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align="center">{t('Sender Id')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align="center">{t('Sms Api Key')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align="center">{t('Actions')}</TableHeaderCellWrapper>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -246,22 +249,21 @@ const Results: FC<ResultsProps> = ({
                         hover
                         key={project.id}
                       >
-                        <TableCell align="center">
+                        <TableBodyCellWrapper align="center">
                           {project?.id}
-                        </TableCell>
-                        <TableCell align="center">
-                          <Typography noWrap variant="h5">
-                            {project?.details?.sender_id}
-                          </Typography>
-                        </TableCell>
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper align="center">
+                          {project?.school?.name}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper align="center">
+                          {project?.details?.sender_id}
+                        </TableBodyCellWrapper>
 
-                        <TableCell align="center">
-                          <Typography noWrap variant="h5">
-                            {project?.details?.sms_api_key}
-                          </Typography>
-                        </TableCell>
+                        <TableBodyCellWrapper align="center">
+                          {project?.details?.sms_api_key}
+                        </TableBodyCellWrapper>
 
-                        <TableCell align="center">
+                        <TableBodyCellWrapper align="center">
                           <Typography noWrap>
 
                             <Tooltip title={t('Edit')} arrow>
@@ -284,7 +286,7 @@ const Results: FC<ResultsProps> = ({
                               </IconButton>
                             </Tooltip> */}
                           </Typography>
-                        </TableCell>
+                        </TableBodyCellWrapper>
                       </TableRow>
                     );
                   })}

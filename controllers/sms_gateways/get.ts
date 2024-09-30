@@ -13,7 +13,7 @@ async function get(req, res, refresh_token) {
 
     if (is_active) where["is_active"] = is_active === "true" ? true : false;
 
-    const response = await prisma.smsGateway.findMany({ where })
+    const response = await prisma.smsGateway.findMany({ where, include: { school: { select: { name: true } } } })
 
     return res.json({ data: response, success: true });
 
