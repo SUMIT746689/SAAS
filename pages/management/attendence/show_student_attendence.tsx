@@ -14,11 +14,11 @@ import { getStudentInfo } from '@/utils/serverSidePropsFunctions';
 import ShowSelectStudentAttendenceResult from '@/content/Management/Attendence/ShowSelectStudentAttendenceResult';
 
 export async function getServerSideProps(context: any) {
-  return await getStudentInfo(context)
+  return await getStudentInfo(context);
 }
 
 function ExamRoutine({ data }) {
-  console.log({ data })
+  console.log({ data });
   // const { user }: any = useAuth();
 
   return (
@@ -37,16 +37,9 @@ function ExamRoutine({ data }) {
         justifyContent="center"
         alignItems="stretch"
         spacing={3}
-
       >
         <Grid item xs={12}>
-          {
-            data ?
-              <ShowStudentAttendence data={data} />
-              :
-              <ShowSelectStudentAttendenceResult />
-          }
-
+          {data ? <ShowStudentAttendence data={data} /> : <ShowSelectStudentAttendenceResult />}
         </Grid>
       </Grid>
       <Footer />

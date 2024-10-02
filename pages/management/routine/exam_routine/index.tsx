@@ -18,11 +18,10 @@ export async function getServerSideProps(context: any) {
   let student: any = null;
   let data: any = null;
   try {
-    const refresh_token_varify: any = serverSideAuthentication(context)
+    const refresh_token_varify: any = serverSideAuthentication(context);
     if (!refresh_token_varify) return { props: { student } };
 
     if (refresh_token_varify.role.title === 'STUDENT') {
-
       student = await prisma.student.findFirst({
         where: {
           student_info: {
@@ -81,16 +80,14 @@ export async function getServerSideProps(context: any) {
         student_id: student.id
       };
     }
-  }
-  catch (error) {
-    console.log({ error })
+  } catch (error) {
+    console.log({ error });
   }
   const parse = JSON.parse(JSON.stringify({ data }));
-  return { props: parse }
+  return { props: parse };
 }
 
 function ExamRoutine({ data }) {
-
   // const { user }: any = useAuth();
 
   return (
@@ -109,16 +106,9 @@ function ExamRoutine({ data }) {
         justifyContent="center"
         alignItems="stretch"
         spacing={3}
-
       >
         <Grid item xs={12}>
-          {
-            data ?
-              <SingleStudentExamRoutine data={data} />
-              :
-              <ExampRoutine />
-          }
-
+          {data ? <SingleStudentExamRoutine data={data} /> : <ExampRoutine />}
         </Grid>
       </Grid>
       <Footer />

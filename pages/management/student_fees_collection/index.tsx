@@ -23,6 +23,7 @@ import { monthList } from '@/utils/getDay';
 import { Data } from '@/models/front_end';
 import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
 import DesignPaymentInvoiceSmallSize from '@/content/Management/StudentFeesCollection/DesignPaymentInvoiceSmallSize';
+import { Iso } from '@mui/icons-material';
 
 // updated searching code start
 
@@ -510,34 +511,32 @@ function Managementschools() {
   const [gatewayOption, setGatewayOption] = useState([]);
   const [showPrint, setShowPrint] = useState(false);
   const [isCompleteUpdate, setIsCompleteUpdate] = useState(false);
-
+  // isSmallSize
   const [isSmallSize, setIsSmallSize] = useState(false);
+  const [isOn, setIsOn] = useState(false);
   useEffect(() => {
     const storedValue = localStorage.getItem('isSmallSize');
     console.log(storedValue);
     if (storedValue !== null) {
-      setIsSmallSize(JSON.parse(storedValue)); // Parse since it's stored as a string
+      setIsSmallSize(JSON.parse(storedValue));
     }
   }, []);
-
-  // Save the toggle state in local storage whenever it changes
   useEffect(() => {
     localStorage.setItem('isSmallSize', JSON.stringify(isSmallSize));
   }, [isSmallSize]);
 
-  const [isOn, setIsOn] = useState(false);
+  // isOn
   useEffect(() => {
     const storedValue = localStorage.getItem('isOn');
-    console.log(storedValue);
+    console.log({ storedValue });
     if (storedValue !== null) {
-      setIsOn(JSON.parse(storedValue)); // Parse since it's stored as a string
+      setIsOn(JSON.parse(storedValue));
     }
   }, []);
 
-  // Save the toggle state in local storage whenever it changes
   useEffect(() => {
-    localStorage.setItem('setIsOn', JSON.stringify(setIsOn));
-  }, [setIsOn]);
+    localStorage.setItem('isOn', JSON.stringify(isOn));
+  }, [isOn]);
 
   useEffect(() => {
     const temp = datas.filter((i) => {
@@ -920,7 +919,7 @@ function Managementschools() {
                   label={`Office Invoice: ${isOn ? 'On' : 'Off'}`}
                   labelPlacement="start"
                   sx={{ mr: 'auto' }}
-                />
+                />{' '}
               </FormGroup>
             </Grid>
 
