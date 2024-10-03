@@ -846,11 +846,19 @@ const examination: MenuItems[] = [
             icon: AssignmentIcon
           }
         ]
+      },{
+        name: 'Admit Card',
+        link: '/admit_card',
+        icon: DesignServicesIcon
       },
       {
         name: 'Grading system',
         link: '/management/grade',
         icon: GradeIcon
+      }, {
+        name: 'Exam Routine',
+        link: '/management/routine/exam_routine',
+        icon: AccessibilityIcon
       },
       {
         name: 'Report card',
