@@ -75,6 +75,8 @@ model School {
   masking_sms_price        Float?  @default(0)
   non_masking_sms_price    Float?  @default(0)
   current_academic_year_id Int?
+  parent_school_id         Int?
+  branch_limit             Int?
 
   voice_sms_balance Float @default(0)
   voice_sms_price   Float @default(0)
@@ -89,6 +91,7 @@ model School {
   // admin          User                 @relation(fields: [admin_id], references: [id], name: "AdminUserSchool")
   admin_panel                AdminPanel?                  @relation(fields: [admin_panel_id], references: [id])
   currentAcademicYear        AcademicYear?                @relation(fields: [current_academic_year_id], references: [id])
+  parent_school              School?                      @relation(name: "SchoolToBranch", fields: [parent_school_id], references: [id])
   admins                     User[]                       @relation("AdminUserSchool")
   teachers                   Teacher[]
   classes                    Class[]
@@ -139,6 +142,7 @@ model School {
   websiteDynamicPages        WebsiteDynamicPage[]
   Discount                   Discount[]
   Homework                   Homework[]
+  School                     School[]                     @relation("SchoolToBranch")
 
   // routines Routine[]
   @@map("schools")

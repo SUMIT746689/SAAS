@@ -4,29 +4,47 @@ import { logFile } from 'utilities_api/handleLogFile';
 
 const postSchool = async (req, res, authenticate_user) => {
   try {
-    const { admin_panel_id } = authenticate_user;
+    const { school_id, admin_panel_id } = authenticate_user;
+    console.log({ authenticate_user })
+
     const authenticate_user_Info = await prisma.user.findFirst({
-      where: { id: authenticate_user.id },
+      where: {
+        id: authenticate_user.id,
+        school_id
+      },
       select: {
-        role: true
+        role: true,
+        school: {
+          include: {
+            subscription: {
+              where: { is_active: true },
+              include: { package: true },
+              orderBy: { id: "desc" }
+            },
+          }
+        }
       }
     });
 
-    if (authenticate_user_Info.role.title !== 'ASSIST_SUPER_ADMIN')
-      throw new Error('Your role have no permissions');
+    if (!authenticate_user_Info.school.branch_limit) throw new Error(`permission denied `);
 
-    const { name, phone, email, address, admin_ids, currency, domain,
-      main_balance, masking_sms_price, non_masking_sms_price,
-      masking_sms_count, non_masking_sms_count,
-      package_price, package_duration, package_student_count, is_std_cnt_wise,
-      voice_sms_balance,
-      voice_sms_price,
-      voice_pulse_size,
-      branch_limit
+    const getAlreadyCreateNoOfSchoolBranch = await prisma.school.count({ where: { parent_school_id: school_id } })
+
+    if (authenticate_user_Info.school.branch_limit <= getAlreadyCreateNoOfSchoolBranch) throw new Error('branch create permission limit already over')
+
+    if (authenticate_user_Info.role.title !== 'ADMIN') throw new Error('Your role have no permissions');
+
+    const {
+      name, phone, email, address, admin_ids, currency, domain,
+      // main_balance, masking_sms_price, non_masking_sms_price,
+      // masking_sms_count, non_masking_sms_count,
+      // package_price, package_duration, package_student_count, is_std_cnt_wise,
+      // voice_sms_balance, voice_sms_price, voice_pulse_size,
     } = req.body;
 
     if (!name || !phone || !email || !address) throw new Error('provide valid data');
     const admins = admin_ids.map((id) => ({ id }));
+
     // const response = await prisma.school.create({
     //   data: {
     //     name,
@@ -47,8 +65,9 @@ const postSchool = async (req, res, authenticate_user) => {
 
 
     const start_date = new Date(Date.now());
-    const end_date_provided = new Date(Date.now());
-    end_date_provided.setDate(end_date_provided.getDate() + package_duration);
+    // const end_date_provided = new Date(Date.now());
+    // end_date_provided.setDate(end_date_provided.getDate() + package_duration);
+    const end_date_provided = authenticate_user_Info.school.subscription[0].end_date;
 
     const response = await prisma.subscription.create({
       data: {
@@ -58,17 +77,17 @@ const postSchool = async (req, res, authenticate_user) => {
             phone,
             email,
             address,
-            currency,
+            currency: authenticate_user_Info.school.currency,
             domain,
-            main_balance: main_balance ?? undefined,
-            masking_sms_price: masking_sms_price ?? undefined,
-            non_masking_sms_price: non_masking_sms_price ?? undefined,
-            masking_sms_count: masking_sms_count ?? undefined,
-            non_masking_sms_count: non_masking_sms_count ?? undefined,
-            voice_sms_balance,
-            voice_sms_price,
-            voice_pulse_size,
-            branch_limit: branch_limit ?? undefined,
+            parent_school: { connect: { id: school_id } },
+            // main_balance: main_balance ?? undefined,
+            // masking_sms_price: masking_sms_price ?? undefined,
+            // non_masking_sms_price: non_masking_sms_price ?? undefined,
+            // masking_sms_count: masking_sms_count ?? undefined,
+            // non_masking_sms_count: non_masking_sms_count ?? undefined,
+            // voice_sms_balance,
+            // voice_sms_price,
+            voice_pulse_size: authenticate_user_Info.school.voice_pulse_size,
             admins: { connect: admins },
             AutoAttendanceSentSms: {
               create: {
@@ -85,10 +104,10 @@ const postSchool = async (req, res, authenticate_user) => {
         },
         package: {
           create: {
-            price: Number(package_price),
-            duration: Number(package_duration),
-            student_count: Number(package_student_count),
-            is_std_cnt_wise
+            price: authenticate_user_Info.school.subscription[0].package.price,
+            duration: authenticate_user_Info.school.subscription[0].package.duration,
+            student_count: authenticate_user_Info.school.subscription[0].package.student_count,
+            is_std_cnt_wise: authenticate_user_Info.school.subscription[0].package.is_std_cnt_wise
           }
         },
         start_date,
@@ -99,26 +118,6 @@ const postSchool = async (req, res, authenticate_user) => {
 
     await prisma.academicYear.create({ data: { title: String((new Date()).getFullYear()), school_id: response.school_id, curr_active: true } });
     await createClassesWithSections(response.school_id);
-    // await prisma.section.create({
-    //   data: {
-    //     name: "default-One",
-    //     class: {
-    //       create:
-    //         { name: "One", code: "001", has_section: false, school_id: response.school_id, }
-    //     }
-    //   },
-    //   // [
-    //   //   { name: "Two", code: "002", has_section: false, school_id: response.school_id },
-    //   //   { name: "Three", code: "003", has_section: false, school_id: response.school_id },
-    //   //   { name: "Four", code: "004", has_section: false, school_id: response.school_id },
-    //   //   { name: "Five", code: "005", has_section: false, school_id: response.school_id },
-    //   //   { name: "Six", code: "006", has_section: false, school_id: response.school_id },
-    //   //   { name: "Seven", code: "007", has_section: false, school_id: response.school_id },
-    //   //   { name: "Eight", code: "008", has_section: false, school_id: response.school_id },
-    //   //   { name: "Nine", code: "009", has_section: false, school_id: response.school_id },
-    //   //   { name: "Ten", code: "010", has_section: false, school_id: response.school_id },
-    //   // ]
-    // });
 
     await prisma.accounts.create({
       data: {
@@ -139,6 +138,8 @@ const postSchool = async (req, res, authenticate_user) => {
 
   } catch (err) {
     logFile.error(err.message)
+    if (err.message.includes(`schools_domain_key`)) return res.status(404).json({ error: 'This domain is already used, use another' });
+
     console.log(err.message);
     res.status(404).json({ error: err.message });
   }

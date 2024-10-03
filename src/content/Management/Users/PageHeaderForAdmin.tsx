@@ -4,19 +4,7 @@ import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'src/hooks/useAuth';
 
-import {
-  Grid,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  Typography,
-  TextField,
-  CircularProgress,
-  Autocomplete,
-  Button,
-  Card
-} from '@mui/material';
+import { Grid, Dialog, DialogTitle, DialogActions, DialogContent, Typography, TextField, CircularProgress, Autocomplete, Button, Card } from '@mui/material';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import axios from 'axios';
 import useNotistick from '@/hooks/useNotistick';
@@ -37,22 +25,10 @@ function PageHeader({ editUser, setEditUser, reFetchData }) {
   }, [editUser]);
 
   const permissons = [
-    {
-      label: 'Assistant Super Admin',
-      role: 'ASSIST_SUPER_ADMIN',
-      value: 'create_assist_super_admin'
-    },
-    { label: 'Admin', role: 'ADMIN', value: 'create_admin' },
     { label: 'Branch Admin', role: 'BRANCH_ADMIN', value: 'create_branch_admin' },
-    { label: 'Guardian', role: 'GURDIAN', value: 'create_gurdian' },
-    { label: 'Stuff', role: 'STAFF', value: 'create_stuff' },
-    { label: 'Accountant', role: 'ACCOUNTANT', value: 'create_accountant' },
-    { label: 'Librarian', role: 'LIBRARIAN', value: 'create_librarian' },
-    { label: 'Receptionist', role: 'RECEPTIONIST', value: 'create_receptionist' },
-
   ];
   const available_permissions = user?.permissions?.map((permission) => permission.value);
-  console.log({available_permissions})
+  console.log({ available_permissions })
   const userPrermissionRoles = permissons.filter((role) => available_permissions?.includes(role.value));
 
   const { t }: { t: any } = useTranslation();
@@ -112,9 +88,10 @@ function PageHeader({ editUser, setEditUser, reFetchData }) {
       setSubmitting(false);
     }
   };
-  console.log({userPrermissionRoles})
+  console.log({ userPrermissionRoles })
   const temp = userPrermissionRoles.find((i) => i.role == editUser?.user_role?.title);
-  console.log({ temp })
+  console.log({ temp });
+
   const handleDebounce = (value) => {
     if (editUser?.username?.toLowerCase() === value?.toLowerCase()) return setIsAvailableUsername(null);
     if (value) {
@@ -156,7 +133,7 @@ function PageHeader({ editUser, setEditUser, reFetchData }) {
       <PageHeaderTitleWrapper
         name={'User'}
         handleCreateClassOpen={handleCreateUserOpen}
-        actionButton={user?.role?.title !== 'ASSIST_SUPER_ADMIN' && user?.role?.title !== 'SUPER_ADMIN' ? true : false}
+        // actionButton={user?.role?.title !== 'ASSIST_SUPER_ADMIN' && user?.role?.title !== 'SUPER_ADMIN' ? true : false}
       />
 
       <Dialog fullWidth maxWidth="sm" open={open} onClose={handleCreateUserClose}>
@@ -230,7 +207,7 @@ function PageHeader({ editUser, setEditUser, reFetchData }) {
                     <NewDebounceInput
                       touched={touched.username}
                       errors={errors.username || isAvailableUsername}
-                      label={''}
+                      label={'User Name'}
                       name="username"
                       handleBlur={handleBlur}
                       handleChange={handleChange}

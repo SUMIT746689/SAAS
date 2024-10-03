@@ -169,15 +169,16 @@ const Results = ({ users, roleOptions, reFetchData, setEditUser }) => {
   }, [query]);
 
   const getNsetOptions = () => {
-    let url = `/api/user?`;
-    if (searchToken) url += `role=${searchToken}&`;
-    if (filterByActiveStatus?.label !== 'All') url += `is_enabled=${filterByActiveStatus.label === 'Active' ? true : false}`;
+    reFetchData();
+    //   let url = `/api/user?`;
+    //   if (searchToken) url += `role=${searchToken}&`;
+    //   if (filterByActiveStatus?.label !== 'All') url += `is_enabled=${filterByActiveStatus.label === 'Active' ? true : false}`;
 
-    axios
-      .get(url)
-      .then((res) => setAllUsers(res.data))
-      .catch((err) => handleShowErrMsg(err, showNotification));
-    setPage(0);
+    //   axios
+    //     .get(url)
+    //     .then((res) => setAllUsers(res.data))
+    //     .catch((err) => handleShowErrMsg(err, showNotification));
+    //   setPage(0);
   };
   useEffect(() => {
     if (isMountingRef.current) getNsetOptions();
@@ -347,7 +348,7 @@ const Results = ({ users, roleOptions, reFetchData, setEditUser }) => {
               />
               {isNotSuperAdmin && (
                 <Grid display="grid" gridTemplateColumns="1fr 1fr" columnGap={1}>
-                  {/* <Autocomplete
+                  <Autocomplete
                     size="small"
                     options={roleOptions || []}
                     value={searchToken}
@@ -363,7 +364,7 @@ const Results = ({ users, roleOptions, reFetchData, setEditUser }) => {
                         label="Filter by Role"
                       />
                     )}
-                  /> */}
+                  />
                   {/* for filter active/ desabled users */}
                   <Autocomplete
                     size="small"
