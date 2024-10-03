@@ -88,6 +88,11 @@ const all_users: MenuItems[] = [
         name: 'Users',
         icon: AssignmentIndTwoToneIcon,
         link: '/management/users'
+      },
+      {
+        name: 'Branch Admins',
+        icon: AssignmentIndTwoToneIcon,
+        link: '/management/users/branch_admins'
       }
     ]
   }

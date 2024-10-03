@@ -10,13 +10,11 @@ import { useSearchUsers } from '@/hooks/useSearchUsers';
 import { currency_list } from '@/static_data/currency_list';
 import useNotistick from '@/hooks/useNotistick';
 import { PageHeaderTitleWrapper } from '@/components/PageHeaderTitle';
-import { FileUploadFieldWrapper, TextFieldWrapper } from '@/components/TextFields';
-import { ButtonWrapper } from '@/components/ButtonWrapper';
-import Image from 'next/image';
+import { TextFieldWrapper } from '@/components/TextFields';
 import { DialogActionWrapper } from '@/components/DialogWrapper';
 
 function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
-  
+
   const { t }: { t: any } = useTranslation();
   const [open, setOpen] = useState(false);
   const [logo, setLogo] = useState(null)
@@ -116,7 +114,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
             non_masking_sms_count: editSchool?.non_masking_sms_count ? editSchool?.non_masking_sms_count : null,
             masking_sms_price: editSchool?.masking_sms_price ? editSchool?.masking_sms_price : null,
             non_masking_sms_price: editSchool?.non_masking_sms_price ? editSchool?.non_masking_sms_price : null,
-
+            branch_limit: editSchool?.branch_limit ? editSchool.branch_limit : null,
 
             is_std_cnt_wise: editSchool?.subscription[0]?.package?.is_std_cnt_wise,
             package_price: editSchool?.subscription[0]?.package?.price,
@@ -124,7 +122,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
             package_student_count: editSchool?.subscription[0]?.package?.student_count,
 
             voice_sms_balance: editSchool?.voice_sms_balance || undefined,
-            voice_sms_price: editSchool?.voice_sms_price || undefined, 
+            voice_sms_price: editSchool?.voice_sms_price || undefined,
             voice_pulse_size: editSchool?.voice_pulse_size || undefined,
 
             submit: null
@@ -179,7 +177,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
             values,
             setFieldValue
           }) => {
-            
+
             return (
               <form onSubmit={handleSubmit}>
                 <DialogContent
@@ -189,7 +187,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                   }}
                 >
                   <Grid container spacing={0}>
-  
+
                     <TextFieldWrapper
                       errors={errors.name}
                       touched={touched.name}
@@ -199,7 +197,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                       handleChange={handleChange}
                       value={values.name}
                     />
-  
+
                     <TextFieldWrapper
                       errors={errors.phone}
                       touched={touched.phone}
@@ -209,7 +207,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                       handleChange={handleChange}
                       value={values.phone}
                     />
-  
+
                     <TextFieldWrapper
                       errors={errors.email}
                       touched={touched.email}
@@ -219,7 +217,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                       handleChange={handleChange}
                       value={values.email}
                     />
-  
+
                     <TextFieldWrapper
                       errors={errors.address}
                       touched={touched.address}
@@ -229,7 +227,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                       handleChange={handleChange}
                       value={values.address}
                     />
-  
+
                     <Grid
                       container
                       width={'100%'}
@@ -249,9 +247,9 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                       <Typography variant="h6">
                         Student count package?
                       </Typography>
-  
+
                     </Grid>
-  
+
                     <Grid sx={{
                       display: 'grid',
                       gridTemplateColumns: {
@@ -270,7 +268,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                         value={values?.package_price}
                         type='number'
                       />
-  
+
                       <TextFieldWrapper
                         errors={errors?.package_duration}
                         touched={touched?.package_duration}
@@ -295,25 +293,48 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                         />
                       }
                     </Grid>
-  
-                    <Grid
-                      item
-                      width={'100%'}
-                      justifyContent="flex-end"
-                      textAlign={{ sm: 'right' }}
-                      mb={1}
-                    >
-  
-                      {/* <AdminSelect
+
+
+                    <Grid sx={{
+                      display: 'grid',
+                      gridTemplateColumns: {
+                        md: '1fr 1fr'
+                      },
+                      width: '100%',
+                      gap: 1
+                    }}>
+                      <Grid
+                        item
+                        width={'100%'}
+                        justifyContent="flex-end"
+                        textAlign={{ sm: 'right' }}
+                        mb={1}
+                      >
+
+                        {/* <AdminSelect
                         setFieldValue={setFieldValue}
                         oldSelectedAdminID={values.admin_id}
                       /> */}
-                      <SelectAdmin
-                        setFieldValue={setFieldValue}
-                        oldSelectedAdminID={values.admin_ids}
+                        <SelectAdmin
+                          setFieldValue={setFieldValue}
+                          oldSelectedAdminID={values.admin_ids}
+                        />
+                      </Grid>
+
+
+                      <TextFieldWrapper
+                        type="number"
+                        errors={errors.branch_limit}
+                        touched={touched.branch_limit}
+                        name="branch_limit"
+                        label={t('Select Branch Limit ')}
+                        handleBlur={handleBlur}
+                        handleChange={handleChange}
+                        value={values.branch_limit}
                       />
+
                     </Grid>
-  
+
                     <Grid
                       item
                       width="100%"
@@ -324,7 +345,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                       <Autocomplete
                         size='small'
                         id="tags-outlined"
-  
+
                         disablePortal
                         value={
                           currency_list.find(
@@ -359,7 +380,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                           setFieldValue('currency', value?.code || 0)
                         }
                       />
-  
+
                       <TextFieldWrapper
                         type="number"
                         errors={errors.main_balance}
@@ -371,8 +392,8 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                         value={values.main_balance}
                       />
                     </Grid>
-  
-  
+
+
                     <TextFieldWrapper
                       errors={errors.domain}
                       touched={touched.domain}
@@ -382,9 +403,9 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                       handleChange={handleChange}
                       value={values.domain}
                     />
-  
+
                     <Grid container display="grid" gridTemplateColumns={{ xs: "1fr", sm: "1fr 1fr" }} columnGap={1}>
-  
+
                       <TextFieldWrapper
                         type="number"
                         errors={errors.masking_sms_price}
@@ -395,7 +416,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                         handleChange={handleChange}
                         value={values.masking_sms_price}
                       />
-  
+
                       <TextFieldWrapper
                         type="number"
                         errors={errors.non_masking_sms_price}
@@ -406,7 +427,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                         handleChange={handleChange}
                         value={values.non_masking_sms_price}
                       />
-  
+
                       <TextFieldWrapper
                         type="number"
                         errors={errors.masking_sms_count}
@@ -461,8 +482,8 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                         pattern="[0-9]{10}"
                       />
                     </Grid>
-  
-  
+
+
                   </Grid>
                 </DialogContent>
                 <DialogActionWrapper

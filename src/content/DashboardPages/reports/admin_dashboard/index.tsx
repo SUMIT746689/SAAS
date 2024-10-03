@@ -130,6 +130,13 @@ const quickLinks = [
     name: 'Study Materials'
   },
   {
+    color: quickLinksColors[1],
+    linkUrl: 'dashboards/modules/admin',
+    icon: <SmsIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />,
+    name: 'Card Generate'
+  },
+
+  {
     color: quickLinksColors[0],
     linkUrl: 'dashboards/modules/admin',
     icon: <SmsIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />,
@@ -249,8 +256,9 @@ function AdminDashboardContent({ blockCount = null }) {
                   transition: 'all 5s'
                 }}
               >
-                {quickLinks.map(({ color, linkUrl, icon, name }, index) => (
-                  <DashboardQuickLinkButtonWrapper
+                {quickLinks.map(({ color, linkUrl, icon, name }, index) => {
+                  console.log({ name, adminModulesList: adminModulesList[index] })
+                  return <DashboardQuickLinkButtonWrapper
                     key={index}
                     color={color}
                     linkUrl={linkUrl}
@@ -258,7 +266,8 @@ function AdminDashboardContent({ blockCount = null }) {
                     name={name}
                     value={adminModulesList[index]}
                   />
-                ))}
+                }
+                )}
               </Grid>
             </Grid>
           </Grid>
@@ -284,9 +293,8 @@ function AdminDashboardContent({ blockCount = null }) {
                   <Link target="_blank" href={right_banners[0].redirectUrl}>
                     <img
                       style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
-                      src={`/api/get_file/${
-                        Array.isArray(right_banners) && right_banners.length > 0 && right_banners[0].url && right_banners[0].url
-                      }`}
+                      src={`/api/get_file/${Array.isArray(right_banners) && right_banners.length > 0 && right_banners[0].url && right_banners[0].url
+                        }`}
                       alt="right_banner"
                     />
                   </Link>

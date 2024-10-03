@@ -13,6 +13,7 @@ export default async function patchSchool(req, res, refresh_token) {
       voice_sms_balance,
       voice_sms_price,
       voice_pulse_size,
+      branch_limit
     } = req.body;
 
     let data = {};
@@ -32,7 +33,7 @@ export default async function patchSchool(req, res, refresh_token) {
     if (voice_sms_balance) data['voice_sms_balance'] = voice_sms_balance;
     if (voice_sms_price) data['voice_sms_price'] = voice_sms_price;
     if (voice_pulse_size) data['voice_pulse_size'] = voice_pulse_size;
-
+    if (branch_limit) data['branch_limit'] = branch_limit
 
     const existingSchoolIdList = await prisma.user.findMany({
       where: {

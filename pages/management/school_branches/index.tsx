@@ -5,20 +5,19 @@ import { useState } from 'react';
 import ExtendedSidebarLayout from 'src/layouts/ExtendedSidebarLayout';
 import { Authenticated } from 'src/components/Authenticated';
 
-import PageHeader from 'src/content/Management/Schools/PageHeader';
+import PageHeader from 'src/content/Management/SchoolBranches/PageHeader';
 import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 
 import { Grid } from '@mui/material';
-import Results from 'src/content/Management/Schools/Results';
+import Results from 'src/content/Management/SchoolBranches/Results';
 import { useClientFetch } from 'src/hooks/useClientFetch';
-import ManageSubcriptions from '@/content/Management/Schools/ManageSubcriptions';
 
 function Managementschools() {
   const [editSchool, setEditSchool] = useState(null);
-  const { data: schools, reFetchData, error } = useClientFetch('/api/school');
+  const { data: schools, reFetchData, error } = useClientFetch('/api/school/school_branches');
   const [openSubscriptionModal, setOpenopenSubscriptionModal] = useState(false);
-  
+
   return (
     <>
       <Head>
@@ -42,13 +41,13 @@ function Managementschools() {
             />
           </PageTitleWrapper>
 
-          <Grid>
+          {/* <Grid>
             <ManageSubcriptions
               open={openSubscriptionModal}
               setOpen={setOpenopenSubscriptionModal}
               reFetchData={reFetchData}
             />
-          </Grid>
+          </Grid> */}
 
           <Grid
             sx={{ px: 4 }}
@@ -60,6 +59,7 @@ function Managementschools() {
           >
             <Grid item xs={12}>
               <Results
+                reFetchData={reFetchData}
                 schools={schools || []}
                 editSchool={editSchool}
                 setEditSchool={setEditSchool}
@@ -68,14 +68,14 @@ function Managementschools() {
             </Grid>
           </Grid>
         </Grid>
-          <Footer />
+        <Footer />
       </Grid>
     </>
   );
 }
 
 Managementschools.getLayout = (page) => (
-  <Authenticated name="school">
+  <Authenticated name="user">
     <ExtendedSidebarLayout>{page}</ExtendedSidebarLayout>
   </Authenticated>
 );

@@ -7,6 +7,12 @@ const index = async (req, res) => {
 
     switch (method) {
       case 'GET':
+        const { selected_title } = req.query;
+
+        const selectUser = {};
+
+        if (selected_title) selectUser['title'] = selected_title;
+
         const data = await prisma.role.findMany({
           where: {
             AND: [
@@ -20,6 +26,7 @@ const index = async (req, res) => {
                   not: 'ADMIN',
                 }
               },
+              selectUser
             ]
           }
         })
