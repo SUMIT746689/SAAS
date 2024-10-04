@@ -35,11 +35,9 @@ function ManagementClasses() {
   const [discount, setDiscount] = useState([]);
   const [fee, setFee] = useState([]);
   const idCard = useRef();
-  const [isLoading, setIsLoading] = useState(false)
-  const { data: classes } = useClientFetch(
-    `/api/class?school_id=${user?.school_id}`
-  );
-
+  const [isLoading, setIsLoading] = useState(false);
+  const { data: classes } = useClientFetch(`/api/class?school_id=${user?.school_id}`);
+  console.log('classess....................................', { classes });
   useEffect(() => {
     if (selectedClass && academicYear && selectedSection) handleStudentList();
   }, [selectedClass, academicYear, selectedSection]);
@@ -58,9 +56,7 @@ function ManagementClasses() {
         });
         setSections(sections);
         if (students?.selectedSection) {
-          setSelectedSection(
-            sections?.find((i) => i.id == students?.selectedSection?.id)
-          );
+          setSelectedSection(sections?.find((i) => i.id == students?.selectedSection?.id));
         }
       });
     }
@@ -69,9 +65,7 @@ function ManagementClasses() {
   useEffect(() => {
     if (selectedClass && academicYear) {
       axios
-        .get(
-          `/api/discount?class_id=${selectedClass?.id}&academic_year_id=${academicYear?.id}`
-        )
+        .get(`/api/discount?class_id=${selectedClass?.id}&academic_year_id=${academicYear?.id}`)
         .then((res) => {
           setDiscount(
             res.data?.map((i) => ({
@@ -82,9 +76,7 @@ function ManagementClasses() {
         })
         .catch((err) => console.log(err));
       axios
-        .get(
-          `/api/fee?class_id=${selectedClass?.id}&academic_year_id=${academicYear?.id}`
-        )
+        .get(`/api/fee?class_id=${selectedClass?.id}&academic_year_id=${academicYear?.id}`)
         .then((res) =>
           setFee(
             res?.data?.data?.map((i) => ({
@@ -100,17 +92,18 @@ function ManagementClasses() {
   const handleStudentList = () => {
     if (academicYear && selectedSection) {
       setIsLoading(true);
-      
-      const section_ids = []
+
+      const section_ids = [];
       // if (selectedSection?.id === 'all') sections.forEach(sec => { if (sec.id !== "all") section_ids.push(sec.id) });
-      // else 
-      section_ids.push(selectedSection.id)
-      if (section_ids.length === 0) return showNotification("section not founds...", "error"), setIsLoading(false);
+      // else
+      section_ids.push(selectedSection.id);
+      if (section_ids.length === 0) return showNotification('section not founds...', 'error'), setIsLoading(false);
 
       let url = `/api/student/student_lists_with_batches?class_id=${selectedClass?.id}&`;
       if (selectedSection?.id !== 'all') url += `section_ids=${section_ids}`;
-      
-      axios.get(url)
+
+      axios
+        .get(url)
         .then((res) => {
           setStudents({
             AllStudents: res.data,
@@ -118,8 +111,8 @@ function ManagementClasses() {
             selectedSection
           });
         })
-        .catch(err => handleShowErrMsg(err, showNotification))
-        .finally(() => setIsLoading(false))
+        .catch((err) => handleShowErrMsg(err, showNotification))
+        .finally(() => setIsLoading(false));
     }
   };
 
@@ -151,7 +144,7 @@ function ManagementClasses() {
       }
     }
   };
-  console.log({ selectedClass })
+  console.log({ selectedClass });
   return (
     <>
       <Head>
@@ -164,11 +157,7 @@ function ManagementClasses() {
             <Typography variant="h3" component="h3" gutterBottom>
               {t('Students Batches - Management')}
             </Typography>
-            <Typography variant="subtitle2">
-              {t(
-                'All aspects related to the students batches can be managed from this page'
-              )}
-            </Typography>
+            <Typography variant="subtitle2">{t('All aspects related to the students batches can be managed from this page')}</Typography>
           </Grid>
         </Grid>
       </PageTitleWrapper>
@@ -181,10 +170,10 @@ function ManagementClasses() {
           mb: 1,
           display: 'grid',
           gridTemplateColumns: {
-            sm: `1fr 1fr ${selectedClass && selectedClass.has_section && sections ? '1fr' : ''}`,
+            sm: `1fr 1fr ${selectedClass && selectedClass.has_section && sections ? '1fr' : ''}`
           },
           columnGap: 1,
-          borderRadius: 0.5,
+          borderRadius: 0.5
           // mx: 'auto'
         }}
       >
@@ -219,17 +208,13 @@ function ManagementClasses() {
             }}
           />
         )}
-        <SearchingButtonWrapper isLoading={isLoading} disabled={!selectedSection || isLoading} handleClick={handleStudentList}> Find </SearchingButtonWrapper>
+        <SearchingButtonWrapper isLoading={isLoading} disabled={!selectedSection || isLoading} handleClick={handleStudentList}>
+          {' '}
+          Find{' '}
+        </SearchingButtonWrapper>
       </Card>
 
-      <Grid
-        sx={{ px: 1 }}
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="stretch"
-        spacing={1}
-      >
+      <Grid sx={{ px: 1 }} container direction="row" justifyContent="center" alignItems="stretch" spacing={1}>
         <Grid item xs={12}>
           <Results
             students={students?.AllStudents || []}

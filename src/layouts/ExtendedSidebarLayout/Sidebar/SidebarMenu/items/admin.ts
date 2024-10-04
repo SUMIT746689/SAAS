@@ -730,6 +730,11 @@ const website_settings: MenuItems[] = [
         link: '/front_end/website_dynamic_pages'
       },
       {
+        name: 'Scholarship',
+        icon: CameraFrontIcon,
+        link: '/front_end/scholarship'
+      },
+      {
         name: 'Video Gallary',
         icon: CameraFrontIcon,
         link: '/front_end/video_gallary'

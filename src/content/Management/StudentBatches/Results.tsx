@@ -182,22 +182,23 @@ const Results: FC<{ students: any[]; refetch: () => void; discount: any[]; idCar
   };
 
   const handleDeleteCompleted = () => {
-    if (!openConfirmDelete?.student_id || !openConfirmDelete.section_id) return showNotification("student id or batch id not founds", "error");
-    axios.delete(`/api/student_batches/${openConfirmDelete.student_id}?section_id=${openConfirmDelete.section_id}`)
-      .then(res => {
+    if (!openConfirmDelete?.student_id || !openConfirmDelete.section_id) return showNotification('student id or batch id not founds', 'error');
+    axios
+      .delete(`/api/student_batches/${openConfirmDelete.student_id}?section_id=${openConfirmDelete.section_id}`)
+      .then((res) => {
         setOpenConfirmDelete(null);
         showNotification('The batch has been removed');
         refetch();
       })
-      .catch(err => {
+      .catch((err) => {
         setOpenConfirmDelete(null);
         showNotification('batch deletion failed !', 'error');
-      })
+      });
   };
 
   const handleConfirmDelete = ({ student_id, section_id }) => {
-    setOpenConfirmDelete({ student_id, section_id })
-  }
+    setOpenConfirmDelete({ student_id, section_id });
+  };
   // console.log(selectedStudent);
   const [addSubject, setAddSubject] = useState();
   const [searchValue, setSearchValue] = useState('');
@@ -208,9 +209,7 @@ const Results: FC<{ students: any[]; refetch: () => void; discount: any[]; idCar
     try {
       if (!searchValue || searchValue.length < 3) return setSearchResults([]);
       setSearchLoading(true);
-      const { data } = await axios.get(
-        `/api/student/search-students?search_value=${searchValue}`
-      );
+      const { data } = await axios.get(`/api/student/search-students?search_value=${searchValue}`);
       setSearchResults(data);
     } catch (err) {
       setSearchResults([]);
@@ -240,30 +239,25 @@ const Results: FC<{ students: any[]; refetch: () => void; discount: any[]; idCar
 
   return (
     <>
-      {addSubject
-        && <Add
+      {addSubject && (
+        <Add
           refetch={refetch}
           isOpen={true}
           selectCls={selectedClass}
           student_id={addSubject}
           setAddSubject={setAddSubject}
           sections={selectedClass?.sections?.map((section) => ({ value: section.id, label: section.name })) || []}
-        />}
+        />
+      )}
 
       <Card sx={{ minHeight: 'calc(100vh - 410px)', borderRadius: 0 }}>
-
         {selectedBulkActions && (
           <Box p={2}>
             <BulkActions />
           </Box>
         )}
         {!selectedBulkActions && (
-          <Box
-            p={1}
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
+          <Box p={1} display="flex" alignItems="center" justifyContent="space-between">
             <Box>
               <Typography component="span" variant="subtitle1">
                 {t('Showing')}:
@@ -332,49 +326,50 @@ const Results: FC<{ students: any[]; refetch: () => void; discount: any[]; idCar
                                                 value={isUserSelected}
                                             />
                                             </TableBodyCellWrapper> */}
-                      <TableBodyCellWrapper><Grid py={0.5}>{i.id}</Grid></TableBodyCellWrapper>
+                      <TableBodyCellWrapper>
+                        <Grid py={0.5}>{i.id}</Grid>
+                      </TableBodyCellWrapper>
                       <TableBodyCellWrapper>
                         {[i?.student_info?.first_name, i?.student_info?.middle_name, i?.student_info?.last_name].join(' ')}
                       </TableBodyCellWrapper>
                       <TableBodyCellWrapper>
                         <Grid display="flex" gap={0.5}>
-                          {i?.batches?.map(list => (
-                            <Grid key={list.id} sx={{ border: "1px solid gray", borderRadius: 0.25, px: 0.5, py: 0.25 }}>{list.name}
+                          {i?.batches?.map((list) => (
+                            <Grid key={list.id} sx={{ border: '1px solid gray', borderRadius: 0.25, px: 0.5, py: 0.25 }}>
+                              {list.name}
                               <button
-                                // disabled={deleteIsLoading} 
+                                // disabled={deleteIsLoading}
                                 onClick={() => {
                                   // handleDeleteSubject(i.id, list.id)
-                                  handleConfirmDelete({ student_id: i.id, section_id: list.id })
-                                }}>
-                                <ClearIcon sx={{ cursor: "pointer", fontSize: 13, ":hover": { bgcolor: "red", color: "white" } }} />
+                                  handleConfirmDelete({ student_id: i.id, section_id: list.id });
+                                }}
+                              >
+                                <ClearIcon sx={{ cursor: 'pointer', fontSize: 13, ':hover': { bgcolor: 'red', color: 'white' } }} />
                               </button>
                             </Grid>
                           ))}
                         </Grid>
                       </TableBodyCellWrapper>
-                      <TableBodyCellWrapper>
-                        {selectedClass?.label}
-                      </TableBodyCellWrapper>
+                      <TableBodyCellWrapper>{selectedClass?.label}</TableBodyCellWrapper>
                       {/* <TableBodyCellWrapper>
                         {selectedClass?.has_section ? selectedSection?.label : ''}
                       </TableBodyCellWrapper> */}
                       <TableBodyCellWrapper>
                         <Grid display="flex" columnGap={1} justifyContent="center">
-
                           <Tooltip title={t('Add Batch')} arrow>
                             <IconButton
                               color="primary"
                               sx={ActionStyle}
                               // @ts-ignore
-                              onClick={() => { setAddSubject(i.id) }}
-                            //  onClick={<Page}
+                              onClick={() => {
+                                setAddSubject(i.id);
+                              }}
+                              //  onClick={<Page}
                             >
                               <AddIcon />
                             </IconButton>
                           </Tooltip>
-
                         </Grid>
-
                       </TableBodyCellWrapper>
                     </TableRow>
                   );
@@ -393,13 +388,7 @@ const Results: FC<{ students: any[]; refetch: () => void; discount: any[]; idCar
         keepMounted
         onClose={closeConfirmDelete}
       >
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-          p={2}
-        >
+        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" p={2}>
           <AvatarError sx={{ width: 40, height: 40 }}>
             <CloseIcon sx={{ p: 1 }} />
           </AvatarError>
@@ -412,8 +401,7 @@ const Results: FC<{ students: any[]; refetch: () => void; discount: any[]; idCar
             }}
             variant="h4"
           >
-            {t('Are you sure you want to permanently delete this student class subject')}
-            ?
+            {t('Are you sure you want to permanently delete this student class subject')}?
           </Typography>
 
           <Box>
