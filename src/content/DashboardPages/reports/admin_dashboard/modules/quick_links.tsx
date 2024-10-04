@@ -93,9 +93,10 @@ const examination = [
     { color: quickLinksColors[2], linkUrl: "/management/exam/addtional_marks", icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />, name: "Exams Addtional Marks" },
     { color: quickLinksColors[1], linkUrl: "/management/exam/seat-plan", icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />, name: "Exams Seat Plan" },
     { color: quickLinksColors[0], linkUrl: "/management/exam/question", icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "Exam Questions" },
-
 ]
-
+const school_branches = [
+    { color: quickLinksColors[0], linkUrl: "/management/school_branches", icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "School Branches" },
+]
 // { color: quickLinksColors[1], linkUrl: "/management/students", icon: <StudentRegIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />, name: "Students" },
 // { color: quickLinksColors[2], linkUrl: "/management/teachers", icon: <TeacherIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />, name: "Teachers" },
 // { color: quickLinksColors[0], linkUrl: "/management/users/entry_other_users", icon: <StudentRegIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "Other Users" },
@@ -121,5 +122,5 @@ const examination = [
 export default {
     all_users, online_addmission, students, teachers,
     other_users, attendance, accounting, notice, routine, sms, card_generate,
-    study_materials, website_settings, report, examination
+    study_materials, website_settings, report, examination, school_branches
 }

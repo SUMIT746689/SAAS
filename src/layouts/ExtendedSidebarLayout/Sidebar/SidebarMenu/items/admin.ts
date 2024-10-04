@@ -951,6 +951,18 @@ const examination: MenuItems[] = [
   }
 ];
 
+const school_branches = [
+  {
+    items: [
+      {
+        name: 'School Branches',
+        link: '/management/school_branches',
+        icon: AccessibilityIcon
+      }
+    ]
+  }
+]
+
 export default {
   all_users,
   online_addmission,
@@ -967,6 +979,7 @@ export default {
   website_settings,
   report,
   examination,
-  module_dashboard
+  module_dashboard,
+  school_branches
 };
 // export default adminItems

@@ -18,7 +18,7 @@ export const get = async (req, res, refresh_token) => {
 
       },
       include: {
-        user_role:true
+        user_role: true
       }
     });
     const { role, is_enabled } = req.query;
@@ -37,7 +37,7 @@ export const get = async (req, res, refresh_token) => {
       { admin_panel_id: admin_panel_id || { not: null } },
       {
         role: {
-          title: 'ADMIN'
+          title: { in: ['ADMIN', 'BRANCH_ADMIN'] }
         }
       }
     );
@@ -64,7 +64,7 @@ export const get = async (req, res, refresh_token) => {
     }
     else throw new Error('Only role 1 and 2 is allowed to see validate data')
     // : [{ school_id: user.school_id }, { id: { not: user.id } }]
-    console.log({is_enabled})
+    console.log({ is_enabled })
     if (is_enabled) AND.push({ is_enabled: is_enabled === 'true' ? true : false })
 
     const users = await prisma.user.findMany({
@@ -89,7 +89,7 @@ export const get = async (req, res, refresh_token) => {
             title: true
           }
         },
-        user_role_id:true,
+        user_role_id: true,
         role_id: true,
         school_id: true,
         school: {
