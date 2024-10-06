@@ -17,7 +17,7 @@ const get = async (req, res, refresh_token) => {
     if (by) AND.push({ [by]: { contains: token || '' } });
     if (user.role.title === 'ASSIST_SUPER_ADMIN') AND.push({
       role: {
-        title: 'ADMIN'
+        title: { in: ['ADMIN', 'BRANCH_ADMIN'] }
       }
     });
     else if (user.role.title === 'ADMIN') {

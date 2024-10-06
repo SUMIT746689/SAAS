@@ -37,11 +37,7 @@ function PageHeader({ editUser, setEditUser, reFetchData }) {
   }, [editUser]);
 
   const permissons = [
-    {
-      label: 'Assistant Super Admin',
-      role: 'ASSIST_SUPER_ADMIN',
-      value: 'create_assist_super_admin'
-    },
+    { label: 'Assistant Super Admin', role: 'ASSIST_SUPER_ADMIN', value: 'create_assist_super_admin' },
     { label: 'Admin', role: 'ADMIN', value: 'create_admin' },
     { label: 'Branch Admin', role: 'BRANCH_ADMIN', value: 'create_branch_admin' },
     { label: 'Guardian', role: 'GURDIAN', value: 'create_gurdian' },
@@ -52,7 +48,7 @@ function PageHeader({ editUser, setEditUser, reFetchData }) {
 
   ];
   const available_permissions = user?.permissions?.map((permission) => permission.value);
-  console.log({available_permissions})
+  console.log({ available_permissions })
   const userPrermissionRoles = permissons.filter((role) => available_permissions?.includes(role.value));
 
   const { t }: { t: any } = useTranslation();
@@ -112,7 +108,7 @@ function PageHeader({ editUser, setEditUser, reFetchData }) {
       setSubmitting(false);
     }
   };
-  console.log({userPrermissionRoles})
+  console.log({ userPrermissionRoles })
   const temp = userPrermissionRoles.find((i) => i.role == editUser?.user_role?.title);
   console.log({ temp })
   const handleDebounce = (value) => {

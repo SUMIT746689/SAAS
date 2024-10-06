@@ -63,7 +63,8 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   };
 
   return (
-    <> <DialogTitleWrapper name={'Scholarship'} editData={editData} paddingLeft={32} paddingRight={32} />
+    <> 
+    <Grid paddingLeft={32} paddingRight={32} > <DialogTitleWrapper  name={'Scholarship'} editData={editData} /></Grid>
     <Formik
           initialValues={{
             title: editData?.title || undefined,
@@ -189,13 +190,13 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                 </DialogContent>
 
                 {/* handle cancel dilog / close / submit dialog click cancel or add button */}
-               <DialogActionWrapper 
+               <Grid paddingLeft={32} paddingRight={32}><DialogActionWrapper 
                   title="Scholarship"
                   handleCreateClassClose={handleCreateClassClose}
                   errors={errors}
                   editData={editData}
-                  isSubmitting={isSubmitting}
-                />
+                  isSubmitting={isSubmitting} 
+                /></Grid>
                
               </form>
             );
