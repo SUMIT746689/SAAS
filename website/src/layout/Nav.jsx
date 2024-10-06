@@ -93,6 +93,9 @@ const NavLinks = ({ serverhost }) => {
       <Link href="/">
         <div className={navLink}>প্রধান পাতা</div>
       </Link>
+      {/* <Link href="/scholarship">
+        <div className={navLink}>Scholarship</div>
+      </Link> */}
       <Link href="/teachers">
         <div className={navLink}> শিক্ষক</div>
       </Link>
