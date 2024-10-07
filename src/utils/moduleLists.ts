@@ -2,6 +2,10 @@ export const adminModulesList = [
     'all_users', 'online_addmission', 'school_branches', 'students', 'teachers', 'staffs', 'attendance', 'accounting', 'notice',
     'routine', 'study_materials', 'card_generate', 'sms', 'website_settings', 'report', 'examination'
 ]
+export const branchAdminModulesList = [
+    'all_users', 'online_addmission', 'students', 'teachers', 'staffs', 'attendance', 'accounting', 'notice',
+    'routine', 'study_materials', 'card_generate', 'sms', 'website_settings', 'report', 'examination'
+]
 
 export const teacherModulesList = [
     'student_attendence', 'class_exam', 'mark_entry', 'student_home_work',

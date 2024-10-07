@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { AuthConsumer, AuthProvider } from '@/contexts/JWTAuthContext';
 import { permissionVerify } from '@/utils/permissionVerify';
 import adminItems from './items/admin';
+import branch_adminItems from './items/branchadmin';
 import teacherItems from './items/teacher';
 import studentItems from './items/student';
 import allUserMenuItems, { dashboardMenuItem } from './items/items';
@@ -766,10 +767,12 @@ function SidebarMenu() {
           // select role wise module lists
           const allItems = {
             adminItems,
+            branch_adminItems,
             teacherItems,
-            studentItems
+            studentItems,
           };
           const selectRoleWiseMenuItems = allItems[`${roleLower}Items`];
+          console.log({ roleLower, selectRoleWiseMenuItems })
           const selectModuleFromRoleWiseMenuItems = selectRoleWiseMenuItems ? selectRoleWiseMenuItems[selectModule] : [{ items: [] }];
           const showMenuItems = [{ items: [] }];
           if (
@@ -779,7 +782,7 @@ function SidebarMenu() {
           ) {
             showMenuItems[0].items = [selectRoleWiseMenuItems.module_dashboard, ...selectModuleFromRoleWiseMenuItems[0]?.items];
           }
-          if (!['ADMIN', 'TEACHER', 'STUDENT'].includes(roleTitle))
+          if (!['ADMIN','BRANCH_ADMIN', 'TEACHER', 'STUDENT'].includes(roleTitle))
             return (
               <>
                 {allUserMenuItems?.map((section: any) => (

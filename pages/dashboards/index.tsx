@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 // import { useEffect } from 'react';
 import { serverSideAuthentication } from '@/utils/serverSideAuthentication';
 import AdminDashboardReportsContent from '@/content/DashboardPages/reports/admin_dashboard/index';
+import BranchAdminDashboardReportsContent from '@/content/DashboardPages/reports/branchadmin_dashboard/index';
 import StudentDashboardReportsContent from '@/content/DashboardPages/reports/student_dashboard/index';
 import TeacherDashboardReportsContent from '@/content/DashboardPages/reports/teacher_dashboard/index';
 
@@ -72,8 +73,8 @@ export async function getServerSideProps(context: any) {
         }));
         break;
 
-      case 'ADMIN':
-        blockCount['role'] = 'admin';
+      case 'ADMIN': case 'BRANCH_ADMIN':
+        blockCount['role'] =  refresh_token.role.title === 'ADMIN' ? 'admin': 'branch admin' ;
         blockCount['students'] = {
           count: await prisma.student.count({
             where: { student_info: { school_id: refresh_token?.school_id } }
@@ -145,10 +146,15 @@ export async function getServerSideProps(context: any) {
           select: {
             class_roll_no: true,
             class: true,
+            batches: {
+              select: {
+                name: true
+              }
+            },
             // section: {
             //   select: {
             //     name: true,
-            //     class: true
+            //     class: true,
             //   }
             // },
             student_info: {
@@ -206,6 +212,15 @@ function MainDashboard({ blockCount }) {
             <title>Dashboard</title>
           </Head>
           <AdminDashboardReportsContent blockCount={blockCount} />
+        </>
+      );
+    case 'branch admin':
+      return (
+        <>
+          <Head>
+            <title>Dashboard</title>
+          </Head>
+          <BranchAdminDashboardReportsContent blockCount={blockCount} />
         </>
       );
     default:
