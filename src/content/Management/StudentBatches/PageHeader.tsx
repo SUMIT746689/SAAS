@@ -241,7 +241,7 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
             );
           }}
         </Formik>
-      </DialogTitleWrapper>
+      </Dialog>
     </>
   );
 }

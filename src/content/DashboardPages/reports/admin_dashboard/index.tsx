@@ -82,6 +82,12 @@ const quickLinks = [
     name: 'Online Admission'
   },
   {
+    color: quickLinksColors[2],
+    linkUrl: 'dashboards/modules/admin',
+    icon: <OnlineAddmissionIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />,
+    name: 'School Branches'
+  },
+  {
     color: quickLinksColors[1],
     linkUrl: 'dashboards/modules/admin',
     icon: <StudentRegIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />,

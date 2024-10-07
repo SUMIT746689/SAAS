@@ -18,6 +18,7 @@ export default function MiddleNavbar({ datas }) {
                     <li><a>Email: {email}</a></li>
                     <li><a>Phone No: {phone}</a></li>
                     <Link
+                    
                     href={`/scholarship`} 
                     className=" ml-40 rounded bg-[#FFFEF3] text-[#192F59] flex items-center gap-1 font-bold"
                     >

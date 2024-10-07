@@ -225,12 +225,13 @@ model Teacher {
 }
 
 model Class {
-  id          Int     @id @default(autoincrement())
-  name        String
-  code        String
-  has_section Boolean @default(false)
-  school_id   Int
-  is_extra    Boolean @default(false)
+  id             Int     @id @default(autoincrement())
+  name           String
+  code           String
+  has_section    Boolean @default(false)
+  school_id      Int
+  is_extra       Boolean @default(false)
+  scholarship_id Int?
 
   sections                   Section[]
   subjects                   Subject[]
@@ -242,6 +243,7 @@ model Class {
   Student                    Student[]
   Period                     Period[]
   Homework                   Homework[]
+  scholarship                WebsiteUi?                   @relation(fields: [scholarship_id], references: [id])
 
   @@map("classes")
 }
@@ -918,7 +920,12 @@ model WebsiteUi {
 
   school_id Int
 
-  school School @relation(fields: [school_id], references: [id])
+  english_scholarship_name String?
+  bangla_scholarship_name  String?
+  is_scholarship_active    Boolean @default(false)
+
+  school             School  @relation(fields: [school_id], references: [id])
+  scholarshipClasses Class[]
 
   @@map("website_uis")
 }

@@ -97,6 +97,12 @@ const examination = [
 const school_branches = [
     { color: quickLinksColors[0], linkUrl: "/management/school_branches", icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "School Branches" },
 ]
+
+const staffs = [
+    { color: quickLinksColors[0], linkUrl: "/management/users/entry_other_users", icon: <ExamIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "Staffs" },
+]
+
+
 // { color: quickLinksColors[1], linkUrl: "/management/students", icon: <StudentRegIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />, name: "Students" },
 // { color: quickLinksColors[2], linkUrl: "/management/teachers", icon: <TeacherIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />, name: "Teachers" },
 // { color: quickLinksColors[0], linkUrl: "/management/users/entry_other_users", icon: <StudentRegIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "Other Users" },
@@ -122,5 +128,5 @@ const school_branches = [
 export default {
     all_users, online_addmission, students, teachers,
     other_users, attendance, accounting, notice, routine, sms, card_generate,
-    study_materials, website_settings, report, examination, school_branches
+    study_materials, website_settings, report, examination, school_branches, staffs
 }

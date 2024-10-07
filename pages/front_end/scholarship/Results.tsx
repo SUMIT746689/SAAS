@@ -3,17 +3,18 @@ import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, CircularProgress, Grid } from '@mui/material';
 import { FormControlLabel, FormGroup, Switch, Typography } from '@mui/material';
-import { NewFileUploadFieldWrapper, PreviewImageCard, TextAreaWrapper, TextFieldWrapper } from '@/components/TextFields';
+import { TextFieldWrapper } from '@/components/TextFields';
 import axios from 'axios';
 import useNotistick from '@/hooks/useNotistick';
 import { useEffect, useState } from 'react';
 import { AutoCompleteWrapper } from '@/components/AutoCompleteWrapper';
 import { useClientFetch } from '@/hooks/useClientFetch';
 import { useAuth } from '@/hooks/useAuth';
-const Results = ({ data, reFetchData, sections }) => {
+const Results = ({ data, reFetchData }) => {
   const { user } = useAuth();
   const [classOptions, setClassOptions] = useState([]);
   const { data: classes } = useClientFetch(`/api/class?school_id=${user?.school_id}`);
+
   useEffect(() => {
     if (!classes || !Array.isArray(classes)) return;
     setClassOptions(
@@ -24,8 +25,6 @@ const Results = ({ data, reFetchData, sections }) => {
     );
   }, [classes]);
 
-  console.log('classess...', { classes });
-  console.log({ classOptions });
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
   // isOn
@@ -45,9 +44,10 @@ const Results = ({ data, reFetchData, sections }) => {
     <Formik
       enableReinitialize
       initialValues={{
-        english_chairman_name: data?.english_chairman_name || '',
-        bangla_chairman_name: data?.bangla_chairman_name || '',
-        classess: data?.classess || '',
+        english_scholarship_name: data?.english_scholarship_name || '',
+        bangla_scholarship_name: data?.bangla_scholarship_name || '',
+        classes: data?.scholarshipClasses?.map((cls) => ({ id: cls.id, label: cls.name })) || [],
+        // classess: [],
         submit: null
       }}
       onSubmit={async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
@@ -57,30 +57,10 @@ const Results = ({ data, reFetchData, sections }) => {
             setSubmitting(false);
             showNotification(message);
           };
-          const formData = new FormData();
-          for (let i in _values) {
-            if (i.includes('preview_')) continue;
-            if (i == 'carousel_image') {
-              const temp = _values[i];
-              for (const j in temp) {
-                if (typeof temp[j] == 'object') {
-                  formData.append('carousel_image', temp[j]);
-                }
-              }
-            } else if (
-              ['header_image', 'about_school_photo', 'chairman_photo', 'principal_photo', 'assist_principal_photo'].includes(i) &&
-              _values[i]
-            ) {
-              formData.append(`${i}`, _values[i][0]);
-            } else if (['e_books_section', 'downloads_section'].includes(i) && _values[i]) {
-              formData.append(`${i}`, JSON.stringify(_values[i]));
-            } else {
-              console.log({ i: _values[i] });
-              formData.append(`${i}`, _values[i]);
-            }
-          }
+          const copyValues = JSON.parse(JSON.stringify(_values));
+          copyValues.classes = copyValues?.classes?.map((cls) => cls.id);
           axios
-            .put('/api/front_end', formData)
+            .put('/api/front_end/scholarship', copyValues)
             .then((res) => {
               reFetchData();
               successResponse('Scholarship information updated !');
@@ -100,46 +80,49 @@ const Results = ({ data, reFetchData, sections }) => {
       }}
     >
       {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
+        console.log({ values });
         return (
           <>
             <form onSubmit={handleSubmit}>
-              <Card sx={{ maxWidth: 1400 }}>
+              <Card sx={{ maxWidth: { sm: '40vw' } }}>
                 <Grid container columnSpacing={1} paddingTop={2} borderTop="1px solid lightGray" borderBottom="1px solid lightGray" p={2}>
                   <TextFieldWrapper
-                    touched={touched.english_chairman_name}
-                    errors={errors.english_chairman_name}
-                    label="Select_English_Name"
-                    name="english_chairman_name"
+                    touched={touched.english_scholarship_name}
+                    errors={errors.english_scholarship_name}
+                    label="Select English Name"
+                    name="english_scholarship_name"
                     handleBlur={handleBlur}
                     handleChange={handleChange}
-                    value={values.english_chairman_name}
+                    value={values.english_scholarship_name}
                     autocomplete="false"
                   />
                   <TextFieldWrapper
-                    touched={touched.bangla_chairman_name}
-                    errors={errors.bangla_chairman_name}
-                    label="Select_Bangla_Name"
-                    name="bangla_chairman_name"
+                    touched={touched.bangla_scholarship_name}
+                    errors={errors.bangla_scholarship_name}
+                    label="Select Bangla Name"
+                    name="bangla_scholarship_name"
                     handleBlur={handleBlur}
                     handleChange={handleChange}
-                    value={values.bangla_chairman_name}
+                    value={values.bangla_scholarship_name}
                     autocomplete="false"
                   />
                   <AutoCompleteWrapper
                     minWidth="100%"
-                    label="Select classess"
-                    placeholder="classess..."
+                    label="Select Classes"
+                    placeholder="classes..."
                     multiple
+                    value={values.classes}
                     options={classOptions}
                     name="classes"
-                    error={errors?.classess}
-                    touched={touched?.classess}
-                    handleChange={(e, value: any) => setFieldValue('classess', value)}
+                    error={errors?.classes}
+                    touched={touched?.classes}
+                    // @ts-ignore
+                    handleChange={(e, value: any) => setFieldValue('classes', value)}
                   />
-                  <Grid item>Scholership</Grid>
+
                   <FormControlLabel
                     control={<Switch checked={isOn} onChange={() => setIsOn((value) => !value)} inputProps={{ 'aria-label': 'controlled' }} />}
-                    label={`${isOn ? 'On' : 'Off'}`}
+                    label={`Scholarship ${isOn ? 'Active' : 'Disable'}`}
                     labelPlacement="start"
                     sx={{ mr: 'auto' }}
                   />
