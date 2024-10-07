@@ -41,7 +41,7 @@ function ManagementUsers() {
       </PageTitleWrapper>
 
       <Grid
-        sx={{ px: 4 }}
+        sx={{ px: 4, minHeight:'calc(100vh)'  }}
         container
         direction="row"
         justifyContent="center"

@@ -88,7 +88,7 @@ const Results = ({ data, reFetchData }) => {
         return (
           <>
             <form onSubmit={handleSubmit}>
-              <Card sx={{ minWidth:'calc(100vh-40px)' }}>
+              <Card sx={{ maxWidth:{sm:'40vw'}}}>
                 <Grid container columnSpacing={1} paddingTop={2} borderTop="1px solid lightGray" borderBottom="1px solid lightGray" p={2}>
                   <TextFieldWrapper
                     touched={touched.english_scholarship_name}
