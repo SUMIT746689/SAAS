@@ -2,22 +2,12 @@ import { useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import {
-  Grid,
-  DialogActions,
-  DialogContent,
-  TextField,
-  CircularProgress,
-  Button,
-} from '@mui/material';
+import { Grid, DialogActions, DialogContent, TextField, CircularProgress, Button } from '@mui/material';
 import axios from 'axios';
-
 import Image from 'next/image';
-
 import useNotistick from '../../hooks/useNotistick';
 import { FileUploadFieldWrapper } from '../reuseable/fileUpload';
 import { useRouter } from 'next/navigation';
-
 function RegistrationThirdPart({
   school_id,
   totalFormData,
@@ -29,7 +19,7 @@ function RegistrationThirdPart({
   setPdfDatas,
   handlePrint
 }) {
-  const router = useRouter()
+  const router = useRouter();
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
 
@@ -37,7 +27,7 @@ function RegistrationThirdPart({
   const [mother_photo, setMother_photo] = useState(null);
   const [guardian_photo, setGuardian_photo] = useState(null);
 
-  const registration3rdPart = useRef(null)
+  const registration3rdPart = useRef(null);
 
   return (
     <>
@@ -60,10 +50,7 @@ function RegistrationThirdPart({
         validationSchema={Yup.object().shape({
           father_name: Yup.string().max(255).nullable(true)
         })}
-        onSubmit={async (
-          _values,
-          { resetForm, setErrors, setStatus, setSubmitting }
-        ) => {
+        onSubmit={async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
           try {
             _values = {
               ..._values,
@@ -71,7 +58,7 @@ function RegistrationThirdPart({
               ...totalFormData,
               school_id: school_id
             };
-            console.log({ _values })
+            console.log({ _values });
 
             const formData = new FormData();
 
@@ -79,13 +66,13 @@ function RegistrationThirdPart({
               formData.append(`${i}`, _values[i]);
             }
 
-            await axios.post(`${serverHost}/api/onlineAdmission`, formData)
-              // .then(res => { console.log({ res }) })
-              // .catch(err => { console.log({ err }) })
-            setPdfDatas(() => _values)
+            await axios.post(`${serverHost}/api/onlineAdmission`, formData);
+            // .then(res => { console.log({ res }) })
+            // .catch(err => { console.log({ err }) })
+            setPdfDatas(() => _values);
 
             resetForm();
-            setTotalFormData({})
+            setTotalFormData({});
             setStatus({ success: true });
             setSubmitting(false);
             setUsersFlag(true);
@@ -94,9 +81,8 @@ function RegistrationThirdPart({
             // router.push('/online-admission');
 
             setTimeout(() => {
-              handlePrint()
+              handlePrint();
             }, 2000);
-
           } catch (err) {
             setPdfDatas({});
             console.log(err.message);
@@ -108,16 +94,7 @@ function RegistrationThirdPart({
           }
         }}
       >
-        {({
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          touched,
-          values,
-          setFieldValue
-        }) => {
+        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
           // console.log("T__values__",values);
 
           return (
@@ -127,7 +104,6 @@ function RegistrationThirdPart({
                 sx={{
                   p: 3
                 }}
-
               >
                 <Grid container ref={registration3rdPart}>
                   <Grid container item spacing={1}>
@@ -140,9 +116,7 @@ function RegistrationThirdPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.father_name && errors.father_name
-                        )}
+                        error={Boolean(touched.father_name && errors.father_name)}
                         fullWidth
                         margin="normal"
                         helperText={touched.father_name && errors.father_name}
@@ -164,9 +138,7 @@ function RegistrationThirdPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.father_phone && errors.father_phone
-                        )}
+                        error={Boolean(touched.father_phone && errors.father_phone)}
                         fullWidth
                         margin="normal"
                         helperText={touched.father_phone && errors.father_phone}
@@ -188,14 +160,10 @@ function RegistrationThirdPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.father_profession && errors.father_profession
-                        )}
+                        error={Boolean(touched.father_profession && errors.father_profession)}
                         fullWidth
                         margin="normal"
-                        helperText={
-                          touched.father_profession && errors.father_profession
-                        }
+                        helperText={touched.father_profession && errors.father_profession}
                         label={t('father Profession')}
                         name="father_profession"
                         onBlur={handleBlur}
@@ -207,17 +175,11 @@ function RegistrationThirdPart({
                     </Grid>
                     {/* father_photo */}
                     <Grid container p={1} gap={1} xs={12} sm={6} md={6}>
-                      {
-                        father_photo && <Grid item>
-                          <Image src={father_photo}
-                            height={100}
-                            width={100}
-                            alt="Father's photo:"
-                            loading='lazy'
-                          />
-
+                      {father_photo && (
+                        <Grid item>
+                          <Image src={father_photo} height={100} width={100} alt="Father's photo:" loading="lazy" />
                         </Grid>
-                      }
+                      )}
 
                       <br />
                       <FileUploadFieldWrapper
@@ -230,13 +192,13 @@ function RegistrationThirdPart({
                           if (e.target?.files?.length) {
                             const photoUrl = URL.createObjectURL(e.target.files[0]);
                             // @ts-ignore
-                            setFather_photo(photoUrl)
-                            setFieldValue('father_photo', e.target.files[0])
+                            setFather_photo(photoUrl);
+                            setFieldValue('father_photo', e.target.files[0]);
                           }
                         }}
                         handleRemoveFile={(e) => {
                           setFather_photo(null);
-                          setFieldValue('father_photo', undefined)
+                          setFieldValue('father_photo', undefined);
                         }}
                       />
                     </Grid>
@@ -249,9 +211,7 @@ function RegistrationThirdPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.mother_name && errors.mother_name
-                        )}
+                        error={Boolean(touched.mother_name && errors.mother_name)}
                         fullWidth
                         margin="normal"
                         helperText={touched.father_name && errors.mother_name}
@@ -273,9 +233,7 @@ function RegistrationThirdPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.mother_phone && errors.mother_phone
-                        )}
+                        error={Boolean(touched.mother_phone && errors.mother_phone)}
                         fullWidth
                         margin="normal"
                         helperText={touched.mother_phone && errors.mother_phone}
@@ -297,14 +255,10 @@ function RegistrationThirdPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.mother_profession && errors.mother_profession
-                        )}
+                        error={Boolean(touched.mother_profession && errors.mother_profession)}
                         fullWidth
                         margin="normal"
-                        helperText={
-                          touched.mother_profession && errors.mother_profession
-                        }
+                        helperText={touched.mother_profession && errors.mother_profession}
                         label={t('Mother profession')}
                         name="mother_profession"
                         onBlur={handleBlur}
@@ -316,18 +270,11 @@ function RegistrationThirdPart({
                     </Grid>
                     {/* mather_photo */}
                     <Grid container p={1} gap={1} xs={12} sm={6} md={6}>
-
-                      {
-                        mother_photo && <Grid item>
-                          <Image src={mother_photo}
-                            height={100}
-                            width={100}
-                            alt="Mother's photo:"
-                            loading='lazy'
-                          />
-
+                      {mother_photo && (
+                        <Grid item>
+                          <Image src={mother_photo} height={100} width={100} alt="Mother's photo:" loading="lazy" />
                         </Grid>
-                      }
+                      )}
                       <br />
                       <FileUploadFieldWrapper
                         htmlFor="mother_photo"
@@ -339,13 +286,13 @@ function RegistrationThirdPart({
                           if (e.target?.files?.length) {
                             const photoUrl = URL.createObjectURL(e.target.files[0]);
                             // @ts-ignore
-                            setMother_photo(photoUrl)
-                            setFieldValue('mother_photo', e.target.files[0])
+                            setMother_photo(photoUrl);
+                            setFieldValue('mother_photo', e.target.files[0]);
                           }
                         }}
                         handleRemoveFile={(e) => {
                           setMother_photo(null);
-                          setFieldValue('mother_photo', undefined)
+                          setFieldValue('mother_photo', undefined);
                         }}
                       />
                     </Grid>
@@ -358,14 +305,10 @@ function RegistrationThirdPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.guardian_name && errors.guardian_name
-                        )}
+                        error={Boolean(touched.guardian_name && errors.guardian_name)}
                         fullWidth
                         margin="normal"
-                        helperText={
-                          touched.guardian_name && errors.guardian_name
-                        }
+                        helperText={touched.guardian_name && errors.guardian_name}
                         label={t('Guardian name')}
                         name="guardian_name"
                         onBlur={handleBlur}
@@ -384,14 +327,10 @@ function RegistrationThirdPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.guardian_phone && errors.guardian_phone
-                        )}
+                        error={Boolean(touched.guardian_phone && errors.guardian_phone)}
                         fullWidth
                         margin="normal"
-                        helperText={
-                          touched.guardian_phone && errors.guardian_phone
-                        }
+                        helperText={touched.guardian_phone && errors.guardian_phone}
                         label={t('Guardian phone')}
                         name="guardian_phone"
                         onBlur={handleBlur}
@@ -410,16 +349,10 @@ function RegistrationThirdPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.guardian_profession &&
-                          errors.guardian_profession
-                        )}
+                        error={Boolean(touched.guardian_profession && errors.guardian_profession)}
                         fullWidth
                         margin="normal"
-                        helperText={
-                          touched.guardian_profession &&
-                          errors.guardian_profession
-                        }
+                        helperText={touched.guardian_profession && errors.guardian_profession}
                         label={t('Guardian profession')}
                         name="guardian_profession"
                         onBlur={handleBlur}
@@ -431,18 +364,11 @@ function RegistrationThirdPart({
                     </Grid>
                     {/* guardian_photo */}
                     <Grid container p={1} gap={1} item xs={12} sm={6} md={6}>
-
-                      {
-                        guardian_photo && <Grid item>
-                          <Image src={guardian_photo}
-                            height={100}
-                            width={100}
-                            alt="Guardian's photo:"
-                            loading='lazy'
-                          />
-
+                      {guardian_photo && (
+                        <Grid item>
+                          <Image src={guardian_photo} height={100} width={100} alt="Guardian's photo:" loading="lazy" />
                         </Grid>
-                      }
+                      )}
                       <br />
                       <FileUploadFieldWrapper
                         htmlFor="guardian_photo"
@@ -454,13 +380,13 @@ function RegistrationThirdPart({
                           if (e.target?.files?.length) {
                             const photoUrl = URL.createObjectURL(e.target.files[0]);
                             // @ts-ignore
-                            setGuardian_photo(photoUrl)
-                            setFieldValue('guardian_photo', e.target.files[0])
+                            setGuardian_photo(photoUrl);
+                            setFieldValue('guardian_photo', e.target.files[0]);
                           }
                         }}
                         handleRemoveFile={(e) => {
                           setGuardian_photo(null);
-                          setFieldValue('guardian_photo', undefined)
+                          setFieldValue('guardian_photo', undefined);
                         }}
                       />
                     </Grid>
@@ -473,16 +399,10 @@ function RegistrationThirdPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.relation_with_guardian &&
-                          errors.relation_with_guardian
-                        )}
+                        error={Boolean(touched.relation_with_guardian && errors.relation_with_guardian)}
                         fullWidth
                         margin="normal"
-                        helperText={
-                          touched.relation_with_guardian &&
-                          errors.relation_with_guardian
-                        }
+                        helperText={touched.relation_with_guardian && errors.relation_with_guardian}
                         label={t('Relation with guardian')}
                         name="relation_with_guardian"
                         onBlur={handleBlur}
@@ -500,22 +420,15 @@ function RegistrationThirdPart({
                   p: 3
                 }}
               >
-
                 <Button color="secondary" onClick={handleCreateClassClose}>
                   {t('Cancel')}
                 </Button>
-                <Button
-                  color="warning"
-                  variant="contained"
-                  onClick={() => setActiveStep(1)}
-                >
+                <Button color="warning" variant="contained" onClick={() => setActiveStep(1)}>
                   {t('Previous')}
                 </Button>
                 <Button
                   type="submit"
-                  startIcon={
-                    isSubmitting ? <CircularProgress size="1rem" /> : null
-                  }
+                  startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
                   // @ts-ignore
                   disabled={Boolean(errors.submit) || isSubmitting}
                   variant="contained"
@@ -527,8 +440,6 @@ function RegistrationThirdPart({
           );
         }}
       </Formik>
-
-
     </>
   );
 }

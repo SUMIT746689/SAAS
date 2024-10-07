@@ -5,14 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import dayjs, { Dayjs } from 'dayjs';
 
-import {
-  Grid,
-  DialogActions,
-  DialogContent,
-  TextField,
-  CircularProgress,
-  Button,
-} from '@mui/material';
+import { Grid, DialogActions, DialogContent, TextField, CircularProgress, Button } from '@mui/material';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
@@ -22,11 +15,7 @@ import FormLabel from '@mui/material/FormLabel';
 import { MobileDatePicker, MobileDateTimePicker } from '@mui/lab';
 import useNotistick from '../../hooks/useNotistick';
 
-function RegistrationFirstPart({
-  setTotalFormData,
-  setActiveStep,
-  handleCreateClassClose
-}) {
+function RegistrationFirstPart({ setTotalFormData, setActiveStep, handleCreateClassClose }) {
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
   const [gender, setGender] = useState('male');
@@ -50,24 +39,18 @@ function RegistrationFirstPart({
           student_photo: null
         }}
         validationSchema={Yup.object().shape({
-          first_name: Yup.string()
-            .max(255)
-            .required(t('First name field is required')),
+          first_name: Yup.string().max(255).required(t('First name field is required')),
           middle_name: Yup.string().max(255).nullable(true),
           last_name: Yup.string().max(255).nullable(true),
           date_of_birth: Yup.date().required(t('Date of birth is required!')),
           gender: Yup.string().required(t('select a gender')),
           blood_group: Yup.string().nullable(true),
           religion: Yup.string().nullable(true),
-          phone: Yup.string().required(t('Phone number is required!'))
-            .min(11, 'Phone number must be greater then or equals 11 character'),
+          phone: Yup.string().required(t('Phone number is required!')).min(11, 'Phone number must be greater then or equals 11 character'),
           email: Yup.string(),
           national_id: Yup.string()
         })}
-        onSubmit={async (
-          _values,
-          { resetForm, setErrors, setStatus, setSubmitting }
-        ) => {
+        onSubmit={async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
           try {
             console.log('clicked');
             setTotalFormData((values: any) => ({ ...values, ..._values }));
@@ -82,20 +65,11 @@ function RegistrationFirstPart({
           }
         }}
       >
-        {({
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          touched,
-          values,
-          setFieldValue
-        }) => {
+        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
           // console.log("T__values__",values);
           console.log({ errors });
           return (
-            <form onSubmit={handleSubmit} >
+            <form onSubmit={handleSubmit}>
               <DialogContent
                 dividers
                 sx={{
@@ -135,9 +109,7 @@ function RegistrationFirstPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.middle_name && errors.middle_name
-                        )}
+                        error={Boolean(touched.middle_name && errors.middle_name)}
                         fullWidth
                         helperText={touched.middle_name && errors.middle_name}
                         label={t('Middle name')}
@@ -240,7 +212,7 @@ function RegistrationFirstPart({
                     <Grid item xs={12} md={6}>
                       <MobileDatePicker
                         label="Date of birth"
-                        inputFormat='dd/MM/yyyy'
+                        inputFormat="dd/MM/yyyy"
                         value={values.date_of_birth}
                         onChange={(n) => {
                           // console.log("start time__hour",newValue.$H);
@@ -248,19 +220,18 @@ function RegistrationFirstPart({
                           if (n) {
                             // setFieldValue("date_of_birth", `1970-05-02 ${newValue.$H}:${newValue.$m}:00+0000`)
                             // @ts-ignore
-                            const newValue = dayjs(n)
+                            const newValue = dayjs(n);
 
                             // dayjs(newValue).format('H:m:ss')
                             //@ts-ignore
                             setFieldValue('date_of_birth', newValue);
-
                           }
                         }}
                         renderInput={(params) => (
                           <TextField
                             required
                             fullWidth
-                            name='date_of_birth'
+                            name="date_of_birth"
                             size="small"
                             sx={{
                               '& fieldset': {
@@ -271,18 +242,13 @@ function RegistrationFirstPart({
                           />
                         )}
                       />
-                      {
-                        errors.date_of_birth && <span style={{ color: 'red' }}> Date of birth are required</span>
-                      }
-
+                      {errors.date_of_birth && <span style={{ color: 'red' }}> Date of birth are required</span>}
                     </Grid>
 
                     {/* Gender */}
-                    <Grid item xs={12}  md={6}>
+                    <Grid item xs={12} md={6}>
                       <FormControl>
-                        <FormLabel id="demo-row-radio-buttons-group-label">
-                          Select Gender *
-                        </FormLabel>
+                        <FormLabel id="demo-row-radio-buttons-group-label">Select Gender *</FormLabel>
                         <RadioGroup
                           aria-labelledby="demo-controlled-radio-buttons-group"
                           name="gender"
@@ -293,16 +259,8 @@ function RegistrationFirstPart({
                             setFieldValue('gender', event.target.value);
                           }}
                         >
-                          <FormControlLabel
-                            value="male"
-                            control={<Radio />}
-                            label="Male"
-                          />
-                          <FormControlLabel
-                            value="female"
-                            control={<Radio />}
-                            label="Female"
-                          />
+                          <FormControlLabel value="male" control={<Radio />} label="Male" />
+                          <FormControlLabel value="female" control={<Radio />} label="Female" />
                         </RadioGroup>
                       </FormControl>
                     </Grid>
@@ -316,9 +274,7 @@ function RegistrationFirstPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.blood_group && errors.blood_group
-                        )}
+                        error={Boolean(touched.blood_group && errors.blood_group)}
                         fullWidth
                         helperText={touched.blood_group && errors.blood_group}
                         label={t('blood Group')}
@@ -400,7 +356,7 @@ function RegistrationFirstPart({
                     </Grid>
 
                     {/* national_id */}
-                    <Grid item xs={12} >
+                    <Grid item xs={12}>
                       <TextField
                         size="small"
                         sx={{
@@ -408,9 +364,7 @@ function RegistrationFirstPart({
                             borderRadius: '3px'
                           }
                         }}
-                        error={Boolean(
-                          touched.national_id && errors.national_id
-                        )}
+                        error={Boolean(touched.national_id && errors.national_id)}
                         fullWidth
                         helperText={touched.national_id && errors.national_id}
                         label={t('Birth certificate Id')}
@@ -430,14 +384,12 @@ function RegistrationFirstPart({
                   p: 3
                 }}
               >
-                <Button color="secondary" onClick={handleCreateClassClose} >
+                <Button color="secondary" onClick={handleCreateClassClose}>
                   {t('Cancel')}
                 </Button>
                 <Button
                   type="submit"
-                  startIcon={
-                    isSubmitting ? <CircularProgress size="1rem" /> : null
-                  }
+                  startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
                   // @ts-ignore
                   disabled={Boolean(errors.submit) || isSubmitting}
                   variant="contained"
