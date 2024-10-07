@@ -48,12 +48,8 @@ const Results = ({ data, reFetchData, sections }) => {
         english_chairman_name: data?.english_chairman_name || '',
         bangla_chairman_name: data?.bangla_chairman_name || '',
         classess: data?.classess || '',
-        // classess: [],
         submit: null
       }}
-      // validationSchema={Yup.object().shape({
-      //   classess: Yup.array().min(1, 'select a classess')
-      // })}
       onSubmit={async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
         try {
           const successResponse = (message) => {
@@ -134,15 +130,12 @@ const Results = ({ data, reFetchData, sections }) => {
                     label="Select classess"
                     placeholder="classess..."
                     multiple
-                    // value={values.classess}
                     options={classOptions}
                     name="classes"
                     error={errors?.classess}
                     touched={touched?.classess}
-                    // @ts-ignore
                     handleChange={(e, value: any) => setFieldValue('classess', value)}
                   />
-
                   <Grid item>Scholership</Grid>
                   <FormControlLabel
                     control={<Switch checked={isOn} onChange={() => setIsOn((value) => !value)} inputProps={{ 'aria-label': 'controlled' }} />}
@@ -175,5 +168,4 @@ const Results = ({ data, reFetchData, sections }) => {
     </Formik>
   );
 };
-
 export default Results;

@@ -27,18 +27,10 @@ const Notice = () => {
           px={1}
         >
           <PageTitleWrapper>
-            <PageHeader
-              editData={editData}
-              setEditData={setEditData}
-              reFetchData={reFetchData}
-            />
+            <PageHeader editData={editData} setEditData={setEditData} reFetchData={reFetchData} />
           </PageTitleWrapper>
 
-          <Results
-            sessions={notices?.data || []}
-            setEditData={setEditData}
-            reFetchData={reFetchData}
-          />
+          <Results sessions={notices?.data || []} setEditData={setEditData} reFetchData={reFetchData} />
         </Grid>
         <Footer />
       </PageBodyWrapper>

@@ -20,22 +20,19 @@ function PageHeader({ editData, setEditData, reFetchData }) {
 
   useEffect(() => {
     if (editData) setOpen(true);
-  }, [editData])
+  }, [editData]);
 
   const handleCreateClassOpen = () => {
     setOpen(true);
   };
 
   const handleCreateClassClose = () => {
-    setPhoto(null)
+    setPhoto(null);
     setOpen(false);
     setEditData(null);
   };
 
-  const handleFormSubmit = async (
-    _values,
-    { resetForm, setErrors, setStatus, setSubmitting }
-  ) => {
+  const handleFormSubmit = async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
     try {
       const successResponse = (message) => {
         showNotification(message);
@@ -54,16 +51,14 @@ function PageHeader({ editData, setEditData, reFetchData }) {
       if (editData) {
         const res = await axios.patch(`/api/notices/${editData.id}`, formData);
         // fetchData('')
-        console.log({ res })
+        console.log({ res });
         successResponse('Notice updated !!');
-      }
-      else {
+      } else {
         const res = await axios.post(`/api/notices`, formData);
         successResponse('Notice created !!');
       }
-      setPhoto(null)
-    }
-    catch (err) {
+      setPhoto(null);
+    } catch (err) {
       console.log(err);
       showNotification(err?.response?.data?.message, 'error');
       setStatus({ success: false });
@@ -74,23 +69,18 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   };
 
   const handleDynamicContent = async (userType) => {
-    const [err, res] = await fetchData('/api/certificate_templates/dynamic_content', 'get', {})
-    setDynamicContent(() => (!err && res.success) ? res.data : []);
-  }
+    const [err, res] = await fetchData('/api/certificate_templates/dynamic_content', 'get', {});
+    setDynamicContent(() => (!err && res.success ? res.data : []));
+  };
 
   return (
     <>
       {/* page head title and create button ui */}
       <PageHeaderTitleWrapper name="notice" handleCreateClassOpen={handleCreateClassOpen} />
 
-      <Dialog
-        fullWidth
-        maxWidth="sm"
-        open={open}
-        onClose={handleCreateClassClose}
-      >
+      <Dialog fullWidth maxWidth="sm" open={open} onClose={handleCreateClassClose}>
         {/* dialog title */}
-        <DialogTitleWrapper name={"Notice"} editData={editData} />
+        <DialogTitleWrapper name={'Notice'} editData={editData} />
 
         <Formik
           initialValues={{
@@ -100,21 +90,15 @@ function PageHeader({ editData, setEditData, reFetchData }) {
             submit: null
           }}
           validationSchema={Yup.object().shape({
-            title: Yup.string()
-              .max(255)
-              .required(t('The name field is required')),
+            title: Yup.string().max(255).required(t('The name field is required'))
             // content: Yup.string()
             //   .max(255)
             //   .required(t('The content field is required'))
           })}
           onSubmit={handleFormSubmit}
         >
-          {({
-            errors, handleBlur, handleChange, handleSubmit,
-            isSubmitting, touched, values,
-            setFieldValue
-          }) => {
-            console.log({ values, errors })
+          {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
+            console.log({ values, errors });
             return (
               <form onSubmit={handleSubmit}>
                 <DialogContent
@@ -123,7 +107,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                     p: 3
                   }}
                 >
-                  <Grid container gap={1} >
+                  <Grid container gap={1}>
                     {/* <Grid container display="grid" sx={{ gridTemplateColumns: { sm: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 1 }} > */}
                     <TextFieldWrapper
                       label="Title"
@@ -151,21 +135,20 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                           label="Photo Image"
                           name="photo"
                           value={values.photo?.name || ''}
-                          accept='application/pdf'
+                          accept="application/pdf"
                           handleChangeFile={(e) => {
                             if (e.target?.files?.length) {
-                              setPhoto(URL.createObjectURL(e.target.files[0]))
-                              setFieldValue("photo", e.target.files[0])
+                              setPhoto(URL.createObjectURL(e.target.files[0]));
+                              setFieldValue('photo', e.target.files[0]);
                             }
                           }}
                           handleRemoveFile={() => {
-                            setPhoto(null)
-                            setFieldValue("photo", undefined)
+                            setPhoto(null);
+                            setFieldValue('photo', undefined);
                           }}
                         />
                       </Grid>
-                      {
-                        (photo || editData?.file_url) &&
+                      {(photo || editData?.file_url) && (
                         <Grid
                           sx={{
                             p: 1,
@@ -175,15 +158,11 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                             color: 'primary.main'
                           }}
                         >
-                          <a
-                            style={{ width: '50px' }}
-                            target="_blank"
-                            href={photo || getFile(editData?.file_url)}
-                          >
+                          <a style={{ width: '50px' }} target="_blank" href={photo || getFile(editData?.file_url)}>
                             {photo || (editData?.file_url ? getFile(editData?.file_url) : 'Not selected')}
                           </a>
                         </Grid>
-                      }
+                      )}
                     </Grid>
                   </Grid>
                 </DialogContent>
