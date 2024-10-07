@@ -24,7 +24,7 @@ import SearchInputWrapper from '@/components/SearchInput';
 import { NavIcon } from '@/components/Icon';
 import { useTranslation } from 'next-i18next';
 import { ModuleContext } from '@/contexts/ModuleContext';
-import { adminModulesList, studentModulesList, teacherModulesList } from '@/utils/moduleLists';
+import { adminModulesList, branchAdminModulesList, studentModulesList, teacherModulesList } from '@/utils/moduleLists';
 import Link from 'next/link';
 import { HighestStudentIdContext } from '@/contexts/HighestStudentIdContext';
 
@@ -294,6 +294,12 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
           >
             {auth?.user?.role?.title === 'ADMIN' &&
               adminModulesList.map((module, index) => (
+                <MenuItem key={index} value={module} sx={{ textTransform: 'capitalize' }}>
+                  {module.split('_').join(' ')}
+                </MenuItem>
+              ))}
+            {auth?.user?.role?.title === 'BRANCH_ADMIN' &&
+              branchAdminModulesList.map((module, index) => (
                 <MenuItem key={index} value={module} sx={{ textTransform: 'capitalize' }}>
                   {module.split('_').join(' ')}
                 </MenuItem>

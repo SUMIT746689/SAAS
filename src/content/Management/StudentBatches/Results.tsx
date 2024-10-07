@@ -312,7 +312,7 @@ const Results: FC<{ students: any[]; refetch: () => void; discount: any[]; idCar
                 </TableRow>
               </TableHead>
               <TableBody>
-                {paginatedClasses.map((i) => {
+                {paginatedClasses.map((i:any) => {
                   const isUserSelected = selectedItems.includes(i.id);
 
                   return (

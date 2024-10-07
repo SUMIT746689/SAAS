@@ -58,9 +58,12 @@ const automaticLogin = async (req, res, refresh_token) => {
                 if (resLoginUser.user_role.title !== "ASSIST_SUPER_ADMIN") throw new Error("permission denied");
                 break;
             case 'ASSIST_SUPER_ADMIN':
-                if (resLoginUser.user_role.title !== "ADMIN") throw new Error("permission denied");
+                if (!["ADMIN", "BRANCH_ADMIN"].includes(resLoginUser.user_role.title)) throw new Error("permission denied");
                 break;
             case 'ADMIN':
+                if (["SUPER_ADMIN", "ASSIST_SUPER_ADMIN", "ADMIN"].includes(resLoginUser.user_role.title)) throw new Error("permission denied")
+                break;
+            case 'BRANCH_ADMIN':
                 if (["SUPER_ADMIN", "ASSIST_SUPER_ADMIN", "ADMIN"].includes(resLoginUser.user_role.title)) throw new Error("permission denied")
                 break;
             default:
