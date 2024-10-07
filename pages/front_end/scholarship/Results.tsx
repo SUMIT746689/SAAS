@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, CircularProgress, Grid } from '@mui/material';
 import { FormControlLabel, FormGroup, Switch, Typography } from '@mui/material';
-import {TextFieldWrapper } from '@/components/TextFields';
+import { TextFieldWrapper } from '@/components/TextFields';
 import axios from 'axios';
 import useNotistick from '@/hooks/useNotistick';
 import { useEffect, useState } from 'react';
@@ -11,11 +11,10 @@ import { AutoCompleteWrapper } from '@/components/AutoCompleteWrapper';
 import { useClientFetch } from '@/hooks/useClientFetch';
 import { useAuth } from '@/hooks/useAuth';
 const Results = ({ data, reFetchData }) => {
-
   const { user } = useAuth();
   const [classOptions, setClassOptions] = useState([]);
   const { data: classes } = useClientFetch(`/api/class?school_id=${user?.school_id}`);
-  
+
   useEffect(() => {
     if (!classes || !Array.isArray(classes)) return;
     setClassOptions(
@@ -47,13 +46,10 @@ const Results = ({ data, reFetchData }) => {
       initialValues={{
         english_scholarship_name: data?.english_scholarship_name || '',
         bangla_scholarship_name: data?.bangla_scholarship_name || '',
-        classes: data?.scholarshipClasses?.map(cls=>({id: cls.id, label: cls.name})) || [],
+        classes: data?.scholarshipClasses?.map((cls) => ({ id: cls.id, label: cls.name })) || [],
         // classess: [],
         submit: null
       }}
-      // validationSchema={Yup.object().shape({
-      //   classess: Yup.array().min(1, 'select a classess')
-      // })}
       onSubmit={async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
         try {
           const successResponse = (message) => {
@@ -62,7 +58,7 @@ const Results = ({ data, reFetchData }) => {
             showNotification(message);
           };
           const copyValues = JSON.parse(JSON.stringify(_values));
-          copyValues.classes = copyValues?.classes?.map(cls=>cls.id);
+          copyValues.classes = copyValues?.classes?.map((cls) => cls.id);
           axios
             .put('/api/front_end/scholarship', copyValues)
             .then((res) => {
@@ -84,11 +80,11 @@ const Results = ({ data, reFetchData }) => {
       }}
     >
       {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
-        console.log({values})
+        console.log({ values });
         return (
           <>
             <form onSubmit={handleSubmit}>
-              <Card sx={{ maxWidth:{sm:'40vw'}}}>
+              <Card sx={{ maxWidth: { sm: '40vw' } }}>
                 <Grid container columnSpacing={1} paddingTop={2} borderTop="1px solid lightGray" borderBottom="1px solid lightGray" p={2}>
                   <TextFieldWrapper
                     touched={touched.english_scholarship_name}
@@ -155,5 +151,4 @@ const Results = ({ data, reFetchData }) => {
     </Formik>
   );
 };
-
 export default Results;
