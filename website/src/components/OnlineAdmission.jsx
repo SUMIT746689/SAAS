@@ -14,7 +14,6 @@ import PdfDatas from './admissionForm/PdfDatas';
 import { useReactToPrint } from 'react-to-print';
 
 const OnlineAdmission = ({ classes, academicYears, serverHost, school_id, studentAdmissionForm, school }) => {
-  // console.log("classes,academicYears__", classes, academicYears);
   const router = useRouter();
   const { t } = useTranslation();
   const [activeStep, setActiveStep] = useState(0);

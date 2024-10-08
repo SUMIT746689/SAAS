@@ -32,32 +32,7 @@ function Scholarship({ editData, setEditData, reFetchData , serverHost}) {
   };
 
   const handleFormSubmit = async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
-    // try {
-    //   const successResponse = (message) => {
-    //     showNotification(message);
-    //     resetForm();
-    //     setStatus({ success: true });
-    //     setSubmitting(false);
-    //     reFetchData();
-    //     handleCreateClassClose();
-    //   };
-
-    //   const formData = new FormData();
-    //   for (const [key, value] of Object.entries(_values)) {
-    //     // @ts-ignore
-    //     formData.append(key, value);
-    //   }
-    //   if (editData) {
-    //     const res = await axios.patch(`/api/notices/${editData.id}`, formData);
-    //     // fetchData('')
-    //     console.log({ res });
-    //     successResponse('Notice updated !!');
-    //   } else {
-    //     const res = await axios.post(`/api/notices`, formData);
-    //     successResponse('Notice created !!');
-    //   }
-    //   setPhoto(null);
-    // } 
+   
     try {
       
       const formData = new FormData();
@@ -92,17 +67,19 @@ function Scholarship({ editData, setEditData, reFetchData , serverHost}) {
     <Grid paddingLeft={32} paddingRight={32} > <DialogTitleWrapper  name={'Scholarship'} editData={editData} /></Grid>
     <Formik
           initialValues={{
-          first_name: undefined,
-          middle_name: '',
-          last_name: '',
-          date_of_birth: null,
-          phone: undefined,
-          father_name: undefined,
-          father_phn_no: undefined,
-          mother_name: '',
-          mother_phn_no: undefined,
+          first_name: editData?.first_name ? editData.first_name : undefined,
+          middle_name: editData?.middle_name ? editData.middle_name : undefined,
+          last_name: editData?.last_name ? editData.last_name : undefined,
+          date_of_birth:editData?.date_of_birth ? editData.date_of_birth : undefined,
+          class: editData?.class ? editData.class : undefined,
+          phone: editData?.phone ? editData.phone : undefined,
+          father_name: editData?.father_name ? editData.father_name : undefined,
+          father_phn_no: editData?.father_phn_no ? editData.father_phn_no : undefined,
+          mother_name: editData?.mother_name ? editData.mother_name : undefined,
+          mother_phn_no: editData?.mother_phn_no ? editData.mother_phn_no : undefined,
           
         }}
+    
         // validationSchema={Yup.object().shape({
         //   first_name: Yup.string().max(255).required(t('First name field is required')),
         //   middle_name: Yup.string().max(255).nullable(true),
@@ -132,47 +109,56 @@ function Scholarship({ editData, setEditData, reFetchData , serverHost}) {
                    <TextFieldWrapper
                       label="First Name"
                       name="first_name"
-                      value={values.title}
-                      touched={touched.title}
-                      errors={errors.title}
+                      value={values.first_name }
+                      touched={touched.first_name }
+                      errors={errors.first_name }
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                     />
                     <TextFieldWrapper
                       label="Middle Name"
                       name="middle_name"
-                      value={values.title}
-                      touched={touched.title}
-                      errors={errors.title}
+                      value={values.middle_name}
+                      touched={touched.middle_name}
+                      errors={errors.middle_name}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                     />
                     <TextFieldWrapper
                       label="Last Name"
                       name="last_name"
-                      value={values.title}
-                      touched={touched.title}
-                      errors={errors.title}
+                      value={values.last_name}
+                      touched={touched.last_name}
+                      errors={errors.last_name}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                     />
                    </Grid>
-                   <Grid container display="grid" sx={{ gridTemplateColumns: { sm: '1fr 1fr', md: ' 1fr 1fr' }, gap: 1 }} >
+                   <Grid container display="grid" sx={{ gridTemplateColumns: { sm: '1fr 1fr', md: ' 1fr 1fr 1fr'  }, gap: 1 }} >
+                    <TextFieldWrapper
+                      label="Class"
+                      name="class"
+                      value={values.class}
+                      touched={touched.class}
+                      errors={errors.class}
+                      handleChange={handleChange}
+                      handleBlur={handleBlur}
+                    />
                     <TextFieldWrapper
                       label="Date Of Birth"
                       name="date_of_birth"
-                      value={values.title}
-                      touched={touched.title}
-                      errors={errors.title}
+                      value={values.date_of_birth}
+                      touched={touched.date_of_birth}
+                      errors={errors.date_of_birth}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                     />
                     <TextFieldWrapper
                       label="Phone"
                       name="phone"
-                      value={values.title}
-                      touched={touched.title}
-                      errors={errors.title}
+                      value={values.phone}
+                      touched={touched.phone}
+                      errors={errors.phone}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                     />
@@ -181,18 +167,18 @@ function Scholarship({ editData, setEditData, reFetchData , serverHost}) {
                    <TextFieldWrapper
                       label="Father Name"
                       name="father_name"
-                      value={values.title}
-                      touched={touched.title}
-                      errors={errors.title}
+                      value={values.father_name}
+                      touched={touched.father_name}
+                      errors={errors.father_name}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                     />
                     <TextFieldWrapper
                       label="Father Phn No"
                       name="father_phn_no"
-                      value={values.title}
-                      touched={touched.title}
-                      errors={errors.title}
+                      value={values.father_phn_no}
+                      touched={touched.father_phn_no}
+                      errors={errors.father_phn_no}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                     />
@@ -201,18 +187,18 @@ function Scholarship({ editData, setEditData, reFetchData , serverHost}) {
                     <TextFieldWrapper
                       label="Mother Name"
                       name="mother_name"
-                      value={values.title}
-                      touched={touched.title}
-                      errors={errors.title}
+                      value={values.mother_name}
+                      touched={touched.mother_name}
+                      errors={errors.mother_name}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                     />
                     <TextFieldWrapper
                       label="Mother Phn No"
                       name="mother_phn_no"
-                      value={values.title}
-                      touched={touched.title}
-                      errors={errors.title}
+                      value={values.mother_phn_no}
+                      touched={touched.mother_phn_no}
+                      errors={errors.mother_phn_no}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                     />

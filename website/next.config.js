@@ -35,6 +35,12 @@ const nextConfig = {
         port: '3000',
         pathname: '/api/get_file/**',
       },
+      {
+        protocol: 'http',
+        hostname: '192.168.11.69',
+        port: '3000',
+        pathname: '/api/get_file/**',
+      },
     ],
   },
   eslint: {
