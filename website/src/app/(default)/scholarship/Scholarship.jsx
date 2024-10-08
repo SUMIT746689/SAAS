@@ -9,20 +9,36 @@ import { DialogActionWrapper, DialogTitleWrapper } from '@/components/DialogWrap
 import { PageHeaderTitleWrapper } from '@/components/PageHeaderTitle';
 import { FileUploadFieldWrapper, TextFieldWrapper } from '@/components/TextFields';
 import { useTranslation } from 'react-i18next';
+import { AutoCompleteWrapper } from '@/components/AutoCompleteWrapper';
+import { useClientFetch } from '@/hooks/useClientFetch';
+import { useAuth } from '@/hooks/useAuth';
 
 
-
-function Scholarship({ editData, setEditData, reFetchData , serverHost}) {
-  // const { t }: { t: any } = useTranslation();
+function Scholarship({classes, editData, setEditData, reFetchData , serverHost}) {
   const [open, setOpen] = useState(false);
+  const [classOptions, setClassOptions] = useState([]);
+  const { user } = useAuth();
+  // const { data: classes } = useClientFetch(`/api/class?school_id=${user?.school_id}`);
   const { showNotification } = useNotistick();
+
+  console.log({classes})
+
+  // useEffect(() => {
+  //   if (!classes || !Array.isArray(classes)) return;
+  //   setClassOptions(
+  //     classes.map((cls) => ({
+  //       id: cls.id,
+  //       label: cls.name
+  //     }))
+  //   );
+  // }, [classes]);
 
   useEffect(() => {
     if (editData) setOpen(true);
   }, [editData]);
 
   const handleCreateClassOpen = () => {
-    setOpen(true);9
+    setOpen(true);
   };
 
   const handleCreateClassClose = () => {
@@ -44,8 +60,6 @@ function Scholarship({ editData, setEditData, reFetchData , serverHost}) {
       await axios.post(`${serverHost}/api/onlineAdmission`, formData)
         .then(res => { console.log({ res }) })
         .catch(err => { console.log({ err }) })
-      
-        // setPdfDatas(() => _values)
 
       resetForm();
       setStatus({ success: true });
@@ -71,7 +85,7 @@ function Scholarship({ editData, setEditData, reFetchData , serverHost}) {
           middle_name: editData?.middle_name ? editData.middle_name : undefined,
           last_name: editData?.last_name ? editData.last_name : undefined,
           date_of_birth:editData?.date_of_birth ? editData.date_of_birth : undefined,
-          class: editData?.class ? editData.class : undefined,
+          // classes: data?.scholarshipClasses?.map((cls) => ({ id: cls.id, label: cls.name })) || [],
           phone: editData?.phone ? editData.phone : undefined,
           father_name: editData?.father_name ? editData.father_name : undefined,
           father_phn_no: editData?.father_phn_no ? editData.father_phn_no : undefined,
@@ -135,7 +149,7 @@ function Scholarship({ editData, setEditData, reFetchData , serverHost}) {
                     />
                    </Grid>
                    <Grid container display="grid" sx={{ gridTemplateColumns: { sm: '1fr 1fr', md: ' 1fr 1fr 1fr'  }, gap: 1 }} >
-                    <TextFieldWrapper
+                    {/* <TextFieldWrapper
                       label="Class"
                       name="class"
                       value={values.class}
@@ -143,7 +157,20 @@ function Scholarship({ editData, setEditData, reFetchData , serverHost}) {
                       errors={errors.class}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
-                    />
+                    /> */}
+                    <AutoCompleteWrapper
+                    minWidth="100%"
+                    label="Select Classes"
+                    placeholder="classes..."
+                    multiple
+                    value={values.classes}
+                    options={classes}
+                    name="classes"
+                    error={errors?.classes}
+                    touched={touched?.classes}
+                    // @ts-ignore
+                    handleChange={(e, value) => setFieldValue('classes', value)}
+                  />
                     <TextFieldWrapper
                       label="Date Of Birth"
                       name="date_of_birth"

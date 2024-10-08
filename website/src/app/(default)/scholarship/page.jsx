@@ -38,15 +38,19 @@ export default async function Scholar() {
         select: {
             name: true,
             address: true,
-            websiteui: { select: { header_image: true } }
+            websiteui: { select: { header_image: true,  scholarshipClasses:true} }
         }
     })
+    console.log("CLS",JSON.stringify(resSchool.websiteui[0].scholarshipClasses , null, 3))
 
     const serverHost = JSON.stringify(process.env.SERVER_HOST);
+    
     return (
         <div>
             <Scholarship
-                classes={classes || []}
+                classes={
+                    resSchool?.websiteui[0]?.scholarshipClasses?.map((cls) => ({id: cls.id,label: cls.name})) || []
+                }
                 academicYears={academicYear || []}
                 serverHost={`${process.env.SERVER_HOST}` || ''}
                 studentAdmissionForm={studentAdmissionForm}
