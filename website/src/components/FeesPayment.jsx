@@ -10,6 +10,11 @@ import { formatNumber } from "@/utils/numberFormat"
 import Image from 'next/image';
 import { TableBodyCellWrapper, TableHeaderCellWrapper, TableRowWrapper } from '@/new_components/Table/Table';
 import { useRouter } from 'next/navigation';
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import ClassIcon from '@mui/icons-material/Class';
+import SubjectIcon from '@mui/icons-material/Subject';
+import BatchPredictionIcon from '@mui/icons-material/BatchPrediction';
+import NumbersIcon from '@mui/icons-material/Numbers';
 
 const FeesPayment = ({ serverHost }) => {
     const { t } = useTranslation();
@@ -83,7 +88,9 @@ const FeesPayment = ({ serverHost }) => {
             });
         });
         try {
+            console.log({ stdInfo })
             const data = {
+                user_id: stdInfo.student_info.user_id,
                 student_id: stdInfo.id,
                 // collected_by_user: user?.id,
                 // fee_ids: selectedItems,
@@ -93,7 +100,7 @@ const FeesPayment = ({ serverHost }) => {
             }
             console.log("got__", data);
 
-            await fetch(`${serverHost}/api/bkash/website-payment`, {
+            await fetch(`${serverHost}/api/bkash/pay_with_website/website-payment`, {
                 method: "POST",
                 contentType: "text/plain",
                 body: JSON.stringify(data),
@@ -118,44 +125,51 @@ const FeesPayment = ({ serverHost }) => {
 
     console.log({ stdInfo, lists });
     console.log({ selectedItems, selectedPayAmt });
-    
+
     return (
-        <>
-            <Typography variant="h4" gutterBottom p={4} align="center">
+        <Grid maxWidth={1300} mx="auto" py={10} >
+            <Typography variant="h4" gutterBottom py={6} align="center">
                 {t('Student Fees Online Payments')}
             </Typography>
+            <Grid mt={8}></Grid>
+            <Grid display="grid" sx={{ gridTemplateColumns: { md: "1fr 1fr" }, columnGap: 2, rowGap:10 }} >
+                <Formik
+                    initialValues={{
+                        student_id: '',
+                        phone_number: '',
+                        submit: null
+                    }}
+                    validationSchema={Yup.object().shape({
+                        student_id: Yup.string().required(
+                            t('The student id is required')
+                        ),
+                        // phone_number: Yup.string()
+                        //     .min(11, t('Phone number must be greater then or equals 11 character')),
 
-            <Formik
-                initialValues={{
-                    student_id: '',
-                    phone_number: '',
-                    submit: null
-                }}
-                validationSchema={Yup.object().shape({
-                    student_id: Yup.string().required(
-                        t('The student id is required')
-                    ),
-                    // phone_number: Yup.string()
-                    //     .min(11, t('Phone number must be greater then or equals 11 character')),
-
-                })}
-                onSubmit={handleFormSubmit}
-            >
-                {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue, resetForm }) => {
-                    console.log("errors__", errors);
-                    return (
-                        <form onSubmit={handleSubmit}>
-                            <Grid container>
-                                <Grid container item sx={{ display: "flex", justifyContent: "center", alignItems: "start", gap: 2 }}>
+                    })}
+                    onSubmit={handleFormSubmit}
+                >
+                    {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue, resetForm }) => {
+                        console.log("errors__", errors);
+                        return (
+                            <form onSubmit={handleSubmit}>
+                                <Grid container sx={{
+                                    border: `1px solid lightgray`,
+                                    // boxShadow: `5px 0px 1px -10px gray`,
+                                    boxShadow: '0px 0px 4px 0px rgba(138,134,138,0.71)',
+                                    borderRadius: '5px',
+                                    p: 2,
+                                }} >
+                                    {/* <Grid container item sx={{ display: "flex", justifyContent: "center", alignItems: "start", gap: 2 }}> */}
 
                                     {/* student id */}
-                                    <Grid item xs={12} sm={6} md={4}>
+                                    <Grid item xs={12}>
                                         <Grid>
                                             <Box
                                                 pr={3}
                                                 sx={{
                                                     pt: `${theme.spacing(1)}`,
-                                                    pb: { xs: 1, md: 0 }
+                                                    // pb: { xs: 1, md: 0 }
                                                 }}
                                                 alignSelf="center"
                                             >
@@ -164,7 +178,7 @@ const FeesPayment = ({ serverHost }) => {
                                         </Grid>
                                         <Grid
                                             sx={{
-                                                mb: `${theme.spacing(3)}`
+                                                // mb: `${theme.spacing(3)}`
                                             }}
                                             item
                                             xs={12}
@@ -190,7 +204,7 @@ const FeesPayment = ({ serverHost }) => {
                                     </Grid>
 
                                     {/* phone number */}
-                                    <Grid item xs={12} sm={6} md={4}>
+                                    <Grid item xs={12}>
                                         <Grid item>
                                             <Box
                                                 pr={3}
@@ -219,47 +233,87 @@ const FeesPayment = ({ serverHost }) => {
                                         </Grid>
                                     </Grid>
 
+                                    {/* </Grid> */}
+
+                                    <Grid item xs={12}>
+                                        <Button
+                                            type="submit"
+                                            startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
+                                            //@ts-ignore
+                                            disabled={Boolean(errors.submit) || isSubmitting}
+                                            variant="contained"
+                                            sx={{ height: 40, width: "100%" }}
+                                        >
+                                            {t(`Search Fees`)}
+                                        </Button>
+                                    </Grid>
                                 </Grid>
+                            </form>
+                        );
+                    }}
+                </Formik>
 
-                                <Grid item xs={12} sm={6} md={4} mx="auto">
-                                    <Button
-                                        type="submit"
-                                        startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
-                                        //@ts-ignore
-                                        disabled={Boolean(errors.submit) || isSubmitting}
-                                        variant="contained"
-                                        sx={{ height: 40, width: "100%" }}
-                                    >
-                                        {t(`Search Fees`)}
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </form>
-                    );
-                }}
-            </Formik>
+                {/* student informations */}
+                <div
+                    style={{
+                        // marginTop: 4,
+                        padding: 1,
+                        position: "relative",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        // border: (theme) => `1px solid ${theme.palette.primary.light}`,
+                        // boxShadow: (theme) => `0px 0px 13px -4px ${theme.palette.primary.light}`
+                        border: `1px solid lightgray`,
+                        // boxShadow: `5px 0px 1px -10px gray`,
+                        boxShadow: '0px 0px 4px 0px rgba(138,134,138,0.71)',
+                        borderRadius: '5px',
+                    }}>
+                    <Grid container mt={9} px={2} color="gray" >
+                        <Grid fontSize="2em" textAlign="center" mx="auto">{[stdInfo?.student_info?.first_name, stdInfo?.student_info?.middle_name, stdInfo?.student_info?.last_name].join(' ')}</Grid>
+                        <Grid item display="grid" width="100%" gridTemplateColumns="1fr 1fr" columnSpacing="10px" rowGap={1}>
+                            <Grid> <PermIdentityIcon sx={{ fontSize: 18, mb: 0.5 }} /> Student Id: <span>{stdInfo?.student_info?.student_id}</span> </Grid>
+                            <Grid> <ClassIcon sx={{ fontSize: 18, mb: 0.5 }} /> Class: <span>{stdInfo?.class?.name}</span></Grid>
+                            <Grid> <SubjectIcon sx={{ fontSize: 18, mb: 0.5 }} /> Subjects: <span>{stdInfo?.subjects?.map(subject => subject.name)?.join(', ')}</span></Grid>
+                            {stdInfo?.section?.class?.has_section ? <Grid> <BatchPredictionIcon sx={{ fontSize: 18, mb: 0.5 }} /> Batch: <span>{stdInfo?.section?.name}</span></Grid> : ''}
+                            <Grid > <NumbersIcon sx={{ fontSize: 18, mb: 0.5 }} /> Roll No: {stdInfo?.class_roll_no}</Grid>
+                        </Grid>
+                    </Grid>
 
-            {/* student informations */}
-            <Card sx={{ m: 2, p: 1, display: "flex", justifyContent: "space-between" }}>
-                <Grid>
-                    <Grid>Name: {[stdInfo?.student_info?.first_name, stdInfo?.student_info?.middle_name, stdInfo?.student_info?.last_name].join(' ')}</Grid>
-                    <Grid> Student Id: {stdInfo?.student_info?.student_id} </Grid>
-                    <Grid>Class: {stdInfo?.class?.name}</Grid>
-                    <Grid>Subjects: {stdInfo?.subjects?.map(subject=>subject.name)?.join(', ')}</Grid>
-                    {stdInfo?.section?.class?.has_section ? <Grid>Section: {stdInfo?.section?.name}</Grid> : ''}
-                    <Grid>Roll No: {stdInfo?.class_roll_no}</Grid>
-
-                </Grid>
-
-                <Card sx={{ borderRadius: "50%" }}>
-                    <Image src={stdInfo?.student_photo ? `${serverHost}/api/get_file/${stdInfo?.student_photo}` : "/dummy.jpg"} width={150} height={150} style={{ objectPosition: "center", objectFit: "cover" }} />
-                </Card>
-            </Card>
+                    <Grid
+                        sx={{
+                            width: 150,
+                            height: 150,
+                            borderRadius: "50%",
+                            background: "white",
+                            // width:"100%",
+                            display: "flex",
+                            // flexDirection:"column",
+                            justifyContent: "center",
+                            // alignContent:"center",
+                            // justifyItems:"center",
+                            alignItems: "center",
+                            position: "absolute",
+                            // right: "40%",
+                            top: "-40%",
+                            zIndex: "60",
+                            border: '1px solid lightgray',
+                            overflow: "hidden",
+                            p: 1,
+                            left: 0,
+                            right: 0,
+                            marginInline: 'auto',
+                            // width: 'fit-content'
+                            // mx:"auto"
+                        }}>
+                        <Image src={stdInfo?.student_photo ? `${serverHost}/api/get_file/${stdInfo?.student_photo}` : "/dummy.jpg"} width={150} height={150} style={{ objectPosition: "center", objectFit: "contain" }} />
+                    </Grid>
+                </div>
+            </Grid>
 
             {/* info msg */}
-            <Grid color={(theme) => theme.palette.warning.light} textAlign="center"> - - - Select fees for payment - - - </Grid>
+            <Grid color={(theme) => theme.palette.warning.light} textAlign="center" py={2}> - - - Select fees for payment - - - </Grid>
 
-            <Card sx={{ m: 1, p: 1, border:(theme)=>`1px solid ${theme.palette.primary.light}`,boxShadow:(theme)=>`0px 0px 13px -4px ${theme.palette.primary.light}` }}>
+            <Card sx={{ p: 1, border: (theme) => `1px solid ${theme.palette.primary.light}`, boxShadow: (theme) => `0px 0px 13px -4px ${theme.palette.primary.light}` }}>
                 <Table>
                     <TableRowWrapper>
                         <TableHeaderCellWrapper padding="checkbox">
@@ -337,8 +391,8 @@ const FeesPayment = ({ serverHost }) => {
                 Payment Channels:
                 <Grid>DBBL NEXUS, Q Cash, Union Pay, Vise, Mastercard, American Express</Grid>
                 <Grid>Bkash, Nogod, Rocket, Upay, Sure Cash, Tap'n Pay, M cash, </Grid>
-            </Grid> */}
-        </>
+            </Grid> */} 
+        </Grid>
     )
 };
 

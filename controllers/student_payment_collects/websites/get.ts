@@ -26,7 +26,7 @@ export const get = async (req, res) => {
         class_roll_no: true,
         student_info: {
           select: {
-            first_name: true, middle_name: true, last_name: true, student_id: true
+            first_name: true, middle_name: true, last_name: true, student_id: true, user_id: true
           }
         },
         class: {

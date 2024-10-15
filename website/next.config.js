@@ -49,6 +49,21 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  rewrites:
+    [
+      {
+        source: '/api/onlineAdmission',
+        destination: 'http://192.168.10.96:3001/:path*',
+      },
+      {
+        source: '/api/bkash/pay_with_website/get-token',
+        destination: 'https://tokenized.sandbox.bka.sh/v1.2.0-beta/tokenized/checkout/token/grant',
+      },
+      {
+        source: '/api/bkash/pay_with_website/create-payment',
+        destination: 'https://tokenized.sandbox.bka.sh/v1.2.0-beta/tokenized/checkout/create',
+      },
+    ],
   // reactStrictMode:'true',
   output: 'standalone'
 }

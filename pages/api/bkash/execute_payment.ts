@@ -78,7 +78,7 @@ const index = async (req, res, refresh_token) => {
 
 
     const { paymentID, status } = req.query
-    console.log(req.query);
+    console.log("rrrrrrrrrr",req.query);
 
     if (status === 'cancel') {
         await prisma.session_store.delete({ where: { paymentID: paymentID } })
@@ -106,7 +106,8 @@ const index = async (req, res, refresh_token) => {
                             //@ts-ignore
                             'x-app-key': session?.data?.X_App_Key
                         }
-                    })
+                    });
+
                     console.log("exe data__", paymentVerify.data);
 
                     if (paymentVerify.data && paymentVerify.data.statusCode === '0000') {
@@ -135,8 +136,8 @@ const index = async (req, res, refresh_token) => {
                             //@ts-ignore
                             // payment_method: account?.payment_method[0]?.title,
                             transID: paymentVerify.data.trxID,
-                            collected_by: Number(collected_by_user),
-                            total_payable: Number(total_payable)
+                            collected_by: parseInt(collected_by_user),
+                            total_payable: parseInt(total_payable)
                         }
                         //@ts-ignore
                         await handleTransaction({ data, status: session.data.status, account, voucher, school_id })
