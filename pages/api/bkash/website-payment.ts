@@ -48,7 +48,6 @@ const handleTransaction = ({ student_id, user_id,
                     'x-app-key': process.env.bkash_X_App_Key,
                 }
             })
-            console.log("payment__", payment.data);
 
             if (!payment.data?.paymentID || !token.data?.id_token) throw Error(payment.data.statusMessage)
 
@@ -104,14 +103,14 @@ const index = async (req, res) => {
         switch (method) {
             case 'POST':
 
-                const { student_id, pay_fees } = JSON.parse(req.body);
-
+                const { user_id, student_id, pay_fees } = JSON.parse(req.body);
+                console.log({ student_id, pay_fees })
                 await pay_fees.forEach(async (feesP) => {
                     // console.log({ feesP });
                     const studentRes = {
                         student_id,
-                        user_id: 2,
-                        collected_by_user: undefined,
+                        user_id: user_id,
+                        collected_by_user: user_id ,
                         fee_id: feesP.fee_id,
                         collected_amount: feesP.paid_amount,
                         total_payable: 0,
