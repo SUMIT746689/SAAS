@@ -197,6 +197,13 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
 
   console.log({ feesUserData });
 
+  const paragraphStyle = { fontFamily: "monospace", textAlign: 'center', fontSize: '0.7rem' };
+
+  const paragraphStyleInfo = { fontFamily: "monospace", fontSize: '0.7rem' };
+
+  const tableCellStyle = { border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', fontSize: '0.7rem', paddingBottom: '2px', textTransform: 'capitalize' }
+  const color = "black"
+  const fontFamily = "monospace"
   return (
     <Grid>
       {/* part 1 */}
@@ -218,20 +225,24 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                 ''
               )}
             </Grid>
-            <Grid sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" sx={{ textAlign: 'center' }}>
+            <Grid sx={{ textAlign: 'center', color: "black" }}>
+              <h1 style={{ textAlign: "center", fontFamily: "CG Times" }}>
                 {user?.school?.name}
-              </Typography>
-              <Typography variant="body1" sx={{ textAlign: 'center', fontSize: '0.775rem' }}>
+              </h1>
+              {/* @ts-ignore */}
+              <p style={paragraphStyle}>
                 {user?.school?.address}
-              </Typography>
-              <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>Student Payment Receipt</Typography>
-              <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>
+              </p>
+              {/* @ts-ignore */}
+              <p style={paragraphStyle}>Student Payment Receipt</p>
+              {/* @ts-ignore */}
+              <p style={paragraphStyle}>
                 Received By: {username}
-              </Typography>
-              <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>
+              </p>
+              {/* @ts-ignore */}
+              <p style={paragraphStyle}>
                 Student Copy
-              </Typography>
+              </p>
             </Grid>
           </Grid>
           {/* <Grid width="80px" height="80px"></Grid> */}
@@ -240,64 +251,64 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
         {/* student information */}
         <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
           <Grid sx={{ display: 'flex', gap: '20px' }}>
-            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px', color: "black" }}>
+              <p style={paragraphStyleInfo}>
                 Rec. No.
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+              </p>
+              <p style={paragraphStyleInfo}>
                 Student Name & Id
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+              </p>
+              <p style={paragraphStyleInfo}>
                 Batch
-              </Typography>
+              </p>
             </Grid>
-            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px', color: "black" }}>
+              <p style={paragraphStyleInfo}>
                 : {selectedFees[0]?.tracking_number}
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+              </p>
+              <p style={paragraphStyleInfo}>
                 : {`${[feesUserData?.first_name, feesUserData?.middle_name, feesUserData?.last_name].join(' ')} (${student_id})`}
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+              </p>
+              <p style={paragraphStyleInfo}>
                 : {feesUserData?.section_name}
-              </Typography>
+              </p>
             </Grid>
           </Grid>
           <Grid sx={{ display: 'flex', gap: '20px' }}>
-            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px', color: "black" }}>
+              <p style={paragraphStyleInfo}>
                 Date
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+              </p>
+              <p style={paragraphStyleInfo}>
                 Class
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+              </p>
+              <p style={paragraphStyleInfo}>
                 Roll No
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+              </p>
+              <p style={paragraphStyleInfo}>
                 Phone No
-              </Typography>
+              </p>
             </Grid>
-            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+            <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px', color: "black" }}>
+              <p style={paragraphStyleInfo}>
                 : {formattedDate}
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+              </p>
+              <p style={paragraphStyleInfo}>
                 : {feesUserData?.class_name}
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+              </p>
+              <p style={paragraphStyleInfo}>
                 : {feesUserData?.class_roll_no}
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+              </p>
+              <p style={paragraphStyleInfo}>
                 : {userInformation?.phone}
-              </Typography>
+              </p>
             </Grid>
           </Grid>
         </Grid>
 
         {/* table one */}
         <Grid mt={1}>
-          <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
+          <TableContainer sx={{ borderRadius: 0, fontWeight: "normal" }}>
             <Table sx={{ minWidth: '340px', maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
               <TableHead>
                 <TableRow>
@@ -311,7 +322,9 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       paddingRight: '5px',
                       fontSize: '0.7rem',
                       paddingTop: '2px',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      fontWeight: "normal"
+
                       // color: '#000'
                     }}
                   >
@@ -355,12 +368,16 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                         style={{
                           border: '1px solid black',
                           // fontWeight: 'bold',
+                          color,
+                          fontFamily,
                           paddingLeft: '5px',
                           paddingRight: '5px',
                           paddingTop: '2px',
                           fontSize: '0.7rem',
                           paddingBottom: '2px',
-                          textTransform: 'capitalize'
+                          textTransform: 'capitalize',
+                          fontWeight: "normal"
+
                         }}
                       >
                         {payment?.head_title && payment?.fee_id ? `${payment?.head_title} (${payment?.title})` : payment?.title} <br />
@@ -402,11 +419,15 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                         style={{
                           border: '1px solid black',
                           // fontWeight: 'bold',
+                          fontFamily,
+                          color,
                           paddingLeft: '5px',
                           paddingRight: '5px',
                           paddingTop: '2px',
                           fontSize: '0.7rem',
-                          paddingBottom: '2px'
+                          paddingBottom: '2px',
+                          fontWeight: "normal"
+
                         }}
                       >
                         {payment?.payableAmount?.toFixed(2)}
@@ -455,12 +476,16 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     style={{
                       border: '1px solid black',
                       // fontWeight: 'bold',
+                      fontFamily,
+                      color,
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       paddingTop: '2px',
                       fontSize: '0.7rem',
                       textTransform: 'capitalize',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      fontWeight: "normal"
+
                     }}
                   >
                     Payable Amt.
@@ -470,13 +495,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     style={{
                       border: '1px solid black',
                       // fontWeight: 'bold',
+                      fontFamily,
+                      color,
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       textTransform: 'capitalize',
                       paddingTop: '2px',
 
                       fontSize: '0.7rem',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      fontWeight: "normal"
+
                     }}
                   >
                     {/* {totalPreAmount?.toFixed(2)} */}
@@ -489,13 +518,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     style={{
                       border: '1px solid black',
                       // fontWeight: 'bold',
+                      fontFamily,
+                      color,
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       textTransform: 'capitalize',
                       paddingTop: '2px',
 
                       fontSize: '0.7rem',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      fontWeight: "normal"
+
                     }}
                   >
                     Prev. Paid
@@ -505,13 +538,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     style={{
                       border: '1px solid black',
                       // fontWeight: 'bold',
+                      color,
+                      fontFamily,
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       textTransform: 'capitalize',
                       paddingTop: '2px',
 
                       fontSize: '0.7rem',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      fontWeight: "normal"
+
                     }}
                   >
                     {totalPreAmount?.toFixed(2)}
@@ -523,13 +560,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     style={{
                       border: '1px solid black',
                       // fontWeight: 'bold',
+                      color,
+                      fontFamily,
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       textTransform: 'capitalize',
                       paddingTop: '2px',
 
                       fontSize: '0.7rem',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      fontWeight: "normal"
+
                     }}
                   >
                     Prev. Discount
@@ -539,13 +580,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     style={{
                       border: '1px solid black',
                       // fontWeight: 'bold',
+                      fontFamily,
+                      color,
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       textTransform: 'capitalize',
                       paddingTop: '2px',
 
                       fontSize: '0.7rem',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      fontWeight: "normal"
+
                     }}
                   >
                     {totalPreviousDiscount?.toFixed(2)}
@@ -557,13 +602,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     style={{
                       border: '1px solid black',
                       // fontWeight: 'bold',
+                      color,
+                      fontFamily,
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       textTransform: 'capitalize',
                       paddingTop: '2px',
 
                       fontSize: '0.7rem',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      fontWeight: "normal"
+
                     }}
                   >
                     Paid Amt
@@ -573,13 +622,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     style={{
                       border: '1px solid black',
                       // fontWeight: 'bold',
+                      fontFamily,
+                      color,
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       textTransform: 'capitalize',
                       paddingTop: '2px',
 
                       fontSize: '0.7rem',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      fontWeight: "normal"
+
                     }}
                   >
                     {totalPaidAmount?.toFixed(2)}
@@ -595,9 +648,12 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       paddingRight: '5px',
                       textTransform: 'capitalize',
                       paddingTop: '2px',
-
+                      fontFamily,
+                      color,
                       fontSize: '0.7rem',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      fontWeight: "normal"
+
                     }}
                   >
                     Discount
@@ -607,12 +663,16 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     style={{
                       border: '1px solid black',
                       // fontWeight: 'bold',
+                      fontFamily,
+                      color,
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       textTransform: 'capitalize',
                       paddingTop: '2px',
                       fontSize: '0.7rem',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      fontWeight: "normal"
+
                     }}
                   >
                     {totalCurrentDisountAmount?.toFixed(2)}
@@ -624,12 +684,16 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     style={{
                       border: '1px solid black',
                       // fontWeight: 'bold',
+                      fontFamily,
+                      color,
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       textTransform: 'capitalize',
                       paddingTop: '2px',
                       fontSize: '0.7rem',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      fontWeight: "normal"
+
                     }}
                   >
                     Due Amt.
@@ -638,12 +702,16 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     align="right"
                     style={{
                       border: '1px solid black',
+                      fontFamily,
+                      color,
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       textTransform: 'capitalize',
                       paddingTop: '2px',
                       fontSize: '0.7rem',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      fontWeight: "normal"
+
                     }}
                   >
                     {totalDueAmount?.toFixed(2)}
@@ -663,13 +731,15 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     scope="row"
                     align="left"
                     style={{
+                      fontFamily,
+                      color,
                       border: '1px solid black',
-                      fontWeight: 'bold',
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       paddingTop: '2px',
                       fontSize: '0.7rem',
-                      paddingBottom: '2px'
+                      paddingBottom: '2px',
+                      fontWeight: "normal"
                     }}
                   >
                     Total Due
@@ -677,9 +747,10 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   <TableCell
                     align="right"
                     style={{
+                      fontFamily,
+                      color,
                       border: '1px solid black',
                       fontSize: '0.7rem',
-                      fontWeight: 'bold',
                       paddingLeft: '5px',
                       paddingRight: '5px',
                       paddingTop: '2px',
@@ -817,20 +888,24 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   ''
                 )}
               </Grid>
-              <Grid sx={{ textAlign: 'center' }}>
-                <Typography variant="h4" sx={{ textAlign: 'center' }}>
+              <Grid sx={{ textAlign: 'center', color: "black" }}>
+                <h1 style={{ textAlign: "center", fontFamily: "CG Times" }}>
                   {user?.school?.name}
-                </Typography>
-                <Typography variant="body1" sx={{ textAlign: 'center', fontSize: '0.775rem' }}>
+                </h1>
+                {/* @ts-ignore */}
+                <p style={paragraphStyle}>
                   {user?.school?.address}
-                </Typography>
-                <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>Student Payment Receipt</Typography>
-                <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>
+                </p>
+                {/* @ts-ignore */}
+                <p style={paragraphStyle}>Student Payment Receipt</p>
+                {/* @ts-ignore */}
+                <p style={paragraphStyle}>
                   Received By: {username}
-                </Typography>
-                <Typography variant="body1" sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '0.7rem' }}>
+                </p>
+                {/* @ts-ignore */}
+                <p style={paragraphStyle}>
                   Office Copy
-                </Typography>
+                </p>
               </Grid>
             </Grid>
             {/* <Grid width="80px" height="80px"></Grid> */}
@@ -839,64 +914,64 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
           {/* student information */}
           <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
             <Grid sx={{ display: 'flex', gap: '20px' }}>
-              <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+              <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px', color: "black" }}>
+                <p style={paragraphStyleInfo}>
                   Rec. No.
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                </p>
+                <p style={paragraphStyleInfo}>
                   Student Name & Id
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                </p>
+                <p style={paragraphStyleInfo}>
                   Batch
-                </Typography>
+                </p>
               </Grid>
-              <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+              <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px', color: "black" }}>
+                <p style={paragraphStyleInfo}>
                   : {selectedFees[0]?.tracking_number}
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                </p>
+                <p style={paragraphStyleInfo}>
                   : {`${[feesUserData?.first_name, feesUserData?.middle_name, feesUserData?.last_name].join(' ')} (${student_id})`}
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                </p>
+                <p style={paragraphStyleInfo}>
                   : {feesUserData?.section_name}
-                </Typography>
+                </p>
               </Grid>
             </Grid>
             <Grid sx={{ display: 'flex', gap: '20px' }}>
-              <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+              <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px', color: "black" }}>
+                <p style={paragraphStyleInfo}>
                   Date
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                </p>
+                <p style={paragraphStyleInfo}>
                   Class
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                </p>
+                <p style={paragraphStyleInfo}>
                   Roll No
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                </p>
+                <p style={paragraphStyleInfo}>
                   Phone No
-                </Typography>
+                </p>
               </Grid>
-              <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+              <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px', color: "black" }}>
+                <p style={paragraphStyleInfo}>
                   : {formattedDate}
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                </p>
+                <p style={paragraphStyleInfo}>
                   : {feesUserData?.class_name}
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                </p>
+                <p style={paragraphStyleInfo}>
                   : {feesUserData?.class_roll_no}
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#000', fontSize: '0.7rem' }}>
+                </p>
+                <p style={paragraphStyleInfo}>
                   : {userInformation?.phone}
-                </Typography>
+                </p>
               </Grid>
             </Grid>
           </Grid>
 
           {/* table one */}
           <Grid mt={1}>
-            <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
+            <TableContainer sx={{ borderRadius: 0, fontWeight: "normal" }}>
               <Table sx={{ minWidth: '340px', maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
                 <TableHead>
                   <TableRow>
@@ -910,7 +985,9 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                         paddingRight: '5px',
                         fontSize: '0.7rem',
                         paddingTop: '2px',
-                        paddingBottom: '2px'
+                        paddingBottom: '2px',
+                        fontWeight: "normal"
+
                         // color: '#000'
                       }}
                     >
@@ -919,26 +996,26 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                   </TableRow>
 
                   {/* <TableRow>
-                    {selectedFees.find((item) => item.teacher_name) ? (
-                      <TableCell
-                        style={{
-                          border: '1px solid black',
-                          textTransform: 'capitalize',
-                          // fontWeight: 'bold',
-                          width: '25%',
-                          paddingLeft: '5px',
-                          paddingRight: '5px',
-                          paddingTop: '2px',
-                          paddingBottom: '2px',
-                          color: '#000'
-                        }}
-                      >
-                        Teacher Name
-                      </TableCell>
-                    ) : (
-                      ''
-                    )}
-                  </TableRow> */}
+                  {selectedFees.find((item) => item.teacher_name) ? (
+                    <TableCell
+                      style={{
+                        border: '1px solid black',
+                        textTransform: 'capitalize',
+                        // fontWeight: 'bold',
+                        width: '25%',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        paddingTop: '2px',
+                        paddingBottom: '2px',
+                        color: '#000'
+                      }}
+                    >
+                      Teacher Name
+                    </TableCell>
+                  ) : (
+                    ''
+                  )}
+                </TableRow> */}
 
                   {selectedFees?.map((payment, index) => {
                     return (
@@ -954,12 +1031,16 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                           style={{
                             border: '1px solid black',
                             // fontWeight: 'bold',
+                            color,
+                            fontFamily,
                             paddingLeft: '5px',
                             paddingRight: '5px',
                             paddingTop: '2px',
                             fontSize: '0.7rem',
                             paddingBottom: '2px',
-                            textTransform: 'capitalize'
+                            textTransform: 'capitalize',
+                            fontWeight: "normal"
+
                           }}
                         >
                           {payment?.head_title && payment?.fee_id ? `${payment?.head_title} (${payment?.title})` : payment?.title} <br />
@@ -969,35 +1050,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                           {payment?.teacher_name ? `Teacher Name: ${payment?.teacher_name}` : ''}
 
                           {/* {[payment?.head_title, payment?.title, payment?.subject_name].filter(Boolean)[0] +
-                          ' ' +
-                          [payment?.head_title, payment?.title, payment?.subject_name]
-                            .filter(Boolean)
-                            .slice(1)
-                            .map((item) => `(${item})`)
-                            .join(' ')} */}
+                        ' ' +
+                        [payment?.head_title, payment?.title, payment?.subject_name]
+                          .filter(Boolean)
+                          .slice(1)
+                          .map((item) => `(${item})`)
+                          .join(' ')} */}
                         </TableCell>
 
                         {/* {selectedFees.find((item) => item.teacher_name) ? (
-                          <TableCell
-                            align="left"
-                            style={{
-                              border: '1px solid black',
-                              // fontWeight: 'bold',
-                              paddingLeft: '5px',
-                              paddingRight: '5px',
-                              paddingTop: '2px',
-                              fontSize: '0.7rem',
-                              paddingBottom: '2px'
-                            }}
-                          >
-                            {payment?.teacher_name ? payment?.teacher_name : ''}
-                          </TableCell>
-                        ) : (
-                          ''
-                        )} */}
-
                         <TableCell
-                          align="right"
+                          align="left"
                           style={{
                             border: '1px solid black',
                             // fontWeight: 'bold',
@@ -1008,38 +1071,60 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                             paddingBottom: '2px'
                           }}
                         >
+                          {payment?.teacher_name ? payment?.teacher_name : ''}
+                        </TableCell>
+                      ) : (
+                        ''
+                      )} */}
+
+                        <TableCell
+                          align="right"
+                          style={{
+                            border: '1px solid black',
+                            // fontWeight: 'bold',
+                            fontFamily,
+                            color,
+                            paddingLeft: '5px',
+                            paddingRight: '5px',
+                            paddingTop: '2px',
+                            fontSize: '0.7rem',
+                            paddingBottom: '2px',
+                            fontWeight: "normal"
+
+                          }}
+                        >
                           {payment?.payableAmount?.toFixed(2)}
                         </TableCell>
                         {/* <TableCell
-                        align="left"
-                        style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
-                      >
-                        {payment.prevAmount ? formatNumber(payment?.prevAmount?.toFixed(2)) : 0}
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
-                      >
-                        {payment.prev_disount ? formatNumber(payment.prev_disount?.toFixed(2)) : 0}
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
-                      >
-                        {payment.paidAmount ? formatNumber(payment.paidAmount?.toFixed(2)) : 0}
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
-                      >
-                        {payment.on_time_discount && payment.fee_id ? formatNumber(payment.on_time_discount?.toFixed(2)) : 0}
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
-                      >
-                        {payment.paidAmount ? formatNumber(payment.due?.toFixed(2)) : 0}
-                      </TableCell> */}
+                      align="left"
+                      style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
+                    >
+                      {payment.prevAmount ? formatNumber(payment?.prevAmount?.toFixed(2)) : 0}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
+                    >
+                      {payment.prev_disount ? formatNumber(payment.prev_disount?.toFixed(2)) : 0}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
+                    >
+                      {payment.paidAmount ? formatNumber(payment.paidAmount?.toFixed(2)) : 0}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
+                    >
+                      {payment.on_time_discount && payment.fee_id ? formatNumber(payment.on_time_discount?.toFixed(2)) : 0}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      style={{ border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px' }}
+                    >
+                      {payment.paidAmount ? formatNumber(payment.due?.toFixed(2)) : 0}
+                    </TableCell> */}
                       </TableRow>
                     );
                   })}
@@ -1054,12 +1139,16 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       style={{
                         border: '1px solid black',
                         // fontWeight: 'bold',
+                        fontFamily,
+                        color,
                         paddingLeft: '5px',
                         paddingRight: '5px',
                         paddingTop: '2px',
                         fontSize: '0.7rem',
                         textTransform: 'capitalize',
-                        paddingBottom: '2px'
+                        paddingBottom: '2px',
+                        fontWeight: "normal"
+
                       }}
                     >
                       Payable Amt.
@@ -1069,13 +1158,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       style={{
                         border: '1px solid black',
                         // fontWeight: 'bold',
+                        fontFamily,
+                        color,
                         paddingLeft: '5px',
                         paddingRight: '5px',
                         textTransform: 'capitalize',
                         paddingTop: '2px',
 
                         fontSize: '0.7rem',
-                        paddingBottom: '2px'
+                        paddingBottom: '2px',
+                        fontWeight: "normal"
+
                       }}
                     >
                       {/* {totalPreAmount?.toFixed(2)} */}
@@ -1088,13 +1181,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       style={{
                         border: '1px solid black',
                         // fontWeight: 'bold',
+                        fontFamily,
+                        color,
                         paddingLeft: '5px',
                         paddingRight: '5px',
                         textTransform: 'capitalize',
                         paddingTop: '2px',
 
                         fontSize: '0.7rem',
-                        paddingBottom: '2px'
+                        paddingBottom: '2px',
+                        fontWeight: "normal"
+
                       }}
                     >
                       Prev. Paid
@@ -1104,13 +1201,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       style={{
                         border: '1px solid black',
                         // fontWeight: 'bold',
+                        color,
+                        fontFamily,
                         paddingLeft: '5px',
                         paddingRight: '5px',
                         textTransform: 'capitalize',
                         paddingTop: '2px',
 
                         fontSize: '0.7rem',
-                        paddingBottom: '2px'
+                        paddingBottom: '2px',
+                        fontWeight: "normal"
+
                       }}
                     >
                       {totalPreAmount?.toFixed(2)}
@@ -1122,13 +1223,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       style={{
                         border: '1px solid black',
                         // fontWeight: 'bold',
+                        color,
+                        fontFamily,
                         paddingLeft: '5px',
                         paddingRight: '5px',
                         textTransform: 'capitalize',
                         paddingTop: '2px',
 
                         fontSize: '0.7rem',
-                        paddingBottom: '2px'
+                        paddingBottom: '2px',
+                        fontWeight: "normal"
+
                       }}
                     >
                       Prev. Discount
@@ -1138,13 +1243,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       style={{
                         border: '1px solid black',
                         // fontWeight: 'bold',
+                        fontFamily,
+                        color,
                         paddingLeft: '5px',
                         paddingRight: '5px',
                         textTransform: 'capitalize',
                         paddingTop: '2px',
 
                         fontSize: '0.7rem',
-                        paddingBottom: '2px'
+                        paddingBottom: '2px',
+                        fontWeight: "normal"
+
                       }}
                     >
                       {totalPreviousDiscount?.toFixed(2)}
@@ -1156,13 +1265,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       style={{
                         border: '1px solid black',
                         // fontWeight: 'bold',
+                        color,
+                        fontFamily,
                         paddingLeft: '5px',
                         paddingRight: '5px',
                         textTransform: 'capitalize',
                         paddingTop: '2px',
 
                         fontSize: '0.7rem',
-                        paddingBottom: '2px'
+                        paddingBottom: '2px',
+                        fontWeight: "normal"
+
                       }}
                     >
                       Paid Amt
@@ -1172,13 +1285,17 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       style={{
                         border: '1px solid black',
                         // fontWeight: 'bold',
+                        fontFamily,
+                        color,
                         paddingLeft: '5px',
                         paddingRight: '5px',
                         textTransform: 'capitalize',
                         paddingTop: '2px',
 
                         fontSize: '0.7rem',
-                        paddingBottom: '2px'
+                        paddingBottom: '2px',
+                        fontWeight: "normal"
+
                       }}
                     >
                       {totalPaidAmount?.toFixed(2)}
@@ -1194,9 +1311,12 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                         paddingRight: '5px',
                         textTransform: 'capitalize',
                         paddingTop: '2px',
-
+                        fontFamily,
+                        color,
                         fontSize: '0.7rem',
-                        paddingBottom: '2px'
+                        paddingBottom: '2px',
+                        fontWeight: "normal"
+
                       }}
                     >
                       Discount
@@ -1206,12 +1326,16 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       style={{
                         border: '1px solid black',
                         // fontWeight: 'bold',
+                        fontFamily,
+                        color,
                         paddingLeft: '5px',
                         paddingRight: '5px',
                         textTransform: 'capitalize',
                         paddingTop: '2px',
                         fontSize: '0.7rem',
-                        paddingBottom: '2px'
+                        paddingBottom: '2px',
+                        fontWeight: "normal"
+
                       }}
                     >
                       {totalCurrentDisountAmount?.toFixed(2)}
@@ -1223,12 +1347,16 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       style={{
                         border: '1px solid black',
                         // fontWeight: 'bold',
+                        fontFamily,
+                        color,
                         paddingLeft: '5px',
                         paddingRight: '5px',
                         textTransform: 'capitalize',
                         paddingTop: '2px',
                         fontSize: '0.7rem',
-                        paddingBottom: '2px'
+                        paddingBottom: '2px',
+                        fontWeight: "normal"
+
                       }}
                     >
                       Due Amt.
@@ -1237,12 +1365,16 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       align="right"
                       style={{
                         border: '1px solid black',
+                        fontFamily,
+                        color,
                         paddingLeft: '5px',
                         paddingRight: '5px',
                         textTransform: 'capitalize',
                         paddingTop: '2px',
                         fontSize: '0.7rem',
-                        paddingBottom: '2px'
+                        paddingBottom: '2px',
+                        fontWeight: "normal"
+
                       }}
                     >
                       {totalDueAmount?.toFixed(2)}
@@ -1262,13 +1394,15 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       scope="row"
                       align="left"
                       style={{
+                        fontFamily,
+                        color,
                         border: '1px solid black',
-                        fontWeight: 'bold',
                         paddingLeft: '5px',
                         paddingRight: '5px',
                         paddingTop: '2px',
                         fontSize: '0.7rem',
-                        paddingBottom: '2px'
+                        paddingBottom: '2px',
+                        fontWeight: "normal"
                       }}
                     >
                       Total Due
@@ -1276,9 +1410,10 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                     <TableCell
                       align="right"
                       style={{
+                        fontFamily,
+                        color,
                         border: '1px solid black',
                         fontSize: '0.7rem',
-                        fontWeight: 'bold',
                         paddingLeft: '5px',
                         paddingRight: '5px',
                         paddingTop: '2px',
@@ -1294,8 +1429,8 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
           </Grid>
           {/* taka in words */}
           {/* <Typography variant="body1" sx={{ fontWeight: 'bold' }} my={1}>
-          In Words: One Thousand
-        </Typography> */}
+        In Words: One Thousand
+      </Typography> */}
           <Grid container sx={{ gap: '2px', display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem' }} my={1}>
             <Grid
               sx={{
@@ -1313,68 +1448,68 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
           </Grid>
           {/* table two */}
           {/* <Grid mt={1} mb={6}>
-          <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
-            <Table sx={{ minWidth: '340px', maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    style={{
-                      border: '1px solid black',
-                      textTransform: 'capitalize',
-                      // fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      fontSize: '0.7rem',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                      // color: '#000'
-                    }}
-                  >
-                    Payment Status
-                  </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{
-                    '&:last-child td, &:last-child th': { border: 0 }
+        <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
+          <Table sx={{ minWidth: '340px', maxWidth: 'calc(100%-10px)' }} size="small" aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  colSpan={4}
+                  style={{
+                    border: '1px solid black',
+                    textTransform: 'capitalize',
+                    // fontWeight: 'bold',
+                    paddingLeft: '5px',
+                    paddingRight: '5px',
+                    fontSize: '0.7rem',
+                    paddingTop: '2px',
+                    paddingBottom: '2px'
+                    // color: '#000'
                   }}
                 >
-                  <TableCell
-                    align="left"
-                    style={{
-                      border: '1px solid black',
-                      width: '30%',
-                      paddingLeft: '5px',
-                      fontSize: '0.7rem',
-                      paddingRight: '5px',
-                      paddingTop: '2px',
-                      textTransform: 'capitalize',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    Total Due
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    style={{
-                      border: '1px solid black',
-                      width: '20%',
-                      fontWeight: 'bold',
-                      paddingLeft: '5px',
-                      paddingRight: '5px',
-                      fontSize: '0.7rem',
-                      paddingTop: '2px',
-                      paddingBottom: '2px'
-                    }}
-                  >
-                    {totalDueAmount?.toFixed(2)}
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody></TableBody>
-            </Table>
-          </TableContainer>
-        </Grid> */}
+                  Payment Status
+                </TableCell>
+              </TableRow>
+              <TableRow
+                sx={{
+                  '&:last-child td, &:last-child th': { border: 0 }
+                }}
+              >
+                <TableCell
+                  align="left"
+                  style={{
+                    border: '1px solid black',
+                    width: '30%',
+                    paddingLeft: '5px',
+                    fontSize: '0.7rem',
+                    paddingRight: '5px',
+                    paddingTop: '2px',
+                    textTransform: 'capitalize',
+                    paddingBottom: '2px'
+                  }}
+                >
+                  Total Due
+                </TableCell>
+                <TableCell
+                  align="right"
+                  style={{
+                    border: '1px solid black',
+                    width: '20%',
+                    fontWeight: 'bold',
+                    paddingLeft: '5px',
+                    paddingRight: '5px',
+                    fontSize: '0.7rem',
+                    paddingTop: '2px',
+                    paddingBottom: '2px'
+                  }}
+                >
+                  {totalDueAmount?.toFixed(2)}
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody></TableBody>
+          </Table>
+        </TableContainer>
+      </Grid> */}
           {/* signature  */}
           <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 3 }}>
             <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
@@ -1395,6 +1530,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
             </Grid>
           </Grid>
         </Grid>
+
       )}
 
     </Grid>

@@ -54,7 +54,7 @@ function ManagementUsers() {
 }
 
 ManagementUsers.getLayout = (page) => (
-  <Authenticated name="user" requiredPermissions={['create_branch_admin']}>
+  <Authenticated requiredPermissions={['create_branch_admin']}>
     <ExtendedSidebarLayout>{page}</ExtendedSidebarLayout>
   </Authenticated>
 );

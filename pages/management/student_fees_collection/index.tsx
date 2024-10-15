@@ -23,7 +23,6 @@ import { monthList } from '@/utils/getDay';
 import { Data } from '@/models/front_end';
 import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
 import DesignPaymentInvoiceSmallSize from '@/content/Management/StudentFeesCollection/DesignPaymentInvoiceSmallSize';
-import { Iso } from '@mui/icons-material';
 
 // updated searching code start
 
