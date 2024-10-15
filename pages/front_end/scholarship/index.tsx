@@ -11,7 +11,8 @@ import Results from './Results';
 
 const Packages = () => {
   const { data, reFetchData }: { data: Data; reFetchData: Function } = useClientFetch('/api/front_end/scholarship');
-  console.log({data})
+
+  console.log({ data });
   return (
     <>
       <Head>
@@ -24,7 +25,7 @@ const Packages = () => {
 
       <Grid sx={{ px: { xs: 1, sm: 2, md: 3 } }} container direction="row" justifyContent="center" alignItems="stretch" spacing={3}>
         <Grid item>
-          <Results data={data} reFetchData={reFetchData }/>
+          <Results data={data} reFetchData={reFetchData} />
         </Grid>
       </Grid>
       <Footer />
