@@ -48,7 +48,9 @@ export default async function Scholar() {
     return (
         <div>
             <Scholarship
-                classes={
+                classes=
+                
+                {
                     resSchool?.websiteui[0]?.scholarshipClasses?.map((cls) => ({id: cls.id,label: cls.name})) || []
                 }
                 academicYears={academicYear || []}

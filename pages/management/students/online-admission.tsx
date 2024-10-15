@@ -1,11 +1,4 @@
-import {
-  ChangeEvent,
-  useState,
-  ReactElement,
-  Ref,
-  forwardRef,
-  useEffect,
-} from 'react';
+import { ChangeEvent, useState, ReactElement, Ref, forwardRef, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 import {
@@ -28,7 +21,7 @@ import {
   styled,
   TablePagination,
   Grid,
-  Switch,
+  Switch
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import CloseIcon from '@mui/icons-material/Close';
@@ -90,18 +83,11 @@ interface Filters {
   role?: string;
 }
 
-const Transition = forwardRef(function Transition(
-  props: TransitionProps & { children: ReactElement<any, any> },
-  ref: Ref<unknown>
-) {
+const Transition = forwardRef(function Transition(props: TransitionProps & { children: ReactElement<any, any> }, ref: Ref<unknown>) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const applyFilters = (
-  users,
-  query,
-  filters
-) => {
+const applyFilters = (users, query, filters) => {
   return users?.filter((user) => {
     let matches = true;
 
@@ -139,16 +125,12 @@ const applyFilters = (
   });
 };
 
-const applyPagination = (
-  users: User[],
-  page: number,
-  limit: number
-): User[] => {
+const applyPagination = (users: User[], page: number, limit: number): User[] => {
   return users?.slice(page * limit, page * limit + limit);
 };
 
 const Results = () => {
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([]);
   const [selectedItems, setSelectedUsers] = useState([]);
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
@@ -165,20 +147,21 @@ const Results = () => {
   const [openConfirmDelete, setOpenConfirmDelete] = useState(null);
 
   const refetch = () => {
-    axios.get('/api/onlineAdmission')
-      .then(res => setUsers(res.data))
-      .catch(err => console.log(err))
-  }
+    axios
+      .get('/api/onlineAdmission')
+      .then((res) => setUsers(res.data))
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
-    refetch()
-  }, [])
+    refetch();
+  }, []);
 
   const handleCreateProjectClose = () => {
-    setOpen(false)
-    setSelectedStudent(null)
+    setOpen(false);
+    setSelectedStudent(null);
     refetch();
-  }
+  };
   const handlePageChange = (_event: any, newPage: number): void => {
     setPage(newPage);
   };
@@ -186,29 +169,22 @@ const Results = () => {
     setLimit(parseInt(event.target.value));
   };
 
-
   const handleSelectAllUsers = (event: ChangeEvent<HTMLInputElement>): void => {
     setSelectedUsers(event.target.checked ? users.map((user) => user.id) : []);
   };
 
-  const handleSelectOneUser = (
-    _event: ChangeEvent<HTMLInputElement>,
-    userId: string
-  ): void => {
+  const handleSelectOneUser = (_event: ChangeEvent<HTMLInputElement>, userId: string): void => {
     if (!selectedItems.includes(userId)) {
       setSelectedUsers((prevSelected) => [...prevSelected, userId]);
     } else {
-      setSelectedUsers((prevSelected) =>
-        prevSelected.filter((id) => id !== userId)
-      );
+      setSelectedUsers((prevSelected) => prevSelected.filter((id) => id !== userId));
     }
   };
 
   const filteredClasses = applyFilters(users, query, filters);
   const paginatedClasses = applyPagination(filteredClasses, page, limit);
   const selectedBulkActions = selectedItems.length > 0;
-  const selectedSomeUsers =
-    selectedItems.length > 0 && selectedItems.length < users.length;
+  const selectedSomeUsers = selectedItems.length > 0 && selectedItems.length < users.length;
   const selectedAllUsers = selectedItems.length === users.length;
 
   const closeConfirmDelete = () => {
@@ -216,21 +192,21 @@ const Results = () => {
   };
 
   const handleDeleteCompleted = () => {
-
-    axios.delete(`/api/onlineAdmission/${openConfirmDelete}`)
-      .then(res => {
+    axios
+      .delete(`/api/onlineAdmission/${openConfirmDelete}`)
+      .then((res) => {
         setOpenConfirmDelete(null);
         refetch();
         showNotification('Admission request has been removed');
       })
-      .catch(err => {
+      .catch((err) => {
         setOpenConfirmDelete(null);
         showNotification('Admission request deletion failed !', 'error');
-      })
+      });
   };
   const handleConfirmDelete = (id) => {
-    setOpenConfirmDelete(id)
-  }
+    setOpenConfirmDelete(id);
+  };
   const [editSection, setEditSection] = useState();
   return (
     <>
@@ -239,41 +215,22 @@ const Results = () => {
       </Head>
 
       <PageTitleWrapper>
-        <PageHead
-          editSection={editSection}
-          setEditSection={setEditSection}
-          reFetchData={() => { }}
-        />
+        <PageHead editSection={editSection} setEditSection={setEditSection} reFetchData={() => {}} />
       </PageTitleWrapper>
 
-      <Dialog
-        fullWidth
-        maxWidth="lg"
-        open={open}
-        onClose={handleCreateProjectClose}
-        scroll='body'
-      >
+      <Dialog fullWidth maxWidth="lg" open={open} onClose={handleCreateProjectClose} scroll="body">
         <Grid p={2}>
-          <Typography variant='h2' align='center' py={2}> Online Admission Approval</Typography>
-          <StudentForm
-            student={selectedStudent?.student}
-            handleClose={handleCreateProjectClose}
-            onlineAdmission_id={selectedStudent?.id}
-          />
+          <Typography variant="h2" align="center" py={2}>
+            {' '}
+            Online Admission Approval
+          </Typography>
+          <StudentForm student={selectedStudent?.student} handleClose={handleCreateProjectClose} onlineAdmission_id={selectedStudent?.id} />
         </Grid>
-
       </Dialog>
 
       <Card sx={{ minHeight: 'calc(100vh - 215px)', mx: 0.5 }}>
-
-
         {!selectedBulkActions && (
-          <Box
-            p={2}
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
+          <Box p={2} display="flex" alignItems="center" justifyContent="space-between">
             <Box>
               <Typography component="span" variant="subtitle1">
                 {t('Showing')}:
@@ -309,7 +266,7 @@ const Results = () => {
           </>
         ) : (
           <>
-            <TableContainer >
+            <TableContainer>
               <Table size="small">
                 <TableHead>
                   <TableRow>
@@ -325,38 +282,26 @@ const Results = () => {
                 </TableHead>
                 <TableBody>
                   {paginatedClasses.map((i) => {
+                    console.log({ i });
                     return (
-                      <TableRow hover key={i.id} >
-                        <TableBodyCellWrapper align={'center'}>
-                          {i?.id}
-                        </TableBodyCellWrapper>
+                      <TableRow hover key={i.id}>
+                        <TableBodyCellWrapper align={'center'}>{i?.id}</TableBodyCellWrapper>
                         <TableBodyCellWrapper align={'center'}>
                           {i?.student?.first_name} {i?.student?.middle_name} {i?.student?.last_name}
                         </TableBodyCellWrapper>
-                        <TableBodyCellWrapper align={'center'}>
-                          {i?.student?.username}
-                        </TableBodyCellWrapper>
-                        <TableBodyCellWrapper align={'center'}>
-                          {i?.student?.password}
-                        </TableBodyCellWrapper>
-                        <TableBodyCellWrapper align={'center'}>
-                          {i?.student?.class_name}
-                        </TableBodyCellWrapper>
-                        <TableBodyCellWrapper align={'center'}>
-                          {i?.student?.academic_year_title}
-                        </TableBodyCellWrapper>
-                        <TableBodyCellWrapper align={'center'}>
-                          {customizeDateWithTime(i?.student?.admission_date)}
-                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper align={'center'}>{i?.student?.username}</TableBodyCellWrapper>
+                        <TableBodyCellWrapper align={'center'}>{i?.student?.password}</TableBodyCellWrapper>
+                        <TableBodyCellWrapper align={'center'}>{i?.student?.class_name}</TableBodyCellWrapper>
+                        <TableBodyCellWrapper align={'center'}>{i?.student?.academic_year_title}</TableBodyCellWrapper>
+                        <TableBodyCellWrapper align={'center'}>{customizeDateWithTime(i?.student?.admission_date)}</TableBodyCellWrapper>
 
-                        <TableBodyCellWrapper align={'center'} >
-
+                        <TableBodyCellWrapper align={'center'}>
                           <Tooltip title={t('Approve')} arrow>
                             <IconButton
                               color="primary"
                               onClick={() => {
-                                setSelectedStudent(i)
-                                setOpen(true)
+                                setSelectedStudent(i);
+                                setOpen(true);
                               }}
                             >
                               <ApprovalIcon fontSize="small" />
@@ -364,10 +309,7 @@ const Results = () => {
                           </Tooltip>
 
                           <Tooltip title={t('Delete')} arrow sx={{ ml: 1 }}>
-                            <IconButton
-                              onClick={() => handleConfirmDelete(i.id)}
-                              color="primary"
-                            >
+                            <IconButton onClick={() => handleConfirmDelete(i.id)} color="primary">
                               <DeleteTwoToneIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
@@ -392,13 +334,7 @@ const Results = () => {
         keepMounted
         onClose={closeConfirmDelete}
       >
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-          p={5}
-        >
+        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" p={5}>
           <AvatarError>
             <CloseIcon />
           </AvatarError>
@@ -411,8 +347,7 @@ const Results = () => {
             }}
             variant="h3"
           >
-            {t('Are you sure you want to permanently delete this student')}
-            ?
+            {t('Are you sure you want to permanently delete this student')}?
           </Typography>
 
           <Box>
@@ -443,7 +378,6 @@ const Results = () => {
     </>
   );
 };
-
 
 Results.getLayout = (page) => (
   <Authenticated name="student">

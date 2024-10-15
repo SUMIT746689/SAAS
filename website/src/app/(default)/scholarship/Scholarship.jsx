@@ -12,59 +12,57 @@ import { useTranslation } from 'react-i18next';
 import { AutoCompleteWrapper } from '@/components/AutoCompleteWrapper';
 import { useClientFetch } from '@/hooks/useClientFetch';
 import { useAuth } from '@/hooks/useAuth';
-
-
 function Scholarship({classes, editData, setEditData, reFetchData , serverHost}) {
   const [open, setOpen] = useState(false);
   const [classOptions, setClassOptions] = useState([]);
   const { user } = useAuth();
-  // const { data: classes } = useClientFetch(`/api/class?school_id=${user?.school_id}`);
   const { showNotification } = useNotistick();
-
-  console.log({classes})
-
-  // useEffect(() => {
-  //   if (!classes || !Array.isArray(classes)) return;
-  //   setClassOptions(
-  //     classes.map((cls) => ({
-  //       id: cls.id,
-  //       label: cls.name
-  //     }))
-  //   );
-  // }, [classes]);
-
+  console.log("classes.............",{classes}) 
+  useEffect(() => {
+    if (!classes || !Array.isArray(classes)) return;
+    setClassOptions(
+      classes.map((cls) => ({
+        id: cls.id,
+        label: cls.name
+      }))
+    );
+  }, [classes]);
   useEffect(() => {
     if (editData) setOpen(true);
   }, [editData]);
-
   const handleCreateClassOpen = () => {
     setOpen(true);
   };
-
   const handleCreateClassClose = () => {
     // setPhoto(null);
     setOpen(false);
     setEditData(null);
   };
-
   const handleFormSubmit = async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
-   
     try {
-      
       const formData = new FormData();
-
       for (let i in _values) {
-        formData.append(`${i}`, _values[i]);
+        console.log({_values})
+        if(i === "classes") {
+        //  const customCls = JSON.stringify(Array.isArray(_values.classes) ? _values.classes.map(cls=>({id:cls.id, name:cls.label})) : [])
+        //  console.log({customCls});
+        //  formData.append(`${i}`,customCls);
+         // formData.append('classes', JSON.stringify(Array.isArray( _values.classes) ? _values.classes.map(cls=>({id:cls.id,name:cls.label})): [])); 
+        
+         formData.append(`${i}`, JSON.stringify({id:_values.classes.id,name:_values.classes.label}));
+        
+        }
+          else formData.append(`${i}`, _values[i]);
       }
+
+      formData.append(`admission_date`, new Date(Date.now()).toISOString())
 
       await axios.post(`${serverHost}/api/onlineAdmission`, formData)
         .then(res => { console.log({ res }) })
         .catch(err => { console.log({ err }) })
-
       resetForm();
       setStatus({ success: true });
       showNotification('Online Admission form submitted !!');
-
     }
     catch (err) {
       console.log(err);
@@ -75,7 +73,6 @@ function Scholarship({classes, editData, setEditData, reFetchData , serverHost})
       setSubmitting(false);
     }
   };
-
   return (
     <> 
     <Grid paddingLeft={32} paddingRight={32} > <DialogTitleWrapper  name={'Scholarship'} editData={editData} /></Grid>
@@ -84,8 +81,8 @@ function Scholarship({classes, editData, setEditData, reFetchData , serverHost})
           first_name: editData?.first_name ? editData.first_name : undefined,
           middle_name: editData?.middle_name ? editData.middle_name : undefined,
           last_name: editData?.last_name ? editData.last_name : undefined,
-          date_of_birth:editData?.date_of_birth ? editData.date_of_birth : undefined,
-          // classes: data?.scholarshipClasses?.map((cls) => ({ id: cls.id, label: cls.name })) || [],
+          classes: undefined,
+          date_of_birth: editData?.date_of_birth ? editData.date_of_birth : undefined,
           phone: editData?.phone ? editData.phone : undefined,
           father_name: editData?.father_name ? editData.father_name : undefined,
           father_phn_no: editData?.father_phn_no ? editData.father_phn_no : undefined,
@@ -93,19 +90,6 @@ function Scholarship({classes, editData, setEditData, reFetchData , serverHost})
           mother_phn_no: editData?.mother_phn_no ? editData.mother_phn_no : undefined,
           
         }}
-    
-        // validationSchema={Yup.object().shape({
-        //   first_name: Yup.string().max(255).required(t('First name field is required')),
-        //   middle_name: Yup.string().max(255).nullable(true),
-        //   last_name: Yup.string().max(255).nullable(true),
-        //   date_of_birth: Yup.date().required(t('Date of birth is required!')),
-        //   phone: Yup.string().required(t('Phone number is required!')).min(11, 'Phone number must be greater then or equals 11 character'),
-        //   father_name: Yup.string().max(255).required(t('First name field is required')),
-        //   mother_name: Yup.string().max(255).nullable(true),
-        //   father_phn_no:  Yup.string().required(t('Phone number is required!')).min(11, 'Phone number must be greater then or equals 11 character'),
-        //   mother_phn_no:  Yup.string().required(t('Phone number is required!')).min(11, 'Phone number must be greater then or equals 11 character'),
-          
-        // })}
           onSubmit={handleFormSubmit}
         >
           {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
@@ -149,27 +133,20 @@ function Scholarship({classes, editData, setEditData, reFetchData , serverHost})
                     />
                    </Grid>
                    <Grid container display="grid" sx={{ gridTemplateColumns: { sm: '1fr 1fr', md: ' 1fr 1fr 1fr'  }, gap: 1 }} >
-                    {/* <TextFieldWrapper
-                      label="Class"
-                      name="class"
-                      value={values.class}
-                      touched={touched.class}
-                      errors={errors.class}
-                      handleChange={handleChange}
-                      handleBlur={handleBlur}
-                    /> */}
                     <AutoCompleteWrapper
                     minWidth="100%"
                     label="Select Classes"
                     placeholder="classes..."
-                    multiple
+                    // multiple
                     value={values.classes}
                     options={classes}
                     name="classes"
                     error={errors?.classes}
                     touched={touched?.classes}
-                    // @ts-ignore
-                    handleChange={(e, value) => setFieldValue('classes', value)}
+                    handleChange={(e, value) =>{
+                      setFieldValue("classes",value);
+                      setFieldValue("class_ids", value.id);
+                      }}
                   />
                     <TextFieldWrapper
                       label="Date Of Birth"
