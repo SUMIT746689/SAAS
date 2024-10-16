@@ -1,4 +1,5 @@
 "use client"
+
 import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -13,6 +14,7 @@ import { AutoCompleteWrapper } from '@/components/AutoCompleteWrapper';
 import { useClientFetch } from '@/hooks/useClientFetch';
 import { useAuth } from '@/hooks/useAuth';
 function Scholarship({classes, editData, setEditData, reFetchData , serverHost}) {
+  const {t} = useTranslation()
   const [open, setOpen] = useState(false);
   const [classOptions, setClassOptions] = useState([]);
   const { user } = useAuth();
@@ -90,6 +92,23 @@ function Scholarship({classes, editData, setEditData, reFetchData , serverHost})
           mother_phn_no: editData?.mother_phn_no ? editData.mother_phn_no : undefined,
           
         }}
+        validationSchema={Yup.object().shape({
+          first_name: Yup.string()
+            .max(255)
+            .required(t('The first name field is required')),
+
+            classes: Yup.mixed()
+            // .max(255)
+            .required(t('The classes field is required')),
+            
+          date_of_birth: Yup.string()
+            .max(255)
+            .required(t('The date_of_birth field is required')),
+
+          phone: Yup.string()
+            .max(255)
+            .required(t('The phone field is required')),
+        })}
           onSubmit={handleFormSubmit}
         >
           {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
@@ -132,7 +151,8 @@ function Scholarship({classes, editData, setEditData, reFetchData , serverHost})
                       handleBlur={handleBlur}
                     />
                    </Grid>
-                   <Grid container display="grid" sx={{ gridTemplateColumns: { sm: '1fr 1fr', md: ' 1fr 1fr 1fr'  }, gap: 1 }} >
+                   <Grid  style={{ color: 'red', fontSize: '14px', marginTop: '2px' }}container display="grid" sx={{ gridTemplateColumns: { sm: '1fr 1fr', md: ' 1fr 1fr 1fr'  }, gap: 1 }} >
+                    <Grid >
                     <AutoCompleteWrapper
                     minWidth="100%"
                     label="Select Classes"
@@ -145,9 +165,13 @@ function Scholarship({classes, editData, setEditData, reFetchData , serverHost})
                     touched={touched?.classes}
                     handleChange={(e, value) =>{
                       setFieldValue("classes",value);
-                      setFieldValue("class_ids", value.id);
+                      // setFieldValue("class_ids", value.id);
                       }}
                   />
+                  {
+                     touched.classes && errors?.classes
+                  }
+                    </Grid>
                     <TextFieldWrapper
                       label="Date Of Birth"
                       name="date_of_birth"
