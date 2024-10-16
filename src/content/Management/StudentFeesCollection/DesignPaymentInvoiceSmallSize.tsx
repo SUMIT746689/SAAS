@@ -323,8 +323,8 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                       fontSize: '0.7rem',
                       paddingTop: '2px',
                       paddingBottom: '2px',
-                      fontWeight: "normal"
-
+                      fontWeight: "normal",
+                      color: 'black'
                       // color: '#000'
                     }}
                   >
@@ -768,7 +768,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
         {/* <Typography variant="body1" sx={{ fontWeight: 'bold' }} my={1}>
           In Words: One Thousand
         </Typography> */}
-        <Grid container sx={{ gap: '2px', display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem' }} my={1}>
+        <Grid container sx={{ gap: '2px', display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', fontFamily, color }} my={1}>
           <Grid
             sx={{
               fontSize: '0.7rem'
@@ -848,7 +848,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
           </TableContainer>
         </Grid> */}
         {/* signature  */}
-        <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 3 }}>
+        <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 3, fontFamily, color }}>
           <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
             <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
             <Grid>Student/Guardian Signature </Grid>
@@ -862,7 +862,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
             <Grid>Accounts Officer </Grid>
           </Grid>
 
-          <Grid sx={{ flexGrow: 1, fontSize: '0.6rem' }}>
+          <Grid sx={{ flexGrow: 1, fontSize: '0.6rem', color, fontFamily }}>
             <Grid sx={{ textAlign: 'center' }}>Powered By Edu360</Grid>
           </Grid>
         </Grid>
@@ -986,8 +986,8 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                         fontSize: '0.7rem',
                         paddingTop: '2px',
                         paddingBottom: '2px',
-                        fontWeight: "normal"
-
+                        fontWeight: "normal",
+                        color
                         // color: '#000'
                       }}
                     >
@@ -1431,7 +1431,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
           {/* <Typography variant="body1" sx={{ fontWeight: 'bold' }} my={1}>
         In Words: One Thousand
       </Typography> */}
-          <Grid container sx={{ gap: '2px', display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem' }} my={1}>
+          <Grid container sx={{ gap: '2px', display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', fontFamily, color }} my={1}>
             <Grid
               sx={{
                 fontSize: '0.7rem'
@@ -1511,7 +1511,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
         </TableContainer>
       </Grid> */}
           {/* signature  */}
-          <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 3 }}>
+          <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 3, fontFamily, color }}>
             <Grid sx={{ flexGrow: 1, fontSize: '0.7rem' }}>
               <Grid sx={{ height: '1px', backgroundColor: '#000' }}></Grid>
               <Grid>Student/Guardian Signature </Grid>
@@ -1525,7 +1525,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
               <Grid>Accounts Officer </Grid>
             </Grid>
 
-            <Grid sx={{ flexGrow: 1, fontSize: '0.6rem' }}>
+            <Grid sx={{ flexGrow: 1, fontSize: '0.6rem', color, fontFamily }}>
               <Grid sx={{ textAlign: 'center' }}>Powered By Edu360</Grid>
             </Grid>
           </Grid>
