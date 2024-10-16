@@ -4,21 +4,12 @@ import { fileUpload } from '@/utils/upload';
 import prisma from '@/lib/prisma_client';
 import fs from 'fs';
 import { logFile } from 'utilities_api/handleLogFile';
-
-// export const config = {
-//     api: {
-//         bodyParser: false
-//     }
-// };
-
 const post = async (req: any, res: any, refresh_token) => {
     try {
-
         if (!refresh_token.school_id) throw new Error('permission denied');
-
         const uploadFolderName = "online_admission";
         const { id, school_id } = refresh_token;
-        console.log({ school_id })
+        console.log({ id, school_id })
 
         const fileType = ['application/pdf', 'application/vnd.ms-excel'];
         const filterFiles = {
@@ -51,6 +42,8 @@ const post = async (req: any, res: any, refresh_token) => {
 
         const datas = path.join(process.cwd(), `${process.env.FILESFOLDER}`, resAdmissionForm.file_url);
         fs.unlinkSync(datas)
+
+        
 
         const response = await prisma.studentAdmissionForm.update({
             where: { id: resAdmissionForm.id },

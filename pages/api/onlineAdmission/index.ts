@@ -46,10 +46,13 @@ const index = async (req, res) => {
         };
 
         const { files, fields, error } = await fileUpload({
-          req,
+         req,
           filterFiles,
           uploadFolderName
         });
+        const {first_name,middle_name,last_name,classes,date_of_birth,phone,father_name,father_phn_no,mother_name,mother_phn_no,} = fields
+        
+        console.log({fields,cccccccccc: fields.classes})  
 
         if (error) {
           throw new Error('Server Error !');
@@ -89,12 +92,25 @@ const index = async (req, res) => {
               files?.guardian_photo?.originalFilename
           );
         }
-
+        console.log(JSON.stringify(fields,null,3))
+        const parseCls = JSON.parse(fields.classes);
         await prisma.onlineAdmission.create({
           data: {
             student: {
               ...fields,
-              filePathQuery
+              class_name:parseCls.name,
+              classes:JSON.parse(fields.classes)
+              // first_name,
+              // middle_name,
+              // last_name,
+              // classes,
+              // date_of_birth,
+              // phone,
+              // father_name,
+              // father_phn_no,
+              // mother_name,
+              // mother_phn_no,
+              // filePathQuery
             },
             school_id: school.id
           }
