@@ -31,8 +31,10 @@ export default async function RootLayout({ children }) {
             address: true,
             email: true,
             phone: true
+
           }
         },
+        is_scholarship_active:true,
         header_image: true,
         eiin_number: true,
         facebook_link: true,
@@ -46,6 +48,7 @@ export default async function RootLayout({ children }) {
     // console.log({ domain })
 
     const navarDatas = {
+      is_scholarship_active:school_info.is_scholarship_active,
       name: school_info?.school?.name,
       phone: school_info?.school?.phone,
       email: school_info?.school?.email,

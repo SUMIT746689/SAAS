@@ -42,7 +42,7 @@ async function put(req, res, refresh_token) {
                 data:{
                     english_scholarship_name: english_scholarship_name || undefined,
                     bangla_scholarship_name: bangla_scholarship_name || undefined,
-                    is_scholarship_active: is_scholarship_active || undefined,
+                    is_scholarship_active: typeof is_scholarship_active === "boolean" ? is_scholarship_active : undefined,
                     scholarshipClasses
                 }
             }).then(res=>{console.log({res})})
@@ -57,7 +57,7 @@ async function put(req, res, refresh_token) {
                 school_id,
                 english_scholarship_name: english_scholarship_name || undefined,
                 bangla_scholarship_name: bangla_scholarship_name || undefined,
-                is_scholarship_active : is_scholarship_active || undefined,
+                is_scholarship_active: typeof is_scholarship_active === "boolean" ? is_scholarship_active : undefined,
                 scholarshipClasses
             }
         });

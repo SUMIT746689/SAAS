@@ -6,18 +6,16 @@ import fs from 'fs';
 import path from 'path';
 import get from 'controllers/onlineAdmission/get';
 import { logFile } from 'utilities_api/handleLogFile';
-
+import generateUsername from '@/utils/generateUsername';
 export const config = {
   api: {
     bodyParser: false
   }
 };
-
 const index = async (req, res) => {
   const filePathQuery = {};
   try {
     const { method } = req;
-
     switch (method) {
       case 'GET':
         get(req, res);
@@ -44,15 +42,33 @@ const index = async (req, res) => {
           signature: fileType,
           background_image: fileType
         };
-
         const { files, fields, error } = await fileUpload({
          req,
           filterFiles,
           uploadFolderName
         });
-        const {first_name,middle_name,last_name,classes,date_of_birth,phone,father_name,father_phn_no,mother_name,mother_phn_no,} = fields
+        const {first_name,middle_name,last_name,classes,date_of_birth,phone,father_name,father_phn_no,mother_name,mother_phn_no} = fields;
+
+        const domain = req.rawHeaders[req.rawHeaders.indexOf('origin') + 1];
+        const finalDomain = domain.replace(/(https:\/\/|http:\/\/)/, "");
+    
+        console.log({domain,finalDomain});
+
+        const resSchool = await prisma.school.findFirst({
+          where:{
+            domain:finalDomain
+          },
+          select:{
+            academic_years:{
+              where:{ curr_active: true}
+            }
+          }
+        });
         
-        console.log({fields,cccccccccc: fields.classes})  
+        console.log('ggggggggggg',JSON.stringify(resSchool,null,3));
+
+        const username = await generateUsername(first_name);
+
 
         if (error) {
           throw new Error('Server Error !');
@@ -99,18 +115,11 @@ const index = async (req, res) => {
             student: {
               ...fields,
               class_name:parseCls.name,
-              classes:JSON.parse(fields.classes)
-              // first_name,
-              // middle_name,
-              // last_name,
-              // classes,
-              // date_of_birth,
-              // phone,
-              // father_name,
-              // father_phn_no,
-              // mother_name,
-              // mother_phn_no,
-              // filePathQuery
+              classes:JSON.parse(fields.classes),
+              username,
+              password:phone,
+              academic_year_id: resSchool.academic_years[0].id,
+              academic_year_title: resSchool.academic_years[0].title
             },
             school_id: school.id
           }

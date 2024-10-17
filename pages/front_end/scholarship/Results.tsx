@@ -27,19 +27,6 @@ const Results = ({ data, reFetchData }) => {
 
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
-  // isOn
-  const [isOn, setIsOn] = useState(false);
-  useEffect(() => {
-    const storedValue = localStorage.getItem('isOn');
-    console.log({ storedValue });
-    if (storedValue !== null) {
-      setIsOn(JSON.parse(storedValue));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('isOn', JSON.stringify(isOn));
-  }, [isOn]);
   return (
     <Formik
       enableReinitialize
@@ -47,7 +34,7 @@ const Results = ({ data, reFetchData }) => {
         english_scholarship_name: data?.english_scholarship_name || '',
         bangla_scholarship_name: data?.bangla_scholarship_name || '',
         classes: data?.scholarshipClasses?.map((cls) => ({ id: cls.id, label: cls.name })) || [],
-        // classess: [],
+        is_scholarship_active: data?.is_scholarship_active || false,
         submit: null
       }}
       onSubmit={async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
@@ -59,6 +46,7 @@ const Results = ({ data, reFetchData }) => {
           };
           const copyValues = JSON.parse(JSON.stringify(_values));
           copyValues.classes = copyValues?.classes?.map((cls) => cls.id);
+          console.log({ copyValues });
           axios
             .put('/api/front_end/scholarship', copyValues)
             .then((res) => {
@@ -121,8 +109,14 @@ const Results = ({ data, reFetchData }) => {
                   />
 
                   <FormControlLabel
-                    control={<Switch checked={isOn} onChange={() => setIsOn((value) => !value)} inputProps={{ 'aria-label': 'controlled' }} />}
-                    label={`Scholarship ${isOn ? 'Active' : 'Disable'}`}
+                    control={
+                      <Switch
+                        checked={values.is_scholarship_active}
+                        onChange={() => setFieldValue('is_scholarship_active', !values.is_scholarship_active)}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                      />
+                    }
+                    label={`Scholarship ${values.is_scholarship_active ? 'Active' : 'Disable'}`}
                     labelPlacement="start"
                     sx={{ mr: 'auto' }}
                   />
