@@ -1,5 +1,4 @@
 "use client"
-
 import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -80,16 +79,17 @@ function Scholarship({classes, editData, setEditData, reFetchData , serverHost})
     <Grid paddingLeft={32} paddingRight={32} > <DialogTitleWrapper  name={'Scholarship'} editData={editData} /></Grid>
     <Formik
           initialValues={{
-          first_name: editData?.first_name ? editData.first_name : undefined,
-          middle_name: editData?.middle_name ? editData.middle_name : undefined,
-          last_name: editData?.last_name ? editData.last_name : undefined,
-          classes: undefined,
-          date_of_birth: editData?.date_of_birth ? editData.date_of_birth : undefined,
-          phone: editData?.phone ? editData.phone : undefined,
-          father_name: editData?.father_name ? editData.father_name : undefined,
-          father_phn_no: editData?.father_phn_no ? editData.father_phn_no : undefined,
-          mother_name: editData?.mother_name ? editData.mother_name : undefined,
-          mother_phn_no: editData?.mother_phn_no ? editData.mother_phn_no : undefined,
+          // first_name: editData?.first_name ? editData.first_name : " ",
+          first_name: editData?.first_name || '',
+          middle_name: editData?.middle_name || '',
+          last_name: editData?.last_name || '',
+          classes: "",
+          date_of_birth: editData?.date_of_birth || '',
+          phone: editData?.phone || '',
+          father_name: editData?.father_name || '',
+          father_phn_no: editData?.father_phn_no || '',
+          mother_name: editData?.mother_name || '',
+          mother_phn_no: editData?.mother_phn_no || '',
           
         }}
         validationSchema={Yup.object().shape({
