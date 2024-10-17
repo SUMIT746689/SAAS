@@ -197,13 +197,11 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
 
   console.log({ feesUserData });
 
-  const paragraphStyle = { fontFamily: "monospace", textAlign: 'center', fontSize: '0.7rem' };
-
-  const paragraphStyleInfo = { fontFamily: "monospace", fontSize: '0.7rem' };
-
-  const tableCellStyle = { border: '1px solid black', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', fontSize: '0.7rem', paddingBottom: '2px', textTransform: 'capitalize' }
+  const fontFamily = "arial"
   const color = "black"
-  const fontFamily = "monospace"
+  const paragraphStyle = { fontFamily, textAlign: 'center', fontSize: '0.7rem' };
+  const paragraphStyleInfo = { fontFamily, fontSize: '0.7rem' };
+
   return (
     <Grid>
       {/* part 1 */}
@@ -226,7 +224,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
               )}
             </Grid>
             <Grid sx={{ textAlign: 'center', color: "black" }}>
-              <h1 style={{ textAlign: "center", fontFamily: "CG Times" }}>
+              <h1 style={{ textAlign: "center", fontFamily }}>
                 {user?.school?.name}
               </h1>
               {/* @ts-ignore */}
@@ -889,7 +887,7 @@ const DesignPaymentInvoiceSmallSize: FC<PaymentInvoiceType> = ({
                 )}
               </Grid>
               <Grid sx={{ textAlign: 'center', color: "black" }}>
-                <h1 style={{ textAlign: "center", fontFamily: "CG Times" }}>
+                <h1 style={{ textAlign: "center", fontFamily }}>
                   {user?.school?.name}
                 </h1>
                 {/* @ts-ignore */}
