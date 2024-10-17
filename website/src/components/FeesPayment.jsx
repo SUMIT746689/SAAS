@@ -16,7 +16,7 @@ import SubjectIcon from '@mui/icons-material/Subject';
 import BatchPredictionIcon from '@mui/icons-material/BatchPrediction';
 import NumbersIcon from '@mui/icons-material/Numbers';
 
-const FeesPayment = ({ serverHost }) => {
+const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
     const { t } = useTranslation();
     const theme = useTheme();
     const { showNotification } = useNotistick();
@@ -121,18 +121,14 @@ const FeesPayment = ({ serverHost }) => {
 
         }
     }
-
-
-    console.log({ stdInfo, lists });
-    console.log({ selectedItems, selectedPayAmt });
-
+    
     return (
-        <Grid maxWidth={1300} mx="auto" py={10} >
+        <Grid maxWidth={1300} mx="auto" py={10} > 
             <Typography variant="h4" gutterBottom py={6} align="center">
                 {t('Student Fees Online Payments')}
             </Typography>
             <Grid mt={8}></Grid>
-            <Grid display="grid" sx={{ gridTemplateColumns: { md: "1fr 1fr" }, columnGap: 2, rowGap:10 }} >
+            <Grid display="grid" sx={{ gridTemplateColumns: { md: "1fr 1fr" }, columnGap: 2, rowGap: 10 }} >
                 <Formik
                     initialValues={{
                         student_id: '',
@@ -365,33 +361,38 @@ const FeesPayment = ({ serverHost }) => {
                 </Table>
             </Card>
 
-            <Grid container >
-                Total Pay Amount: {formatNumber(selectedPayAmt)} TK
-            </Grid>
-            <Grid container>
-                <Button sx={{
-                    borderRadius: 0.5,
-                    textAlign: 'center',
-                    px: 'auto', display: 'flex',
-                    justifyContent: 'center', alignItems: 'center',
-                    height: 0.8,
-                    // backgroundColor: amount && amount >= 10 && '#42a5f5',
-                }}
-                    variant='contained'
-                    // disabled={amount && amount >= 10 ? false : true}
-                    onClick={handlePayment}>
+            <Grid display="grid" alignItems="end" justifyContent="right" justifyItems="right" gap={2} ml="auto" mt={1} pr={2}>
+                <Grid container fontWeight={700} textTransform="uppercase" >
+                    Total Selected Amount: <span style={{ color: "#E2136E", padding: '0px 5px' }}> {formatNumber(selectedPayAmt)} </span> TK
+                </Grid>
 
-                    <Image src={'/bkash.svg'} alt={'bkash'} width={35} height={35} />
-                    Pay Bkash
-                </Button>
-                {/* <Button variant='contained' disabled={selectedItems.length === 0} sx={{ m: 1, width: "100%" }} >Pay Fees</Button> */}
-            </Grid>
+                {
+                    bkashActivationInfo?.is_active && 
+                    <Grid container display="flex" justifyContent="right">
+                        <Button sx={{
+                            borderRadius: 0.5,
+                            textAlign: 'center',
+                            px: 'auto', display: 'flex',
+                            justifyContent: 'center', alignItems: 'center',
+                            height: 0.8,
+                            // backgroundColor: amount && amount >= 10 && '#42a5f5',
+                        }}
+                            variant='contained'
+                            // disabled={amount && amount >= 10 ? false : true}
+                            onClick={handlePayment}>
 
+                            <Image src={'/bkash.svg'} alt={'bkash'} width={35} height={35} />
+                            Pay Bkash
+                        </Button>
+                        {/* <Button variant='contained' disabled={selectedItems.length === 0} sx={{ m: 1, width: "100%" }} >Pay Fees</Button> */}
+                    </Grid>
+                }
+            </Grid>
             {/* <Grid>
                 Payment Channels:
                 <Grid>DBBL NEXUS, Q Cash, Union Pay, Vise, Mastercard, American Express</Grid>
                 <Grid>Bkash, Nogod, Rocket, Upay, Sure Cash, Tap'n Pay, M cash, </Grid>
-            </Grid> */} 
+            </Grid> */}
         </Grid>
     )
 };
