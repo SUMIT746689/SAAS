@@ -10,10 +10,10 @@ const DialogStyleWrapper = styled(Dialog)(
 `
 );
 
+// background-color: ${theme.colors.error.lighter};
+// color: ${theme.colors.error.main};
 const AvatarError = styled(Avatar)(
   ({ theme }) => `
-      background-color: ${theme.colors.error.lighter};
-      color: ${theme.colors.error.main};
       width: ${theme.spacing(8)};
       height: ${theme.spacing(8)};
 
@@ -23,13 +23,13 @@ const AvatarError = styled(Avatar)(
 `
 );
 
+// background: ${theme.colors.error.main};
+// background: ${theme.colors.error.dark};
 const ButtonError = styled(Button)(
   ({ theme }) => `
-     background: ${theme.colors.error.main};
      color: ${theme.palette.error.contrastText};
      
      &:hover {
-        background: ${theme.colors.error.dark};
      }
     `
 );

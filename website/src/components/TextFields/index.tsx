@@ -251,53 +251,53 @@ export const PreviewImageCard = ({ data, index, handleRemove }) => {
   );
 };
 
-export const PreviewImageCardStudentPhotoUpload = ({ data, index, handleRemove, removeBtn = false }) => {
-  const { src, name, database } = data;
-  console.log('Hello src data is here ');
-  console.log(src);
-  return (
-    <Grid
-      height="80px"
-      display="flex"
-      justifyContent="start"
-      alignItems={'center'}
-      gap={2}
-      sx={{
-        borderRadius: 0.6,
-        borderStyle: 'dashed',
-        p: 0.5,
-        ':hover': {
-          scale: 1.5,
-          cursor: 'pointer'
-        }
-      }}
-    >
-      <Grid maxHeight="120px">
-        {database ? (
-          <Image
-            src={getFile(src)}
-            width={80}
-            height={80}
-            alt="image"
-            objectFit="contain"
-            style={{ width: '80px', height: '80px', objectFit: 'contain' }}
-          />
-        ) : (
-          <img src={src} style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
-        )}
+// export const PreviewImageCardStudentPhotoUpload = ({ data, index, handleRemove, removeBtn = false }) => {
+//   const { src, name, database } = data;
+//   console.log('Hello src data is here ');
+//   console.log(src);
+//   return (
+//     <Grid
+//       height="80px"
+//       display="flex"
+//       justifyContent="start"
+//       alignItems={'center'}
+//       gap={2}
+//       sx={{
+//         borderRadius: 0.6,
+//         borderStyle: 'dashed',
+//         p: 0.5,
+//         ':hover': {
+//           scale: 1.5,
+//           cursor: 'pointer'
+//         }
+//       }}
+//     >
+//       <Grid maxHeight="120px">
+//         {database ? (
+//           <Image
+//             src={getFile(src)}
+//             width={80}
+//             height={80}
+//             alt="image"
+//             objectFit="contain"
+//             style={{ width: '80px', height: '80px', objectFit: 'contain' }}
+//           />
+//         ) : (
+//           <img src={src} style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
+//         )}
 
-        {/* <img src={src} style={{ width: '80px', height: '80px', objectFit: 'contain' }} /> */}
-      </Grid>
-      {removeBtn ? (
-        <Grid sx={{ display: 'flex', alignItems: 'center' }}>
-          <SearchingButtonWrapper isLoading={false} handleClick={() => handleRemove(index)} disabled={false} children={'Remove'} pb={0} />
-        </Grid>
-      ) : (
-        ''
-      )}
-    </Grid>
-  );
-};
+//         {/* <img src={src} style={{ width: '80px', height: '80px', objectFit: 'contain' }} /> */}
+//       </Grid>
+//       {removeBtn ? (
+//         <Grid sx={{ display: 'flex', alignItems: 'center' }}>
+//           <SearchingButtonWrapper isLoading={false} handleClick={() => handleRemove(index)} disabled={false} children={'Remove'} pb={0} />
+//         </Grid>
+//       ) : (
+//         ''
+//       )}
+//     </Grid>
+//   );
+// };
 
 type ImageCardType = {
   url: string;

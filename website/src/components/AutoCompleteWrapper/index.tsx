@@ -21,7 +21,9 @@ export const AutoCompleteWrapper = ({ minWidth = null, required = false, options
         id="tags-outlined"
         options={options}
         value={value}
-        filterSelectedOptions
+        filterSelectedOptions        // @ts-ignore
+
+        // @ts-ignore
         renderInput={(rnParams) => <TextField size="small" fullWidth required={required} {...rnParams} label={label} placeholder={placeholder} />}
         onChange={handleChange}
       />
@@ -63,7 +65,9 @@ export const AutoCompleteWrapperWithoutRenderInput = ({
         filterSelectedOptions
         renderInput={(rnParams) => (
           <TextField
+            // @ts-ignore
             size="small"
+            // @ts-ignore
             fullWidth
             required={required}
             {...rnParams}
@@ -100,6 +104,7 @@ export const EmptyAutoCompleteWrapper = ({ minWidth = null, options, value, labe
         options={options}
         value={value}
         filterSelectedOptions
+        // @ts-ignore
         renderInput={(params) => <TextField size="small" fullWidth {...params} label={label} placeholder={placeholder} />}
       />
     </Grid>
@@ -108,8 +113,8 @@ export const EmptyAutoCompleteWrapper = ({ minWidth = null, options, value, labe
 
 export const AutoCompleteWrapperWithDebounce = ({
   debounceTimeout,
-  handleDebounce = (value) => {},
-  searchHandleUpdate = () => {},
+  handleDebounce = (value) => { },
+  searchHandleUpdate = () => { },
   minWidth = null,
   required = false,
   options,
@@ -148,6 +153,7 @@ export const AutoCompleteWrapperWithDebounce = ({
         options={options}
         value={value}
         filterSelectedOptions
+        // @ts-ignore
         renderInput={(rnParams) => <TextField size="small" fullWidth required={required} {...rnParams} label={label} placeholder={placeholder} />}
         onInputChange={handleChange}
         onChange={searchHandleUpdate}
