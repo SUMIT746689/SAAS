@@ -1,0 +1,22 @@
+# FROM node:current-alpine3.19 as base
+FROM node:current-alpine3.19
+
+# 3. Production image, copy all the files and run next
+# FROM base AS runner
+WORKDIR /app
+#environment variable
+# RUN echo "HELLO WORLD........"
+ENV NODE_ENV=production
+COPY .env ./.env
+COPY public ./public
+RUN ls -alh
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY .next/standalone ./
+COPY .next/static ./.next/static
+
+# ENV PORT 3000
+# ENV SERVER_HOST='http://10.0.0.105:3000'
+# ENV DATABASE_URL=mysql://root:password@10.0.0.105:3306/school?parseTime=true
+
+CMD ["node", "server.js"]

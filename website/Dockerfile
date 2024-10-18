@@ -23,8 +23,10 @@ RUN npx prisma generate
 # This will do the trick, use the corresponding env file for each environment.
 COPY .env .env
 #RUN yarn build
+RUN cat next.config.js
+RUN ls -alh
 RUN npm run build
-
+# RUN ls /app/.next -alh
 
 # 3. Production image, copy all the files and run next
 FROM base AS runner

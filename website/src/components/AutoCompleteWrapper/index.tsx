@@ -64,6 +64,7 @@ export const AutoCompleteWrapperWithoutRenderInput = ({
         value={value}
         filterSelectedOptions
         renderInput={(rnParams) => (
+          // @ts-ignore
           <TextField
             // @ts-ignore
             size="small"

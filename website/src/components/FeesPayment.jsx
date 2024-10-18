@@ -10,11 +10,11 @@ import { formatNumber } from "@/utils/numberFormat"
 import Image from 'next/image';
 import { TableBodyCellWrapper, TableHeaderCellWrapper, TableRowWrapper } from '@/new_components/Table/Table';
 import { useRouter } from 'next/navigation';
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
-import ClassIcon from '@mui/icons-material/Class';
-import SubjectIcon from '@mui/icons-material/Subject';
-import BatchPredictionIcon from '@mui/icons-material/BatchPrediction';
-import NumbersIcon from '@mui/icons-material/Numbers';
+import { FaRegIdCard } from "react-icons/fc";
+import { MdFlightClass } from "react-icons/md";
+import { MdOutlineBatchPrediction } from "react-icons/md";
+import { MdSubject } from "react-icons/md";
+import { AiOutlineFieldNumber } from "react-icons/ai";
 
 const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
     const { t } = useTranslation();
@@ -267,11 +267,11 @@ const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
                     <Grid container mt={9} px={2} color="gray" >
                         <Grid fontSize="2em" textAlign="center" mx="auto">{[stdInfo?.student_info?.first_name, stdInfo?.student_info?.middle_name, stdInfo?.student_info?.last_name].join(' ')}</Grid>
                         <Grid item display="grid" width="100%" gridTemplateColumns="1fr 1fr" columnSpacing="10px" rowGap={1}>
-                            <Grid> <PermIdentityIcon sx={{ fontSize: 18, mb: 0.5 }} /> Student Id: <span>{stdInfo?.student_info?.student_id}</span> </Grid>
-                            <Grid> <ClassIcon sx={{ fontSize: 18, mb: 0.5 }} /> Class: <span>{stdInfo?.class?.name}</span></Grid>
-                            <Grid> <SubjectIcon sx={{ fontSize: 18, mb: 0.5 }} /> Subjects: <span>{stdInfo?.subjects?.map(subject => subject.name)?.join(', ')}</span></Grid>
-                            {stdInfo?.section?.class?.has_section ? <Grid> <BatchPredictionIcon sx={{ fontSize: 18, mb: 0.5 }} /> Batch: <span>{stdInfo?.section?.name}</span></Grid> : ''}
-                            <Grid > <NumbersIcon sx={{ fontSize: 18, mb: 0.5 }} /> Roll No: {stdInfo?.class_roll_no}</Grid>
+                            <Grid> <FaRegIdCard sx={{ fontSize: 18, mb: 0.5 }} /> Student Id: <span>{stdInfo?.student_info?.student_id}</span> </Grid>
+                            <Grid> <MdFlightClass sx={{ fontSize: 18, mb: 0.5 }} /> Class: <span>{stdInfo?.class?.name}</span></Grid>
+                            <Grid> <MdSubject sx={{ fontSize: 18, mb: 0.5 }} /> Subjects: <span>{stdInfo?.subjects?.map(subject => subject.name)?.join(', ')}</span></Grid>
+                            {stdInfo?.section?.class?.has_section ? <Grid> <MdOutlineBatchPrediction sx={{ fontSize: 18, mb: 0.5 }} /> Batch: <span>{stdInfo?.section?.name}</span></Grid> : ''}
+                            <Grid > <AiOutlineFieldNumber sx={{ fontSize: 18, mb: 0.5 }} /> Roll No: {stdInfo?.class_roll_no}</Grid>
                         </Grid>
                     </Grid>
 

@@ -1,7 +1,5 @@
 import { Avatar, Box, Button, CircularProgress, Dialog, DialogActions, DialogTitle, styled, Typography } from '@mui/material';
-import { useTranslation } from 'next-i18next';
-import CloseIcon from '@mui/icons-material/Close';
-
+import { IoIosClose } from "react-icons/io";
 const DialogStyleWrapper = styled(Dialog)(
   () => `
       .MuiDialog-paper {
@@ -35,29 +33,28 @@ const ButtonError = styled(Button)(
 );
 
 export const DialogWrapper = ({ openConfirmDelete, closeConfirmDelete, handleDeleteCompleted, Transition }) => {
-  const { t }: { t: any } = useTranslation();
 
   return (
     <DialogStyleWrapper open={openConfirmDelete} maxWidth="sm" fullWidth TransitionComponent={Transition} keepMounted onClose={closeConfirmDelete}>
       <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" p={5}>
         <AvatarError>
-          <CloseIcon />
+          <IoIosClose />
         </AvatarError>
 
         <Typography align="center" sx={{ pt: 4, px: 6 }} variant="h3">
-          {t('Do you really want to delete this project')}?
+          {'Do you really want to delete this project'}?
         </Typography>
 
         <Typography align="center" sx={{ pt: 2, pb: 4, px: 6 }} fontWeight="normal" color="text.secondary" variant="h4">
-          {t("You won't be able to revert after deletion")}
+          {"You won't be able to revert after deletion"}
         </Typography>
 
         <Box>
           <Button variant="text" sx={{ mx: 1 }} onClick={closeConfirmDelete}>
-            {t('Cancel')}
+            {'Cancel'}
           </Button>
           <ButtonError onClick={handleDeleteCompleted} sx={{ mx: 1, px: 3 }} variant="contained">
-            {t('Delete')}
+            {'Delete'}
           </ButtonError>
         </Box>
       </Box>
@@ -66,13 +63,13 @@ export const DialogWrapper = ({ openConfirmDelete, closeConfirmDelete, handleDel
 };
 
 export const DialogTitleWrapper = ({ editData, name }) => {
-  const { t }: { t: any } = useTranslation();
+
   return (
     <DialogTitle sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        {t(editData ? 'Edit ' : 'Add new ' + name)}
+        {editData ? 'Edit ' : 'Add new ' + name}
       </Typography>
-      <Typography variant="subtitle2">{t(`Fill in the fields below to create or edit ${name}`)}</Typography>
+      <Typography variant="subtitle2">{`Fill in the fields below to create or edit ${name}`}</Typography>
     </DialogTitle>
   );
 };
@@ -87,7 +84,6 @@ export const DialogActionWrapper = ({
   customSubmitLabel = '',
   disabled = false
 }) => {
-  const { t }: { t: any } = useTranslation();
 
   return (
     <DialogActions
@@ -96,7 +92,7 @@ export const DialogActionWrapper = ({
       }}
     >
       <Button color="secondary" onClick={handleCreateClassClose}>
-        {t('Cancel')}
+        {'Cancel'}
       </Button>
       <Button
         type="submit"
