@@ -18,7 +18,7 @@ const page = async () => {
             is_active: true
         }
     });
-
+    console.log({school_info})
     const bkashActivationInfo = school_info.find(school => school?.title === "bkash");
     const serverHost = process.env.SERVER_HOST;
     

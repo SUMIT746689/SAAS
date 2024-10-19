@@ -10,11 +10,16 @@ import { formatNumber } from "@/utils/numberFormat"
 import Image from 'next/image';
 import { TableBodyCellWrapper, TableHeaderCellWrapper, TableRowWrapper } from '@/new_components/Table/Table';
 import { useRouter } from 'next/navigation';
-import { FaRegIdCard } from "react-icons/fc";
+import { FcBiohazard } from "react-icons/fc";
 import { MdFlightClass } from "react-icons/md";
 import { MdOutlineBatchPrediction } from "react-icons/md";
 import { MdSubject } from "react-icons/md";
 import { AiOutlineFieldNumber } from "react-icons/ai";
+import { AiOutlineIdcard } from "react-icons/ai";
+import { SiGoogleclassroom } from "react-icons/si";
+import { GiRadarCrossSection } from "react-icons/gi";
+import { FaQuidditch } from "react-icons/fa";
+
 
 const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
     const { t } = useTranslation();
@@ -52,8 +57,9 @@ const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
             showNotification(res?.data?.message);
             successProcess();
         } catch (err) {
-            console.error(err);
             showNotification(err.response?.data?.message, 'error');
+            // showNotification(err.message,"error")
+            console.error(err);
             setStatus({ success: false });
             setErrors({ submit: err.message });
             setSubmitting(false);
@@ -267,11 +273,12 @@ const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
                     <Grid container mt={9} px={2} color="gray" >
                         <Grid fontSize="2em" textAlign="center" mx="auto">{[stdInfo?.student_info?.first_name, stdInfo?.student_info?.middle_name, stdInfo?.student_info?.last_name].join(' ')}</Grid>
                         <Grid item display="grid" width="100%" gridTemplateColumns="1fr 1fr" columnSpacing="10px" rowGap={1}>
-                            <Grid> <FaRegIdCard sx={{ fontSize: 18, mb: 0.5 }} /> Student Id: <span>{stdInfo?.student_info?.student_id}</span> </Grid>
-                            <Grid> <MdFlightClass sx={{ fontSize: 18, mb: 0.5 }} /> Class: <span>{stdInfo?.class?.name}</span></Grid>
-                            <Grid> <MdSubject sx={{ fontSize: 18, mb: 0.5 }} /> Subjects: <span>{stdInfo?.subjects?.map(subject => subject.name)?.join(', ')}</span></Grid>
-                            {stdInfo?.section?.class?.has_section ? <Grid> <MdOutlineBatchPrediction sx={{ fontSize: 18, mb: 0.5 }} /> Batch: <span>{stdInfo?.section?.name}</span></Grid> : ''}
-                            <Grid > <AiOutlineFieldNumber sx={{ fontSize: 18, mb: 0.5 }} /> Roll No: {stdInfo?.class_roll_no}</Grid>
+                            <Grid sx={{display:"flex", alignItems:"center", columnGap:1}}> <AiOutlineIdcard /> Student Id: <span>{stdInfo?.student_info?.student_id}</span> </Grid>
+                            <Grid sx={{display:"flex", alignItems:"center", columnGap:1}}> <SiGoogleclassroom /> Class: <span>{stdInfo?.class?.name}</span></Grid>
+                            <Grid sx={{display:"flex", alignItems:"center", columnGap:1}}> <GiRadarCrossSection /> Batch: <span>{stdInfo?.subjects?.map(subject => subject.name)?.join(', ')}</span></Grid>
+                            {stdInfo?.section?.class?.has_section ? 
+                            <Grid sx={{display:"flex", alignItems:"center", columnGap:1}}> <MdOutlineBatchPrediction /> Batch: <span>{stdInfo?.section?.name}</span></Grid> : ''}
+                            <Grid sx={{display:"flex", alignItems:"center", columnGap:1}}> <FaQuidditch /> Roll No: {stdInfo?.class_roll_no}</Grid>
                         </Grid>
                     </Grid>
 
@@ -301,7 +308,7 @@ const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
                             // width: 'fit-content'
                             // mx:"auto"
                         }}>
-                        <Image src={stdInfo?.student_photo ? `${serverHost}/api/get_file/${stdInfo?.student_photo}` : "/dummy.jpg"} width={150} height={150} style={{ objectPosition: "center", objectFit: "contain" }} />
+                        {/* <Image src={stdInfo?.student_photo ? `${serverHost}/api/get_file/${stdInfo?.student_photo}` : "/dummy.jpg"} width={150} height={150} style={{ objectPosition: "center", objectFit: "contain" }} /> */}
                     </Grid>
                 </div>
             </Grid>

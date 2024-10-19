@@ -2,32 +2,28 @@
 import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { Grid, Dialog, DialogContent, Button } from '@mui/material';
+import { Grid, DialogContent } from '@mui/material';
 import axios from 'axios';
 import useNotistick from '@/hooks/useNotistick';
 import { DialogActionWrapper, DialogTitleWrapper } from '@/components/DialogWrapper';
-import { PageHeaderTitleWrapper } from '@/components/PageHeaderTitle';
-import { FileUploadFieldWrapper, TextFieldWrapper } from '@/components/TextFields';
+import { TextFieldWrapper } from '@/components/TextFields';
 import { useTranslation } from 'react-i18next';
 import { AutoCompleteWrapper } from '@/components/AutoCompleteWrapper';
-import { useClientFetch } from '@/hooks/useClientFetch';
-import { useAuth } from '@/hooks/useAuth';
+
 function Scholarship({classes, editData, setEditData, reFetchData , serverHost}) {
   const {t} = useTranslation()
   const [open, setOpen] = useState(false);
   const [classOptions, setClassOptions] = useState([]);
-  const { user } = useAuth();
   const { showNotification } = useNotistick();
-  console.log("classes.............",{classes}) 
-  useEffect(() => {
-    if (!classes || !Array.isArray(classes)) return;
-    setClassOptions(
-      classes.map((cls) => ({
-        id: cls.id,
-        label: cls.name
-      }))
-    );
-  }, [classes]);
+  // useEffect(() => {
+  //   if (!classes || !Array.isArray(classes)) return;
+  //   setClassOptions(
+  //     classes.map((cls) => ({
+  //       id: cls.id,
+  //       label: cls.name
+  //     }))
+  //   );
+  // }, [classes]);
   useEffect(() => {
     if (editData) setOpen(true);
   }, [editData]);

@@ -2,16 +2,17 @@
 import Image from "next/image";
 import Link from "next/link";
 export default function MiddleNavbar({ datas }) {
-  const { 
-    name, 
-    eiin_number, 
-    address, 
-    email, 
-    phone, 
-    header_image, 
-    is_scholarship_active 
-  } = datas;
-  console.log({ is_scholarship_active }); 
+  console.log({ datas })
+  const {
+    name,
+    eiin_number,
+    address,
+    email,
+    phone,
+    header_image,
+    is_scholarship_active
+  } = datas || {};
+  console.log({ is_scholarship_active });
   return (
     <div className="bg-[#FFFEF3]">
       <div className="flex flex-row justify-between items-center gap-6 mx-8">
@@ -28,19 +29,19 @@ export default function MiddleNavbar({ datas }) {
               <li><a>Address: {address}</a></li>
               <li><a>Email: {email}</a></li>
               <li><a>Phone No: {phone}</a></li>
-              {is_scholarship_active && (
-                <Link
-                  href={`/scholarship`}
-                  className="ml-40 rounded bg-[#FFFEF3] text-[#192F59] flex items-center gap-1 font-bold"
-                >
-                  <button className="bg-orange-800 text-[#FFFFFF] rounded capitalize px-2 py-1">
-                    Scholarship
-                  </button>
-                </Link>
-              )}
             </ul>
           </div>
         </div>
+        {is_scholarship_active && (
+          <Link
+            href={`/scholarship`}
+            className="ml-40 rounded bg-[#FFFEF3] text-[#192F59] flex items-center gap-1 font-bold"
+          >
+            <button className="bg-orange-800 hover:bg-orange-700 active:bg-orange-900 duration-150 text-[#FFFFFF] rounded capitalize px-2 py-1">
+              Scholarship
+            </button>
+          </Link>
+        )}
       </div>
     </div>
   );
