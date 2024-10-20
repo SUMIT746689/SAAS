@@ -66,6 +66,8 @@ model School {
   name                     String
   address                  String
   phone                    String
+  optional_phone           String?
+  map_location             String?
   email                    String
   domain                   String? @unique
   currency                 String?

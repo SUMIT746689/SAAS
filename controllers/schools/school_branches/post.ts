@@ -35,14 +35,14 @@ const postSchool = async (req, res, authenticate_user) => {
     if (authenticate_user_Info.role.title !== 'ADMIN') throw new Error('Your role have no permissions');
 
     const {
-      name, phone, email, address, admin_ids, currency, domain,
+      name, phone, optional_phone, map_location, email, address, admin_ids, currency, domain,
       // main_balance, masking_sms_price, non_masking_sms_price,
       // masking_sms_count, non_masking_sms_count,
       // package_price, package_duration, package_student_count, is_std_cnt_wise,
       // voice_sms_balance, voice_sms_price, voice_pulse_size,
     } = req.body;
 
-    if (!name || !phone || !email || !address) throw new Error('provide valid data');
+    if (!name ||  !phone || !optional_phone || !email || !address) throw new Error('provide valid data');
     const admins = admin_ids.map((id) => ({ id }));
 
     // const response = await prisma.school.create({
@@ -75,6 +75,8 @@ const postSchool = async (req, res, authenticate_user) => {
           create: {
             name,
             phone,
+            optional_phone,
+            map_location,
             email,
             address,
             currency: authenticate_user_Info.school.currency,

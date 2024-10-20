@@ -60,7 +60,6 @@ const AvatarError = styled(Avatar)(
 `
 );
 
-
 const ButtonError = styled(Button)(
   ({ theme }) => `
      background: ${theme.colors.error.main};
@@ -70,7 +69,6 @@ const ButtonError = styled(Button)(
      }
     `
 );
-
 
 interface ResultsProps {
   schools: Project[];
@@ -84,18 +82,11 @@ interface Filters {
   status?: ProjectStatus;
 }
 
-const Transition = forwardRef(function Transition(
-  props: TransitionProps & { children: ReactElement<any, any> },
-  ref: Ref<unknown>
-) {
+const Transition = forwardRef(function Transition(props: TransitionProps & { children: ReactElement<any, any> }, ref: Ref<unknown>) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const applyFilters = (
-  schools: Project[],
-  query: string,
-  filters: Filters
-): Project[] => {
+const applyFilters = (schools: Project[], query: string, filters: Filters): Project[] => {
   return schools.filter((project) => {
     let matches = true;
 
@@ -130,20 +121,11 @@ const applyFilters = (
   });
 };
 
-const applyPagination = (
-  schools: Project[],
-  page: number,
-  limit: number
-): Project[] => {
+const applyPagination = (schools: Project[], page: number, limit: number): Project[] => {
   return schools.slice(page * limit, page * limit + limit);
 };
 // @ts-ignore
-const Results: FC<ResultsProps> = ({
-  reFetchData,
-  schools,
-  setEditSchool,
-  setOpenopenSubscriptionModal
-}) => {
+const Results: FC<ResultsProps> = ({ reFetchData, schools, setEditSchool, setOpenopenSubscriptionModal }) => {
   const [selectedItems, setSelectedschools] = useState<string[]>([]);
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
@@ -160,24 +142,15 @@ const Results: FC<ResultsProps> = ({
     setQuery(event.target.value);
   };
 
-  const handleSelectAllschools = (
-    event: ChangeEvent<HTMLInputElement>
-  ): void => {
-    setSelectedschools(
-      event.target.checked ? schools.map((project) => project.id) : []
-    );
+  const handleSelectAllschools = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSelectedschools(event.target.checked ? schools.map((project) => project.id) : []);
   };
 
-  const handleSelectOneProject = (
-    _event: ChangeEvent<HTMLInputElement>,
-    projectId: string
-  ): void => {
+  const handleSelectOneProject = (_event: ChangeEvent<HTMLInputElement>, projectId: string): void => {
     if (!selectedItems.includes(projectId)) {
       setSelectedschools((prevSelected) => [...prevSelected, projectId]);
     } else {
-      setSelectedschools((prevSelected) =>
-        prevSelected.filter((id) => id !== projectId)
-      );
+      setSelectedschools((prevSelected) => prevSelected.filter((id) => id !== projectId));
     }
   };
 
@@ -192,8 +165,7 @@ const Results: FC<ResultsProps> = ({
   const filteredschools = applyFilters(schools, query, filters);
   const paginatedschools = applyPagination(filteredschools, page, limit);
   const selectedBulkActions = selectedItems.length > 0;
-  const selectedSomeschools =
-    selectedItems.length > 0 && selectedItems.length < schools.length;
+  const selectedSomeschools = selectedItems.length > 0 && selectedItems.length < schools.length;
   const selectedAllschools = selectedItems.length === schools.length;
 
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
@@ -219,17 +191,18 @@ const Results: FC<ResultsProps> = ({
   const [isAdminRemoveLoading, setIsAdminRemoveLoading] = useState(false);
 
   const handleRemoveAdmin = (school_id, user_id) => {
-    setIsAdminRemoveLoading(true)
-    axios.delete(`/api/school/school_branches/${school_id}?remove_user_id=${user_id}`)
-      .then(res => {
-        showNotification("admin branch deleted successfull")
+    setIsAdminRemoveLoading(true);
+    axios
+      .delete(`/api/school/school_branches/${school_id}?remove_user_id=${user_id}`)
+      .then((res) => {
+        showNotification('admin branch deleted successfull');
         reFetchData();
       })
-      .catch(err => {
-        showNotification("admin branch failed to delete", "error")
+      .catch((err) => {
+        showNotification('admin branch failed to delete', 'error');
       })
-      .finally(() => setIsAdminRemoveLoading(false))
-  }
+      .finally(() => setIsAdminRemoveLoading(false));
+  };
 
   return (
     <>
@@ -243,9 +216,8 @@ const Results: FC<ResultsProps> = ({
           <Grid item xs={12}>
             <Box p={0.5}>
               <TextField
-                sx={{ m: 0, borderRadius: 0.6, }}
-                size='small'
-
+                sx={{ m: 0, borderRadius: 0.6 }}
+                size="small"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -265,14 +237,8 @@ const Results: FC<ResultsProps> = ({
       </Card>
 
       <Card>
-
         {!selectedBulkActions && (
-          <Box
-            p={1}
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
+          <Box p={1} display="flex" alignItems="center" justifyContent="space-between">
             <Box>
               <Typography component="span" variant="subtitle1">
                 {t('Showing')}:
@@ -309,7 +275,7 @@ const Results: FC<ResultsProps> = ({
         ) : (
           <>
             <TableContainer>
-              <Table size='small'>
+              <Table size="small">
                 <TableHead>
                   <TableRow>
                     <TableHeaderCellWrapper>{t('Id')}</TableHeaderCellWrapper>
@@ -318,6 +284,7 @@ const Results: FC<ResultsProps> = ({
                     <TableHeaderCellWrapper>{t('Subscription Start')}</TableHeaderCellWrapper>
                     <TableHeaderCellWrapper>{t('Subscription End')}</TableHeaderCellWrapper>
                     <TableHeaderCellWrapper>{t('Contact Number')}</TableHeaderCellWrapper>
+                    {/* <TableHeaderCellWrapper>{t('Optional Contact Number')}</TableHeaderCellWrapper> */}
                     <TableHeaderCellWrapper>{t('Email')}</TableHeaderCellWrapper>
                     <TableHeaderCellWrapper align="center">{t('Actions')}</TableHeaderCellWrapper>
                   </TableRow>
@@ -325,23 +292,21 @@ const Results: FC<ResultsProps> = ({
                 <TableBody>
                   {paginatedschools?.map((school) => {
                     return (
-                      <TableRow
-                        hover
-                        key={school.id}
-                      >
+                      <TableRow hover key={school.id}>
+                        <TableBodyCellWrapper>{school?.id}</TableBodyCellWrapper>
 
-                        <TableBodyCellWrapper>
-                          {school?.id}
-                        </TableBodyCellWrapper>
-
-                        <TableBodyCellWrapper>
-                          {school?.name}
-                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper>{school?.name}</TableBodyCellWrapper>
 
                         <TableBodyCellWrapper>
                           <Grid display="grid">
                             {school?.admins?.map((user: any) => (
-                              <Grid key={user.id} display="flex" justifyContent="space-between" alignItems="center" borderBottom='1px solid lightgray'>
+                              <Grid
+                                key={user.id}
+                                display="flex"
+                                justifyContent="space-between"
+                                alignItems="center"
+                                borderBottom="1px solid lightgray"
+                              >
                                 <Grid>{user?.username + ' (' + user?.role?.title.split('_').join(' ') + ')'}</Grid>
                                 {/* <IconButton
                                   color="error"
@@ -356,10 +321,7 @@ const Results: FC<ResultsProps> = ({
 
                         <TableBodyCellWrapper>
                           <Grid fontWeight={700}>
-                            {school?.subscription[0]?.start_date &&
-                              dayjs(school?.subscription[0]?.start_date).format(
-                                'DD-MM-YYYY'
-                              )}
+                            {school?.subscription[0]?.start_date && dayjs(school?.subscription[0]?.start_date).format('DD-MM-YYYY')}
                           </Grid>
                         </TableBodyCellWrapper>
                         <TableBodyCellWrapper>
@@ -370,20 +332,17 @@ const Results: FC<ResultsProps> = ({
                               fontWeight: 700
                             }}
                           >
-                            {school?.subscription[0]?.end_date &&
-                              dayjs(school?.subscription[0]?.end_date).format(
-                                'DD-MM-YYYY'
-                              )}
+                            {school?.subscription[0]?.end_date && dayjs(school?.subscription[0]?.end_date).format('DD-MM-YYYY')}
                           </Grid>
                         </TableBodyCellWrapper>
                         <TableBodyCellWrapper align="center">
-                          <Link href={`tel:${school.phone}`} style={{ color: 'yellowgreen', fontWeight: 700 }}>{school?.phone} </Link>
+                          <Link href={`tel:${school.phone}`} style={{ color: 'yellowgreen', fontWeight: 700 }}>
+                            {school?.phone}{' '}
+                          </Link>
                         </TableBodyCellWrapper>
 
                         <TableBodyCellWrapper>
-                          <Link href={`mailto:${school?.email}`}>
-                            {school?.email}
-                          </Link>
+                          <Link href={`mailto:${school?.email}`}>{school?.email}</Link>
                         </TableBodyCellWrapper>
 
                         <TableBodyCellWrapper align="center">
@@ -431,23 +390,10 @@ const Results: FC<ResultsProps> = ({
             </TableContainer>
           </>
         )}
-      </Card >
+      </Card>
 
-      <DialogWrapper
-        open={openConfirmDelete}
-        maxWidth="sm"
-        fullWidth
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={closeConfirmDelete}
-      >
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-          p={5}
-        >
+      <DialogWrapper open={openConfirmDelete} maxWidth="sm" fullWidth TransitionComponent={Transition} keepMounted onClose={closeConfirmDelete}>
+        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" p={5}>
           <AvatarError>
             <CloseIcon />
           </AvatarError>

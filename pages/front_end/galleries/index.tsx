@@ -19,20 +19,10 @@ const Packages = () => {
       </Head>
 
       <PageTitleWrapper>
-        <PageHeaderTitleWrapper
-          name={'Website Gallery'}
-          handleCreateClassOpen={false}
-          actionButton={' '}
-        />
+        <PageHeaderTitleWrapper name={'Website Gallery'} handleCreateClassOpen={false} actionButton={' '} />
       </PageTitleWrapper>
 
-      <Grid
-        display="grid"
-        gridTemplateColumns="1fr"
-        columnGap={1}
-        mx={1}
-        minHeight={'calc(100vh - 330px)'}
-      >
+      <Grid display="grid" gridTemplateColumns="1fr" columnGap={1} mx={1} minHeight={'calc(100vh - 330px)'}>
         <Gallery refetchBanner={reFetchData} id={id} galleries={gallery || []} />
       </Grid>
 

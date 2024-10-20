@@ -15,10 +15,9 @@ import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
 import { useClientFetch } from '@/hooks/useClientFetch';
 
 function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
-
   const { t }: { t: any } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [logo, setLogo] = useState(null)
+  const [logo, setLogo] = useState(null);
   const theme = useTheme();
   const { showNotification } = useNotistick();
   const handleCreateProjectOpen = () => {
@@ -50,7 +49,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
       };
 
       if (editSchool) {
-        _values['subscription_id'] = editSchool?.subscription[0]?.id
+        _values['subscription_id'] = editSchool?.subscription[0]?.id;
         const res = await axios.patch(`/api/school/school_branches/${editSchool.id}`, _values);
         if (res?.data?.success) {
           handleSubmitSuccess(t('A school batch has been updated successfully'));
@@ -73,16 +72,8 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
   };
   return (
     <>
-      <PageHeaderTitleWrapper
-        name="School Branch"
-        handleCreateClassOpen={handleCreateProjectOpen}
-      />
-      <Dialog
-        fullWidth
-        maxWidth='sm'
-        open={open}
-        onClose={handleCreateProjectClose}
-      >
+      <PageHeaderTitleWrapper name="School Branch" handleCreateClassOpen={handleCreateProjectOpen} />
+      <Dialog fullWidth maxWidth="sm" open={open} onClose={handleCreateProjectClose}>
         <DialogTitle
           sx={{
             p: 3
@@ -91,14 +82,14 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
           <Typography variant="h4" gutterBottom>
             {t(editSchool ? 'Edit a School Branch' : 'Create new School Branch')}
           </Typography>
-          <Typography variant="subtitle2">
-            {t(`Use this dialog window to ${editSchool ? 'update a' : 'add a new'} school branch`)}
-          </Typography>
+          <Typography variant="subtitle2">{t(`Use this dialog window to ${editSchool ? 'update a' : 'add a new'} school branch`)}</Typography>
         </DialogTitle>
         <Formik
           initialValues={{
             name: editSchool?.name ? editSchool.name : undefined,
             phone: editSchool?.phone ? editSchool.phone : undefined,
+            optional_phone: editSchool?.optional_phone ? editSchool.optional_phone : undefined,
+            map_location: editSchool?.map_location ? editSchool.map_location : undefined,
             email: editSchool?.email ? editSchool.email : undefined,
             address: editSchool?.address ? editSchool.address : undefined,
             admin_ids: editSchool?.admins ? Array.from(editSchool.admins, (x: any) => x.id) : undefined,
@@ -109,7 +100,6 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
             // non_masking_sms_count: editSchool?.non_masking_sms_count ? editSchool?.non_masking_sms_count : null,
             // masking_sms_price: editSchool?.masking_sms_price ? editSchool?.masking_sms_price : null,
             // non_masking_sms_price: editSchool?.non_masking_sms_price ? editSchool?.non_masking_sms_price : null,
-
 
             // is_std_cnt_wise: editSchool?.subscription[0]?.package?.is_std_cnt_wise,
             // package_price: editSchool?.subscription[0]?.package?.price,
@@ -123,67 +113,36 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
             submit: null
           }}
           validationSchema={Yup.object().shape({
-            name: Yup.string()
-              .max(255)
-              .required(t('The name field is required')),
-            phone: Yup.string()
-              .length(11)
-              .required(t('The phone field is required')),
-            email: Yup.string()
-              .email()
-              .required(t('The email field is required')),
-            address: Yup.string()
-              .max(255)
-              .required(t('The address field is required')),
-            admin_ids: Yup.array(
-              Yup.number().required(t('The admin_ids field must be number'))
-            ).required('Please select a branch admin'),
-            domain: Yup.string().nullable(),
-
-
+            name: Yup.string().max(255).required(t('The name field is required')),
+            phone: Yup.string().length(11).required(t('The phone field is required')),
+            optional_phone: Yup.string().length(11).required(t('The optional phone field is required')),
+            location: Yup.string().length(11).required(t('The location field is required')),
+            email: Yup.string().email().required(t('The email field is required')),
+            address: Yup.string().max(255).required(t('The address field is required')),
+            admin_ids: Yup.array(Yup.number().required(t('The admin_ids field must be number'))).required('Please select a branch admin'),
+            domain: Yup.string().nullable()
 
             // is_std_cnt_wise: Yup.boolean(),
             // package_price: Yup.number().min(1).required(t('The price field is required')),
             // package_duration: Yup.number().min(1).required(t('The duration field is required')),
 
             // voice_pulse_size: Yup.number().integer().min(0).required(t('The voice pusle size field is required'))
-
           })}
-          onSubmit={async (
-            _values,
-            { resetForm, setErrors, setStatus, setSubmitting }
-          ) => {
-            handleFormSubmit(
-              _values,
-              resetForm,
-              setErrors,
-              setStatus,
-              setSubmitting
-            );
+          onSubmit={async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
+            handleFormSubmit(_values, resetForm, setErrors, setStatus, setSubmitting);
           }}
         >
-          {({
-            errors,
-            handleBlur,
-            handleChange,
-            handleSubmit,
-            isSubmitting,
-            touched,
-            values,
-            setFieldValue
-          }) => {
-            console.log({ values, errors, touched })
+          {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
+            console.log({ values, errors, touched });
             return (
               <form onSubmit={handleSubmit}>
                 <DialogContent
                   dividers
                   sx={{
-                    p: 3,
-
+                    p: 3
                   }}
                 >
                   <Grid container spacing={0}>
-
                     <TextFieldWrapper
                       errors={errors.name}
                       touched={touched.name}
@@ -202,6 +161,24 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                       handleBlur={handleBlur}
                       handleChange={handleChange}
                       value={values.phone}
+                    />
+                    <TextFieldWrapper
+                      errors={errors.optional_phone}
+                      touched={touched.optional_phone}
+                      name="optional_phone"
+                      label={t('Optional Phone Number')}
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.optional_phone}
+                    />
+                    <TextFieldWrapper
+                      errors={errors.map_location}
+                      touched={touched.map_location}
+                      name="map_location"
+                      label={t('Map Location')}
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.map_location}
                     />
 
                     <TextFieldWrapper
@@ -234,13 +211,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                       value={values.domain}
                     />
 
-                    <Grid
-                      item
-                      width={'100%'}
-                      justifyContent="flex-end"
-                      textAlign={{ sm: 'right' }}
-                      mb={1}
-                    >
+                    <Grid item width={'100%'} justifyContent="flex-end" textAlign={{ sm: 'right' }} mb={1}>
                       <SelectAdmin
                         touched={touched.admin_ids}
                         error={errors.admin_ids}
@@ -248,23 +219,20 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
                         oldSelectedAdminID={values.admin_ids}
                       />
                     </Grid>
-
                   </Grid>
                 </DialogContent>
                 <DialogActionWrapper
                   handleCreateClassClose={handleCreateProjectClose}
                   errors={errors}
                   editData={editSchool}
-                  title={"School Branch"}
+                  title={'School Branch'}
                   isSubmitting={isSubmitting}
                 />
               </form>
-            )
-          }
-          }
+            );
+          }}
         </Formik>
-
-      </Dialog >
+      </Dialog>
     </>
   );
 }
@@ -285,7 +253,8 @@ const SelectAdmin = ({ error, touched, setFieldValue, oldSelectedAdminID }) => {
       branchUsers.map((user) => ({
         id: user.id,
         label: user.username
-      })));
+      }))
+    );
 
     if (!oldSelectedAdminID) return;
 
@@ -294,16 +263,14 @@ const SelectAdmin = ({ error, touched, setFieldValue, oldSelectedAdminID }) => {
     for (const i of oldSelectedAdminID) {
       const user: any = branchUsers.find((user) => user.id === i);
       if (user) {
-        prevSelected.push({ id: user?.id, label: user?.username })
+        prevSelected.push({ id: user?.id, label: user?.username });
       }
     }
-    setSelectedOption(prevSelected)
-
-  }, [branchUsers])
-
+    setSelectedOption(prevSelected);
+  }, [branchUsers]);
 
   const handleSelect = (value) => {
-    if (Array.isArray(value) && value.length > 1) return showNotification("only add one branch admin...", "warning")
+    if (Array.isArray(value) && value.length > 1) return showNotification('only add one branch admin...', 'warning');
     setSelectedOption(value);
     const filterIds = Array.from(value, (x: any) => x.id);
     if (value) setFieldValue('admin_ids', filterIds);
@@ -359,18 +326,23 @@ const SelectAdmin = ({ error, touched, setFieldValue, oldSelectedAdminID }) => {
         value={selectedOption}
         onChange={(e, v) => handleSelect(v)}
         onInputChange={(e, v) => setSearchToken(v)}
-        renderInput={(params) => <TextField
-          sx={{
-            [`& fieldset`]: {
-              borderRadius: 0.6,
-            }
-          }}
-          {...params}
-          label="Select Branch Admin"
-        />
-        }
+        renderInput={(params) => (
+          <TextField
+            sx={{
+              [`& fieldset`]: {
+                borderRadius: 0.6
+              }
+            }}
+            {...params}
+            label="Select Branch Admin"
+          />
+        )}
       />
-      {((Array.isArray(touched) && touched.length > 0) || touched) && <Grid textAlign="left" px={1} py={0.5} color="red" fontWeight={600}>{error}</Grid>}
+      {((Array.isArray(touched) && touched.length > 0) || touched) && (
+        <Grid textAlign="left" px={1} py={0.5} color="red" fontWeight={600}>
+          {error}
+        </Grid>
+      )}
     </>
   );
 };

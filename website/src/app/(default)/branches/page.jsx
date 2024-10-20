@@ -6,7 +6,7 @@ function page({classes, editData, setEditData, reFetchData , serverHost}) {
   return (
     <> 
    <div className='flex flex-row  my-8'>
-   <div className=' bg-slate-300 flex flex-col gap-4 mx-auto px-6 py-6 rounded-xl'>
+   <div className=' bg-slate-300 flex flex-col gap-4 mx-auto px-6 py-6 rounded-2xl'>
       <div className='flex flex-row gap-8 justify-between ' >
         <h3 className='font-bold text-black text-xl' >বনশ্রী</h3> 
         <p className='text-red-500 text-4xl'>
@@ -30,7 +30,7 @@ function page({classes, editData, setEditData, reFetchData , serverHost}) {
         </div>
       </div>
     </div>
-   <div className=' bg-slate-300 flex flex-col gap-4 mx-auto px-6 py-6 rounded-xl'>
+    <div className=' bg-slate-300 flex flex-col gap-4 mx-auto px-6 py-6 rounded-2xl'>
       <div className='flex flex-row gap-8 justify-between ' >
         <h3 className='font-bold text-black text-xl' >বনশ্রী</h3> 
         <p className='text-red-500 text-4xl'>
@@ -54,7 +54,7 @@ function page({classes, editData, setEditData, reFetchData , serverHost}) {
         </div>
       </div>
     </div>
-   <div className=' bg-slate-300 flex flex-col gap-4 mx-auto px-6 py-6 rounded-xl'>
+    <div className=' bg-slate-300 flex flex-col gap-4 mx-auto px-6 py-6 rounded-2xl'>
       <div className='flex flex-row gap-8 justify-between ' >
         <h3 className='font-bold text-black text-xl' >বনশ্রী</h3> 
         <p className='text-red-500 text-4xl'>
