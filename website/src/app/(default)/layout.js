@@ -34,7 +34,6 @@ export default async function RootLayout({ children }) {
 
           }
         },
-        is_scholarship_active:true,
         header_image: true,
         eiin_number: true,
         facebook_link: true,
@@ -42,13 +41,18 @@ export default async function RootLayout({ children }) {
         google_link: true,
         linkedin_link: true,
         youtube_link: true,
+        english_scholarship_name: true,
+        bangla_scholarship_name: true,
+        is_scholarship_active: true,
       }
     })
-    console.log({school_info})
+    console.log({ school_info })
     // console.log({ domain })
 
     const navarDatas = {
-      is_scholarship_active:school_info?.is_scholarship_active,
+      english_scholarship_name: school_info?.english_scholarship_name,
+      bangla_scholarship_name: school_info?.bangla_scholarship_name,
+      is_scholarship_active: school_info?.is_scholarship_active,
       name: school_info?.school?.name,
       phone: school_info?.school?.phone,
       email: school_info?.school?.email,
@@ -57,7 +61,7 @@ export default async function RootLayout({ children }) {
       header_image: `${process.env.SERVER_HOST}/api/get_file/${school_info?.header_image?.replace(/\\/g, '/')}`,
       serverHost: `${process.env.SERVER_HOST}`
     }
-    
+
     const resMenus = await prisma.websiteMenu.findMany({
       where: { school: { domain }, status: "publish" }, include: {
         websiteDynamicPage: {
@@ -79,7 +83,7 @@ export default async function RootLayout({ children }) {
           <body >
 
             <LanguageContextProvider>
-              <Navbar datas={navarDatas} menus={resMenus}></Navbar>
+              <Navbar datas={navarDatas || {}} menus={resMenus}></Navbar>
               {children}
               <Footer />
             </LanguageContextProvider>

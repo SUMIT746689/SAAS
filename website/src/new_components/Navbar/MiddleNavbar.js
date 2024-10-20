@@ -1,6 +1,9 @@
 "use client";
+import { LanguageContext } from "@/app/context/language";
+import { handleTextChangeLangWise } from "@/utils/handleLanguage";
 import Image from "next/image";
 import Link from "next/link";
+import { useContext } from "react";
 export default function MiddleNavbar({ datas }) {
   console.log({ datas })
   const {
@@ -10,9 +13,14 @@ export default function MiddleNavbar({ datas }) {
     email,
     phone,
     header_image,
+    english_scholarship_name,
+    bangla_scholarship_name,
     is_scholarship_active
-  } = datas || {};
+  } = datas;
   console.log({ is_scholarship_active });
+
+  const { language } = useContext(LanguageContext);
+
   return (
     <div className="bg-[#FFFEF3]">
       <div className="flex flex-row justify-between items-center gap-6 mx-8">
@@ -38,7 +46,7 @@ export default function MiddleNavbar({ datas }) {
             className="ml-40 rounded bg-[#FFFEF3] text-[#192F59] flex items-center gap-1 font-bold"
           >
             <button className="bg-orange-800 hover:bg-orange-700 active:bg-orange-900 duration-150 text-[#FFFFFF] rounded capitalize px-2 py-1">
-              Scholarship
+              {handleTextChangeLangWise(language, english_scholarship_name, bangla_scholarship_name)}
             </button>
           </Link>
         )}
