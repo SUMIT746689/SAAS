@@ -7,13 +7,15 @@ import path from 'path';
 import get from 'controllers/onlineAdmission/get';
 import { logFile } from 'utilities_api/handleLogFile';
 import generateUsername from '@/utils/generateUsername';
+
 export const config = {
   api: {
     bodyParser: false
   }
 };
+
 const index = async (req, res) => {
-  const filePathQuery = {};
+  const filePathQuery:any = {};
   try {
     const { method } = req;
     switch (method) {
@@ -43,29 +45,30 @@ const index = async (req, res) => {
           background_image: fileType
         };
         const { files, fields, error } = await fileUpload({
-         req,
+          req,
           filterFiles,
           uploadFolderName
         });
-        const {first_name,middle_name,last_name,classes,date_of_birth,phone,father_name,father_phn_no,mother_name,mother_phn_no} = fields;
+        const { first_name, middle_name, last_name, classes, date_of_birth, phone, father_name, father_phn_no, mother_name, mother_phn_no } = fields;
 
         const domain = req.rawHeaders[req.rawHeaders.indexOf('origin') + 1];
         const finalDomain = domain.replace(/(https:\/\/|http:\/\/)/, "");
-    
-        console.log({domain,finalDomain});
+
+        console.log({ domain, finalDomain });
 
         const resSchool = await prisma.school.findFirst({
-          where:{
-            domain:finalDomain
+          where: {
+            domain: finalDomain
           },
-          select:{
-            academic_years:{
-              where:{ curr_active: true}
+          select: {
+            academic_years: {
+              where: { curr_active: true }
             }
           }
         });
-        
-        console.log('ggggggggggg',JSON.stringify(resSchool,null,3));
+
+        console.log('ggggggggggg', JSON.stringify(resSchool, null, 3));
+        console.log('files', JSON.stringify(files, null, 3));
 
         const username = await generateUsername(first_name);
 
@@ -104,22 +107,26 @@ const index = async (req, res) => {
             uploadFolderName,
             'guardian_photo',
             Date.now().toString() +
-              '_' +
-              files?.guardian_photo?.originalFilename
+            '_' +
+            files?.guardian_photo?.originalFilename
           );
         }
-        console.log(JSON.stringify(fields,null,3))
+        console.log(JSON.stringify(fields, null, 3))
         const parseCls = JSON.parse(fields.classes);
-        await prisma.onlineAdmission.create({
+        const resOnlineAdd = await prisma.onlineAdmission.create({
           data: {
             student: {
               ...fields,
-              class_name:parseCls.name,
-              classes:JSON.parse(fields.classes),
+              class_name: parseCls.name,
+              classes: JSON.parse(fields.classes),
               username,
-              password:phone,
+              password: phone,
               academic_year_id: resSchool.academic_years[0].id,
-              academic_year_title: resSchool.academic_years[0].title
+              academic_year_title: resSchool.academic_years[0].title,
+              student_photo_path:filePathQuery?.student_photo_path,
+              father_photo_path:filePathQuery?.father_photo_path,
+              mother_photo_path:filePathQuery?.mother_photo_path,
+              guardian_photo_path:filePathQuery?.guardian_photo_path
             },
             school_id: school.id
           }
@@ -136,7 +143,8 @@ const index = async (req, res) => {
         );
         res.status(200).json({
           success: true,
-          message: 'Admission Application submitted !!'
+          message: 'Admission Application submitted !!',
+          datas: resOnlineAdd
         });
         break;
       default:

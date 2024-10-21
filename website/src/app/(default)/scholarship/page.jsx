@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma_client';
 import { headers } from 'next/headers';
-import Scholarship from './Scholarship';
+import ScholarshipMain from "@/components/scholarship/ScholarshipMain";
+
 export default async function Scholar() {
 
     const headersList = headers();
@@ -24,13 +25,13 @@ export default async function Scholar() {
             websiteui: { select: { header_image: true,  scholarshipClasses:true} }
         }
     })
-    console.log("CLS",JSON.stringify(resSchool?.websiteui[0]?.scholarshipClasses , null, 3))
-
-    const serverHost = JSON.stringify(process.env.SERVER_HOST);
+    
+    // const serverHost = JSON.stringify(process.env.SERVER_HOST);
     
     return (
         <div>
-            <Scholarship
+
+            <ScholarshipMain
                 classes=
                 {
                     resSchool?.websiteui[0]?.scholarshipClasses?.map((cls) => ({id: cls?.id,label: cls?.name})) || []
