@@ -38,6 +38,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
 
   const handleFormSubmit = async (_values, resetForm, setErrors, setStatus, setSubmitting) => {
     try {
+      console.log('....dhdhdhhdhdhdhd');
       const handleSubmitSuccess = async (message) => {
         resetForm();
         setStatus({ success: true });
@@ -48,7 +49,9 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
         handleCreateProjectClose();
       };
 
+      console.log('editSchool');
       if (editSchool) {
+        console.log({ editSchool });
         _values['subscription_id'] = editSchool?.subscription[0]?.id;
         const res = await axios.patch(`/api/school/school_branches/${editSchool.id}`, _values);
         if (res?.data?.success) {
@@ -57,8 +60,9 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
           new Error('Edit school failed');
         }
       } else {
+        console.log('.........shshhs');
         const res = await axios.post('/api/school/school_branches', _values);
-
+        console.log({ res });
         if (res.data?.success) {
           handleSubmitSuccess(t('A new school batch has been created successfully'));
         } else throw new Error('Failed to create new school');
@@ -116,7 +120,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
             name: Yup.string().max(255).required(t('The name field is required')),
             phone: Yup.string().length(11).required(t('The phone field is required')),
             optional_phone: Yup.string().length(11).required(t('The optional phone field is required')),
-            location: Yup.string().length(11).required(t('The location field is required')),
+            map_location: Yup.string().length(11).required(t('The location field is required')),
             email: Yup.string().email().required(t('The email field is required')),
             address: Yup.string().max(255).required(t('The address field is required')),
             admin_ids: Yup.array(Yup.number().required(t('The admin_ids field must be number'))).required('Please select a branch admin'),
