@@ -717,6 +717,11 @@ const website_settings: MenuItems[] = [
         name: 'Video Gallary',
         icon: CameraFrontIcon,
         link: '/front_end/video_gallary'
+      },
+      {
+        name: 'Branch',
+        icon: CameraFrontIcon,
+        link: '/front_end/branches'
       }
     ]
   }

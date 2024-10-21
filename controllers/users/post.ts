@@ -40,7 +40,6 @@ export const post = async (req, res, refresh_token) => {
       password,
       Number(process.env.SALTROUNDS)
     );
-
     const user = await prisma.user.findFirst({
       where: { id: refresh_token.id },
       include: {
@@ -50,11 +49,11 @@ export const post = async (req, res, refresh_token) => {
             permissions: true
           }
         }
-
+        
       }
     });
-
-
+    
+    
     if (!user.permissions.length && user.role_id) {
       user['permissions'] = user.role.permissions;
       delete user['role']['permissions'];
@@ -63,21 +62,21 @@ export const post = async (req, res, refresh_token) => {
       (permission) => permission.value === parseRole.permission
     );
     if (!findUser) throw Error('Permission denied !')
-    const isExist = await prisma.user.findFirst({
-      where: {
-        username
-      }
-    })
-
-    if (isExist) throw Error('This username is taken, try another !')
+      const isExist = await prisma.user.findFirst({
+    where: {
+      username
+    }
+  })
+  
+  if (isExist) throw Error('This username is taken, try another !')
     const data = {
-      username: username,
-      password: hashPassword,
-      adminPanel: {}
-    };
+  username: username,
+  password: hashPassword,
+  adminPanel: {}
+};
 
-    if (fetch_req_user_role?.title !== "SUPER_ADMIN" && domain && logo && copy_right_txt) throw new Error("permission denied for doamin/logo/copy_right fields")
-    if (fetch_req_user_role?.title === "SUPER_ADMIN") {
+if (fetch_req_user_role?.title !== "SUPER_ADMIN" && domain && logo && copy_right_txt) throw new Error("permission denied for doamin/logo/copy_right fields")
+  if (fetch_req_user_role?.title === "SUPER_ADMIN") {
       if (!domain) throw new Error("domain field is required");
       const create_admin_panel = {
         create: {
@@ -90,12 +89,12 @@ export const post = async (req, res, refresh_token) => {
       data["adminPanel"] = create_admin_panel;
     }
     else data.adminPanel = { connect: { id: admin_panel_id } }
-
-
+    
+    
     if (refresh_token.school_id) data['school'] = {
       connect: { id: parseInt(refresh_token.school_id) }
     }
-
+    
     const target_role = await prisma.role.findFirst({
       where: {
         title: parseRole.role_title
@@ -114,17 +113,17 @@ export const post = async (req, res, refresh_token) => {
     if (files?.user_photo?.newFilename) {
       const user_imageNewName = Date.now().toString() + '_' + files.user_photo.originalFilename;
       await fspromises.rename(files.user_photo.filepath, path.join(process.cwd(), `${process.env.FILESFOLDER}`, uploadFolderName, user_imageNewName))
-        .then(() => {
-          data['user_photo'] = path.join(uploadFolderName, user_imageNewName)
-
-        })
-        .catch(err => {
-          data['user_photo'] = path.join(uploadFolderName, files.user_photo?.newFilename)
-        })
-
+      .then(() => {
+        data['user_photo'] = path.join(uploadFolderName, user_imageNewName)
+        
+      })
+      .catch(err => {
+        data['user_photo'] = path.join(uploadFolderName, files.user_photo?.newFilename)
+      })
+      
     }
-
-
+    
+    
     await prisma.user.create({
       // @ts-ignore
       data,
@@ -133,6 +132,7 @@ export const post = async (req, res, refresh_token) => {
     res.status(200).json({ message: `${parseRole.role_title} Created Successfully` });
     // res.status(200).json({ data });
   } catch (err) {
+    console.log({err})
     logFile.error(err.message)
     res.status(404).json({ error: err.message });
   }
