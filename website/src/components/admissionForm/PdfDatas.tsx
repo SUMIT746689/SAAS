@@ -37,7 +37,7 @@ function PdfDatas({ school, values, serverHost }) {
                 <Grid display="grid" gridTemplateColumns="1fr 1fr 1fr" justifyContent="space-between"   >
                     <Grid sx={{ borderRadius: 1, overflow: "hidden", border: "5px solid white", height: 150, width: 150 }}>
                         <Image
-                            src={`${serverHost}/api/get_file/${school?.websiteui[0].header_image.replace(/\\/g, '/')}`}
+                            src={`${serverHost}/api/get_file/${school?.websiteui[0].header_image?.replace(/\\/g, '/')}`}
                             width={150}
                             height={150}
                             alt={"school_image"}

@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma_client';
 import { headers } from 'next/headers';
-import Scholarship from './Scholarship';
+import Scholarship from "@/components/scholarship/Scholarship";
+
 export default async function Scholar() {
 
     const headersList = headers();
