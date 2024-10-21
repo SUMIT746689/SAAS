@@ -317,7 +317,7 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
 
 
       {/* pdf show */}
-      {Object.keys(pdfDatas).length > 0 && (
+      {Object?.keys(pdfDatas).length > 0 && (
         <Grid display="grid" sx={{ width: '100%', pb: 8 }}>
           <Button variant="outlined" onClick={handlePrint} sx={{ mx: 'auto' }}>
             Download Submission Form

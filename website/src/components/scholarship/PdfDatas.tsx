@@ -9,7 +9,6 @@ import {
     Card,
 } from '@mui/material';
 import Image from 'next/image';
-import { ShowImage } from '../ImageShow'
 
 function PdfDatas({ school, values, serverHost }) {
     const { t }: { t: any } = useTranslation();
