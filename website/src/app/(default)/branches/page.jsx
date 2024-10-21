@@ -16,6 +16,7 @@ export default async function Branch() {
           phone: true,
           optional_phone: true,
           map_location: true,
+          domain:true
         },
       },
     },
