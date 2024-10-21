@@ -17,7 +17,7 @@ import { handleFileChange, handleFileRemove } from '@/utils/handleFileUpload';
 import { useReactToPrint } from 'react-to-print';
 
 
-function Scholarship({ classes, editData, setEditData, reFetchData, serverHost, school }) {
+function Scholarship({ classes, editData, setEditData, serverHost, school }) {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false);
   const { showNotification } = useNotistick();
