@@ -8,7 +8,7 @@ function Branches({ branches, serverHost }) {
   console.log({ branches });
 
   return (
-    <div className="grid grid-cols-3 my-8 gap-4">
+    <div className="grid grid-cols-3 my-8 gap-4 ">
       {branches.map((branch, index) => (
         <div
           key={index}
@@ -37,7 +37,6 @@ function Branches({ branches, serverHost }) {
             )}
             
           </div>
-          
           <Link href={`http://${branch.domain}`} className='flex flex-row'>
           <p className="text-red-500 mr-1 my-auto font-bold">
           <FaExternalLinkAlt />

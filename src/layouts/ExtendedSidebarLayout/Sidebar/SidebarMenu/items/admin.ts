@@ -735,6 +735,11 @@ const website_settings: MenuItems[] = [
         link: '/front_end/branches'
       },
       {
+        name: 'Program',
+        icon: CameraFrontIcon,
+        link: '/front_end/programs'
+      },
+      {
         name: 'Scholarship',
         icon: CameraFrontIcon,
         link: '/front_end/scholarship'

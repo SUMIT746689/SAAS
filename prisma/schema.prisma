@@ -145,6 +145,7 @@ model School {
   Discount                   Discount[]
   Homework                   Homework[]
   School                     School[]                     @relation("SchoolToBranch")
+  Program                    Program[]
 
   // routines Routine[]
   @@map("schools")
@@ -1896,9 +1897,19 @@ model WebsiteDynamicPage {
   feature_photo       String?
   status              WebsiteDynamicPageStatus
   school_id           Int
-
-  school      School        @relation(fields: [school_id], references: [id])
-  WebsiteMenu WebsiteMenu[]
+  school              School                   @relation(fields: [school_id], references: [id])
+  WebsiteMenu         WebsiteMenu[]
 
   @@map("website_dynamic_pages")
+}
+
+model Program {
+  id           Int     @id @default(autoincrement())
+  title        String
+  banner_photo String?
+  body         Json
+  school_id    Int
+  school       School  @relation(fields: [school_id], references: [id])
+
+  @@map("programs")
 }
