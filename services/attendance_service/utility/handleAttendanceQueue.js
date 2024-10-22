@@ -33,9 +33,28 @@ export const userWiseAttendanceQueues = async ({ user_id, min_attend_datetime, m
         const res = await prisma.$queryRaw`
             SELECT
             id,school_id,
+            MIN(submission_time) OVER() AS entry_time,
             MAX(submission_time) OVER() AS exit_time
             FROM tbl_attendance_queue
             WHERE user_id = ${user_id} AND submission_time >=${min_attend_datetime} AND submission_time <= ${max_attend_datetime}
+        `
+        if (res.length === 0) return { error: `attendence not found for update user_id(${user_id})`, data: null };
+        return { error: null, data: res }
+    }
+    catch (err) {
+        return { error: err.message, data: null }
+    }
+}
+
+export const userWiseMinMaxAttendanceQueues = async ({ user_id, min_attend_datetime, max_attend_datetime }) => {
+    try {
+        const res = await prisma.$queryRaw`
+            SELECT
+            MIN(submission_time) AS entry_time,
+            MAX(submission_time) AS exit_time
+            FROM tbl_attendance_queue
+            WHERE user_id = ${user_id} AND submission_time >=${min_attend_datetime} AND submission_time <= ${max_attend_datetime}
+            GROUP BY user_id
         `
         if (res.length === 0) return { error: `attendence not found for update user_id(${user_id})`, data: null };
         return { error: null, data: res }

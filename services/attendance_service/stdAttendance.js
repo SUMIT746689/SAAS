@@ -1,6 +1,6 @@
 import path from "path";
 import { createAttendance, stdAlreadyAttendance, updateAttendance } from "./utility/handleAttendance.js";
-import { deleteTblAttendanceQueues, resStdAttendanceQueues, userWiseAttendanceQueues, userWiseAttendanceQueuesWithStatus } from "./utility/handleAttendanceQueue.js";
+import { deleteTblAttendanceQueues, resStdAttendanceQueues, userWiseAttendanceQueues, userWiseAttendanceQueuesWithStatus, userWiseMinMaxAttendanceQueues } from "./utility/handleAttendanceQueue.js";
 import { handleResStdInfo } from "./utility/handleUserInfo.js";
 import { logFile } from "./utility/handleLog.js";
 import { sentSms } from "./utility/sent_sms.js";
@@ -15,12 +15,40 @@ export const stdAttendance = async ({ min_attend_datetime, max_attend_datetime }
             const { user_id } = userAttend;
 
             const { error, data: resStudent } = await handleResStdInfo({ user_id });
+            console.log({ resStudent: JSON.stringify(resStudent, null, 3) })
             if (error) return logFile.error(error);
 
-            const { id, guardian_phone, section, student_info, class_roll_no } = resStudent || {};
+            const { id, guardian_phone, batches, student_info, class_roll_no } = resStudent || {};
 
             if (!id) return logFile.error(`user_id(${user_id}) student not found, suggestion:check the academic year`);
-            if (!section?.std_entry_time || !section?.std_late_time || !section?.std_absence_time) return logFile.error(`user_id(${user_id}) section_id(${section?.id}) entry time, late time ,or absence time not found`);
+
+            // const res
+            if (!Array.isArray(batches) || batches.length === 0) return logFile.error(`user_id(${user_id}) student batches not founds`);
+
+            const { error: s, data: stdAttendanceQueues } = await userWiseMinMaxAttendanceQueues({ user_id, min_attend_datetime, max_attend_datetime });
+            console.log({ stdAttendanceQueues: stdAttendanceQueues })
+
+            // select a batch from all batches
+            const resSelectBatch = (batches) => {
+
+                const selectBatch = batches[batches.length - 1];
+                const batchesLength = batches.length;
+                if (batchesLength === 1) {
+                    if (!selectBatch?.std_entry_time || !selectBatch?.std_late_time || !selectBatch?.std_absence_time) return { error: `user_id(${user_id}) section_id/batch_id(${selectBatch?.id}) entry time, late time ,or absence time not found` }
+                    return { data: selectBatch };
+                }
+
+                for (let i = 0; i < (batchesLength - 1); i++) {
+                    if (!batches[i]?.std_entry_time || !batches[i]?.std_late_time || !batches[i]?.std_absence_time) return { error: `user_id(${user_id}) section_id/batch_id(${batches[i]?.id}) entry time, late time ,or absence time not found` }
+                    // if(batches[i].std_entry_time < batches. )
+                    // console.lof({batches.})
+                    return { data: batches[i] };
+                }
+            }
+
+            const { data: section } = resSelectBatch(batches);
+            console.log({ section, max_attend_datetime, min_attend_datetime })
+
 
             // get auto attendende sent sms table
             const resAutoAttendanceSentSms = Array.isArray((resStudent.student_info.school.AutoAttendanceSentSms)) && resStudent.student_info.school.AutoAttendanceSentSms.length > 0 ? resStudent.student_info.school.AutoAttendanceSentSms[0] : {};

@@ -12,21 +12,21 @@ export const handleResStdInfo = async ({ user_id }) => {
                 id: true,
                 guardian_phone: true,
                 class_roll_no: true,
-                section: {
-                    select:
-                    {
-                        id: true,
-                        name: true,
-                        std_entry_time: true,
-                        std_late_time: true,
-                        std_absence_time: true,
-                        std_exit_time: true,
-                        class: {
-                            select:
-                                { name: true }
-                        }
-                    }
-                },
+                // section: {
+                //     select:
+                //     {
+                //         id: true,
+                //         name: true,
+                //         std_entry_time: true,
+                //         std_late_time: true,
+                //         std_absence_time: true,
+                //         std_exit_time: true,
+                //         class: {
+                //             select:
+                //                 { name: true }
+                //         }
+                //     }
+                // },
                 student_info: {
                     select:
                     {
@@ -35,7 +35,7 @@ export const handleResStdInfo = async ({ user_id }) => {
                         last_name: true,
                         school_id: true,
                         phone: true,
-                        gender:true,
+                        gender: true,
                         school: {
                             select: {
                                 name: true,
@@ -46,6 +46,9 @@ export const handleResStdInfo = async ({ user_id }) => {
                             }
                         }
                     }
+                },
+                batches: {
+                    orderBy: { std_entry_time: "asc" }
                 }
             }
         })
