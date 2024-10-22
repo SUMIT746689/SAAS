@@ -1,9 +1,8 @@
-
 "use client";
 import React from 'react';
 import { IoLocationSharp } from "react-icons/io5";
-import { FaPhoneAlt } from "react-icons/fa";
-import { CiLink } from "react-icons/ci";
+import { FaPhoneAlt } from "react-icons/fa";import { FaExternalLinkAlt } from "react-icons/fa";
+import Link from 'next/link';
 
 function Branches({ branches, serverHost }) {
   console.log({ branches });
@@ -17,9 +16,9 @@ function Branches({ branches, serverHost }) {
         >
             <div className="flex flex-row gap-8 justify-between">
             <h3 className="font-bold text-black text-xl">{branch.name}</h3>
-            <p className="text-red-500 text-4xl">
+            <Link href={branch.map_location} className="text-red-500 text-4xl">
               <IoLocationSharp />
-            </p>
+            </Link>
           </div>
           <div className="flex flex-row gap-4">
             <div className="flex flex-row gap-1">
@@ -39,13 +38,14 @@ function Branches({ branches, serverHost }) {
             
           </div>
           
-          <div className='flex flex-row'>
-          <p className="text-red-500 text-xl my-auto font-bold">
-          <CiLink />
+          <Link href={`http://${branch.domain}`} className='flex flex-row'>
+          <p className="text-red-500 mr-1 my-auto font-bold">
+          <FaExternalLinkAlt />
+
             </p>
-          <p className="text-red-500">Location
+          <p className="text-red-500 font-semibold">Website
             </p>
-          </div>
+          </Link>
         </div>
       ))}
     </div>
