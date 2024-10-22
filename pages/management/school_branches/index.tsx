@@ -34,11 +34,7 @@ function Managementschools() {
       >
         <Grid>
           <PageTitleWrapper>
-            <PageHeader
-              editSchool={editSchool}
-              setEditSchool={setEditSchool}
-              reFetchData={reFetchData}
-            />
+            <PageHeader editSchool={editSchool} setEditSchool={setEditSchool} reFetchData={reFetchData} />
           </PageTitleWrapper>
 
           {/* <Grid>
@@ -49,14 +45,7 @@ function Managementschools() {
             />
           </Grid> */}
 
-          <Grid
-            sx={{ px: 4 }}
-            container
-            direction="row"
-            justifyContent="center"
-            alignItems="stretch"
-            spacing={3}
-          >
+          <Grid sx={{ px: 4 }} container direction="row" justifyContent="center" alignItems="stretch" spacing={3}>
             <Grid item xs={12}>
               <Results
                 reFetchData={reFetchData}
