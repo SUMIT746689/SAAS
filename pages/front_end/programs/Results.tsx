@@ -169,7 +169,7 @@ const Results: FC<ResultsProps> = ({ sessions, setEditData, reFetchData }) => {
                 <TableRow>
                   <TableCell>{t('id')}</TableCell>
                   <TableCell>{t('title')}</TableCell>
-                  <TableCell>{t('description')}</TableCell>
+                  <TableCell>{t('body')}</TableCell>
                   <TableCell>{t('banner photo')}</TableCell>
                   <TableCell align="center">{t('Actions')}</TableCell>
                 </TableRow>
@@ -193,7 +193,7 @@ const Results: FC<ResultsProps> = ({ sessions, setEditData, reFetchData }) => {
 
                         <TableCell>
                           <Typography noWrap variant="h5" sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 200 }}>
-                            {dynamicPage.description}
+                            {dynamicPage.body}
                           </Typography>
                         </TableCell>
 

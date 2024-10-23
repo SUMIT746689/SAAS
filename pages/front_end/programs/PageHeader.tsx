@@ -84,6 +84,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
       .get('/api/front_end/programs')
       .then((res) => {
         setProgramsInfo(res.data);
+        console.log('ttttttttttttttttttttttt', res.data);
       })
       .catch((error) => {});
   };
@@ -91,7 +92,6 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   useEffect(() => {
     programsList();
   }, []);
-  useEffect(() => {}, [programsList]);
 
   const handleDynamicContent = async (userType) => {
     const [err, res] = await fetchData('/api/certificate_templates/dynamic_content', 'get', {});
@@ -101,7 +101,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   return (
     <>
       {/* page head title and create button ui */}
-      <PageHeaderTitleWrapper name="website Page" handleCreateClassOpen={handleCreateClassOpen} />
+      <PageHeaderTitleWrapper name="programs Page" handleCreateClassOpen={handleCreateClassOpen} />
 
       <Dialog fullWidth maxWidth="md" open={open} onClose={handleCreateClassClose}>
         {/* dialog title */}

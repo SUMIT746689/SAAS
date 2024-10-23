@@ -12,7 +12,7 @@ import Results from './Results';
 
 const EmailTemplates = () => {
   const [editData, setEditData] = useState();
-  const { data: emailTemplates, reFetchData } = useClientFetch('/api/front_end/website_dynamic_pages');
+  const { data: emailTemplates, reFetchData } = useClientFetch('/api/front_end/programs');
 
   return (
     <>
