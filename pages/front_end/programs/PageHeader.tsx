@@ -22,6 +22,8 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   const { showNotification } = useNotistick();
   const [dynamicContent, setDynamicContent] = useState([]);
 
+  const [programsInfo, setProgramsInfo] = useState([]);
+
   useEffect(() => {
     if (editData) setOpen(true);
   }, [editData]);
@@ -66,7 +68,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
       }
 
       const res = await axios.post(`/api/front_end/programs`, formData);
-      console.log({ res });
+      // console.log({ res });
       successResponse('created');
     } catch (err) {
       console.error(err);
@@ -77,6 +79,19 @@ function PageHeader({ editData, setEditData, reFetchData }) {
       setSubmitting(false);
     }
   };
+  const programsList = () => {
+    axios
+      .get('/api/front_end/programs')
+      .then((res) => {
+        setProgramsInfo(res.data);
+      })
+      .catch((error) => {});
+  };
+
+  useEffect(() => {
+    programsList();
+  }, []);
+  useEffect(() => {}, [programsList]);
 
   const handleDynamicContent = async (userType) => {
     const [err, res] = await fetchData('/api/certificate_templates/dynamic_content', 'get', {});

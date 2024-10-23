@@ -35,7 +35,7 @@ const applyFilters = (sessions: Project[], query: string, filters: Filters): Pro
     let matches = true;
 
     if (query) {
-      const properties = ['id', 'english_title', 'bangla_title'];
+      const properties = ['id', 'title', 'body'];
       let containsQuery = false;
 
       properties.forEach((property) => {

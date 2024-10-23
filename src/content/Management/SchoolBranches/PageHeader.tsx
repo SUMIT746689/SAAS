@@ -120,7 +120,7 @@ function PageHeader({ editSchool, setEditSchool, reFetchData }): any {
             name: Yup.string().max(255).required(t('The name field is required')),
             phone: Yup.string().length(11).required(t('The phone field is required')),
             optional_phone: Yup.string().length(11).required(t('The optional phone field is required')),
-            map_location: Yup.string().length(11).required(t('The location field is required')),
+            // map_location: Yup.string().length(11).required(t('The location field is required')),
             email: Yup.string().email().required(t('The email field is required')),
             address: Yup.string().max(255).required(t('The address field is required')),
             admin_ids: Yup.array(Yup.number().required(t('The admin_ids field must be number'))).required('Please select a branch admin'),
