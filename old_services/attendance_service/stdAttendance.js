@@ -1,92 +1,61 @@
-import { createAttendance, stdAlreadyAttendance, updateAttendance } from "./utilities/handleAttendance.js";
-import { deleteTblAttendanceQueues, resStdAttendanceQueues, userWiseAttendanceQueues, userWiseAttendanceQueuesWithStatus, userWiseMinMaxAttendanceQueues } from "./utilities/handleAttendanceQueue.js";
-import { handleResStdInfo } from "./utilities/handleUserInfo.js";
-import { logFile } from "./utilities/handleLog.js";
-import { sentSms } from "./utilities/sent_sms.js";
-import { createUTCAttendanceTimes, handleDateTimeUtcZeroFormat } from "./utilities/dateTime.js";
+import path from "path";
+import { createAttendance, stdAlreadyAttendance, updateAttendance } from "./utility/handleAttendance.js";
+import { deleteTblAttendanceQueues, resStdAttendanceQueues, userWiseAttendanceQueues, userWiseAttendanceQueuesWithStatus, userWiseMinMaxAttendanceQueues } from "./utility/handleAttendanceQueue.js";
+import { handleResStdInfo } from "./utility/handleUserInfo.js";
+import { logFile } from "./utility/handleLog.js";
+import { sentSms } from "./utility/sent_sms.js";
 
 export const stdAttendance = async ({ min_attend_datetime, max_attend_datetime }) => {
     try {
-        const iso_min_attend_datetime = min_attend_datetime.toISOString()
-        const iso_max_attend_datetime = max_attend_datetime.toISOString()
-
-        const { error, data } = await resStdAttendanceQueues(iso_min_attend_datetime, iso_max_attend_datetime);
-
-        if (data) logFile.info(data);
+        const { error, data } = await resStdAttendanceQueues(min_attend_datetime, max_attend_datetime);
         if (error) return logFile.error(error);
         if (data.length === 0) return logFile.info("student tbl_attendance_queue response array length is 0");
 
         data.forEach(async (userAttend) => {
             const { user_id } = userAttend;
+
             const { error, data: resStudent } = await handleResStdInfo({ user_id });
+            console.log({ resStudent: JSON.stringify(resStudent, null, 3) })
             if (error) return logFile.error(error);
 
             const { id, guardian_phone, batches, student_info, class_roll_no } = resStudent || {};
+
             if (!id) return logFile.error(`user_id(${user_id}) student not found, suggestion:check the academic year`);
-            // if (!section?.std_entry_time || !section?.std_late_time || !section?.std_absence_time) return logFile.error(`user_id(${user_id}) section_id(${section?.id}) entry time, late time ,or absence time not found`);
 
             // const res
             if (!Array.isArray(batches) || batches.length === 0) return logFile.error(`user_id(${user_id}) student batches not founds`);
 
             const { error: s, data: stdAttendanceQueues } = await userWiseMinMaxAttendanceQueues({ user_id, min_attend_datetime, max_attend_datetime });
-
-            const minEntryTimeQueue = handleDateTimeUtcZeroFormat(stdAttendanceQueues[0].entry_time, min_attend_datetime, max_attend_datetime).getTime();
-            const maxAntryTimeQueue = handleDateTimeUtcZeroFormat(stdAttendanceQueues[0].exit_time, min_attend_datetime, max_attend_datetime);
-            console.log({ batches });
+            console.log({ stdAttendanceQueues: stdAttendanceQueues })
 
             // select a batch from all batches
             const resSelectBatch = (batches) => {
 
-                const selectBatch = batches[0];
+                const selectBatch = batches[batches.length - 1];
                 const batchesLength = batches.length;
                 if (batchesLength === 1) {
-                    if (!selectBatch?.std_entry_time || !selectBatch?.std_late_time || !selectBatch?.std_absence_time) return { data: null, error: `user_id(${user_id}) section_id/batch_id(${selectBatch?.id}) entry time, late time ,or absence time not found` }
-
-                    // make utc format custom attendance times 
-                    const customEntryTime = createUTCAttendanceTimes(selectBatch.std_entry_time, min_attend_datetime, max_attend_datetime).getTime();
-                    const customLateTime = createUTCAttendanceTimes(selectBatch.std_late_time, min_attend_datetime, max_attend_datetime).getTime();
-                    const customAbsenceTime = createUTCAttendanceTimes(selectBatch.std_absence_time, min_attend_datetime, max_attend_datetime).getTime();
-                    const customExitTime = createUTCAttendanceTimes(selectBatch.std_exit_time, min_attend_datetime, max_attend_datetime).getTime();
-
-                    console.log({ customEntryTime, customLateTime, customAbsenceTime, customExitTime });
-
-                    return { data: selectBatch, error: null };
+                    if (!selectBatch?.std_entry_time || !selectBatch?.std_late_time || !selectBatch?.std_absence_time) return { error: `user_id(${user_id}) section_id/batch_id(${selectBatch?.id}) entry time, late time ,or absence time not found` }
+                    return { data: selectBatch };
                 }
 
-                for (let i = 1; i < batchesLength; i++) {
-                    if (!batches[i]?.std_entry_time || !batches[i]?.std_late_time || !batches[i]?.std_absence_time || !batches[i]?.std_exit_time) return { data: null, error: `user_id(${user_id}) section_id/batch_id(${batches[i]?.id}) entry time, late time ,or absence time not found` }
-
-                    // make utc format custom attendance times 
-                    const customEntryTime = createUTCAttendanceTimes(batches[i].std_entry_time, min_attend_datetime, max_attend_datetime);
-                    const customLateTime = createUTCAttendanceTimes(batches[i].std_late_time, min_attend_datetime, max_attend_datetime).getTime();
-                    const customAbsenceTime = createUTCAttendanceTimes(batches[i].std_absence_time, min_attend_datetime, max_attend_datetime).getTime();
-                    const customExitTime = createUTCAttendanceTimes(batches[i].std_exit_time, min_attend_datetime, max_attend_datetime);
-
-                    console.log(
-                        {
-                            min_attend_datetime: handleDateTimeUtcZeroFormat(stdAttendanceQueues[0].entry_time, min_attend_datetime, max_attend_datetime),
-                            minEntryTime: stdAttendanceQueues[0].entry_time,
-                            maxEntryTime: stdAttendanceQueues[0].exit_time,
-                            std_entry_time: batches[i].std_entry_time
-                        })
-
-                    console.log({ minEntryTimeQueue, customEntryTime, customExitTime });
-                    if (customEntryTime < minEntryTimeQueue && minEntryTimeQueue < customExitTime) return { data: batches[i], error: null };
+                for (let i = 0; i < (batchesLength - 1); i++) {
+                    if (!batches[i]?.std_entry_time || !batches[i]?.std_late_time || !batches[i]?.std_absence_time) return { error: `user_id(${user_id}) section_id/batch_id(${batches[i]?.id}) entry time, late time ,or absence time not found` }
+                    // if(batches[i].std_entry_time < batches. )
+                    // console.lof({batches.})
+                    return { data: batches[i] };
                 }
-
-                console.log('test..............')
-                const selectBatch_ = batches[batches.length - 1];
-                return { data: selectBatch_, error: null };
             }
 
             const { data: section } = resSelectBatch(batches);
-            console.log({section})
+            console.log({ section, max_attend_datetime, min_attend_datetime })
+
+
             // get auto attendende sent sms table
             const resAutoAttendanceSentSms = Array.isArray((resStudent.student_info.school.AutoAttendanceSentSms)) && resStudent.student_info.school.AutoAttendanceSentSms.length > 0 ? resStudent.student_info.school.AutoAttendanceSentSms[0] : {};
             if (!resAutoAttendanceSentSms?.is_attendence_active) return logFile.error(`user_id(${user_id}) section_id(${section?.id}) attendence is not active`);
 
             const isAlreadyAttendanceEntry = await stdAlreadyAttendance({ student_id: id, min_attend_datetime, max_attend_datetime })
-            console.log({ isAlreadyAttendanceEntry })
+
             if (isAlreadyAttendanceEntry && isAlreadyAttendanceEntry?.id) {
 
                 const { error, data: stdAttendanceQ } = await userWiseAttendanceQueues({ user_id, min_attend_datetime, max_attend_datetime });
@@ -104,18 +73,11 @@ export const stdAttendance = async ({ min_attend_datetime, max_attend_datetime }
 
                 // sent sms
                 // sentSms(resAutoAttendanceSentSms, isAlreadyAttendanceEntry, resStudent, user_id, stdAttendanceQ[0].exit_time, status);
+
             }
             else {
-
-                // make utc format custom attendance times 
-                const customEntryTime = createUTCAttendanceTimes(section.std_entry_time, min_attend_datetime, max_attend_datetime);
-                const customLateTime = createUTCAttendanceTimes(section.std_late_time, min_attend_datetime, max_attend_datetime);
-                const customAbsenceTime = createUTCAttendanceTimes(section.std_absence_time, min_attend_datetime, max_attend_datetime);
-
-                const { error, data: stdAttendanceQ } = await userWiseAttendanceQueuesWithStatus({ user_id, entry_time: customEntryTime, late_time: customLateTime, absence_time: customAbsenceTime, min_attend_datetime: iso_min_attend_datetime, max_attend_datetime: iso_max_attend_datetime });
-                console.log({ stdAttendanceQ })
-
-                if (error) return logFile.error(error);
+                const { error, data: stdAttendanceQ } = await userWiseAttendanceQueuesWithStatus({ user_id, entry_time: section.std_entry_time, late_time: section.std_late_time, absence_time: section.std_absence_time, min_attend_datetime, max_attend_datetime });
+                if (error) return logFile.error(error)
 
                 let entry_time;
                 let exit_time;

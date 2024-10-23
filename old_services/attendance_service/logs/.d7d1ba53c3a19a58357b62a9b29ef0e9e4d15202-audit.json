@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 5
+    },
+    "auditLog": "/home/mehedi/School-SAAS/services/attendance_service/logs/.d7d1ba53c3a19a58357b62a9b29ef0e9e4d15202-audit.json",
+    "files": [
+        {
+            "date": 1729509567246,
+            "name": "/home/mehedi/School-SAAS/services/attendance_service/logs/attendance-2024-10-21.log",
+            "hash": "664e659ad15533454ddd4a53d027e8675af5f4d455f9410ee9d20c134c4e4360"
+        },
+        {
+            "date": 1729570716797,
+            "name": "/home/mehedi/School-SAAS/services/attendance_service/logs/attendance-2024-10-22.log",
+            "hash": "a6c6f6c57155d4bfd54909e687b503cbdd7c908880dab21d117f4d0cb90aed7b"
+        }
+    ],
+    "hashType": "sha256"
+}
