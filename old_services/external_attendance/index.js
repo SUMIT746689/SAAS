@@ -94,7 +94,7 @@ const main = async () => {
                 end_time: "23:59:59"
             }
             const { data } = await axios.post("https://rumytechnologies.com/rams/json_api", smsBody);
-            console.log(data)
+            // console.log(data)
             if (!Array.isArray(data?.log)) return logFile.error(`auth_user(${auth_user}) response(${data})`);
 
 
@@ -127,7 +127,6 @@ const main = async () => {
                     return logFile.error(`auth_user(${auth_user}), user not founds username(${user_name}) `);
                     // continue;
                 };
-
                 console.log({ access_date, access_time });
 
                 const time = new Date(access_date);

@@ -1,0 +1,40 @@
+[2024-10-22 10:18:36.845 AM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 10:18:36.851 AM] error: 	student user_id(110) fetch error
+[2024-10-22 10:19:25.974 AM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 10:19:25.995 AM] error: 	user_id(110) section_id(undefined) entry time, late time ,or absence time not found
+[2024-10-22 10:19:36.181 AM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 10:19:36.184 AM] error: 	user_id(110) section_id(undefined) entry time, late time ,or absence time not found
+[2024-10-22 10:19:55.201 AM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 10:19:55.207 AM] error: 	user_id(110) section_id(undefined) entry time, late time ,or absence time not found
+[2024-10-22 10:30:07.723 AM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 10:30:07.730 AM] error: 	user_id(110) section_id(undefined) entry time, late time ,or absence time not found
+[2024-10-22 11:08:56.709 AM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 12:08:18.936 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 12:09:14.227 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 12:09:14.233 PM] error: 	user_id(110) section_id(93) attendence is not active
+[2024-10-22 12:09:19.939 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 12:09:19.945 PM] error: 	user_id(110) section_id(93) attendence is not active
+[2024-10-22 12:37:27.629 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 12:37:27.637 PM] error: 	user_id(110) section_id(93) attendence is not active
+[2024-10-22 12:38:00.257 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 12:38:00.264 PM] error: 	user_id(110) section_id(93) attendence is not active
+[2024-10-22 12:47:56.306 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 12:47:56.315 PM] error: 	user_id(110) section_id(93) attendence is not active
+[2024-10-22 12:48:56.210 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 12:48:56.225 PM] error: 	user_id(110) section_id(93) attendence is not active
+[2024-10-22 12:49:07.754 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 12:49:07.766 PM] error: 	user_id(110) section_id(93) attendence is not active
+[2024-10-22 12:49:49.355 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 12:49:49.364 PM] error: 	user_id(110) section_id(93) attendence is not active
+[2024-10-22 12:49:53.305 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 12:49:53.312 PM] error: 	user_id(110) section_id(93) attendence is not active
+[2024-10-22 12:59:44.481 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 12:59:44.487 PM] error: 	user_id(110) section_id(93) attendence is not active
+[2024-10-22 01:00:09.595 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 01:00:09.604 PM] error: 	user_id(110) section_id(93) attendence is not active
+[2024-10-22 01:15:38.862 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 01:15:38.869 PM] error: 	user_id(110) section_id(93) attendence is not active
+[2024-10-22 01:42:20.788 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 01:42:20.795 PM] error: 	user_id(110) section_id(93) attendence is not active
+[2024-10-22 02:23:35.249 PM] info: 	today's employee tbl_attendance_queue response array length is 0
+[2024-10-22 02:23:35.263 PM] error: 	user_id(110) section_id(93) attendence is not active

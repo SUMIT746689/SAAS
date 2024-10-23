@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 5
+    },
+    "auditLog": "/home/mehedi-hasan/elitbuzz_projects/School-SAAS/services/external_attendance/logs/.fff66736356a94fbae49b686be21778d276b94ff-audit.json",
+    "files": [
+        {
+            "date": 1710226850413,
+            "name": "/home/mehedi-hasan/elitbuzz_projects/School-SAAS/services/external_attendance/logs/external_attendance-2024-03-12.log",
+            "hash": "56adc62f242d38652eb0471eeff1abc9e2702c2b3455d2f479f6643d4a3bb3fc"
+        }
+    ],
+    "hashType": "sha256"
+}
