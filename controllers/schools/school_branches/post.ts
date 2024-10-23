@@ -1,12 +1,10 @@
 import prisma from '@/lib/prisma_client';
 import { authenticate } from 'middleware/authenticate';
 import { logFile } from 'utilities_api/handleLogFile';
-
 const postSchool = async (req, res, authenticate_user) => {
   try {
     const { school_id, admin_panel_id } = authenticate_user;
     console.log({ authenticate_user })
-
     const authenticate_user_Info = await prisma.user.findFirst({
       where: {
         id: authenticate_user.id,
@@ -26,49 +24,17 @@ const postSchool = async (req, res, authenticate_user) => {
       }
     });
 
-    if (!authenticate_user_Info.school.branch_limit) throw new Error(`permission denied `);
-
+    if (!authenticate_user_Info.school.branch_limit) throw new Error(`permission denied `); 
     const getAlreadyCreateNoOfSchoolBranch = await prisma.school.count({ where: { parent_school_id: school_id } })
-
     if (authenticate_user_Info.school.branch_limit <= getAlreadyCreateNoOfSchoolBranch) throw new Error('branch create permission limit already over')
-
     if (authenticate_user_Info.role.title !== 'ADMIN') throw new Error('Your role have no permissions');
-
     const {
       name, phone, optional_phone, map_location, email, address, admin_ids, currency, domain,
-      // main_balance, masking_sms_price, non_masking_sms_price,
-      // masking_sms_count, non_masking_sms_count,
-      // package_price, package_duration, package_student_count, is_std_cnt_wise,
-      // voice_sms_balance, voice_sms_price, voice_pulse_size,
     } = req.body;
-
     if (!name ||  !phone || !optional_phone || !email || !address) throw new Error('provide valid data');
     const admins = admin_ids.map((id) => ({ id }));
-
-    // const response = await prisma.school.create({
-    //   data: {
-    //     name,
-    //     phone,
-    //     email,
-    //     address,
-    //     currency,
-    //     domain,
-    //     main_balance: main_balance ?? undefined,
-    //     masking_sms_price: masking_sms_price ?? undefined,
-    //     non_masking_sms_price: non_masking_sms_price ?? undefined,
-    //     masking_sms_count: masking_sms_count ?? undefined,
-    //     non_masking_sms_count: non_masking_sms_count ?? undefined,
-    //     admins: { connect: admins }
-    //   }
-    // });
-
-
-
     const start_date = new Date(Date.now());
-    // const end_date_provided = new Date(Date.now());
-    // end_date_provided.setDate(end_date_provided.getDate() + package_duration);
     const end_date_provided = authenticate_user_Info.school.subscription[0].end_date;
-
     const response = await prisma.subscription.create({
       data: {
         school: {
@@ -82,13 +48,6 @@ const postSchool = async (req, res, authenticate_user) => {
             currency: authenticate_user_Info.school.currency,
             domain,
             parent_school: { connect: { id: school_id } },
-            // main_balance: main_balance ?? undefined,
-            // masking_sms_price: masking_sms_price ?? undefined,
-            // non_masking_sms_price: non_masking_sms_price ?? undefined,
-            // masking_sms_count: masking_sms_count ?? undefined,
-            // non_masking_sms_count: non_masking_sms_count ?? undefined,
-            // voice_sms_balance,
-            // voice_sms_price,
             voice_pulse_size: authenticate_user_Info.school.voice_pulse_size,
             admins: { connect: admins },
             AutoAttendanceSentSms: {
@@ -117,7 +76,6 @@ const postSchool = async (req, res, authenticate_user) => {
         is_active: true
       }
     });
-
     await prisma.academicYear.create({ data: { title: String((new Date()).getFullYear()), school_id: response.school_id, curr_active: true } });
     await createClassesWithSections(response.school_id);
 
@@ -134,10 +92,8 @@ const postSchool = async (req, res, authenticate_user) => {
         }
       }
     })
-
     if (!response) throw new Error('Failed to create school');
     res.status(200).json({ success: true, message: 'Successfully created school' });
-
   } catch (err) {
     logFile.error(err.message)
     if (err.message.includes(`schools_domain_key`)) return res.status(404).json({ error: 'This domain is already used, use another' });
@@ -146,10 +102,7 @@ const postSchool = async (req, res, authenticate_user) => {
     res.status(404).json({ error: err.message });
   }
 };
-
 export default authenticate(postSchool);
-
-
 const createClassesWithSections = async (school_id) => {
   // cls sec one
   await prisma.section.create({

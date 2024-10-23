@@ -162,6 +162,11 @@ const WebsiteMenu = () => {
       label: 'Text Book',
       link: '/text-book',
       id: 9
+    },
+    {
+      label: 'Branches',
+      link: '/branches',
+      id: 9
     }
   ]);
   const [statusList, setStatusList] = useState([
