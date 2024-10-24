@@ -5,7 +5,6 @@ import { FaPhoneAlt } from "react-icons/fa";import { FaExternalLinkAlt } from "r
 import Link from 'next/link';
 
 function Branches({ branches, serverHost }) {
-  console.log({ branches });
 
   return (
     <div className="grid grid-cols-3 my-8 gap-4 ">

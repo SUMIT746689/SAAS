@@ -21,7 +21,6 @@ import { LanguageContext } from "@/app/context/language";
 //   { id: 14, name: 'Express', parentId: 10 },
 //   { id: 15, name: 'React Native', parentId: 7 },
 //   { id: 16, name: 'Tailwind Css', parentId: 11 },
-
 // ];
 
 const LinkBtn = ({ website_link, children }) => <Link href={website_link ? website_link : '#'} className="text-black bg-white hover:text-white py-2 px-3 w-full font-medium whitespace-nowrap grid hover:bg-[#3DB166] text-xs border-b">{children}</Link>
