@@ -24,7 +24,6 @@ const Results = ({ data, reFetchData }) => {
   // const [principal_photo, setPrincipal_photo] = useState(null)
 
   const { showNotification } = useNotistick();
-
   const getValue = (carousel_image) => {
     let cnt = [];
     for (const i in carousel_image) {
