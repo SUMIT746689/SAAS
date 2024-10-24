@@ -146,6 +146,7 @@ model School {
   Homework                   Homework[]
   School                     School[]                     @relation("SchoolToBranch")
   Program                    Program[]
+  TeacherShift               TeacherShift[]
 
   // routines Routine[]
   @@map("schools")
@@ -223,6 +224,8 @@ model Teacher {
   // StudentClassSubjects StudentClassSubjects[]
   teacherSalaries          TeacherSalaryStructure[]
   studentFeeWiseTeacherPay studentFeeWiseTeacherPay[]
+  TeacherShift             TeacherShift?              @relation(fields: [teacherShiftId], references: [id])
+  teacherShiftId           Int?
 
   @@map("teachers")
 }
@@ -1912,4 +1915,19 @@ model Program {
   school       School  @relation(fields: [school_id], references: [id])
 
   @@map("programs")
+}
+
+model TeacherShift {
+  id           Int       @id @default(autoincrement())
+  title        String
+  entry_time   DateTime? @db.Time()
+  late_time    DateTime? @db.Time()
+  absence_time DateTime? @db.Time()
+  exit_time    DateTime? @db.Time()
+  school_id    Int
+
+  school  School    @relation(fields: [school_id], references: [id])
+  teacher Teacher[]
+
+  @@map("teacher_shifts")
 }
