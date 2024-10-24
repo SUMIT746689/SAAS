@@ -13,7 +13,7 @@ function Branches({ branches, serverHost }) {
 
   return (
     <div className=' min-h-screen' >
-      <div className=' text-3xl font-bold py-8 text-center'>{ handleTextChangeLangWise(language, 'ShowIng All Branch','Showing All Branch') }</div>
+      {/* <div className=' text-3xl font-bold py-8 text-center'>{ handleTextChangeLangWise(language, 'Showing All Branch','Showing All Branch') }</div> */}
       {/* <div className=" flex m-8 flex-wrap bg-sky-500 justify-center align-middle"> */}
       <div className="flex flex-wrap justify-center object-center gap-4">
         {branches.map((branch, index) => (
@@ -44,7 +44,7 @@ function Branches({ branches, serverHost }) {
               )}
               
             </div>
-            <Link href={`http://${branch?.domain || '#'}`} className='flex flex-row'>
+            <Link href={ branch?.domain ? `http://${branch?.domain}` : '#'} className='flex flex-row'>
               <p className="text-red-500 mr-1 my-auto font-bold">
                 <FaExternalLinkAlt />
               </p>
