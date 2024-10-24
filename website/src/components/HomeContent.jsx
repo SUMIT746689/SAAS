@@ -1,11 +1,7 @@
 'use client';
-import Image from 'next/image';
-import { Inter } from 'next/font/google';
-// import ImgSlider from './ImageSlider';
 import { useRef } from 'react';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 import Link from 'next/link';
-const inter = Inter({ subsets: ['latin'] });
 
 const navLink = 'px-4 py-3 hover:cursor-pointer hover:bg-blue-900 duration-150';
 

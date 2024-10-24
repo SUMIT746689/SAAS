@@ -144,11 +144,11 @@ const index = async (req, res) => {
                             if (!userID || !schoolID || !timestamp || !status || !machineID) return logFile.error(`for creating attendance_table_queue missing required fields`);
                             await prisma.tbl_attendance_queue.create({
                                 data: {
-                                    user_id: parseInt(userID),
+                                    user_id: parseInt(attendance.userID),
                                     school_id: attendance.schoolID,
                                     submission_time: customUtcZeroFormat,
-                                    status: status,
-                                    machine_id: machineID,
+                                    status: attendance.status,
+                                    machine_id: attendance.machineID,
                                 }
                             })
                                 .catch(err => {
