@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import 'react-quill/dist/quill.snow.css';
-
 import { Grid, Typography } from '@mui/material';
 
 function PageHeader({ title }): any {

@@ -2,7 +2,6 @@ import React from 'react';
 import prisma from '@/lib/prisma_client';
 import { headers } from 'next/headers';
 import DynamicPage from '@/new_components/DynamicPage/DynamicPage'
-
 const page = async ({ params }) => {
     const headersList = headers();
     const domain = headersList.get('host');
@@ -21,5 +20,4 @@ const page = async ({ params }) => {
         </>
     )
 };
-
 export default page;

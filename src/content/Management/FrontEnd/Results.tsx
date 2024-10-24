@@ -13,7 +13,6 @@ import { handleFileChange, handleFileRemove } from 'utilities_api/handleFileUplo
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 const Results = ({ data, reFetchData }) => {
-
   const { t }: { t: any } = useTranslation();
   // const [notice, setNotice] = useState([{ title: '', headLine: '', body: undefined, link: undefined }]);
 
@@ -27,12 +26,12 @@ const Results = ({ data, reFetchData }) => {
   const { showNotification } = useNotistick();
 
   const getValue = (carousel_image) => {
-    let cnt = []
+    let cnt = [];
     for (const i in carousel_image) {
-      cnt.push(carousel_image[i])
+      cnt.push(carousel_image[i]);
     }
-    return cnt.map(j => j.name).join(', ')
-  }
+    return cnt.map((j) => j.name).join(', ');
+  };
 
   const handleChangeFromArr = (totalValues, index, setField, name, key, event) => {
     const value = event.target.value;
@@ -41,17 +40,16 @@ const Results = ({ data, reFetchData }) => {
       val[key] = value;
       return val;
     });
-    setField(name, filterValues)
-  }
+    setField(name, filterValues);
+  };
 
   const handleRemoveFromArr = (totalValues, index, setField, name) => {
     const filterValues = totalValues.filter((val, ind) => ind !== index);
-    setField(name, filterValues)
-  }
+    setField(name, filterValues);
+  };
   return (
     <Formik
       enableReinitialize
-
       initialValues={{
         header_image: data ? data?.header_image : undefined,
         preview_header_image: [],
@@ -112,15 +110,12 @@ const Results = ({ data, reFetchData }) => {
       //     .min(1)
       //     .required(t('The duration field is required'))
       // })}
-      onSubmit={async (
-        _values,
-        { resetForm, setErrors, setStatus, setSubmitting }
-      ) => {
+      onSubmit={async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
         try {
           const successResponse = (message) => {
             setStatus({ success: true });
             setSubmitting(false);
-            showNotification(message)
+            showNotification(message);
           };
 
           const formData = new FormData();
@@ -128,10 +123,10 @@ const Results = ({ data, reFetchData }) => {
           for (let i in _values) {
             if (i.includes('preview_')) continue;
             if (i == 'carousel_image') {
-              const temp = _values[i]
+              const temp = _values[i];
               for (const j in temp) {
-                if (typeof (temp[j]) == 'object') {
-                  formData.append('carousel_image', temp[j])
+                if (typeof temp[j] == 'object') {
+                  formData.append('carousel_image', temp[j]);
                 }
               }
             }
@@ -143,27 +138,29 @@ const Results = ({ data, reFetchData }) => {
             //     }
             //   }
             // }
-            else if (["header_image", "about_school_photo", "chairman_photo", "principal_photo", "assist_principal_photo"].includes(i) && _values[i]) {
+            else if (
+              ['header_image', 'about_school_photo', 'chairman_photo', 'principal_photo', 'assist_principal_photo'].includes(i) &&
+              _values[i]
+            ) {
               formData.append(`${i}`, _values[i][0]);
-            }
-            else if (["e_books_section", "downloads_section"].includes(i) && _values[i]) {
+            } else if (['e_books_section', 'downloads_section'].includes(i) && _values[i]) {
               formData.append(`${i}`, JSON.stringify(_values[i]));
-            }
-            else {
-              console.log({ i: _values[i] })
+            } else {
+              console.log({ i: _values[i] });
               formData.append(`${i}`, _values[i]);
             }
           }
 
-          axios.put('/api/front_end', formData)
-            .then(res => {
+          axios
+            .put('/api/front_end', formData)
+            .then((res) => {
               reFetchData();
               successResponse('Front end information updated !');
-            }).catch(err => {
-              console.log(err);
-              showNotification('Front end information update failed !', 'error')
             })
-
+            .catch((err) => {
+              console.log(err);
+              showNotification('Front end information update failed !', 'error');
+            });
         } catch (err) {
           console.error(err);
 
@@ -174,27 +171,17 @@ const Results = ({ data, reFetchData }) => {
         }
       }}
     >
-      {({
-        errors,
-        handleBlur,
-        handleChange,
-        handleSubmit,
-        isSubmitting,
-        touched,
-        values,
-        setFieldValue
-      }) => {
+      {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
         return (
           <>
             <form onSubmit={handleSubmit}>
               <Card sx={{ maxWidth: 1400 }}>
-                <DialogTitleWrapper name={"Website Dynamic Fields"} editData={undefined} />
-                <Grid container columnSpacing={1} paddingTop={2} borderTop='1px solid lightGray' borderBottom='1px solid lightGray' p={2}>
-
+                <DialogTitleWrapper name={'Website Dynamic Fields'} editData={undefined} />
+                <Grid container columnSpacing={1} paddingTop={2} borderTop="1px solid lightGray" borderBottom="1px solid lightGray" p={2}>
                   {/* Eiin number  */}
-                  <Grid container item borderRadius='10px' marginBottom='10px'>
+                  <Grid container item borderRadius="10px" marginBottom="10px">
                     <Grid item>
-                      Eiin Number: <span style={{ color: "red" }}>*</span>
+                      Eiin Number: <span style={{ color: 'red' }}>*</span>
                     </Grid>
                     <TextFieldWrapper
                       touched={touched.eiin_number}
@@ -215,39 +202,36 @@ const Results = ({ data, reFetchData }) => {
                     <NewFileUploadFieldWrapper
                       htmlFor="carousel_image"
                       accept="image/*"
-                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, "carousel_image", "preview_carousel_image")}
-                      label='Carousel Image'
+                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, 'carousel_image', 'preview_carousel_image')}
+                      label="Carousel Image"
                       multiple={true}
                     />
                     <Grid item display="flex" columnGap={0.5}>
-                      {
-                        values?.preview_carousel_image?.map((image, index) => (
-                          <>
-                            <PreviewImageCard
-                              data={image}
-                              index={index}
-                              key={index}
-                              handleRemove={() => handleFileRemove(setFieldValue, "carousel_image", "preview_carousel_image")}
-                            />
-                          </>
-                        ))
-                      }
+                      {values?.preview_carousel_image?.map((image, index) => (
+                        <>
+                          <PreviewImageCard
+                            data={image}
+                            index={index}
+                            key={index}
+                            handleRemove={() => handleFileRemove(setFieldValue, 'carousel_image', 'preview_carousel_image')}
+                          />
+                        </>
+                      ))}
                     </Grid>
-                    {
-                      Array.isArray(data?.carousel_image) && <Grid item display="flex" gap={1} sx={{ overflowX: "auto" }} columnSpacing={0.5}>
-                        {
-                          data?.carousel_image?.map((image) => (
-                            <Image src={getFile(image?.path)}
-                              height={150}
-                              width={150}
-                              alt='Header image'
-                              loading='lazy'
-                              style={{ objectFit: "contain", height: "150px" }}
-                            />
-                          ))
-                        }
+                    {Array.isArray(data?.carousel_image) && (
+                      <Grid item display="flex" gap={1} sx={{ overflowX: 'auto' }} columnSpacing={0.5}>
+                        {data?.carousel_image?.map((image) => (
+                          <Image
+                            src={getFile(image?.path)}
+                            height={150}
+                            width={150}
+                            alt="Header image"
+                            loading="lazy"
+                            style={{ objectFit: 'contain', height: '150px' }}
+                          />
+                        ))}
                       </Grid>
-                    }
+                    )}
                   </Grid>
 
                   {/* heaer image */}
@@ -255,34 +239,26 @@ const Results = ({ data, reFetchData }) => {
                     <NewFileUploadFieldWrapper
                       htmlFor="header_image"
                       accept="image/*"
-                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, "header_image", "preview_header_image")}
-                      label='Header Image'
+                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, 'header_image', 'preview_header_image')}
+                      label="Header Image"
                     />
                     <Grid item>
-                      {
-                        values?.preview_header_image?.map((image, index) => (
-                          <>
-                            <PreviewImageCard
-                              data={image}
-                              index={index}
-                              key={index}
-                              handleRemove={() => handleFileRemove(setFieldValue, "header_image", "preview_header_image")}
-                            />
-                          </>
-                        ))
-                      }
+                      {values?.preview_header_image?.map((image, index) => (
+                        <>
+                          <PreviewImageCard
+                            data={image}
+                            index={index}
+                            key={index}
+                            handleRemove={() => handleFileRemove(setFieldValue, 'header_image', 'preview_header_image')}
+                          />
+                        </>
+                      ))}
                     </Grid>
-                    {
-                      data?.header_image && <Grid item>
-                        <Image src={getFile(data?.header_image)}
-                          height={150}
-                          width={150}
-                          alt='Header image'
-                          loading='lazy'
-                        />
-
+                    {data?.header_image && (
+                      <Grid item>
+                        <Image src={getFile(data?.header_image)} height={150} width={150} alt="Header image" loading="lazy" />
                       </Grid>
-                    }
+                    )}
 
                     {/* <Grid item sx={{
                       pt: '25px'
@@ -306,7 +282,6 @@ const Results = ({ data, reFetchData }) => {
                       />
 
                     </Grid> */}
-
                   </Grid>
 
                   {/* gallery */}
@@ -404,39 +379,30 @@ const Results = ({ data, reFetchData }) => {
                     <NewFileUploadFieldWrapper
                       htmlFor="about_school_photo"
                       accept="image/*"
-                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, "about_school_photo", "preview_about_school_photo")}
-                      label='About School Photo'
+                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, 'about_school_photo', 'preview_about_school_photo')}
+                      label="About School Photo"
                     />
                     <Grid item>
-                      {
-                        values?.preview_about_school_photo?.map((image, index) => (
-                          <>
-                            <PreviewImageCard
-                              data={image}
-                              index={index}
-                              key={index}
-                              handleRemove={() => handleFileRemove(setFieldValue, "about_school_photo", "preview_about_school_photo")}
-                            />
-                          </>
-                        ))
-                      }
+                      {values?.preview_about_school_photo?.map((image, index) => (
+                        <>
+                          <PreviewImageCard
+                            data={image}
+                            index={index}
+                            key={index}
+                            handleRemove={() => handleFileRemove(setFieldValue, 'about_school_photo', 'preview_about_school_photo')}
+                          />
+                        </>
+                      ))}
                     </Grid>
-                    {
-                      data?.about_school_photo && <Grid item>
-                        <Image src={getFile(data?.about_school_photo)}
-                          height={150}
-                          width={150}
-                          alt='About School Photo'
-                          loading='lazy'
-                        />
-
+                    {data?.about_school_photo && (
+                      <Grid item>
+                        <Image src={getFile(data?.about_school_photo)} height={150} width={150} alt="About School Photo" loading="lazy" />
                       </Grid>
-                    }
+                    )}
                   </Grid>
 
-
                   {/* about school */}
-                  <Grid item xs={12} md={6} pt={1} borderRadius='10px' marginBottom='10px'>
+                  <Grid item xs={12} md={6} pt={1} borderRadius="10px" marginBottom="10px">
                     <Grid>About School (English):</Grid>
                     <TextAreaWrapper
                       touched={touched.english_about_school_desc}
@@ -448,7 +414,7 @@ const Results = ({ data, reFetchData }) => {
                       value={values.english_about_school_desc}
                     />
                   </Grid>
-                  <Grid item xs={12} md={6} pt={1} borderRadius='10px' marginBottom='10px'>
+                  <Grid item xs={12} md={6} pt={1} borderRadius="10px" marginBottom="10px">
                     <Grid>About School (বাংলা):</Grid>
 
                     <TextAreaWrapper
@@ -461,7 +427,6 @@ const Results = ({ data, reFetchData }) => {
                       handleChange={handleChange}
                       value={values.bangla_about_school_desc}
                     />
-
 
                     {/* <TextField
                       id="outlined-basic"
@@ -486,34 +451,26 @@ const Results = ({ data, reFetchData }) => {
                     <NewFileUploadFieldWrapper
                       htmlFor="chairman_photo"
                       accept="image/*"
-                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, "chairman_photo", "preview_chairman_photo")}
-                      label='Chairman Photo'
+                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, 'chairman_photo', 'preview_chairman_photo')}
+                      label="Chairman Photo"
                     />
                     <Grid item>
-                      {
-                        values?.preview_chairman_photo?.map((image, index) => (
-                          <>
-                            <PreviewImageCard
-                              data={image}
-                              index={index}
-                              key={index}
-                              handleRemove={() => handleFileRemove(setFieldValue, "chairman_photo", "preview_chairman_photo")}
-                            />
-                          </>
-                        ))
-                      }
+                      {values?.preview_chairman_photo?.map((image, index) => (
+                        <>
+                          <PreviewImageCard
+                            data={image}
+                            index={index}
+                            key={index}
+                            handleRemove={() => handleFileRemove(setFieldValue, 'chairman_photo', 'preview_chairman_photo')}
+                          />
+                        </>
+                      ))}
                     </Grid>
-                    {
-                      data?.chairman_photo && <Grid item>
-                        <Image src={getFile(data?.chairman_photo)}
-                          height={150}
-                          width={150}
-                          alt='Chairman Photo'
-                          loading='lazy'
-                        />
-
+                    {data?.chairman_photo && (
+                      <Grid item>
+                        <Image src={getFile(data?.chairman_photo)} height={150} width={150} alt="Chairman Photo" loading="lazy" />
                       </Grid>
-                    }
+                    )}
                   </Grid>
 
                   {/* principal_photo */}
@@ -521,34 +478,26 @@ const Results = ({ data, reFetchData }) => {
                     <NewFileUploadFieldWrapper
                       htmlFor="principal_photo"
                       accept="image/*"
-                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, "principal_photo", "preview_principal_photo")}
-                      label='Principal Photo'
+                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, 'principal_photo', 'preview_principal_photo')}
+                      label="Principal Photo"
                     />
                     <Grid item>
-                      {
-                        values?.preview_principal_photo?.map((image, index) => (
-                          <>
-                            <PreviewImageCard
-                              data={image}
-                              index={index}
-                              key={index}
-                              handleRemove={() => handleFileRemove(setFieldValue, "principal_photo", "preview_principal_photo")}
-                            />
-                          </>
-                        ))
-                      }
+                      {values?.preview_principal_photo?.map((image, index) => (
+                        <>
+                          <PreviewImageCard
+                            data={image}
+                            index={index}
+                            key={index}
+                            handleRemove={() => handleFileRemove(setFieldValue, 'principal_photo', 'preview_principal_photo')}
+                          />
+                        </>
+                      ))}
                     </Grid>
-                    {
-                      data?.principal_photo && <Grid item>
-                        <Image src={getFile(data?.principal_photo)}
-                          height={150}
-                          width={150}
-                          alt='Principal Photo'
-                          loading='lazy'
-                        />
-
+                    {data?.principal_photo && (
+                      <Grid item>
+                        <Image src={getFile(data?.principal_photo)} height={150} width={150} alt="Principal Photo" loading="lazy" />
                       </Grid>
-                    }
+                    )}
                   </Grid>
 
                   {/* Assistant_principal_photo */}
@@ -556,44 +505,33 @@ const Results = ({ data, reFetchData }) => {
                     <NewFileUploadFieldWrapper
                       htmlFor="assist_principal_photo"
                       accept="image/*"
-                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, "assist_principal_photo", "preview_assist_principal_photo")}
-                      label='Assistant Principal Photo'
+                      handleChangeFile={(e) => handleFileChange(e, setFieldValue, 'assist_principal_photo', 'preview_assist_principal_photo')}
+                      label="Assistant Principal Photo"
                     />
                     <Grid item>
-                      {
-                        values?.preview_assist_principal_photo?.map((image, index) => (
-                          <>
-                            <PreviewImageCard
-                              data={image}
-                              index={index}
-                              key={index}
-                              handleRemove={() => handleFileRemove(setFieldValue, "assist_principal_photo", "preview_assist_principal_photo")}
-                            />
-                          </>
-                        ))
-                      }
+                      {values?.preview_assist_principal_photo?.map((image, index) => (
+                        <>
+                          <PreviewImageCard
+                            data={image}
+                            index={index}
+                            key={index}
+                            handleRemove={() => handleFileRemove(setFieldValue, 'assist_principal_photo', 'preview_assist_principal_photo')}
+                          />
+                        </>
+                      ))}
                     </Grid>
-                    {
-                      data?.assist_principal_photo && <Grid item>
-                        <Image src={getFile(data?.assist_principal_photo)}
-                          height={150}
-                          width={150}
-                          alt='Principal Photo'
-                          loading='lazy'
-                        />
-
+                    {data?.assist_principal_photo && (
+                      <Grid item>
+                        <Image src={getFile(data?.assist_principal_photo)} height={150} width={150} alt="Principal Photo" loading="lazy" />
                       </Grid>
-                    }
+                    )}
                   </Grid>
 
-                  <Grid xs={12} md={6}>
-                  </Grid>
+                  <Grid xs={12} md={6}></Grid>
 
                   {/* chairman_name  */}
                   <Grid container item xs={12} md={6} pt={1}>
-                    <Grid item>
-                      Chairman Name (English):
-                    </Grid>
+                    <Grid item>Chairman Role Name (English):</Grid>
                     <TextFieldWrapper
                       touched={touched.english_chairman_name}
                       errors={errors.english_chairman_name}
@@ -607,9 +545,7 @@ const Results = ({ data, reFetchData }) => {
                     />
                   </Grid>
                   <Grid container item xs={12} md={6} pt={1}>
-                    <Grid item>
-                      Chairman Name (বাংলা):
-                    </Grid>
+                    <Grid item>Chairman Role Name (বাংলা):</Grid>
                     <TextFieldWrapper
                       touched={touched.bangla_chairman_name}
                       errors={errors.bangla_chairman_name}
@@ -653,9 +589,7 @@ const Results = ({ data, reFetchData }) => {
 
                   {/* principal_name  */}
                   <Grid container item xs={12} md={6}>
-                    <Grid item>
-                      Principal Name (English):
-                    </Grid>
+                    <Grid item>Principal Role Name (English):</Grid>
                     <TextFieldWrapper
                       touched={touched.english_principal_name}
                       errors={errors.english_principal_name}
@@ -669,9 +603,7 @@ const Results = ({ data, reFetchData }) => {
                     />
                   </Grid>
                   <Grid container item xs={12} md={6}>
-                    <Grid item>
-                      Principal Name (বাংলা):
-                    </Grid>
+                    <Grid item>Principal Role Name (বাংলা):</Grid>
                     <TextFieldWrapper
                       touched={touched.bangla_principal_name}
                       errors={errors.bangla_principal_name}
@@ -684,7 +616,6 @@ const Results = ({ data, reFetchData }) => {
                       autocomplete="false"
                     />
                   </Grid>
-
 
                   {/* principal_speech */}
                   <Grid item xs={12} md={6}>
@@ -716,9 +647,7 @@ const Results = ({ data, reFetchData }) => {
 
                   {/* assist_principal_name  */}
                   <Grid container item xs={12} md={6}>
-                    <Grid item>
-                      Assistant Principal Name (English):
-                    </Grid>
+                    <Grid item>Assistant Principal Role Name (English):</Grid>
                     <TextFieldWrapper
                       touched={touched.english_assist_principal_name}
                       errors={errors.english_assist_principal_name}
@@ -732,9 +661,7 @@ const Results = ({ data, reFetchData }) => {
                     />
                   </Grid>
                   <Grid container item xs={12} md={6}>
-                    <Grid item>
-                      Assistant Principal Name (বাংলা):
-                    </Grid>
+                    <Grid item>Assistant Principal Role Name (বাংলা):</Grid>
                     <TextFieldWrapper
                       touched={touched.bangla_assist_principal_name}
                       errors={errors.bangla_assist_principal_name}
@@ -747,7 +674,6 @@ const Results = ({ data, reFetchData }) => {
                       autocomplete="false"
                     />
                   </Grid>
-
 
                   {/* Assistant_principal_speech */}
                   <Grid item xs={12} md={6}>
@@ -779,9 +705,7 @@ const Results = ({ data, reFetchData }) => {
 
                   {/* facebook_link */}
                   <Grid item xs={12} md={6}>
-                    <Grid >
-                      Facebook page link:
-                    </Grid>
+                    <Grid>Facebook page link:</Grid>
                     <TextFieldWrapper
                       touched={touched.facebook_link}
                       errors={errors.facebook_link}
@@ -796,9 +720,7 @@ const Results = ({ data, reFetchData }) => {
 
                   {/* twitter_link */}
                   <Grid item xs={12} md={6}>
-                    <Grid >
-                      Twitter page link:
-                    </Grid>
+                    <Grid>Twitter page link:</Grid>
                     <TextFieldWrapper
                       touched={touched.twitter_link}
                       errors={errors.twitter_link}
@@ -813,9 +735,7 @@ const Results = ({ data, reFetchData }) => {
 
                   {/* google_link */}
                   <Grid item xs={12} md={6}>
-                    <Grid >
-                      Google++ profile link:
-                    </Grid>
+                    <Grid>Google++ profile link:</Grid>
                     <TextFieldWrapper
                       touched={touched.google_link}
                       errors={errors.google_link}
@@ -829,10 +749,8 @@ const Results = ({ data, reFetchData }) => {
                   </Grid>
 
                   {/* linkedin_link */}
-                  <Grid item xs={12} md={6} >
-                    <Grid item>
-                      Linkedin profile link:
-                    </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Grid item>Linkedin profile link:</Grid>
                     <TextFieldWrapper
                       touched={touched.linkedin_link}
                       errors={errors.linkedin_link}
@@ -847,9 +765,7 @@ const Results = ({ data, reFetchData }) => {
 
                   {/* youtube_link */}
                   <Grid item xs={12} md={6}>
-                    <Grid >
-                      Youtube profile link:
-                    </Grid>
+                    <Grid>Youtube profile link:</Grid>
                     <TextFieldWrapper
                       touched={touched.youtube_link}
                       errors={errors.youtube_link}
@@ -864,108 +780,119 @@ const Results = ({ data, reFetchData }) => {
 
                   {/* ebooks sections */}
                   <Grid item xs={12}>
-                    <Grid >
-                      E-books Section:
-                    </Grid>
+                    <Grid>E-books Section:</Grid>
                     <Grid item display="grid" gridTemplateColumns="1fr 1fr auto" columnGap={1} px={2}>
-                      {
-                        values.e_books_section?.map((ebook, index) => (
-                          <>
-                            <Grid >
-                              E-book Title:
-                              <TextFieldWrapper
-                                touched={touched.e_books_section}
-                                errors={errors.e_books_section}
-                                // label={t('Eiin number')}
-                                label={t('')}
-                                name={'e-book title'}
-                                handleBlur={handleBlur}
-                                handleChange={(e) => handleChangeFromArr(values.e_books_section, index, setFieldValue, "e_books_section", "title", e)}
-                                value={ebook?.title}
-                              />
-                            </Grid>
-                            <Grid >
-                              E-book Url:
-                              <TextFieldWrapper
-                                touched={touched.e_books_section}
-                                errors={errors.e_books_section}
-                                // label={t('Eiin number')}
-                                label={t('')}
-                                name={'e-book url'}
-                                handleBlur={handleBlur}
-                                handleChange={(event) => handleChangeFromArr(values.e_books_section, index, setFieldValue, "e_books_section", "url", event)}
-                                value={ebook?.url}
-                              />
-                            </Grid>
-                            {/* <Grid > */}
-                            <DeleteOutlineIcon
-                              onClick={() => handleRemoveFromArr(values.e_books_section, index, setFieldValue, "e_books_section")}
-                              color="warning" sx={{ cursor: "pointer", height: 37, mt: 2.3, p: 1, fontSize: 50, border: '2px solid' }} />
-                            {/* </Grid> */}
-                          </>
-                        ))
-                      }
+                      {values.e_books_section?.map((ebook, index) => (
+                        <>
+                          <Grid>
+                            E-book Title:
+                            <TextFieldWrapper
+                              touched={touched.e_books_section}
+                              errors={errors.e_books_section}
+                              // label={t('Eiin number')}
+                              label={t('')}
+                              name={'e-book title'}
+                              handleBlur={handleBlur}
+                              handleChange={(e) => handleChangeFromArr(values.e_books_section, index, setFieldValue, 'e_books_section', 'title', e)}
+                              value={ebook?.title}
+                            />
+                          </Grid>
+                          <Grid>
+                            E-book Url:
+                            <TextFieldWrapper
+                              touched={touched.e_books_section}
+                              errors={errors.e_books_section}
+                              // label={t('Eiin number')}
+                              label={t('')}
+                              name={'e-book url'}
+                              handleBlur={handleBlur}
+                              handleChange={(event) =>
+                                handleChangeFromArr(values.e_books_section, index, setFieldValue, 'e_books_section', 'url', event)
+                              }
+                              value={ebook?.url}
+                            />
+                          </Grid>
+                          {/* <Grid > */}
+                          <DeleteOutlineIcon
+                            onClick={() => handleRemoveFromArr(values.e_books_section, index, setFieldValue, 'e_books_section')}
+                            color="warning"
+                            sx={{ cursor: 'pointer', height: 37, mt: 2.3, p: 1, fontSize: 50, border: '2px solid' }}
+                          />
+                          {/* </Grid> */}
+                        </>
+                      ))}
                     </Grid>
-                    <ButtonWrapper sx={{ mx: 2 }} handleClick={() => setFieldValue("e_books_section", [...values.e_books_section, { title: null, url: null }])} > + Add More Ebooks Section </ButtonWrapper>
+                    <ButtonWrapper
+                      sx={{ mx: 2 }}
+                      handleClick={() => setFieldValue('e_books_section', [...values.e_books_section, { title: null, url: null }])}
+                    >
+                      {' '}
+                      + Add More Ebooks Section{' '}
+                    </ButtonWrapper>
                   </Grid>
 
                   {/* downloads sections */}
                   <Grid item xs={12}>
-                    <Grid >
-                      Downloads Section:
-                    </Grid>
+                    <Grid>Downloads Section:</Grid>
                     <Grid item display="grid" gridTemplateColumns="1fr 1fr auto" columnGap={1} px={2}>
-                      {
-                        values.downloads_section?.map((download_sec, index) => (
-                          <>
-                            <Grid >
-                              Download Title:
-                              <TextFieldWrapper
-                                touched={touched.downloads_section}
-                                errors={errors.downloads_section}
-                                // label={t('Eiin number')}
-                                label={t('')}
-                                name={"title"}
-                                handleBlur={handleBlur}
-                                handleChange={(event) => handleChangeFromArr(values.downloads_section, index, setFieldValue, "downloads_section", "title", event)}
-                                value={download_sec.title}
-                              />
-                            </Grid>
-                            <Grid >
-                              Download Url:
-                              <TextFieldWrapper
-                                touched={touched.downloads_section}
-                                errors={errors.downloads_section}
-                                // label={t('Eiin number')}
-                                label={t('')}
-                                name={"url"}
-                                handleBlur={handleBlur}
-                                handleChange={(event) => handleChangeFromArr(values.downloads_section, index, setFieldValue, "downloads_section", "url", event)}
-                                value={download_sec.url}
-                              />
-                            </Grid>
-                            {/* <Grid > */}
-                            <DeleteOutlineIcon
-                              onClick={() => handleRemoveFromArr(values.downloads_section, index, setFieldValue, "downloads_section")}
-                              color="warning" sx={{ cursor: "pointer", height: 37, mt: 2.3, p: 1, fontSize: 50, border: '2px solid' }} />
-                            {/* </Grid> */}
-                          </>
-                        ))
-                      }
+                      {values.downloads_section?.map((download_sec, index) => (
+                        <>
+                          <Grid>
+                            Download Title:
+                            <TextFieldWrapper
+                              touched={touched.downloads_section}
+                              errors={errors.downloads_section}
+                              // label={t('Eiin number')}
+                              label={t('')}
+                              name={'title'}
+                              handleBlur={handleBlur}
+                              handleChange={(event) =>
+                                handleChangeFromArr(values.downloads_section, index, setFieldValue, 'downloads_section', 'title', event)
+                              }
+                              value={download_sec.title}
+                            />
+                          </Grid>
+                          <Grid>
+                            Download Url:
+                            <TextFieldWrapper
+                              touched={touched.downloads_section}
+                              errors={errors.downloads_section}
+                              // label={t('Eiin number')}
+                              label={t('')}
+                              name={'url'}
+                              handleBlur={handleBlur}
+                              handleChange={(event) =>
+                                handleChangeFromArr(values.downloads_section, index, setFieldValue, 'downloads_section', 'url', event)
+                              }
+                              value={download_sec.url}
+                            />
+                          </Grid>
+                          {/* <Grid > */}
+                          <DeleteOutlineIcon
+                            onClick={() => handleRemoveFromArr(values.downloads_section, index, setFieldValue, 'downloads_section')}
+                            color="warning"
+                            sx={{ cursor: 'pointer', height: 37, mt: 2.3, p: 1, fontSize: 50, border: '2px solid' }}
+                          />
+                          {/* </Grid> */}
+                        </>
+                      ))}
                     </Grid>
-                    <ButtonWrapper sx={{ mx: 2 }} handleClick={() => setFieldValue("downloads_section", [...values.downloads_section, { title: null, url: null }])} > + Add More Downloads Section </ButtonWrapper>
+                    <ButtonWrapper
+                      sx={{ mx: 2 }}
+                      handleClick={() => setFieldValue('downloads_section', [...values.downloads_section, { title: null, url: null }])}
+                    >
+                      {' '}
+                      + Add More Downloads Section{' '}
+                    </ButtonWrapper>
                   </Grid>
-
                 </Grid>
 
-
                 <Grid display={'flex'} alignContent="center" justifyContent={'center'} alignItems="center" padding={2}>
-
                   <Button
                     sx={{
                       borderRadius: 0.5,
                       height: 36,
-                      width: '50%',
+                      width: '50%'
                     }}
                     type="submit"
                     startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
@@ -976,12 +903,12 @@ const Results = ({ data, reFetchData }) => {
                   </Button>
                 </Grid>
               </Card>
-            </form >
+            </form>
           </>
         );
       }}
-    </Formik >
-  )
+    </Formik>
+  );
 };
 
 export default Results;
