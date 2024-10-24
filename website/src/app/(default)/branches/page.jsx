@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma_client';
-import Branches from './Branches';
+import Branches from '@/components/Branches';
 import { headers } from 'next/headers';
 
 export default async function Branch() {
