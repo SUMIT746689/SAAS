@@ -15,23 +15,18 @@ import { fetchData } from '@/utils/post';
 import { ButtonWrapper } from '@/components/ButtonWrapper';
 import { getFile } from '@/utils/utilitY-functions';
 import { handleFileChange, handleFileRemove } from 'utilities_api/handleFileUpload';
-
 function PageHeader({ editData, setEditData, reFetchData }) {
   const { t }: { t: any } = useTranslation();
   const [open, setOpen] = useState(false);
   const { showNotification } = useNotistick();
   const [dynamicContent, setDynamicContent] = useState([]);
-
   const [programsInfo, setProgramsInfo] = useState([]);
-
   useEffect(() => {
     if (editData) setOpen(true);
   }, [editData]);
-
   const handleCreateClassOpen = () => {
     setOpen(true);
   };
-
   const handleCreateClassClose = () => {
     setOpen(false);
     setEditData(null);
@@ -47,7 +42,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
         reFetchData();
         handleCreateClassClose();
       };
-      // console.log('_values__', _values);
+      console.log('_values__', _values);
 
       const formData = new FormData();
       for (const [key, value] of Object.entries(_values)) {
@@ -88,7 +83,6 @@ function PageHeader({ editData, setEditData, reFetchData }) {
       })
       .catch((error) => {});
   };
-
   useEffect(() => {
     programsList();
   }, []);
@@ -156,18 +150,18 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                         <NewFileUploadFieldWrapper
                           htmlFor="banner_photo"
                           accept="image/*"
-                          handleChangeFile={(e) => handleFileChange(e, setFieldValue, 'banner_photo', 'preview_feature_photo')}
+                          handleChangeFile={(e) => handleFileChange(e, setFieldValue, 'banner_photo', 'banner_photo')}
                           label="Banner Photo"
                         />
                       </Grid>
-                      <Grid item>
-                        {values?.preview_feature_photo?.map((image, index) => (
+                      {/* <Grid item>
+                        {values?.banner_photo?.map((image, index) => (
                           <>
                             <PreviewImageCard
                               data={image}
                               index={index}
                               key={index}
-                              handleRemove={() => handleFileRemove(setFieldValue, 'banner_photo', 'preview_feature_photo')}
+                              handleRemove={() => handleFileRemove(setFieldValue, 'banner_photo', 'banner_photo')}
                             />
                           </>
                         ))}
@@ -183,7 +177,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                             style={{ width: 150, height: 150, objectFit: 'contain' }}
                           />
                         )}
-                      </Grid>
+                      </Grid> */}
                     </Grid>
                   </Grid>
                 </DialogContent>
