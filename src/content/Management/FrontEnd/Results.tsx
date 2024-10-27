@@ -13,9 +13,9 @@ import { handleFileChange, handleFileRemove } from 'utilities_api/handleFileUplo
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 const Results = ({ data, reFetchData }) => {
+  console.log('data..........', { data });
   const { t }: { t: any } = useTranslation();
   // const [notice, setNotice] = useState([{ title: '', headLine: '', body: undefined, link: undefined }]);
-
   // const [header_image, setHeader_image] = useState(null)
   // const [carousel_image, setCarousel_image] = useState(null)
   // const [gallery, setGallery] = useState(null)
@@ -67,6 +67,8 @@ const Results = ({ data, reFetchData }) => {
 
         english_chairman_name: data?.english_chairman_name || '',
         bangla_chairman_name: data?.bangla_chairman_name || '',
+        english_chairman_role_name: data?.english_chairman_role_name || '',
+        bangla_chairman_role_name: data?.bangla_chairman_role_name || '',
         chairman_photo: data?.chairman_photo || undefined,
         preview_chairman_photo: [],
         english_chairman_speech: data?.english_chairman_speech || '',
@@ -74,6 +76,8 @@ const Results = ({ data, reFetchData }) => {
 
         english_principal_name: data?.english_principal_name || '',
         bangla_principal_name: data?.bangla_principal_name || '',
+        english_principal_role_name: data?.english_principal_role_name || '',
+        bangla_principal_role_name: data?.bangla_principal_role_name || '',
         principal_photo: data?.principal_photo || '',
         preview_principal_photo: [],
         english_principal_speech: data?.english_principal_speech || '',
@@ -81,6 +85,8 @@ const Results = ({ data, reFetchData }) => {
 
         english_assist_principal_name: data?.english_assist_principal_name || '',
         bangla_assist_principal_name: data?.bangla_assist_principal_name || '',
+        english_assist_principal_role_name: data?.english_assist_principal_name || '',
+        bangla_assist_principal_role_name: data?.bangla_assist_principal_name || '',
         assist_principal_photo: data?.assist_principal_photo || '',
         preview_assist_principal_photo: [],
         english_assist_principal_speech: data?.english_assist_principal_speech || '',
@@ -530,7 +536,7 @@ const Results = ({ data, reFetchData }) => {
 
                   {/* chairman_name  */}
                   <Grid container item xs={12} md={6} pt={1}>
-                    <Grid item>Chairman Role Name (English):</Grid>
+                    <Grid item>Chairman Name (English):</Grid>
                     <TextFieldWrapper
                       touched={touched.english_chairman_name}
                       errors={errors.english_chairman_name}
@@ -544,7 +550,7 @@ const Results = ({ data, reFetchData }) => {
                     />
                   </Grid>
                   <Grid container item xs={12} md={6} pt={1}>
-                    <Grid item>Chairman Role Name (বাংলা):</Grid>
+                    <Grid item>Chairman Name (বাংলা):</Grid>
                     <TextFieldWrapper
                       touched={touched.bangla_chairman_name}
                       errors={errors.bangla_chairman_name}
@@ -554,6 +560,34 @@ const Results = ({ data, reFetchData }) => {
                       handleBlur={handleBlur}
                       handleChange={handleChange}
                       value={values.bangla_chairman_name}
+                      autocomplete="false"
+                    />
+                  </Grid>
+                  <Grid container item xs={12} md={6} pt={1}>
+                    <Grid item>Chairman Role Name (English):</Grid>
+                    <TextFieldWrapper
+                      touched={touched.english_chairman_role_name}
+                      errors={errors.english_chairman_role_name}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="english_chairman_role_name"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.english_chairman_role_name}
+                      autocomplete="false"
+                    />
+                  </Grid>
+                  <Grid container item xs={12} md={6} pt={1}>
+                    <Grid item>Chairman Role Name (বাংলা):</Grid>
+                    <TextFieldWrapper
+                      touched={touched.bangla_chairman_role_name}
+                      errors={errors.bangla_chairman_role_name}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="bangla_chairman_role_name"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.bangla_chairman_role_name}
                       autocomplete="false"
                     />
                   </Grid>
@@ -588,7 +622,7 @@ const Results = ({ data, reFetchData }) => {
 
                   {/* principal_name  */}
                   <Grid container item xs={12} md={6}>
-                    <Grid item>Principal Role Name (English):</Grid>
+                    <Grid item>Principal Name (English):</Grid>
                     <TextFieldWrapper
                       touched={touched.english_principal_name}
                       errors={errors.english_principal_name}
@@ -602,7 +636,7 @@ const Results = ({ data, reFetchData }) => {
                     />
                   </Grid>
                   <Grid container item xs={12} md={6}>
-                    <Grid item>Principal Role Name (বাংলা):</Grid>
+                    <Grid item>Principal Name (বাংলা):</Grid>
                     <TextFieldWrapper
                       touched={touched.bangla_principal_name}
                       errors={errors.bangla_principal_name}
@@ -612,6 +646,34 @@ const Results = ({ data, reFetchData }) => {
                       handleBlur={handleBlur}
                       handleChange={handleChange}
                       value={values.bangla_principal_name}
+                      autocomplete="false"
+                    />
+                  </Grid>
+                  <Grid container item xs={12} md={6}>
+                    <Grid item>Principal Role Name (English):</Grid>
+                    <TextFieldWrapper
+                      touched={touched.english_principal_role_name}
+                      errors={errors.english_principal_role_name}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="english_principal_role_name"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.english_principal_role_name}
+                      autocomplete="false"
+                    />
+                  </Grid>
+                  <Grid container item xs={12} md={6}>
+                    <Grid item>Principal Role Name (বাংলা):</Grid>
+                    <TextFieldWrapper
+                      touched={touched.bangla_principal_role_name}
+                      errors={errors.bangla_principal_role_name}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="bangla_principal_role_name"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.bangla_principal_role_name}
                       autocomplete="false"
                     />
                   </Grid>
@@ -646,7 +708,7 @@ const Results = ({ data, reFetchData }) => {
 
                   {/* assist_principal_name  */}
                   <Grid container item xs={12} md={6}>
-                    <Grid item>Assistant Principal Role Name (English):</Grid>
+                    <Grid item>Assistant Principal Name (English):</Grid>
                     <TextFieldWrapper
                       touched={touched.english_assist_principal_name}
                       errors={errors.english_assist_principal_name}
@@ -660,7 +722,7 @@ const Results = ({ data, reFetchData }) => {
                     />
                   </Grid>
                   <Grid container item xs={12} md={6}>
-                    <Grid item>Assistant Principal Role Name (বাংলা):</Grid>
+                    <Grid item>Assistant Principal Name (বাংলা):</Grid>
                     <TextFieldWrapper
                       touched={touched.bangla_assist_principal_name}
                       errors={errors.bangla_assist_principal_name}
@@ -670,6 +732,34 @@ const Results = ({ data, reFetchData }) => {
                       handleBlur={handleBlur}
                       handleChange={handleChange}
                       value={values.bangla_assist_principal_name}
+                      autocomplete="false"
+                    />
+                  </Grid>
+                  <Grid container item xs={12} md={6}>
+                    <Grid item>Assistant Principal Role Name (English):</Grid>
+                    <TextFieldWrapper
+                      touched={touched.english_assist_principal_role_name}
+                      errors={errors.english_assist_principal_role_name}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="english_assist_principal_role_name"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.english_assist_principal_role_name}
+                      autocomplete="false"
+                    />
+                  </Grid>
+                  <Grid container item xs={12} md={6}>
+                    <Grid item>Assistant Principal Role Name (বাংলা):</Grid>
+                    <TextFieldWrapper
+                      touched={touched.bangla_assist_principal_role_name}
+                      errors={errors.bangla_assist_principal_role_name}
+                      // label={t('Eiin number')}
+                      label={t('')}
+                      name="bangla_assist_principal_role_name"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.bangla_assist_principal_role_name}
                       autocomplete="false"
                     />
                   </Grid>

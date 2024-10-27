@@ -334,6 +334,15 @@ async function put(req, res, refresh_token) {
         if (fields?.english_assist_principal_name) query['english_assist_principal_name'] = fields.english_assist_principal_name
         if (fields?.bangla_assist_principal_name) query['bangla_assist_principal_name'] = fields.bangla_assist_principal_name
 
+        if (fields?.english_chairman_role_name) query['english_chairman_role_name'] = fields.english_chairman_role_name
+        if (fields?.bangla_chairman_role_name) query['bangla_chairman_role_name'] = fields.bangla_chairman_role_name
+
+        if (fields?.english_principal_role_name) query['english_principal_role_name'] = fields.english_principal_role_name
+        if (fields?.bangla_principal_role_name) query['bangla_principal_role_name'] = fields.bangla_principal_role_name
+
+        if (fields?.english_assist_principal_role_name) query['english_assist_principal_role_name'] = fields.english_assist_principal_role_name
+        if (fields?.bangla_assist_principal_role_name) query['bangla_assist_principal_role_name'] = fields.bangla_assist_principal_role_name
+
         if (fields?.english_chairman_speech) query['english_chairman_speech'] = fields.english_chairman_speech
         if (fields?.bangla_chairman_speech) query['bangla_chairman_speech'] = fields.bangla_chairman_speech
 
@@ -365,18 +374,24 @@ async function put(req, res, refresh_token) {
 
                 english_chairman_name: query?.english_chairman_name || undefined,
                 bangla_chairman_name: query?.bangla_chairman_name || undefined,
+                english_chairman_role_name: query?.english_chairman_role_name || undefined,
+                bangla_chairman_role_name: query?.bangla_chairman_role_name || undefined,
                 chairman_photo: query?.chairman_photo || undefined,
                 english_chairman_speech: query?.english_chairman_speech || undefined,
                 bangla_chairman_speech: query?.bangla_chairman_speech || undefined,
 
                 english_principal_name: query?.english_principal_name || undefined,
                 bangla_principal_name: query?.bangla_principal_name || undefined,
+                english_principal_role_name: query?.english_principal_role_name || undefined,
+                bangla_principal_role_name: query?.bangla_principal_role_name || undefined,
                 principal_photo: query?.principal_photo || undefined,
                 english_principal_speech: query?.english_principal_speech || undefined,
                 bangla_principal_speech: query?.bangla_principal_speech || undefined,
 
                 english_assist_principal_name: query?.english_assist_principal_name || undefined,
                 bangla_assist_principal_name: query?.bangla_assist_principal_name || undefined,
+                english_assist_principal_role_name: query?.english_assist_principal_role_name || undefined,
+                bangla_assist_principal_role_name: query?.bangla_assist_principal_role_name || undefined,
                 assist_principal_photo: query?.assist_principal_photo || undefined,
                 english_assist_principal_speech: query?.english_assist_principal_speech || undefined,
                 bangla_assist_principal_speech: query?.bangla_assist_principal_speech || undefined,
