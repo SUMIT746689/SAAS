@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { Grid, DialogContent, TextField, Button } from '@mui/material';
+import { Grid, DialogContent, TextField, Button, CircularProgress, DialogActions } from '@mui/material';
 import axios from 'axios';
 import useNotistick from '@/hooks/useNotistick';
 import { DialogActionWrapper, DialogTitleWrapper } from '@/components/DialogWrapper';
@@ -23,6 +23,7 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
   const { showNotification } = useNotistick();
   const [pdfDatas, setPdfDatas] = useState({});
   const componentRef = useRef(null);
+  const [batches, setBatches] = useState([]);
 
   useEffect(() => {
     if (editData) setOpen(true);
@@ -74,7 +75,8 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
 
   return (
     <>
-      <Grid paddingLeft={32} paddingRight={32} > <DialogTitleWrapper name={'Scholarship'} editData={editData} /></Grid>
+      <Grid sx={{ pt: 4 }}>  </Grid>
+      {/* <Grid paddingLeft={32} paddingRight={32} > <DialogTitleWrapper name={'Scholarship'} editData={editData} /></Grid> */}
       <Formik
         initialValues={{
           // first_name: editData?.first_name ? editData.first_name : " ",
@@ -82,6 +84,7 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
           middle_name: '',
           last_name: '',
           classes: undefined,
+          batch: undefined,
           // date_of_birth: editData?.date_of_birth || new Date(Date.now()),
           date_of_birth: null,
           phone: '',
@@ -154,8 +157,8 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
                     <Grid >
                       <AutoCompleteWrapper
                         minWidth="100%"
-                        label="Select Classes"
-                        placeholder="classes..."
+                        label="Select Class"
+                        placeholder="class..."
                         // multiple
                         value={values.classes}
                         options={classes}
@@ -163,12 +166,35 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
                         error={errors?.classes}
                         touched={touched?.classes}
                         handleChange={(e, value) => {
+                          console.log({ section: value?.section });
                           setFieldValue("classes", value);
+                          setBatches(value?.sections || [])
                           // setFieldValue("class_ids", value.id);
                         }}
                       />
                       {
                         touched.classes && errors?.classes
+                      }
+                    </Grid>
+
+                    {/* batches */}
+                    <Grid >
+                      <AutoCompleteWrapper
+                        minWidth="100%"
+                        label="Select Batch"
+                        placeholder="batch..."
+                        // multiple
+                        value={values.batch}
+                        options={batches}
+                        name="batch"
+                        error={errors?.batch}
+                        touched={touched?.batch}
+                        handleChange={(e, value) => {
+                          setFieldValue("batch", value);
+                        }}
+                      />
+                      {
+                        touched.batch && errors?.batch
                       }
                     </Grid>
 
@@ -301,13 +327,27 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
 
               {/* handle cancel dilog / close / submit dialog click cancel or add button */}
               <Grid paddingLeft={32} paddingRight={32}>
-                <DialogActionWrapper
+                {/* <DialogActionWrapper
                   title="Scholarship"
                   handleCreateClassClose={handleCreateClassClose}
                   errors={errors}
                   editData={editData}
                   isSubmitting={isSubmitting}
-                />
+                /> */}
+                <DialogActions sx={{ p: 3 }}>
+                  <Button color="secondary" onClick={handleCreateClassClose}>
+                    {'Cancel'}
+                  </Button>
+                  <Button
+                    type="submit"
+                    startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
+                    //@ts-ignore
+                    disabled={Boolean(errors.submit) || isSubmitting}
+                    variant="contained"
+                  >
+                    Submit
+                  </Button>
+                </DialogActions>
               </Grid>
 
             </form>
@@ -320,7 +360,7 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
       {Object?.keys(pdfDatas).length > 0 && (
         <Grid display="grid" sx={{ width: '100%', pb: 8 }}>
           <Button variant="outlined" onClick={handlePrint} sx={{ mx: 'auto' }}>
-            Download Submission Form
+            Download Form
           </Button>
         </Grid>
       )}

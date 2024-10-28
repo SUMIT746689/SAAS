@@ -22,19 +22,19 @@ export default async function Scholar() {
         select: {
             name: true,
             address: true,
-            websiteui: { select: { header_image: true,  scholarshipClasses:true} }
+            websiteui: { select: { header_image: true, scholarshipClasses: { include: { sections: true } } } }
         }
     })
-    
+
     // const serverHost = JSON.stringify(process.env.SERVER_HOST);
-    
+
     return (
         <div>
 
             <ScholarshipMain
                 classes=
                 {
-                    resSchool?.websiteui[0]?.scholarshipClasses?.map((cls) => ({id: cls?.id,label: cls?.name})) || []
+                    resSchool?.websiteui[0]?.scholarshipClasses?.map((cls) => ({ id: cls?.id, label: cls?.name, sections: cls.sections })) || []
                 }
                 academicYears={academicYear || []}
                 serverHost={`${process.env.SERVER_HOST}` || ''}

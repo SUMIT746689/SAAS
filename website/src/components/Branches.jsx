@@ -44,7 +44,7 @@ function Branches({ branches, serverHost }) {
               )}
               
             </div>
-            <Link href={`http://${branch?.domain || '#'}`} className='flex flex-row'>
+            <Link href={ branch?.domain ? `http://${branch?.domain}` : '#'} className='flex flex-row'>
               <p className="text-red-500 mr-1 my-auto font-bold">
                 <FaExternalLinkAlt />
               </p>
