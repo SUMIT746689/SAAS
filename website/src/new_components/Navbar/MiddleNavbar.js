@@ -45,7 +45,7 @@ export default function MiddleNavbar({ datas }) {
             href={`/scholarship`}
             className="ml-40 rounded bg-[#FFFEF3] text-[#192F59] flex items-center gap-1 font-bold"
           >
-            <button className="bg-orange-800 hover:bg-orange-700 active:bg-orange-900 duration-150 text-[#FFFFFF] rounded capitalize px-2 py-1">
+            <button className="bg- hover:bg-orange-700 active:bg-orange-900 duration-150 text-[#FFFFFF] rounded capitalize px-2 py-1">
               {handleTextChangeLangWise(language, english_scholarship_name, bangla_scholarship_name)}
             </button>
           </Link>

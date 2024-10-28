@@ -3,25 +3,7 @@ import Link from "next/link";
 import { IoChevronForwardOutline } from "react-icons/io5";
 import React, { useContext, useState } from 'react';
 import { LanguageContext } from "@/app/context/language";
-
-// const menuItems = [
-//   { id: 1, name: 'Home', parentId: null },
-//   { id: 2, name: 'About', parentId: null },
-//   { id: 3, name: 'Team', parentId: 2 },
-//   { id: 4, name: 'History', parentId: 2 },
-//   { id: 5, name: 'Services', parentId: null },
-//   { id: 6, name: 'Web Development', parentId: 5 },
-//   { id: 7, name: 'App Development', parentId: 5 },
-//   { id: 8, name: 'Contact', parentId: null },
-//   { id: 9, name: 'Frontend', parentId: 6 },
-//   { id: 10, name: 'Backend', parentId: 6 },
-//   { id: 11, name: 'React', parentId: 9 },
-//   { id: 12, name: 'Angular', parentId: 9 },
-//   { id: 13, name: 'Node.js', parentId: 10 },
-//   { id: 14, name: 'Express', parentId: 10 },
-//   { id: 15, name: 'React Native', parentId: 7 },
-//   { id: 16, name: 'Tailwind Css', parentId: 11 },
-// ];
+import { handleTextChangeLangWise } from "@/utils/handleLanguage";
 
 const LinkBtn = ({ website_link, children }) => <Link href={website_link ? website_link : '#'} className="text-black bg-white hover:text-white py-2 px-3 w-full font-medium whitespace-nowrap grid hover:bg-[#3DB166] text-xs border-b">{children}</Link>
 
@@ -42,6 +24,7 @@ const ShowChildNav = ({ title, children }) => {
 }
 
 const Menus = ({ navBar }) => {
+  console.log({navBar})
 
   const [isChildMenuOpen, setIsChildMenuOpen] = useState(false);
 
@@ -49,7 +32,7 @@ const Menus = ({ navBar }) => {
     <Link href={navBar.website_link ? navBar.website_link : '#'} className="text-white px-3 py-3 font-medium hover:bg-[#3DB166] text-sm">{navBar.title}</Link>
     :
     <div className="relative group">
-      <button
+      <button 
         className={`${isChildMenuOpen ? 'bg-[#3DB166] text-white' : ' bg-transparent '} hover:bg-[#3DB166] w-full px-3 py-3 text-sm font-medium flex items-center gap-1`}
         onClick={() => setIsChildMenuOpen(v => !v)}
       >
@@ -105,16 +88,16 @@ export default function BottomNavbar({ menus: menuItems }) {
   function buildNestedNavbar(menuItems) {
     const menuMap = {};
     const nestedMenu = [];
+    // console.log({menuItems})
 
     // First, map all menu items by their id
     menuItems.forEach(item => {
       let website_link = '';
       if (item.link_type === 'page link' || item.link_type === 'external link') website_link = item.website_link;
       else if(item.link_type === "dynamic page link") website_link = `/dynamic-pages/${item.websiteDynamicPage.id}`;
-      // item.link_type !== "dynamic page link" ? item.link_type : `${item.websiteDynamicPage?.id ? `/dynamic-pages/${item.websiteDynamicPage.id}` : '#'}`
       menuMap[item.id] = { ...item, website_link, title: item[`${language}_title`], children: [] };
     });
-    console.log(menuMap)
+    // console.log(menuMap)
 
     // Then, construct the nested structure
     menuItems.forEach(item => {
@@ -131,12 +114,14 @@ export default function BottomNavbar({ menus: menuItems }) {
   }
 
   const nestedNavbar = buildNestedNavbar(menuItems);
-  console.log(JSON.stringify(nestedNavbar, null, 2));
-
+  // console.log(JSON.stringify(nestedNavbar, null, 2));
   return (
     <>
       <div className="bg-gradient-to-r from-[#4D609B] to-[#8FD4F6] text-white">
         <ul className="flex flex-row duration-300 gap-[2px] ">
+        <div className="grid space-x-4">
+          <Menus  navBar={{title:handleTextChangeLangWise(language, 'Home', 'হোম'),website_link:"/",children:[] }}  />
+        </div>
           {
             nestedNavbar.map((navBar) => {
               return (
