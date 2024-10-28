@@ -15,8 +15,25 @@ export default async function Home() {
       school: {
         domain: domain
       }
-    }
+    },
+    select:{
+      english_chairman_name:true,
+      bangla_chairman_name:true,
+      english_chairman_role_name:true,
+      bangla_chairman_role_name:true,
+      english_principal_name:true,
+      bangla_principal_name:true,
+      english_principal_role_name:true,
+      bangla_principal_role_name:true,
+      english_assist_principal_name:true,
+      bangla_assist_principal_name:true,
+      english_assist_principal_name:true,
+      bangla_assist_principal_name:true,
+      english_assist_principal_role_name:true,
+      bangla_assist_principal_role_name:true,
+     }
   });
+  console.log("school_info",{school_info})
   const notices = await prisma.notice.findMany({
     where: {
       school: {
@@ -34,18 +51,12 @@ export default async function Home() {
       created_at: 'desc'
     }
   });
+  
 
   const speechDatas = [
-    // {
-    //   title: 'প্রতিষ্ঠানের ইতিহাস',
-    //   title: 'প্রতিষ্ঠানের ইতিহাস',
-    //   image: `${process.env.SERVER_HOST
-    //     }/api/get_file/${school_info?.history_photo?.replace(/\\/g, '/')}`,
-    //   description: school_info?.school_history
-    // },
     {
-      english_title: 'Message of Chairman',
-      bangla_title: 'সভাপতির বাণী',
+      english_title: school_info.english_chairman_role_name,
+      bangla_title: school_info.bangla_chairman_role_name,
       english_name: school_info?.english_chairman_name,
       bangla_name: school_info?.bangla_chairman_name,
       image: school_info?.chairman_photo ?
@@ -58,8 +69,8 @@ export default async function Home() {
 
     },
     {
-      english_title: 'Message of Principal',
-      bangla_title: 'অধ্যক্ষের বাণী',
+      english_title: school_info.english_principal_role_name,
+      bangla_title:school_info.bangla_principal_role_name,
       english_name: school_info?.english_principal_name,
       bangla_name: school_info?.bangla_principal_name,
       image: school_info?.principal_photo ?
@@ -72,8 +83,8 @@ export default async function Home() {
 
     },
     {
-      english_title: 'Message of Ass. Principal',
-      bangla_title: 'উপ-অধ্যক্ষের বাণী',
+      english_title: school_info?.english_assist_principal_role_name,
+      bangla_title: school_info.bangla_assist_principal_role_name,
       english_name: school_info?.english_assist_principal_name,
       bangla_name: school_info?.bangla_assist_principal_name,
       image: school_info?.assist_principal_photo ?

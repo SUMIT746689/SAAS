@@ -11,7 +11,8 @@ export default function Message({ speechData }) {
 
   return (
     <div className="flex flex-col pb-8 mb-auto">
-      <div><h1 className="my-8 text-center text-2xl	font-bold	">{speechData[`${language}_title`]}</h1>
+      <div>
+        <h1 className="my-8 text-center text-2xl	font-bold	">{speechData[`${language}_title`]}</h1>
         <div className=" flex justify-center">
           <div className="relative  flex justify-center">
             <Image src={speechData?.image} alt="image" width={210.26} height={193.87} className=" z-10 w-[210.26px] h-[193.87px] bg-white object-center " />
