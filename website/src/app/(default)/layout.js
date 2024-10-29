@@ -46,8 +46,6 @@ export default async function RootLayout({ children }) {
         is_scholarship_active: true,
       }
     })
-    console.log({ school_info })
-    // console.log({ domain })
 
     const navarDatas = {
       english_scholarship_name: school_info?.english_scholarship_name,
@@ -71,8 +69,6 @@ export default async function RootLayout({ children }) {
         }
       }
     });
-
-    // console.log({resMenus})
 
     return (
       school_info ?

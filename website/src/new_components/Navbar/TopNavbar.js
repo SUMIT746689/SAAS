@@ -10,7 +10,7 @@ export default function TopNavbar({ serverHost }) {
     day: ''
   });
   const { language, handleChangeLang } = useContext(LanguageContext);
-  // console.log({ language })
+
   const updateDateTime = () => {
     const now = new Date();
 

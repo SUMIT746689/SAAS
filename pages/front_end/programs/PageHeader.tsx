@@ -7,14 +7,14 @@ import axios from 'axios';
 import useNotistick from '@/hooks/useNotistick';
 import { DialogActionWrapper, DialogTitleWrapper } from '@/components/DialogWrapper';
 import { PageHeaderTitleWrapper } from '@/components/PageHeaderTitle';
-import { FileUploadFieldWrapper, NewFileUploadFieldWrapper, PreviewImageCard, TextAreaWrapper, TextFieldWrapper } from '@/components/TextFields';
-import { DropDownSelectWrapper, DynamicDropDownSelectWrapper } from '@/components/DropDown';
+import { NewFileUploadFieldWrapper, PreviewImageCard, TextFieldWrapper } from '@/components/TextFields';
 import { RichTextEditorWrapper } from '@/components/RichTextEditorWrapper';
 import Image from 'next/image';
 import { fetchData } from '@/utils/post';
 import { ButtonWrapper } from '@/components/ButtonWrapper';
 import { getFile } from '@/utils/utilitY-functions';
 import { handleFileChange, handleFileRemove } from 'utilities_api/handleFileUpload';
+
 function PageHeader({ editData, setEditData, reFetchData }) {
   const { t }: { t: any } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -42,11 +42,9 @@ function PageHeader({ editData, setEditData, reFetchData }) {
         reFetchData();
         handleCreateClassClose();
       };
-      console.log('_values__', _values);
 
       const formData = new FormData();
       for (const [key, value] of Object.entries(_values)) {
-        // console.log(`${key}: ${value}`);
         if (key === 'banner_photo') {
           formData.append(key, value[0]);
           continue;
@@ -57,13 +55,11 @@ function PageHeader({ editData, setEditData, reFetchData }) {
 
       if (editData) {
         const res = await axios.patch(`/api/front_end/programs/${editData.id}`, formData);
-        console.log({ res });
         successResponse(' updated ');
         return;
       }
 
       const res = await axios.post(`/api/front_end/programs`, formData);
-      // console.log({ res });
       successResponse('created');
     } catch (err) {
       console.error(err);
@@ -79,7 +75,6 @@ function PageHeader({ editData, setEditData, reFetchData }) {
       .get('/api/front_end/programs')
       .then((res) => {
         setProgramsInfo(res.data);
-        console.log('ttttttttttttttttttttttt', res.data);
       })
       .catch((error) => {});
   };
@@ -99,7 +94,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
 
       <Dialog fullWidth maxWidth="md" open={open} onClose={handleCreateClassClose}>
         {/* dialog title */}
-        <DialogTitleWrapper name={'website Page'} editData={editData} />
+        <DialogTitleWrapper name={'Program Page'} editData={editData} />
 
         <Formik
           initialValues={{
@@ -115,7 +110,6 @@ function PageHeader({ editData, setEditData, reFetchData }) {
           onSubmit={handleFormSubmit}
         >
           {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
-            console.log({ values, errors });
             return (
               <form onSubmit={handleSubmit}>
                 <DialogContent dividers sx={{ p: 3 }}>
@@ -150,18 +144,18 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                         <NewFileUploadFieldWrapper
                           htmlFor="banner_photo"
                           accept="image/*"
-                          handleChangeFile={(e) => handleFileChange(e, setFieldValue, 'banner_photo', 'banner_photo')}
+                          handleChangeFile={(e) => handleFileChange(e, setFieldValue, 'banner_photo', 'preview_banner_photo')}
                           label="Banner Photo"
                         />
                       </Grid>
-                      {/* <Grid item>
-                        {values?.banner_photo?.map((image, index) => (
+                      <Grid item>
+                        {values?.preview_banner_photo?.map((image, index) => (
                           <>
                             <PreviewImageCard
                               data={image}
                               index={index}
                               key={index}
-                              handleRemove={() => handleFileRemove(setFieldValue, 'banner_photo', 'banner_photo')}
+                              handleRemove={() => handleFileRemove(setFieldValue, 'banner_photo', 'preview_banner_photo')}
                             />
                           </>
                         ))}
@@ -177,7 +171,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                             style={{ width: 150, height: 150, objectFit: 'contain' }}
                           />
                         )}
-                      </Grid> */}
+                      </Grid>
                     </Grid>
                   </Grid>
                 </DialogContent>

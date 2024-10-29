@@ -7,6 +7,7 @@ import About from '@/new_components/About/About';
 import Gallery from '@/new_components/Gallery/Gallery';
 import VideoGallary from '@/new_components/VideoGallary/VideoGallary';
 import ImportantLink from '@/new_components/ImportantLink/ImportantLink'
+
 export default async function Home() {
   const headersList = headers();
   const domain = headersList.get('host');
@@ -16,24 +17,33 @@ export default async function Home() {
         domain: domain
       }
     },
-    select:{
-      english_chairman_name:true,
-      bangla_chairman_name:true,
-      english_chairman_role_name:true,
-      bangla_chairman_role_name:true,
-      english_principal_name:true,
-      bangla_principal_name:true,
-      english_principal_role_name:true,
-      bangla_principal_role_name:true,
-      english_assist_principal_name:true,
-      bangla_assist_principal_name:true,
-      english_assist_principal_name:true,
-      bangla_assist_principal_name:true,
-      english_assist_principal_role_name:true,
-      bangla_assist_principal_role_name:true,
-     }
+    // select: {
+    //   english_chairman_name: true,
+    //   bangla_chairman_name: true,
+    //   english_chairman_role_name: true,
+    //   bangla_chairman_role_name: true,
+    //   english_principal_name: true,
+    //   bangla_principal_name: true,
+    //   english_principal_role_name: true,
+    //   bangla_principal_role_name: true,
+    //   english_assist_principal_name: true,
+    //   bangla_assist_principal_name: true,
+    //   english_assist_principal_name: true,
+    //   bangla_assist_principal_name: true,
+    //   english_assist_principal_role_name: true,
+    //   bangla_assist_principal_role_name: true,
+    //   chairman_photo: true,
+    //   principal_photo: true,
+    //   assist_principal_photo: true,
+    //   english_chairman_speech: true,
+    //   bangla_chairman_speech: true,
+    //   english_principal_speech: true,
+    //   bangla_principal_speech: true,
+    //   english_assist_principal_speech: true,
+    //   bangla_assist_principal_speech: true
+    // }
   });
-  console.log("school_info",{school_info})
+
   const notices = await prisma.notice.findMany({
     where: {
       school: {
@@ -51,7 +61,7 @@ export default async function Home() {
       created_at: 'desc'
     }
   });
-  
+
 
   const speechDatas = [
     {
@@ -70,7 +80,7 @@ export default async function Home() {
     },
     {
       english_title: school_info.english_principal_role_name,
-      bangla_title:school_info.bangla_principal_role_name,
+      bangla_title: school_info.bangla_principal_role_name,
       english_name: school_info?.english_principal_name,
       bangla_name: school_info?.bangla_principal_name,
       image: school_info?.principal_photo ?
@@ -130,7 +140,7 @@ export default async function Home() {
       <MessageLists speechDatas={speechDatas} />
       <About aboutSchool={aboutSchool} />
       <Gallery images={gallaryImages} />
-      <VideoGallary video_gallary={school_info?.video_gallery || []}/>
+      <VideoGallary video_gallary={school_info?.video_gallery || []} />
       <ImportantLink school_info={school_info} />
       {/* <ImageSlider carousel_image={gallaryImages} /> */}
       {/* <div>
