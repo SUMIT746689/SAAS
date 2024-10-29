@@ -72,7 +72,7 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current
   });
-
+console.log({classes})
   return (
     <>
       <Grid sx={{ pt: 4 }}>  </Grid>
@@ -83,8 +83,8 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
           first_name: '',
           middle_name: '',
           last_name: '',
-          classes: undefined,
-          batch: undefined,
+          classes: " ",
+          batch: "",
           // date_of_birth: editData?.date_of_birth || new Date(Date.now()),
           date_of_birth: null,
           phone: '',
@@ -99,9 +99,9 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
             .max(255)
             .required(t('The first name field is required')),
 
-          classes: Yup.mixed()
-            // .max(255)
-            .required(t('The classes field is required')),
+          // classes: Yup.mixed()
+          //   // .max(255)
+          //   .required(t('The classes field is required')),
 
           date_of_birth: Yup.string()
             .max(255)
@@ -124,6 +124,12 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
                 }}
               >
                 <Grid container gap={1} paddingLeft={32} paddingRight={32}>
+                  <Grid>
+                    <div className='text-red-800 font-bold text-xl'>
+                    Roles and Regulations : 
+                    </div>
+                    <p  className='text-orange-700 font-semibold text-sm mb-4 p-2'>Rules are specific guidelines or instructions created by an organization or authority to regulate behavior and activities. Regulations are official rules and directives established by the government or regulatory body, typically with legal binding, to govern specific sectors or industries. Origin.</p>
+                  </Grid>
                   <Grid container display="grid" sx={{ gridTemplateColumns: { sm: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 1 }} >
                     <TextFieldWrapper
                       label="First Name"
@@ -166,7 +172,7 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
                         error={errors?.classes}
                         touched={touched?.classes}
                         handleChange={(e, value) => {
-                          console.log({ section: value?.section });
+                          console.log({ section: value?.sections });
                           setFieldValue("classes", value);
                           setBatches(value?.sections || [])
                           // setFieldValue("class_ids", value.id);
@@ -178,24 +184,23 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
                     </Grid>
 
                     {/* batches */}
-                    <Grid >
+                    <Grid>
                       <AutoCompleteWrapper
                         minWidth="100%"
                         label="Select Batch"
                         placeholder="batch..."
-                        // multiple
                         value={values.batch}
                         options={batches}
                         name="batch"
                         error={errors?.batch}
                         touched={touched?.batch}
+                        getOptionLabel={(option) => option?.name || ""}  
+                        isOptionEqualToValue={(option, value) => option.id === value.id}  
                         handleChange={(e, value) => {
                           setFieldValue("batch", value);
                         }}
                       />
-                      {
-                        touched.batch && errors?.batch
-                      }
+                      {touched?.batch && errors?.batch}
                     </Grid>
 
                     {/* date_of_birth */}
