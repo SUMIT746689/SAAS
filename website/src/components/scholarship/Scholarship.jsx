@@ -14,23 +14,17 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import dayjs from 'dayjs';
 import PdfDatas from '../scholarship/PdfDatas';
 import { handleFileChange, handleFileRemove } from '@/utils/handleFileUpload';
-import { useClientFetch } from '@/hooks/useClientFetch';
+import { useClientDataFetch, useClientFetch } from '@/hooks/useClientFetch';
 import { useReactToPrint } from 'react-to-print';
-
-
 function Scholarship({ classes, editData, setEditData, serverHost, school }) {
+  console.log("school.......",{school})
+  const [scholarshipData, setScholarshipData] = useState("")
   const { t } = useTranslation()
   const [open, setOpen] = useState(false);
   const { showNotification } = useNotistick();
   const [pdfDatas, setPdfDatas] = useState({});
   const componentRef = useRef(null);
   const [batches, setBatches] = useState([]);
-
-  
-
-
- 
-
   useEffect(() => {
     if (editData) setOpen(true);
   }, [editData]);
@@ -78,7 +72,7 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current
   });
-console.log("...........classes..........",{classes})
+// console.log("...........classes..........",{classes})
   return (
     <>
       <Grid sx={{ pt: 4 }}>  </Grid>
@@ -98,6 +92,7 @@ console.log("...........classes..........",{classes})
           father_phn_no: '',
           mother_name: '',
           mother_phn_no: '',
+          // form_fill_up_rules_and_regulation: school?.form_fill_up_rules_and_regulation || " "
 
         }}
         validationSchema={Yup.object().shape({
@@ -134,9 +129,11 @@ console.log("...........classes..........",{classes})
                     <div className='text-red-800 font-bold text-xl'>
                     Roles and Regulations : 
                     </div>
-                    <p  className='text-orange-700 font-semibold text-sm mb-4 p-2'>Rules are specific guidelines or instructions created by an organization or authority to regulate behavior and activities. Regulations are official rules and directives established by the government or regulatory body, typically with legal binding, to govern specific sectors or industries. Origin.</p>
+                    {/* <div  className='px-4 pb-4 text-sm' dangerouslySetInnerHTML={{ __html: program.body }} /> </div>   */}
+                    <div className='text-orange-700 font-semibold text-sm mb-4 p-2' dangerouslySetInnerHTML={{ __html: school.websiteui[0].form_fill_up_rules_and_regulation }} />
                   </Grid>
                   <Grid container display="grid" sx={{ gridTemplateColumns: { sm: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 1 }} >
+                   
                     <TextFieldWrapper
                       label="First Name"
                       name="first_name"

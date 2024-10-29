@@ -22,8 +22,13 @@ export default async function Scholar() {
         select: {
             name: true,
             address: true,
-            websiteui: { select: { header_image: true, scholarshipClasses: { include: { sections: true } } } }
+            websiteui: { select:  {  
+                form_fill_up_rules_and_regulation:true, 
+                admit_card_rules_and_regulation:true,
+                header_image: true, 
+                scholarshipClasses: { include: { sections: true } } } }
         }
+
     })
 
     // const serverHost = JSON.stringify(process.env.SERVER_HOST);

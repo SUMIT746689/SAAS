@@ -6,6 +6,7 @@ import Image from 'next/image';
 
 function PdfDatas({ school, values, serverHost }) {
   const { t }: { t: any } = useTranslation();
+  console.log('..........school................', { school });
 
   return (
     <>
@@ -276,21 +277,11 @@ function PdfDatas({ school, values, serverHost }) {
         </DialogContent>
 
         <Grid sx={{ display: 'flex', justifyContent: 'space-between', px: 10, pt: 8 }}>
-          {/* <Grid sx={{ borderTop: "1px solid lightgray" }}>Guardian Signature</Grid> */}
-          <Grid item xs={6}>
-            <TextField
-              size="small"
-              sx={{
-                '& fieldset': {
-                  borderRadius: '3px'
-                }
-              }}
-              fullWidth
-              label={t('')}
-              name="mother_phone"
-              type="text"
-              value={values?.student?.mother_phone ?? ''}
-              variant="outlined"
+          <Grid>
+            <div className="text-red-800 font-bold text-xl">Admit Card Rules And Regulation :</div>
+            <div
+              className="text-orange-700  text-sm mb-4 p-2"
+              dangerouslySetInnerHTML={{ __html: school.websiteui[0].admit_card_rules_and_regulation }}
             />
           </Grid>
 
