@@ -124,6 +124,12 @@ console.log({classes})
                 }}
               >
                 <Grid container gap={1} paddingLeft={32} paddingRight={32}>
+                  <Grid>
+                    <div className='text-red-800 font-bold text-xl'>
+                    Roles and Regulations : 
+                    </div>
+                    <p  className='text-orange-700 font-semibold text-sm mb-4 p-2'>Rules are specific guidelines or instructions created by an organization or authority to regulate behavior and activities. Regulations are official rules and directives established by the government or regulatory body, typically with legal binding, to govern specific sectors or industries. Origin.</p>
+                  </Grid>
                   <Grid container display="grid" sx={{ gridTemplateColumns: { sm: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 1 }} >
                     <TextFieldWrapper
                       label="First Name"
@@ -178,25 +184,6 @@ console.log({classes})
                     </Grid>
 
                     {/* batches */}
-                    {/* <Grid >
-                      <AutoCompleteWrapper
-                        minWidth="100%"
-                        label="Select Batch"
-                        placeholder="batch..."
-                        // multiple
-                        value={values.batch}
-                        options={batches}
-                        name="batch"
-                        error={errors?.batch}
-                        touched={touched?.batch}
-                        handleChange={(e, value) => {
-                          setFieldValue("batch", value);
-                        }}
-                      />
-                      {
-                        touched?.batch && errors?.batch
-                      }
-                    </Grid> */}
                     <Grid>
                       <AutoCompleteWrapper
                         minWidth="100%"
