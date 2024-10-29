@@ -6,14 +6,11 @@ import { FaExternalLinkAlt } from "react-icons/fa";
 import Link from 'next/link';
 import { handleTextChangeLangWise } from '@/utils/handleLanguage';
 import { LanguageContext } from '@/app/context/language';
-
 function Branches({ branches, serverHost }) {
-
   const { language } = useContext(LanguageContext);
-
   return (
     <div className=' min-h-screen bg-pink-200' >
-      <div className=' text-3xl font-bold py-8  text-blue-950 text-center'>{ handleTextChangeLangWise(language, 'ShowIng All Branch','Showing All Branch') }</div>
+      {/* <div className=' text-3xl font-bold py-8  text-blue-950 text-center'>{ handleTextChangeLangWise(language, 'Showing All Branch','Showing All Branch') }</div> */}
       {/* <div className=" flex m-8 flex-wrap bg-sky-500 justify-center align-middle"> */}
       <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 object-center justify-center max-w-[900px] mx-auto pb-10  gap-4">
         {branches.map((branch, index) => (
@@ -42,7 +39,6 @@ function Branches({ branches, serverHost }) {
                   <p className='text-sm'>{branch?.optional_phone}</p>
                 </div>
               )}
-              
             </div>
             <Link href={ branch?.domain ? `http://${branch?.domain}` : '#'} className='flex flex-row'>
               <p className="text-red-500 mr-1 my-auto font-bold">
@@ -58,7 +54,6 @@ function Branches({ branches, serverHost }) {
     </div>
   );
 }
-
 export default Branches;
 
 
