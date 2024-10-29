@@ -3,10 +3,10 @@ import prisma from '@/lib/prisma_client';
 import { logFile } from 'utilities_api/handleLogFile';
 
 async function put(req, res, refresh_token) {
-    
+
     try {
-        const {english_scholarship_name, bangla_scholarship_name,classes, is_scholarship_active} = req.body;  
-        const {school_id} = refresh_token;
+        const { english_scholarship_name, bangla_scholarship_name, classes, is_scholarship_active, form_fill_up_rules_and_regulation, admit_card_rules_and_regulation } = req.body;
+        const { school_id } = refresh_token;
 
         if (!english_scholarship_name || !bangla_scholarship_name) return res.status(404).json({ message: 'english scholarship name/bangla scholarship name fields missing !!' });
 
@@ -16,8 +16,8 @@ async function put(req, res, refresh_token) {
             },
             select: {
                 id: true,
-                scholarshipClasses:{
-                    select:{
+                scholarshipClasses: {
+                    select: {
                         id: true
                     }
                 }
@@ -25,45 +25,49 @@ async function put(req, res, refresh_token) {
         });
 
         const scholarshipClasses = {};
-        if(classes && Array.isArray(classes)) {
-            scholarshipClasses["disconnect"] = websiteUirow.scholarshipClasses?.map(cls=>({id:cls.id})) || {}
-            scholarshipClasses["connect"] = classes.map(cls=>{
-                if(typeof cls !== "number") throw new Error('provided invalid class id')
-                return {id:cls}     
+        if (classes && Array.isArray(classes)) {
+            scholarshipClasses["disconnect"] = websiteUirow.scholarshipClasses?.map(cls => ({ id: cls.id })) || {}
+            scholarshipClasses["connect"] = classes.map(cls => {
+                if (typeof cls !== "number") throw new Error('provided invalid class id')
+                return { id: cls }
             });
         };
 
-        
-        if(websiteUirow) {
-            
+
+        if (websiteUirow) {
+
             await prisma.websiteUi.update({
-                where:{
-                    id:websiteUirow.id
+                where: {
+                    id: websiteUirow.id
                 },
-                data:{
+                data: {
                     english_scholarship_name: english_scholarship_name || undefined,
                     bangla_scholarship_name: bangla_scholarship_name || undefined,
                     is_scholarship_active: typeof is_scholarship_active === "boolean" ? is_scholarship_active : undefined,
-                    scholarshipClasses
+                    scholarshipClasses,
+                    form_fill_up_rules_and_regulation,
+                    admit_card_rules_and_regulation
                 }
-            }).then(res=>{console.log({res})})
-       
-        return res.status(200).json({ message: 'updated successfully !' });
+            }).then(res => { console.log({ res }) })
+
+            return res.status(200).json({ message: 'updated successfully !' });
 
         }
 
         await prisma.websiteUi.create({
-            data:{
-                eiin_number:'',
+            data: {
+                eiin_number: '',
                 school_id,
                 english_scholarship_name: english_scholarship_name || undefined,
                 bangla_scholarship_name: bangla_scholarship_name || undefined,
                 is_scholarship_active: typeof is_scholarship_active === "boolean" ? is_scholarship_active : undefined,
-                scholarshipClasses
+                scholarshipClasses,
+                form_fill_up_rules_and_regulation,
+                admit_card_rules_and_regulation
             }
         });
-        return res.status(200).json({message:"created sucessfully"})
-        
+        return res.status(200).json({ message: "created sucessfully" })
+
     } catch (error) {
         console.log("error__", error);
         logFile.error(error.message)

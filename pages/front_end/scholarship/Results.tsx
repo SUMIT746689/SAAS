@@ -3,13 +3,14 @@ import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, CircularProgress, Grid } from '@mui/material';
 import { FormControlLabel, FormGroup, Switch, Typography } from '@mui/material';
-import { TextFieldWrapper } from '@/components/TextFields';
+import { TextAreaWrapper, TextFieldWrapper } from '@/components/TextFields';
 import axios from 'axios';
 import useNotistick from '@/hooks/useNotistick';
 import { useEffect, useState } from 'react';
 import { AutoCompleteWrapper } from '@/components/AutoCompleteWrapper';
 import { useClientFetch } from '@/hooks/useClientFetch';
 import { useAuth } from '@/hooks/useAuth';
+import { RichTextEditorWrapper } from '@/components/RichTextEditorWrapper';
 const Results = ({ data, reFetchData }) => {
   const { user } = useAuth();
   const [classOptions, setClassOptions] = useState([]);
@@ -35,6 +36,8 @@ const Results = ({ data, reFetchData }) => {
         bangla_scholarship_name: data?.bangla_scholarship_name || '',
         classes: data?.scholarshipClasses?.map((cls) => ({ id: cls.id, label: cls.name })) || [],
         is_scholarship_active: data?.is_scholarship_active || false,
+        form_fill_up_rules_and_regulation: data?.form_fill_up_rules_and_regulation || '',
+        admit_card_rules_and_regulation: data?.admit_card_rules_and_regulation || '',
         submit: null
       }}
       onSubmit={async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
@@ -46,7 +49,6 @@ const Results = ({ data, reFetchData }) => {
           };
           const copyValues = JSON.parse(JSON.stringify(_values));
           copyValues.classes = copyValues?.classes?.map((cls) => cls.id);
-          console.log({ copyValues });
           axios
             .put('/api/front_end/scholarship', copyValues)
             .then((res) => {
@@ -108,6 +110,28 @@ const Results = ({ data, reFetchData }) => {
                     handleChange={(e, value: any) => setFieldValue('classes', value)}
                   />
 
+                  <Grid container pl={1} pb={1}>
+                    <Grid>Form Fill up Rules and Regulation</Grid>
+                    <RichTextEditorWrapper
+                      // height='200px'
+                      value={values.form_fill_up_rules_and_regulation}
+                      handleChange={(newValue: any) => {
+                        setFieldValue('form_fill_up_rules_and_regulation', newValue);
+                      }}
+                    />
+                  </Grid>
+
+                  <Grid container pl={1} pb={1}>
+                    <Grid>Admit Card Rules and Regulation</Grid>
+                    <RichTextEditorWrapper
+                      // height='200px'
+                      value={values.admit_card_rules_and_regulation}
+                      handleChange={(newValue: any) => {
+                        setFieldValue('admit_card_rules_and_regulation', newValue);
+                      }}
+                    />
+                  </Grid>
+
                   <FormControlLabel
                     control={
                       <Switch
@@ -138,11 +162,11 @@ const Results = ({ data, reFetchData }) => {
                   </Button>
                 </Grid>
               </Card>
-            </form>
+            </form >
           </>
         );
       }}
-    </Formik>
+    </Formik >
   );
 };
 export default Results;

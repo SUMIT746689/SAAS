@@ -908,7 +908,6 @@ model WebsiteUi {
   principal_photo             String?
   english_principal_speech    String? @db.LongText
   bangla_principal_speech     String? @db.LongText
-
   english_assist_principal_name      String?
   bangla_assist_principal_name       String?
   english_assist_principal_role_name String?
@@ -916,6 +915,9 @@ model WebsiteUi {
   assist_principal_photo             String?
   english_assist_principal_speech    String? @db.LongText
   bangla_assist_principal_speech     String? @db.LongText
+  
+  form_fill_up_rules_and_regulation  String? @db.LongText
+  admit_card_rules_and_regulation    String? @db.LongText
 
   eiin_number   String
   gallery       Json?
