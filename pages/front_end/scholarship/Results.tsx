@@ -15,6 +15,7 @@ const Results = ({ data, reFetchData }) => {
   const { user } = useAuth();
   const [classOptions, setClassOptions] = useState([]);
   const { data: classes } = useClientFetch(`/api/class?school_id=${user?.school_id}`);
+  console.log('data........................s', { data });
 
   useEffect(() => {
     if (!classes || !Array.isArray(classes)) return;
@@ -162,11 +163,11 @@ const Results = ({ data, reFetchData }) => {
                   </Button>
                 </Grid>
               </Card>
-            </form >
+            </form>
           </>
         );
       }}
-    </Formik >
+    </Formik>
   );
 };
 export default Results;

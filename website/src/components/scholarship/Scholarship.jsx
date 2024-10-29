@@ -14,6 +14,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import dayjs from 'dayjs';
 import PdfDatas from '../scholarship/PdfDatas';
 import { handleFileChange, handleFileRemove } from '@/utils/handleFileUpload';
+import { useClientFetch } from '@/hooks/useClientFetch';
 import { useReactToPrint } from 'react-to-print';
 
 
@@ -24,6 +25,11 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
   const [pdfDatas, setPdfDatas] = useState({});
   const componentRef = useRef(null);
   const [batches, setBatches] = useState([]);
+
+  
+
+
+ 
 
   useEffect(() => {
     if (editData) setOpen(true);
@@ -72,7 +78,7 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current
   });
-console.log({classes})
+console.log("...........classes..........",{classes})
   return (
     <>
       <Grid sx={{ pt: 4 }}>  </Grid>
