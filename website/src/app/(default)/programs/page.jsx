@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma_client';
-import Programs from './Programs';
+import Programs from './programs';
 import { headers } from 'next/headers';
 
 export default async function Program() {
