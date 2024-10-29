@@ -23,7 +23,6 @@ export default async function Branch() {
   });
 
   const branches = schoolData?.School || [];
-  console.log("Branches Data:", JSON.stringify(branches, null, 2));
 
   return (
     <div>
