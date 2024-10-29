@@ -20,7 +20,6 @@ export default async function Program() {
   });
 
   const programs = programsData || [];
-  console.log("programs Data:", JSON.stringify(programs, null, 2));
 
   return (
     <div>
