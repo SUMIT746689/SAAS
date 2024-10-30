@@ -100,9 +100,12 @@ console.log({notices})
                 </div>
                 {/* <div className="px-8 font-bold text-lg text-center ">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                      Lorem Ipsum has been the industry's standard dummy text ever  </div> */}
-
+                    <div className=" w-full overflow-hidden">
                     <Box
                         sx={{
+                            // width:"100%",
+                            // background:"red",
+                            maxWidth: "screen",
                             overflow: 'hidden',
                             whiteSpace: 'nowrap',
                             display: 'flex',
@@ -111,12 +114,13 @@ console.log({notices})
                             padding: '20px 0', // Adjust padding as needed
                         }}
                         >
-                        <div className="px-8  flex  gap-12 font-bold text-lg text-center"> 
+                        <div className="px-8  cursor-pointer flex  gap-12 font-bold text-lg text-center"> 
                             {
                                 notices.map(notice => (<p> {notice.title}</p>))
                             }
                         </div>
                         </Box>
+                    </div>
             </div>
         </div >
     );
