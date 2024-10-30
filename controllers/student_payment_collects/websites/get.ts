@@ -3,7 +3,7 @@ import { logFile } from "utilities_api/handleLogFile";
 
 export const get = async (req, res) => {
   try {
-    const { student_id }: any = req.query;
+    const { branch_id, student_id }: any = req.query;
 
     console.log('sssss', Array.isArray(req.rawHeaders));
     console.log('sssss', req.rawHeaders.indexOf('origin'));
@@ -20,7 +20,10 @@ export const get = async (req, res) => {
       where:
       {
         // academic_year: { curr_active: true },
-        student_info: { student_id }
+        student_info: {
+          school_id: parseInt(branch_id),
+          student_id
+        }
       }, select: {
         id: true,
         class_roll_no: true,

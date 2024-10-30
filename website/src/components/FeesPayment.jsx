@@ -27,6 +27,7 @@ const FeesPayment = ({ allBranches, bkashActivationInfo, serverHost }) => {
     const [selectedItems, setSelectedUsers] = useState([]);
     const [selectedPayAmt, setSelectedPayAmt] = useState(0);
     const router = useRouter();
+    // const [selectedBranchId, setSelectedBranchId] = useState();
 
     const selectedAllUsers = selectedItems.length === lists.length;
     const selectedSomeUsers = selectedItems.length > 0 && selectedItems.length < lists.length;
@@ -41,7 +42,7 @@ const FeesPayment = ({ allBranches, bkashActivationInfo, serverHost }) => {
             console.log('_values__', _values);
 
             const successProcess = () => {
-                resetForm();
+                // resetForm();
                 setStatus({ success: true });
                 setSubmitting(false);
             };
@@ -49,7 +50,7 @@ const FeesPayment = ({ allBranches, bkashActivationInfo, serverHost }) => {
             setLists(res.data?.data?.fees);
             setStdInfo(res.data?.data?.stdInfo);
 
-            showNotification(res?.data?.message);
+            showNotification(res?.data?.message || "successfull");
             successProcess();
         } catch (err) {
             showNotification(err.response?.data?.message, 'error');
@@ -97,7 +98,8 @@ const FeesPayment = ({ allBranches, bkashActivationInfo, serverHost }) => {
                 // fee_ids: selectedItems,
                 // collected_amount,
                 // total_payable,
-                pay_fees
+                pay_fees,
+                // school_id: selectedBranchId
             }
             console.log("got__", data);
 
@@ -113,16 +115,16 @@ const FeesPayment = ({ allBranches, bkashActivationInfo, serverHost }) => {
                 })
                 .catch(err => {
                     console.log({ err: err.message });
-                    showNotification(err?.response?.data?.message, 'error');
+                    showNotification(err?.response?.data?.message || 'failed', 'error');
                 })
 
         } catch (err) {
-            showNotification(err?.response?.data?.message, 'error')
+            showNotification(err?.response?.data?.message || 'failed', 'error')
             console.log(err);
 
         }
     }
-    console.log({stdInfo})
+    // console.log({ stdInfo })
 
     return (
         <Grid maxWidth={1300} mx="auto" pb={10} >
@@ -204,12 +206,13 @@ const FeesPayment = ({ allBranches, bkashActivationInfo, serverHost }) => {
                                                         // @ts-ignore
                                                         helperText={touched.branch_id && errors.branch_id}
                                                         onBlur={handleBlur}
-                                                        // label={t('Select Branch')}
+                                                    // label={t('Select Branch')}
                                                     />
                                                 )}
                                                 onChange={(event, value) => {
                                                     setFieldValue("branch_id", value.id);
                                                     setFieldValue("branch", value);
+                                                    // setSelectedBranchId(value?.id || null)
                                                 }}
                                             />
                                         </Grid>

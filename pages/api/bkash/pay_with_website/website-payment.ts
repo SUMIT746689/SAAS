@@ -125,7 +125,7 @@ const index = async (req, res) => {
                         }
                     }
                 });
-
+                console.log({ user_id });
                 const studentRes = {
                     student_id,
                     user_id: user_id,
