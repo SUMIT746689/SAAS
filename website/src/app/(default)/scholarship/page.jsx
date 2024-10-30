@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma_client';
 import { headers } from 'next/headers';
-import ScholarshipMain from "@/components/scholarship/ScholarshipMain";
+import Scholarship from "@/components/scholarship/Scholarship";
+import NotificationProvider from '@/components/NotificationProvider';
 
 export default async function Scholar() {
 
@@ -22,11 +23,14 @@ export default async function Scholar() {
         select: {
             name: true,
             address: true,
-            websiteui: { select:  {  
-                form_fill_up_rules_and_regulation:true, 
-                admit_card_rules_and_regulation:true,
-                header_image: true, 
-                scholarshipClasses: { include: { sections: true } } } }
+            websiteui: {
+                select: {
+                    form_fill_up_rules_and_regulation: true,
+                    admit_card_rules_and_regulation: true,
+                    header_image: true,
+                    scholarshipClasses: { include: { sections: true } }
+                }
+            }
         }
 
     })
@@ -34,9 +38,8 @@ export default async function Scholar() {
     // const serverHost = JSON.stringify(process.env.SERVER_HOST);
 
     return (
-        <div>
-
-            <ScholarshipMain
+        <NotificationProvider>
+            <Scholarship
                 classes=
                 {
                     resSchool?.websiteui[0]?.scholarshipClasses?.map((cls) => ({ id: cls?.id, label: cls?.name, sections: cls.sections })) || []
@@ -46,7 +49,7 @@ export default async function Scholar() {
                 studentAdmissionForm={studentAdmissionForm}
                 school={resSchool}
             />
-        </div>
+        </NotificationProvider>
     )
 
 

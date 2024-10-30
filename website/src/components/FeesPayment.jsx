@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import useNotistick from '@/hooks/useNotistick';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Card, Checkbox, CircularProgress, Grid, Table, TableCell, TableHead, TextField, Typography, useTheme } from '@mui/material';
+import { Autocomplete, Box, Button, Card, Checkbox, CircularProgress, Grid, Table, TextField, Typography, useTheme } from '@mui/material';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -10,18 +10,14 @@ import { formatNumber } from "@/utils/numberFormat"
 import Image from 'next/image';
 import { TableBodyCellWrapper, TableHeaderCellWrapper, TableRowWrapper } from '@/new_components/Table/Table';
 import { useRouter } from 'next/navigation';
-import { FcBiohazard } from "react-icons/fc";
-import { MdFlightClass } from "react-icons/md";
 import { MdOutlineBatchPrediction } from "react-icons/md";
-import { MdSubject } from "react-icons/md";
-import { AiOutlineFieldNumber } from "react-icons/ai";
 import { AiOutlineIdcard } from "react-icons/ai";
 import { SiGoogleclassroom } from "react-icons/si";
 import { GiRadarCrossSection } from "react-icons/gi";
 import { FaQuidditch } from "react-icons/fa";
 
 
-const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
+const FeesPayment = ({ allBranches, bkashActivationInfo, serverHost }) => {
     const { t } = useTranslation();
     const theme = useTheme();
     const { showNotification } = useNotistick();
@@ -49,11 +45,10 @@ const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
                 setStatus({ success: true });
                 setSubmitting(false);
             };
-            const res = await axios.get(`${serverHost}/api/student_payment_collect/websites?student_id=${_values.student_id}&phone_number=${_values.phone_number}`);
+            const res = await axios.get(`${serverHost}/api/student_payment_collect/websites?branch_id=${_values.branch_id}&student_id=${_values.student_id}&phone_number=${_values.phone_number}`);
             setLists(res.data?.data?.fees);
             setStdInfo(res.data?.data?.stdInfo);
 
-            console.log('res?.data__', res?.data);
             showNotification(res?.data?.message);
             successProcess();
         } catch (err) {
@@ -127,9 +122,10 @@ const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
 
         }
     }
-    
+    console.log({stdInfo})
+
     return (
-        <Grid maxWidth={1300} mx="auto" py={10} > 
+        <Grid maxWidth={1300} mx="auto" pb={10} >
             <Typography variant="h4" gutterBottom py={6} align="center">
                 {t('Student Fees Online Payments')}
             </Typography>
@@ -142,6 +138,9 @@ const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
                         submit: null
                     }}
                     validationSchema={Yup.object().shape({
+                        branch_id: Yup.number().required(
+                            t('The branch is required')
+                        ),
                         student_id: Yup.string().required(
                             t('The student id is required')
                         ),
@@ -163,6 +162,59 @@ const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
                                     p: 2,
                                 }} >
                                     {/* <Grid container item sx={{ display: "flex", justifyContent: "center", alignItems: "start", gap: 2 }}> */}
+
+                                    {/*all branches */}
+                                    <Grid item xs={12}>
+                                        <Grid>
+                                            <Box
+                                                pr={3}
+                                                sx={{
+                                                    pt: `${theme.spacing(1)}`,
+                                                    // pb: { xs: 1, md: 0 }
+                                                }}
+                                                alignSelf="center"
+                                            >
+                                                <b>{t('Select Branch')}: <span className=' text-orange-500'>*</span></b>
+                                            </Box>
+                                        </Grid>
+                                        <Grid
+                                            sx={{
+                                                // mb: `${theme.spacing(3)}`
+                                            }}
+                                            item
+                                            xs={12}
+                                        >
+                                            <Autocomplete
+                                                disablePortal
+                                                options={allBranches || []}
+                                                value={values.branch}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        required
+                                                        size="small"
+                                                        sx={{
+                                                            '& fieldset': {
+                                                                borderRadius: '3px'
+                                                            }
+                                                        }}
+                                                        variant='outlined'
+                                                        fullWidth
+                                                        error={Boolean(touched.branch_id && errors.branch_id)}
+                                                        // @ts-ignore
+                                                        helperText={touched.branch_id && errors.branch_id}
+                                                        onBlur={handleBlur}
+                                                        // label={t('Select Branch')}
+                                                    />
+                                                )}
+                                                onChange={(event, value) => {
+                                                    setFieldValue("branch_id", value.id);
+                                                    setFieldValue("branch", value);
+                                                }}
+                                            />
+                                        </Grid>
+                                    </Grid>
+
 
                                     {/* student id */}
                                     <Grid item xs={12}>
@@ -273,12 +325,12 @@ const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
                     <Grid container mt={9} px={2} color="gray" >
                         <Grid fontSize="2em" textAlign="center" mx="auto">{[stdInfo?.student_info?.first_name, stdInfo?.student_info?.middle_name, stdInfo?.student_info?.last_name].join(' ')}</Grid>
                         <Grid item display="grid" width="100%" gridTemplateColumns="1fr 1fr" columnSpacing="10px" rowGap={1}>
-                            <Grid sx={{display:"flex", alignItems:"center", columnGap:1}}> <AiOutlineIdcard /> Student Id: <span>{stdInfo?.student_info?.student_id}</span> </Grid>
-                            <Grid sx={{display:"flex", alignItems:"center", columnGap:1}}> <SiGoogleclassroom /> Class: <span>{stdInfo?.class?.name}</span></Grid>
-                            <Grid sx={{display:"flex", alignItems:"center", columnGap:1}}> <GiRadarCrossSection /> Batch: <span>{stdInfo?.subjects?.map(subject => subject.name)?.join(', ')}</span></Grid>
-                            {stdInfo?.section?.class?.has_section ? 
-                            <Grid sx={{display:"flex", alignItems:"center", columnGap:1}}> <MdOutlineBatchPrediction /> Batch: <span>{stdInfo?.section?.name}</span></Grid> : ''}
-                            <Grid sx={{display:"flex", alignItems:"center", columnGap:1}}> <FaQuidditch /> Roll No: {stdInfo?.class_roll_no}</Grid>
+                            <Grid sx={{ display: "flex", alignItems: "center", columnGap: 1 }}> <AiOutlineIdcard /> Student Id: <span>{stdInfo?.student_info?.student_id}</span> </Grid>
+                            <Grid sx={{ display: "flex", alignItems: "center", columnGap: 1 }}> <SiGoogleclassroom /> Class: <span>{stdInfo?.class?.name}</span></Grid>
+                            <Grid sx={{ display: "flex", alignItems: "center", columnGap: 1 }}> <GiRadarCrossSection /> Batch: <span>{stdInfo?.subjects?.map(subject => subject.name)?.join(', ')}</span></Grid>
+                            {stdInfo?.section?.class?.has_section ?
+                                <Grid sx={{ display: "flex", alignItems: "center", columnGap: 1 }}> <MdOutlineBatchPrediction /> Batch: <span>{stdInfo?.section?.name}</span></Grid> : ''}
+                            <Grid sx={{ display: "flex", alignItems: "center", columnGap: 1 }}> <FaQuidditch /> Roll No: {stdInfo?.class_roll_no}</Grid>
                         </Grid>
                     </Grid>
 
@@ -297,7 +349,7 @@ const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
                             alignItems: "center",
                             position: "absolute",
                             // right: "40%",
-                            top: "-40%",
+                            top: "-25%",
                             zIndex: "60",
                             border: '1px solid lightgray',
                             overflow: "hidden",
@@ -308,7 +360,7 @@ const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
                             // width: 'fit-content'
                             // mx:"auto"
                         }}>
-                        {/* <Image src={stdInfo?.student_photo ? `${serverHost}/api/get_file/${stdInfo?.student_photo}` : "/dummy.jpg"} width={150} height={150} style={{ objectPosition: "center", objectFit: "contain" }} /> */}
+                        <Image src={stdInfo?.student_photo ? `${serverHost}/api/get_file/${stdInfo?.student_photo}` : "/dummy.jpg"} width={150} height={150} style={{ objectPosition: "center", objectFit: "contain" }} />
                     </Grid>
                 </div>
             </Grid>
@@ -374,7 +426,7 @@ const FeesPayment = ({ bkashActivationInfo, serverHost }) => {
                 </Grid>
 
                 {
-                    bkashActivationInfo?.is_active && 
+                    bkashActivationInfo?.is_active &&
                     <Grid container display="flex" justifyContent="right">
                         <Button sx={{
                             borderRadius: 0.5,

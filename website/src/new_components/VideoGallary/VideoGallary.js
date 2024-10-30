@@ -19,7 +19,7 @@ export default function VideoGallary({ video_gallary }) {
                                         frameBorder="0"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                         referrerPolicy="strict-origin-when-cross-origin"
-                                        allowfullscreen>
+                                        allowFullScreen>
                                     </iframe>
                                 </div>
                                 <h1 className="text-center mt-2"> {handleTextChangeLangWise(language, 'Content Name', 'ভিডিও নাম')}: {handleTextChangeLangWise(language, video.english_title, video.bangla_title)}</h1>

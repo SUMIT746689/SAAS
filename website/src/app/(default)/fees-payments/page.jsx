@@ -2,6 +2,7 @@ import React from 'react';
 import FeesPament from '@/components/FeesPayment'
 import { headers } from 'next/headers';
 import prisma from '@/lib/prisma_client';
+import NotificationProvider from '@/components/NotificationProvider';
 
 const page = async () => {
     const headersList = headers();
@@ -15,16 +16,43 @@ const page = async () => {
         },
         select: {
             title: true,
-            is_active: true
+            is_active: true,
         }
     });
-    console.log({school_info})
+
+    const resSchoolAndBranches = await prisma.school.findFirst({
+        where: {
+            domain: domain
+        },
+        select: {
+            id: true,
+            name: true,
+            School: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            }
+        }
+    });
+
+    const allBranches = [{ label: resSchoolAndBranches.name, id: resSchoolAndBranches.id, isAdmin: true, }]
+    resSchoolAndBranches.School?.forEach(branch_school => {
+        allBranches.push({
+            label: branch_school.name,
+            id: branch_school.id,
+            isAdmin: false
+        })
+    });
+
     const bkashActivationInfo = school_info.find(school => school?.title === "bkash");
     const serverHost = process.env.SERVER_HOST;
-    
+
     return (
         <>
-            <FeesPament bkashActivationInfo={bkashActivationInfo} serverHost={serverHost} />
+            <NotificationProvider>
+                <FeesPament allBranches={allBranches} bkashActivationInfo={bkashActivationInfo} serverHost={serverHost} />
+            </NotificationProvider>
         </>
     )
 };
