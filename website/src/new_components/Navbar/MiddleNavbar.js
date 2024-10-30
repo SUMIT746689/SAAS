@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useContext } from "react";
 export default function MiddleNavbar({ datas }) {
-  console.log({ datas })
+
   const {
     name,
     eiin_number,
@@ -17,7 +17,6 @@ export default function MiddleNavbar({ datas }) {
     bangla_scholarship_name,
     is_scholarship_active
   } = datas;
-  console.log({ is_scholarship_active });
 
   const { language } = useContext(LanguageContext);
 

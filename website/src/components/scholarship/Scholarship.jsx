@@ -72,7 +72,7 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current
   });
-// console.log("...........classes..........",{classes})
+
   return (
     <>
       <Grid sx={{ pt: 4 }}>  </Grid>

@@ -1,12 +1,12 @@
 import { logFile } from "utilities_api/handleLogFile";
-import patch from 'controllers/front_end/website_dynamic_pages/patch';
-import delete_ from 'controllers/front_end/website_dynamic_pages/delete';
+import patch from 'controllers/front_end/programs/patch';
+import delete_ from 'controllers/front_end/programs/delete';
 
 export const config = {
     api: {
-      bodyParser: false,
+        bodyParser: false,
     },
-  };  
+};
 
 const id = async (req, res) => {
     try {

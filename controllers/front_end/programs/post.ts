@@ -17,10 +17,12 @@ async function post(req, res, refresh_token) {
       fs.unlink(value.filepath, (err) => { if (err) console.log({ err }) })
     };
     if (error) throw new Error(error);
+    
     const notFoundFiles = [];
-    console.log("...........fields",{fields})
-    const { title, body, banner_photo } = fields;
-    if (!title || !banner_photo || !body) throw new Error('provide all required fields')
+    const { title, body } = fields;
+    const { banner_photo } = files
+    if (!title || !banner_photo || !body) throw new Error('provide all required fields');
+
     const response = await prisma.program.create({
       data: {
         title,
@@ -30,7 +32,7 @@ async function post(req, res, refresh_token) {
       }
     })
     res.json({ data: response, success: true });
-    console.log("response............" , {response})
+
   } catch (err) {
     logFile.error(err.message)
     console.log({ err: err.message });

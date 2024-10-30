@@ -30,7 +30,7 @@ const Transition = forwardRef(function Transition(props: TransitionProps & { chi
 });
 
 const applyFilters = (sessions: Project[], query: string, filters: Filters): Project[] => {
-  console.log({ sessions });
+
   return sessions?.filter((project) => {
     let matches = true;
 
@@ -200,7 +200,7 @@ const Results: FC<ResultsProps> = ({ sessions, setEditData, reFetchData }) => {
                         <TableCell>
                           <Typography noWrap variant="h5">
                             {dynamicPage.banner_photo ? (
-                              <Image width={250} height={250} src={getFile(dynamicPage.feature_photo)} className="w-fit h-10" alt="feature photo" />
+                              <Image width={250} height={250} src={getFile(dynamicPage.banner_photo)} className="w-fit h-10" alt="feature photo" />
                             ) : (
                               'N/A'
                             )}

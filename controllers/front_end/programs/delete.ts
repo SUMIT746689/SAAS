@@ -9,7 +9,7 @@ async function delete_(req, res, refresh_token) {
 
         const { school_id } = refresh_token;
 
-        await prisma.websiteUi.delete({
+        await prisma.program.delete({
             where: {
                 id,
                 school_id
