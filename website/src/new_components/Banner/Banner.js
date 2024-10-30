@@ -7,6 +7,18 @@ import { handleTextChangeLangWise } from "@/utils/handleLanguage";
 import Link from "next/link";
 import { downloadFile, fetchAndDownloadFile } from "@/utils/handleDownload";
 import { ImageSlider } from "@/components/ImageSlider";
+import { Box } from '@mui/material';
+import { keyframes } from '@emotion/react';
+
+// keyframes for the scroll animation
+const scrollAnimation = keyframes`
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+`;
 
 export default function Banner({ carouselImages, serverHost, notices }) {
 
@@ -34,7 +46,17 @@ export default function Banner({ carouselImages, serverHost, notices }) {
                                                 <p>{handleGetMonth(notice.created_at)}</p>
                                             </div>
                                             <div className="grid gap-1 py-1">
-                                                <p className="text-xs font-medium">{notice.headLine}</p>
+                                            <p 
+                                                className="text-xs font-medium" 
+                                                style={{
+                                                    whiteSpace: "nowrap", 
+                                                    overflow: "hidden", 
+                                                    textOverflow: "ellipsis",
+                                                    maxWidth: "300px" // Adjust this value as needed
+                                                }}
+                                                >
+                                                {notice.headLine}
+                                            </p>
                                                 <div className="flex gap-2 flex-row font-medium text-xs items-center justify-center ">
 
                                                     {notice?.file_url ?
@@ -77,7 +99,31 @@ export default function Banner({ carouselImages, serverHost, notices }) {
                         </div>
                     </div>
                 </div>
-                <div className="px-8 font-bold text-lg text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever  </div>
+                {/* <div className="px-8 font-bold text-lg text-center ">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                     Lorem Ipsum has been the industry's standard dummy text ever  </div> */}
+
+                    <Box
+                        sx={{
+                            // overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            display: 'flex',
+                            alignItems: 'center',
+                            animation: `${scrollAnimation} 30s linear infinite`,
+                            padding: '20px 0', // Adjust padding as needed
+                        }}
+                        >
+                        <div className="px-8 font-bold text-lg text-center">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
+                        </div>
+                        </Box>
             </div>
         </div >
     );
