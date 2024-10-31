@@ -329,9 +329,24 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
                       ))}
                     </Grid>
                   </Grid>
+                  <Grid paddingLeft={32} paddingRight={32}>
+                
+                <DialogActions sx={{ p: 3 }}>
+                  <Button className='bg-yellow-500'
+                    type="Process"
+                    startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
+                    //@ts-ignore
+                    disabled={Boolean(errors.submit) || isSubmitting}
+                    variant="contained"
+                  > Process
+                  </Button>
+                </DialogActions>
+              </Grid>
 
                 </Grid>
               </DialogContent>
+
+             
 
               {/* handle cancel dilog / close / submit dialog click cancel or add button */}
               <Grid paddingLeft={32} paddingRight={32}>
@@ -381,5 +396,4 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
     </>
   );
 }
-
 export default Scholarship;

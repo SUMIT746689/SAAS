@@ -23,7 +23,7 @@ const scrollAnimation = keyframes`
 export default function Banner({ carouselImages, serverHost, notices }) {
 
     const { language } = useContext(LanguageContext);
-
+console.log({notices})
     return (
         <div className="bg-[#DDF5FA]">
             <div className="bg-[url('/group.png')] flex flex-col mx-auto pb-24">
@@ -95,16 +95,18 @@ export default function Banner({ carouselImages, serverHost, notices }) {
                                     </div>
                                 ))
                             }
-
                         </div>
                     </div>
                 </div>
                 {/* <div className="px-8 font-bold text-lg text-center ">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                      Lorem Ipsum has been the industry's standard dummy text ever  </div> */}
-
+                    <div className=" w-full overflow-hidden">
                     <Box
                         sx={{
-                            // overflow: 'hidden',
+                            // width:"100%",
+                            // background:"red",
+                            maxWidth: "screen",
+                            overflow: 'hidden',
                             whiteSpace: 'nowrap',
                             display: 'flex',
                             alignItems: 'center',
@@ -112,18 +114,13 @@ export default function Banner({ carouselImages, serverHost, notices }) {
                             padding: '20px 0', // Adjust padding as needed
                         }}
                         >
-                        <div className="px-8 font-bold text-lg text-center">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
+                        <div className="px-8  cursor-pointer flex  gap-12 font-bold text-lg text-center"> 
+                            {
+                                notices.map(notice => (<p> {notice.title}</p>))
+                            }
                         </div>
                         </Box>
+                    </div>
             </div>
         </div >
     );
