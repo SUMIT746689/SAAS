@@ -17,7 +17,6 @@ import { handleFileChange, handleFileRemove } from '@/utils/handleFileUpload';
 import { useClientDataFetch, useClientFetch } from '@/hooks/useClientFetch';
 import { useReactToPrint } from 'react-to-print';
 function Scholarship({ classes, editData, setEditData, serverHost, school }) {
-  console.log("school.......",{school})
   const [scholarshipData, setScholarshipData] = useState("")
   const { t } = useTranslation()
   const [open, setOpen] = useState(false);
@@ -25,6 +24,7 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
   const [pdfDatas, setPdfDatas] = useState({});
   const componentRef = useRef(null);
   const [batches, setBatches] = useState([]);
+  const [classWiseFees, setclassWiseFees] = useState("");
   useEffect(() => {
     if (editData) setOpen(true);
   }, [editData]);
@@ -72,6 +72,13 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current
   });
+  // useEffect(() => {
+  //   axios
+  //     .get(`${serverHost}/api/fee/class_wise?class_id=${class_id}`)
+  //     .then((res) => setclassWiseFees(res.data))
+  //     console.log({setclassWiseFees})
+  //     .catch((err) => console.log(err));
+  // }, []);
 
   return (
     <>
@@ -342,7 +349,6 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
                   </Button>
                 </DialogActions>
               </Grid>
-
                 </Grid>
               </DialogContent>
 
