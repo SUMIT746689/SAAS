@@ -39,6 +39,43 @@ const FeesPayment = ({ allBranches, bkashActivationInfo, serverHost }) => {
     ) => {
 
         try {
+            // outside codes
+            // // ---------- ************ -------------
+            // axios.post('https://880sms.com/smsapi',
+            //     {
+            //         "api_key": "C2009736670d01c575ee35.30675644",
+            //         "senderid": "8809601012272",
+            //         "type": "text",
+            //         "scheduledDateTime": "",
+            //         "msg": "test",
+            //         "contacts": "8801776912033"
+            //     },{
+            //         "Access-Control-Allow-Credentials":"true",
+            //         "Access-Control-Allow-Origin":"*",
+            //         "Access-Control-Allow-Methods":"GET,OPTIONS,PATCH,DELETE,POST,PUT",
+            //         "Access-Control-Allow-Headers":"X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+            //     }
+            // ).then((e) => {
+            //     showNotification("Sent!", "error")
+            // }).catch((e) => {
+            //     showNotification("Failed!", "error")
+            // })
+            // fetch('https://880sms.com/smsapi',{
+            //     method:"POST",
+            //     body: {
+            //         "api_key": "C2009736670d01c575ee35.30675644",
+            //         "senderid": "8809601012272",
+            //         "type": "text",
+            //         "scheduledDateTime": "",
+            //         "msg": "test sms",
+            //         "contacts": "8801776912033"
+            //     }
+            // })
+            // .then(res=>res.json())
+            // .then(res=> showNotification("Sent! Using fetch"))
+            // .catch(res=> showNotification("Failed! Using fetch", "error"))
+            // // ---------- ************ -------------
+
             console.log('_values__', _values);
 
             const successProcess = () => {
@@ -55,7 +92,7 @@ const FeesPayment = ({ allBranches, bkashActivationInfo, serverHost }) => {
         } catch (err) {
             showNotification(err.response?.data?.message, 'error');
             // showNotification(err.message,"error")
-            console.error(err);
+            console.log({err});
             setStatus({ success: false });
             setErrors({ submit: err.message });
             setSubmitting(false);
@@ -111,10 +148,11 @@ const FeesPayment = ({ allBranches, bkashActivationInfo, serverHost }) => {
                 .then(res => res.json())
                 .then(resBkash => {
                     console.log({ resBkash });
-                    router.push(resBkash.bkashURL);
+                    if(!resBkash?.bkashURL) return showNotification('failed to pay bkash',"error")
+                    router.push(resBkash?.bkashURL);
                 })
                 .catch(err => {
-                    console.log({ err: err.message });
+                    console.log({ err });
                     showNotification(err?.response?.data?.message || 'failed', 'error');
                 })
 

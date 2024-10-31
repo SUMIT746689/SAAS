@@ -35,7 +35,9 @@ const handleTransaction = (
 
                 }
             })
-            console.log({ token });
+            console.log({ token: token.data });
+            if (token?.data?.statusCode !== '0000') reject(token?.data?.statusMessage);
+            
             // @ts-ignore
             const payment = await axios.post(bkash_credential?.details?.create_payment_url, {
                 // const payment = await axios.post(process.env.bkash_create_payment_url, {
@@ -56,8 +58,8 @@ const handleTransaction = (
                     // 'x-app-key': process.env.bkash_X_App_Key,
                 }
             })
-
-            if (!payment.data?.paymentID || !token.data?.id_token) throw Error(payment.data.statusMessage)
+            console.log({ payment });
+            if (!payment.data?.paymentID || !token.data?.id_token) throw Error(payment?.data?.statusMessage)
 
             await prisma.session_store.create({
 
@@ -81,7 +83,7 @@ const handleTransaction = (
                         // execute_payment_url: process.env.bkash_execute_payment_url, X_App_Key: process.env.bkash_X_App_Key
                     }
                 }
-            })
+            });
 
             resolve({ bkashURL: payment.data.bkashURL })
 
@@ -147,11 +149,11 @@ const index = async (req, res) => {
                 });
 
                 // console.log({ feesP });
-                const resStd = await handleTransaction(studentRes, resUser.school.Payment_gateway_credential[0]);
+                const resStd = await handleTransaction(studentRes, resUser?.school?.Payment_gateway_credential[0]);
                 // .then(res => { console.log({ res }) }).catch(err => { console.log({ err }) })
                 console.log({ resStd });
                 // @ts-ignore
-                res.status(200).json({ bkashURL: resStd.bkashURL });
+                res.status(200).json({ bkashURL: resStd?.bkashURL });
 
 
                 break;
@@ -161,9 +163,10 @@ const index = async (req, res) => {
                 res.status(405).JSON(`Method ${method} Not Allowed`);
         }
     } catch (err) {
-        console.log(err);
-        logFile.error(err.message);
-        res.status(500).json({ message: err.message });
+        console.log({ err });
+        // console.log(err);
+        logFile.error(err || err?.message);
+        res.status(500).json({ message: err || err?.message });
     }
 };
 
