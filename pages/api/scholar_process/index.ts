@@ -75,4 +75,5 @@ const index = async (req, res, refresh_token) => {
     res.status(500).json({ message: err.message });
   }
 };
+
 export default authenticate(index);

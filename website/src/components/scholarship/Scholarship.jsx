@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { Grid, DialogContent, TextField, Button, CircularProgress, DialogActions } from '@mui/material';
+import { Grid, DialogContent, TextField, Button, CircularProgress, DialogActions, Card, Table, Checkbox } from '@mui/material';
 import axios from 'axios';
 import useNotistick from '@/hooks/useNotistick';
 import { DialogActionWrapper, DialogTitleWrapper } from '@/components/DialogWrapper';
@@ -16,6 +16,7 @@ import PdfDatas from '../scholarship/PdfDatas';
 import { handleFileChange, handleFileRemove } from '@/utils/handleFileUpload';
 import { useClientDataFetch, useClientFetch } from '@/hooks/useClientFetch';
 import { useReactToPrint } from 'react-to-print';
+import { TableBodyCellWrapper, TableHeaderCellWrapper, TableRowWrapper } from '@/new_components/Table/Table';
 function Scholarship({ classes, editData, setEditData, serverHost, school }) {
   const [scholarshipData, setScholarshipData] = useState("")
   const { t } = useTranslation()
@@ -24,7 +25,16 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
   const [pdfDatas, setPdfDatas] = useState({});
   const componentRef = useRef(null);
   const [batches, setBatches] = useState([]);
-  const [classWiseFees, setclassWiseFees] = useState("");
+  
+  const [classWiseFees, setClassWiseFees] = useState([]);
+  const [selectedItems, setSelectedUsers] = useState([]);
+  const [lists, setLists] = useState([]);
+  const handleSelectAllUsers = (event) => {
+    setSelectedPayAmt(event.target.checked ? lists.reduce((prev, curr) => prev + curr.due, 0) : 0);
+    setSelectedUsers(event.target.checked ? lists.map((list) => list.id) : []);
+};
+  const selectedAllUsers = selectedItems.length === lists.length;
+  const selectedSomeUsers = selectedItems.length > 0 && selectedItems.length < lists.length;
   useEffect(() => {
     if (editData) setOpen(true);
   }, [editData]);
@@ -43,7 +53,7 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
     try {
       const formData = new FormData();
       for (let i in _values) {
-        console.log({ _values })
+        // console.log({ _values })
         if (i === "classes") formData.append(`${i}`, JSON.stringify({ id: _values.classes.id, name: _values.classes.label }));
         else if (i === "student_photo") formData.append(`${i}`, _values[i][0])
         else if (i === "preview_student_photo");
@@ -72,13 +82,14 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current
   });
-  // useEffect(() => {
-  //   axios
-  //     .get(`${serverHost}/api/fee/class_wise?class_id=${class_id}`)
-  //     .then((res) => setclassWiseFees(res.data))
-  //     console.log({setclassWiseFees})
-  //     .catch((err) => console.log(err));
-  // }, []);
+
+    const handleProcessSubmit = async (class_id) => {
+      await axios.get(`${serverHost}/api/fee/class_wise?class_id=${class_id}`)
+      .then((res) => setClassWiseFees(res.data.data))
+      .catch((err) => console.log(err));
+  } 
+
+
 
   return (
     <>
@@ -182,7 +193,7 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
                         error={errors?.classes}
                         touched={touched?.classes}
                         handleChange={(e, value) => {
-                          console.log({ section: value?.sections });
+                          // console.log({ section: value?.sections });
                           setFieldValue("classes", value);
                           setBatches(value?.sections || [])
                           // setFieldValue("class_ids", value.id);
@@ -336,23 +347,82 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
                       ))}
                     </Grid>
                   </Grid>
+
+
                   <Grid paddingLeft={32} paddingRight={32}>
                 
                 <DialogActions sx={{ p: 3 }}>
                   <Button className='bg-yellow-500'
-                    type="Process"
-                    startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
-                    //@ts-ignore
-                    disabled={Boolean(errors.submit) || isSubmitting}
-                    variant="contained"
+                    // type="Process"
+                    // startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
+                    // // @ts-ignore
+                    // disabled={Boolean(errors.submit) || isSubmitting}
+                    // variant="contained"
+                    onClick={()=>handleProcessSubmit(values.classes?.id)}
                   > Process
                   </Button>
+                  
+                  {/* {message && <p>{message}</p>} */}
                 </DialogActions>
               </Grid>
+
                 </Grid>
+                <Card sx={{ p: 1, border: (theme) => `1px solid ${theme.palette.primary.light}`, boxShadow: (theme) => `0px 0px 13px -4px ${theme.palette.primary.light}` }}>
+                <Table>
+                    <TableRowWrapper>
+                        <TableHeaderCellWrapper padding="checkbox">
+                            <Checkbox
+                                checked={selectedAllUsers}
+                                indeterminate={selectedSomeUsers}
+                                onChange={handleSelectAllUsers}
+                            />
+                        </TableHeaderCellWrapper>
+                        <TableHeaderCellWrapper>Fee Head</TableHeaderCellWrapper>
+                        <TableHeaderCellWrapper>Subject</TableHeaderCellWrapper>
+                        <TableHeaderCellWrapper>Fee Month</TableHeaderCellWrapper>
+                        <TableHeaderCellWrapper align="right">Amount</TableHeaderCellWrapper>
+                        <TableHeaderCellWrapper align="right">Disc. Amt.</TableHeaderCellWrapper>
+                        <TableHeaderCellWrapper align="right">Late Fee</TableHeaderCellWrapper>
+                        <TableHeaderCellWrapper align="right">Paid Amt.</TableHeaderCellWrapper>
+                        <TableHeaderCellWrapper align="right">Due Amt.</TableHeaderCellWrapper>
+
+                    </TableRowWrapper>
+                    {
+                        classWiseFees?.map(fee => {
+                            const isUserSelected = selectedItems.includes(fee.id);
+                            return (
+                                <TableRowWrapper key={fee.id}>
+                                    <TableBodyCellWrapper padding="checkbox">
+                                        <Checkbox
+                                            checked={isUserSelected}
+                                            onChange={(event) => handleSelectOneUser(event, fee.id, fee.due)}
+                                            value={isUserSelected}
+                                        />
+                                    </TableBodyCellWrapper>
+                                    <TableBodyCellWrapper> {fee?.fees_head} </TableBodyCellWrapper>
+                                    {/* <TableBodyCellWrapper> {fee?.subject_name} </TableBodyCellWrapper> */}
+                                    <TableBodyCellWrapper> {fee?.fees_month} </TableBodyCellWrapper>
+                                    <TableBodyCellWrapper align="right"> {formatNumber(fee?.amount)} </TableBodyCellWrapper>
+                                    {/* <TableBodyCellWrapper align="right"> {formatNumber(fee?.total_discount)} </TableBodyCellWrapper> */}
+                                    <TableBodyCellWrapper align="right"> {formatNumber(fee?.late_fee)} </TableBodyCellWrapper>
+                                    {/* <TableBodyCellWrapper align="right"> {formatNumber(fee?.total_collected_amt)} </TableBodyCellWrapper> */}
+                                    {/* <TableBodyCellWrapper align="right"> {formatNumber(fee?.due)} </TableBodyCellWrapper> */}
+                                </TableRowWrapper>
+                            )
+                        })
+                    }
+                   
+                   
+                   
+                    {/* <TableRowWrapper>
+                        <TableFooterCellWrapper colSpan={7}>Total Pay Amount:</TableFooterCellWrapper>
+                        <TableFooterCellWrapper align="right">{formatNumber(selectedPayAmt)}</TableFooterCellWrapper>
+                     </TableRowWrapper> */}
+                </Table>
+            </Card>
               </DialogContent>
 
-             
+            
 
               {/* handle cancel dilog / close / submit dialog click cancel or add button */}
               <Grid paddingLeft={32} paddingRight={32}>
@@ -367,6 +437,8 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
                   <Button color="secondary" onClick={handleCreateClassClose}>
                     {'Cancel'}
                   </Button>
+
+
                   <Button
                     type="submit"
                     startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
@@ -376,6 +448,8 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
                   >
                     Submit
                   </Button>
+
+
                 </DialogActions>
               </Grid>
 
