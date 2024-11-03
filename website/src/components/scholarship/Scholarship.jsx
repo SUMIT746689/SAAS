@@ -368,8 +368,10 @@ console.log({classWiseFees})
                   <Grid paddingLeft={42} paddingRight={32}>
                 
                 <DialogActions  sx={{ p: 3  }}>
-                  <Button variant="outlined" className=' border-yellow-600 text-yellow-600'
-                    onClick={()=>handleProcessSubmit(values.classes?.id)}
+                  <Button variant="outlined" className='border-yellow-600 text-yellow-600'
+                   
+                    onClick={()=>handleProcessSubmit(values.classes?.id)} 
+                    disabled={!values.classes || !values.classes.id}
                   > Process
                   </Button>
                 </DialogActions>
@@ -397,7 +399,6 @@ console.log({classWiseFees})
                         classWiseFees?.map(fee => {
                             const isUserSelected = selectedItems.includes(fee.id);
                             return (
-                              // <div>sosososoo</div>
                                 <TableRowWrapper key={fee.id}>
                                     {/* <TableBodyCellWrapper padding="checkbox">
                                         <Checkbox
