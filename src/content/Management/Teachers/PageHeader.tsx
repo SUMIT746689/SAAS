@@ -263,7 +263,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         }}
                         alignSelf="center"
                       >
-                        <b>{t('First Name')}:*</b>
+                        <b>{t('First Name')}: <span style={{ color: "red" }}>*</span></b>
                       </Box>
                     </Grid>
                     <Grid
@@ -316,7 +316,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                           if (v) {
                             if (editSchool || values.username) return;
                             const uniqueUsername = await generateUsernameNew(values.first_name);
-                            console.log({uniqueUsername})
+                            console.log({ uniqueUsername })
                             setFieldValue('username', uniqueUsername)
                           }
                         }}
@@ -412,7 +412,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         }}
                         alignSelf="center"
                       >
-                        <b>{t('National Id')}:*</b>
+                        <b>{t('National Id')}: <span style={{ color: "red" }}>*</span></b>
                       </Box>
                     </Grid>
                     <Grid
@@ -451,7 +451,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         }}
                         alignSelf="center"
                       >
-                        <b>{t('Department')}:</b>
+                        <b>{t('Department:')} <span style={{ color: "red" }}>*</span></b>
                       </Box>
                     </Grid>
                     <Grid
@@ -480,6 +480,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                             name="department_id"
                             {...params}
                             label={t('')}
+                            required={true}
                           />
                         )}
                         // @ts-ignore
@@ -539,7 +540,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         }}
                         alignSelf="center"
                       >
-                        <b>{t('Gender')}:*</b>
+                        <b>{t('Gender')}: <span style={{color:"red"}}>*</span></b>
                       </Box>
                     </Grid>
                     <Grid
@@ -669,7 +670,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         }}
                         alignSelf="center"
                       >
-                        <b>{t('Date Of Birth')}:*</b>
+                        <b>{t('Date Of Birth')}: <span style={{color:"red"}}>*</span></b>
                       </Box>
                     </Grid>
                     <Grid
@@ -717,7 +718,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         }}
                         alignSelf="center"
                       >
-                        <b>{t('Salary Type')}:*</b>
+                        <b>{t('Salary Type')}: <span style={{color:"red"}}>*</span></b>
                       </Box>
                     </Grid>
                     <Grid
@@ -787,7 +788,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         }}
                         alignSelf="center"
                       >
-                        <b>{t('Teacher Id')}:*</b>
+                        <b>{t('Teacher Id')}: <span style={{color:"red"}}>*</span></b>
                       </Box>
                     </Grid>
                     <Grid
@@ -837,7 +838,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         }}
                         alignSelf="center"
                       >
-                        <b>{t('Present Address')}:*</b>
+                        <b>{t('Present Address')}: <span style={{color:"red"}}>*</span></b>
                       </Box>
                     </Grid>
                     <Grid
@@ -878,7 +879,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         }}
                         alignSelf="center"
                       >
-                        <b>{t('Permanent Address')}:*</b>
+                        <b>{t('Permanent Address')}: <span style={{color:"red"}}>*</span></b>
                       </Box>
                     </Grid>
                     <Grid
@@ -931,7 +932,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         }}
                         alignSelf="center"
                       >
-                        <b>{t('Username')}:*</b>
+                        <b>{t('Username')}: <span style={{color:"red"}}>*</span></b>
                       </Box>
                     </Grid>
                     <Grid
@@ -985,7 +986,7 @@ function PageHeader({ editSchool, setEditSchool, departments, reFetchData }): an
                         }}
                         alignSelf="center"
                       >
-                        <b>{t('Passsword')}:*</b>
+                        <b>{t('Passsword')}: <span style={{color:"red"}}>*</span></b>
                       </Box>
                     </Grid>
                     <Grid
