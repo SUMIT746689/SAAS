@@ -254,7 +254,7 @@ function PageHeader({
     <>
 
       <PageHeaderTitleWrapper
-        name="Other User"
+        name="Staffs"
         handleCreateClassOpen={handleCreateProjectOpen}
       />
 

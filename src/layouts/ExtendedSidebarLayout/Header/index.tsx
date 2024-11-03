@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 
-import { Box, IconButton, Tooltip, styled, Grid, Autocomplete, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { Box, IconButton, Tooltip, styled, Grid, Autocomplete, TextField, Select, MenuItem, InputLabel, FormControl, Modal, Button, ClickAwayListener, Card } from '@mui/material';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
 import { SidebarContext } from 'src/contexts/SidebarContext';
 import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
@@ -21,12 +21,13 @@ import { useRouter } from 'next/router';
 import useNotistick from '@/hooks/useNotistick';
 import { useClientDataFetch, useClientFetch } from '@/hooks/useClientFetch';
 import SearchInputWrapper from '@/components/SearchInput';
-import { NavIcon } from '@/components/Icon';
+import { AttendanceIcon, NavIcon, OnlineAddmissionIcon, ReportIcon, TeacherIcon } from '@/components/Icon';
 import { useTranslation } from 'next-i18next';
 import { ModuleContext } from '@/contexts/ModuleContext';
 import { adminModulesList, branchAdminModulesList, studentModulesList, teacherModulesList } from '@/utils/moduleLists';
 import Link from 'next/link';
 import { HighestStudentIdContext } from '@/contexts/HighestStudentIdContext';
+import RocketIcon from '@mui/icons-material/Rocket';
 
 const HeaderWrapper = styled(Box)(
   ({ theme }) => `
@@ -57,6 +58,25 @@ const SelectWrpper = styled(Select)(
         width: 100%;
 `
 );
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+const quickLinksColors = [
+  { dark: "#006ADC", light: "#E1F0FF" },
+  { dark: "#9C2BAD", light: "#F9E5F9" },
+  { dark: "#CA3214", light: "#FFE6E2" },
+]
+
 
 function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
   const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
@@ -177,6 +197,22 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
   //   : [];
 
   const permissionsArray_ = auth?.user?.permissions?.length > 0 ? auth?.user?.permissions?.map((permission: any) => permission.value) : [];
+  const [quickLink, setQuickLink] = useState(false);
+
+  const handleQuickLinksToggle = () => {
+    setQuickLink(v => !v)
+  }
+  const handleQuickLinksClose = () => {
+    setQuickLink(false)
+  }
+
+  const quickLinks = [
+    { color: quickLinksColors[1], linkUrl: "/management/student_fees_collection", icon: < AttendanceIcon style={{ margin: 'auto', width: "15px", height: "15px" }} fillColor={quickLinksColors[1].dark} />, name: "Collect Fee" },
+    { color: quickLinksColors[2], linkUrl: "/management/students/registration", icon: <TeacherIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />, name: "Student Registration" },
+    { color: quickLinksColors[1], linkUrl: "/reports/attendence/student/normal", icon: <ReportIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />, name: "Student Attendance" },
+    { color: quickLinksColors[0], linkUrl: "/management/users/entry_other_users", icon: <OnlineAddmissionIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "Staffs" },
+  ];
+
   return (
     <HeaderWrapper
       display="flex"
@@ -221,6 +257,61 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
           </Tooltip>
         )
       }
+      {/* { color: quickLinksColors[1], linkUrl: "/dashboards/modules/teacher", icon: < AttendanceIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />, name: "Student Attendance" },
+  { color: quickLinksColors[2], linkUrl: "/dashboards/modules/teacher", icon: <TeacherIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />, name: "Class Exam" },
+  */}
+
+      {auth?.user?.role?.title !== 'SUPER_ADMIN' && auth?.user?.role?.title !== 'ASSIST_SUPER_ADMIN' && (
+        <ClickAwayListener onClickAway={handleQuickLinksClose}>
+          <Box sx={{ position: 'relative' }}>
+            <Grid onClick={handleQuickLinksToggle} sx={{ cursor: "pointer", border: '1px solid white', color: "white", p: 0.5, mx: 1, transform: "rotate(45deg)" }}>
+              <RocketIcon sx={{ transform: "rotate(-45deg)", animation: "ease", ":hover": { transform: "rotate(135deg)" } }} />
+            </Grid>
+            {quickLink ? (
+              <Card sx={{
+                position: 'absolute',
+                top: '125%',
+                // right: 0,
+                left: 0,
+                zIndex: 1,
+                // border: '1px solid',
+                p: 2,
+                bgcolor: 'background.paper',
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 1,
+              }} >
+                {
+                  quickLinks.map(({ color, linkUrl, icon, name }, index) => (
+                    <DashboardQuickLinkButtonWrapper key={index} color={color} linkUrl={linkUrl} icon={icon} name={name} />
+                  ))
+                }
+              </Card>
+            ) : null}
+          </Box>
+        </ClickAwayListener>
+        // <Grid sx={{ position: "relative", display: "flex", columnGap: 1 }}>
+        //   <Grid onClick={handleQuickLinksOpen} sx={{ cursor: "pointer", border: '1px solid white', color: "white", p: 0.5, transform: "rotate(45deg)" }}>
+        //     <RocketIcon sx={{ transform: "rotate(-45deg)", animation: "ease", ":hover": { transform: "rotate(135deg)" } }} />
+        //   </Grid>
+        //   <Modal
+        //     open={quickLink}
+        //     onClose={handleQuickLinksClose}
+        //     aria-labelledby="modal-modal-title"
+        //     aria-describedby="modal-modal-description"
+        //   >
+        //     <Box sx={style}>
+        //       {/* <Typography id="modal-modal-title" variant="h6" component="h2"> */}
+        //       Text in a modal
+        //       {/* </Typography> */}
+        //       {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}> */}
+        //       Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+        //       {/* </Typography> */}
+        //     </Box>
+        //   </Modal>
+        // </Grid>
+      )}
+
 
       {/* @ts-ignore */}
       {auth?.user?.role?.title !== 'SUPER_ADMIN' && auth?.user?.role?.title !== 'ASSIST_SUPER_ADMIN' && (
@@ -322,7 +413,7 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
 
       {
         auth?.user?.role?.title === 'ADMIN' &&
-        <Grid sx={{ width: 200, p: 1, ml: 1, border: "1px solid white" }}>
+        <Grid sx={{ width: 200, p: 1, ml: 1, border: "1px solid white", display: { xs: "none", sm: "block" } }}>
           <InputLabel sx={{ color: 'white', fontSize: 12, fontWeight: 600 }}>Last Student ID: {highestStudentId}</InputLabel>
         </Grid>
       }
@@ -482,3 +573,48 @@ export const CustomAutoCompleteWrapper = ({ minWidth = null, required = false, o
     </Grid>
   );
 };
+
+
+export const DashboardQuickLinkButtonWrapper = ({ color, linkUrl, name, icon }) => {
+  // const { handleChangeModule } = useContext(ModuleContext);
+  return (
+    <>
+      <Link
+        href={linkUrl}
+        // onClick={() => handleChangeModule(value)}
+        style={{ textDecoration: "none" }}
+      >
+        <Card
+          sx={{
+            p: { xs: 0.75, md: 1, xl: 1.5 },
+            // boxShadow: 'inset 0px 0px 25px 3px rgba(0,0,0,0.1)',
+            border: '1px solid',
+            transition: 'all 0.2s',
+            ':hover': { background: color, transform: 'scale(.95)' },
+            borderRadius: { xs: '10px', md: '18px' },
+            borderColor: color.dark,
+            background: 'transparent',
+            boxShadow: '5px 5px 13px 0px #D1D9E6E5 inset,-5px -5px 10px 0px #FFFFFFE5 inset;,5px -5px 10px 0px #D1D9E633 inset;,-5px 5px 10px 0px #D1D9E633 inset;,-1px -1px 2px 0px #D1D9E680;,1px 1px 2px 0px #FFFFFF4D'
+            // borderRadius: 1, px: 3, py: 1
+          }}>
+          <Card sx={{
+            // boxShadow: '5px 5px 13px 0px #D1D9E6E5,-5px -5px 10px 0px #FFFFFFE5,5px -5px 10px 0px #D1D9E633,-5px 5px 10px 0px #D1D9E633,-1px -1px 2px 0px #D1D9E680 inset,1px 1px 2px 0px #FFFFFF4D inset',
+            boxShadow: 'box-shadow: 5px 5px 13px 0px #D1D9E6E5,-5px -5px 10px 0px #FFFFFFE5,5px -5px 10px 0px #D1D9E633,-5px 5px 10px 0px #D1D9E633,-1px -1px 2px 0px #D1D9E680 inset,1px 1px 2px 0px #FFFFFF4D inset',
+            borderRadius: { xs: '10px', md: '18px' },
+            background: color.light
+          }}>
+            {/* <Grid sx={{ width: { xs: 150, xl: 175 }, height: { xs:80, xl: 101 }, my: "auto", textAlign: "center", display: "flex", flexDirection: 'column', justifyContent: 'space-evenly' }}> */}
+            <Grid sx={{ width: { xs: 100, xl: 125 }, minHeight: { xs: 50, xl: 75 }, textAlign: "center", display: "flex", flexDirection: 'column', justifyContent: 'space-evenly' }}>
+              <Grid>
+                {icon}
+              </Grid>
+              <Grid fontSize={{ xs: 7, lg: 9, xl: 11 }} fontWeight={400} color={color.dark}>
+                {name}
+              </Grid>
+            </Grid>
+          </Card>
+        </Card>
+      </Link>
+    </>
+  )
+}
