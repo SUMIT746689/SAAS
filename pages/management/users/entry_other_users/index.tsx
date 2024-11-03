@@ -22,7 +22,7 @@ function Managementschools() {
   return (
     <>
       <Head>
-        <title>Other Users - Management</title>
+        <title>Staffs - Management</title>
       </Head>
       <PageTitleWrapper>
         <PageHeader
