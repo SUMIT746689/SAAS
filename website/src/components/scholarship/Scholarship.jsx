@@ -17,7 +17,10 @@ import { handleFileChange, handleFileRemove } from '@/utils/handleFileUpload';
 import { useClientDataFetch, useClientFetch } from '@/hooks/useClientFetch';
 import { useReactToPrint } from 'react-to-print';
 import { TableBodyCellWrapper, TableHeaderCellWrapper, TableRowWrapper } from '@/new_components/Table/Table';
+import { formatNumber } from '@/utils/numberFormat';
 function Scholarship({ classes, editData, setEditData, serverHost, school }) {
+
+  const [showCard, setShowCard] = useState(false);
   const [scholarshipData, setScholarshipData] = useState("")
   const { t } = useTranslation()
   const [open, setOpen] = useState(false);
@@ -87,9 +90,22 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
       await axios.get(`${serverHost}/api/fee/class_wise?class_id=${class_id}`)
       .then((res) => setClassWiseFees(res.data.data))
       .catch((err) => console.log(err));
+      setShowCard(true);
+
   } 
+console.log({classWiseFees})
 
 
+
+// const handleSelectOneUser = (_eventEvent, userId, due) => {
+//   if (!selectedItems.includes(userId)) {
+//       setSelectedPayAmt(amt => amt + due);
+//       setSelectedUsers((prevSelected) => [...prevSelected, userId]);
+//   } else {
+//       setSelectedPayAmt(amt => amt - due);
+//       setSelectedUsers((prevSelected) => prevSelected.filter((id) => id !== userId));
+//   }
+// };
 
   return (
     <>
@@ -349,77 +365,59 @@ function Scholarship({ classes, editData, setEditData, serverHost, school }) {
                   </Grid>
 
 
-                  <Grid paddingLeft={32} paddingRight={32}>
+                  <Grid paddingLeft={42} paddingRight={32}>
                 
-                <DialogActions sx={{ p: 3 }}>
-                  <Button className='bg-yellow-500'
-                    // type="Process"
-                    // startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
-                    // // @ts-ignore
-                    // disabled={Boolean(errors.submit) || isSubmitting}
-                    // variant="contained"
+                <DialogActions  sx={{ p: 3  }}>
+                  <Button variant="outlined" className=' border-yellow-600 text-yellow-600'
                     onClick={()=>handleProcessSubmit(values.classes?.id)}
                   > Process
                   </Button>
-                  
-                  {/* {message && <p>{message}</p>} */}
                 </DialogActions>
               </Grid>
-
                 </Grid>
-                <Card sx={{ p: 1, border: (theme) => `1px solid ${theme.palette.primary.light}`, boxShadow: (theme) => `0px 0px 13px -4px ${theme.palette.primary.light}` }}>
+                {showCard && (
+
+                <Card  sx={{ p: 1, border: (theme) => `1px solid ${theme.palette.primary.light}`,  textAlign:"center", mx:"auto",    maxWidth:'850px', boxShadow: (theme) => `0px 0px 13px -4px ${theme.palette.primary.light}` }}>
                 <Table>
                     <TableRowWrapper>
-                        <TableHeaderCellWrapper padding="checkbox">
+                        {/* <TableHeaderCellWrapper padding="checkbox">
                             <Checkbox
                                 checked={selectedAllUsers}
                                 indeterminate={selectedSomeUsers}
                                 onChange={handleSelectAllUsers}
                             />
-                        </TableHeaderCellWrapper>
+                        </TableHeaderCellWrapper> */}
                         <TableHeaderCellWrapper>Fee Head</TableHeaderCellWrapper>
-                        <TableHeaderCellWrapper>Subject</TableHeaderCellWrapper>
                         <TableHeaderCellWrapper>Fee Month</TableHeaderCellWrapper>
                         <TableHeaderCellWrapper align="right">Amount</TableHeaderCellWrapper>
-                        <TableHeaderCellWrapper align="right">Disc. Amt.</TableHeaderCellWrapper>
                         <TableHeaderCellWrapper align="right">Late Fee</TableHeaderCellWrapper>
-                        <TableHeaderCellWrapper align="right">Paid Amt.</TableHeaderCellWrapper>
-                        <TableHeaderCellWrapper align="right">Due Amt.</TableHeaderCellWrapper>
 
                     </TableRowWrapper>
                     {
                         classWiseFees?.map(fee => {
                             const isUserSelected = selectedItems.includes(fee.id);
                             return (
+                              // <div>sosososoo</div>
                                 <TableRowWrapper key={fee.id}>
-                                    <TableBodyCellWrapper padding="checkbox">
+                                    {/* <TableBodyCellWrapper padding="checkbox">
                                         <Checkbox
                                             checked={isUserSelected}
-                                            onChange={(event) => handleSelectOneUser(event, fee.id, fee.due)}
+                                            // onChange={(event) => handleSelectOneUser(event, fee.id, fee.due)}
                                             value={isUserSelected}
                                         />
-                                    </TableBodyCellWrapper>
-                                    <TableBodyCellWrapper> {fee?.fees_head} </TableBodyCellWrapper>
-                                    {/* <TableBodyCellWrapper> {fee?.subject_name} </TableBodyCellWrapper> */}
+                                    </TableBodyCellWrapper> */}
+                                    {/* <TableBodyCellWrapper> {fee?.fees_head?.id} </TableBodyCellWrapper> */}
+                                    <TableBodyCellWrapper> {fee?.fees_head?.title} </TableBodyCellWrapper>
                                     <TableBodyCellWrapper> {fee?.fees_month} </TableBodyCellWrapper>
                                     <TableBodyCellWrapper align="right"> {formatNumber(fee?.amount)} </TableBodyCellWrapper>
-                                    {/* <TableBodyCellWrapper align="right"> {formatNumber(fee?.total_discount)} </TableBodyCellWrapper> */}
                                     <TableBodyCellWrapper align="right"> {formatNumber(fee?.late_fee)} </TableBodyCellWrapper>
-                                    {/* <TableBodyCellWrapper align="right"> {formatNumber(fee?.total_collected_amt)} </TableBodyCellWrapper> */}
-                                    {/* <TableBodyCellWrapper align="right"> {formatNumber(fee?.due)} </TableBodyCellWrapper> */}
                                 </TableRowWrapper>
                             )
                         })
                     }
-                   
-                   
-                   
-                    {/* <TableRowWrapper>
-                        <TableFooterCellWrapper colSpan={7}>Total Pay Amount:</TableFooterCellWrapper>
-                        <TableFooterCellWrapper align="right">{formatNumber(selectedPayAmt)}</TableFooterCellWrapper>
-                     </TableRowWrapper> */}
                 </Table>
             </Card>
+             )}
               </DialogContent>
 
             
