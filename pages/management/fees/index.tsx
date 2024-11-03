@@ -1,10 +1,7 @@
 import Head from 'next/head';
-
 import { useState, useEffect, useCallback, useContext } from 'react';
-
 import ExtendedSidebarLayout from 'src/layouts/ExtendedSidebarLayout';
 import { Authenticated } from 'src/components/Authenticated';
-
 import PageHeader from 'src/content/Management/Fees/PageHeader';
 import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
@@ -22,7 +19,9 @@ function ManagementFees() {
   const [editData, setEditData] = useState<Project>(null);
   const [academicYear, setAcademicYear] = useContext(AcademicYearContext);
   const { data, error, reFetchData } = useClientFetch(`/api/fee?academic_year_id=${academicYear?.id}`);
+
   const { data: classData, error: classError } = useClientFetch('/api/class');
+
   const { data: feesHeads } = useClientFetch('/api/fees_heads');
   const { data: subjectData, error: subjectError } = useClientFetch('/api/subject');
 
@@ -37,6 +36,7 @@ function ManagementFees() {
       </Head>
       <PageTitleWrapper>
         {/* @ts-ignore */}
+
         <PageHeader
           name="Fees"
           classData={

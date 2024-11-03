@@ -138,6 +138,7 @@ const applyPagination = (sessions: Project[], page: number, limit: number): Proj
 };
 
 const Results: FC<ResultsProps> = ({ sessions, setEditData, reFetchData }) => {
+  console.log({ sessions });
   const [selectedItems, setSelectedschools] = useState<string[]>([]);
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();

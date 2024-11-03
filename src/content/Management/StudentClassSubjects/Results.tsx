@@ -1,11 +1,4 @@
-import {
-  FC,
-  ChangeEvent,
-  useState,
-  ReactElement,
-  Ref,
-  forwardRef
-} from 'react';
+import { FC, ChangeEvent, useState, ReactElement, Ref, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   Avatar,
@@ -95,36 +88,28 @@ interface Filters {
   status?: ProjectStatus;
 }
 
-const Transition = forwardRef(function Transition(
-  props: TransitionProps & { children: ReactElement<any, any> },
-  ref: Ref<unknown>
-) {
+const Transition = forwardRef(function Transition(props: TransitionProps & { children: ReactElement<any, any> }, ref: Ref<unknown>) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-
-const applyFilters = (
-  sessions: Project[],
-  query: string,
-  filters: Filters
-): Project[] => {
+const applyFilters = (sessions: Project[], query: string, filters: Filters): Project[] => {
   return sessions.filter((project) => {
     let matches = true;
 
     if (query) {
       const properties = ['name', 'title', 'id', 'amount'];
-      const nestedProperties = ["fees_head", "class"]
+      const nestedProperties = ['fees_head', 'class'];
       let containsQuery = false;
 
       properties.forEach((property) => {
         if (project[property]?.toString().toLowerCase().includes(query.toLowerCase())) {
-          return containsQuery = true;
+          return (containsQuery = true);
         }
-        nestedProperties.forEach(nestedProperty => {
+        nestedProperties.forEach((nestedProperty) => {
           if (project[nestedProperty] && project[nestedProperty][property]?.toString().toLowerCase().includes(query.toLowerCase())) {
-            containsQuery = true
+            containsQuery = true;
           }
-        })
+        });
       });
 
       if (filters.status && project.status !== filters.status) {
@@ -148,26 +133,18 @@ const applyFilters = (
   });
 };
 
-const applyPagination = (
-  sessions: Project[],
-  page: number,
-  limit: number
-): Project[] => {
+const applyPagination = (sessions: Project[], page: number, limit: number): Project[] => {
   return sessions.slice(page * limit, page * limit + limit);
 };
 
-const Results: FC<ResultsProps> = ({
-  sessions,
-  setEditData,
-  reFetchData
-}) => {
+const Results: FC<ResultsProps> = ({ sessions, setEditData, reFetchData }) => {
   const [selectedItems, setSelectedschools] = useState<string[]>([]);
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
 
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(12);
-  const [searchValue, setSearchValue] = useState<string | null>(null)
+  const [searchValue, setSearchValue] = useState<string | null>(null);
   const [query, setQuery] = useState<string>('');
   const [filters, setFilters] = useState<Filters>({
     status: null
@@ -182,24 +159,15 @@ const Results: FC<ResultsProps> = ({
     setQuery(event.target.value);
   };
 
-  const handleSelectAllschools = (
-    event: ChangeEvent<HTMLInputElement>
-  ): void => {
-    setSelectedschools(
-      event.target.checked ? sessions.map((project) => project.id) : []
-    );
+  const handleSelectAllschools = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSelectedschools(event.target.checked ? sessions.map((project) => project.id) : []);
   };
 
-  const handleSelectOneProject = (
-    _event: ChangeEvent<HTMLInputElement>,
-    projectId: string
-  ): void => {
+  const handleSelectOneProject = (_event: ChangeEvent<HTMLInputElement>, projectId: string): void => {
     if (!selectedItems.includes(projectId)) {
       setSelectedschools((prevSelected) => [...prevSelected, projectId]);
     } else {
-      setSelectedschools((prevSelected) =>
-        prevSelected.filter((id) => id !== projectId)
-      );
+      setSelectedschools((prevSelected) => prevSelected.filter((id) => id !== projectId));
     }
   };
 
@@ -214,8 +182,7 @@ const Results: FC<ResultsProps> = ({
   const filteredschools = applyFilters(sessions, query, filters);
   const paginatedFees = applyPagination(filteredschools, page, limit);
   const selectedBulkActions = selectedItems.length > 0;
-  const selectedSomeschools =
-    selectedItems.length > 0 && selectedItems.length < sessions.length;
+  const selectedSomeschools = selectedItems.length > 0 && selectedItems.length < sessions.length;
   const selectedAllschools = selectedItems.length === sessions.length;
 
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
@@ -236,13 +203,13 @@ const Results: FC<ResultsProps> = ({
       setOpenConfirmDelete(false);
       if (!result.data?.success) throw new Error('unsuccessful delete');
       showNotification('The fees has been deleted successfully');
-      reFetchData()
+      reFetchData();
     } catch (err) {
       setOpenConfirmDelete(false);
       showNotification(err?.response?.data?.message, 'error');
     }
   };
-  console.log({ page })
+  console.log({ page });
   return (
     <>
       <Card
@@ -260,7 +227,7 @@ const Results: FC<ResultsProps> = ({
                 value={searchValue}
                 handleChange={(v) => {
                   setSearchValue(v.target?.value);
-                  setPage(0)
+                  setPage(0);
                 }}
                 label={'Search by fees title, id or amount......'}
                 InputProps={{
@@ -283,13 +250,7 @@ const Results: FC<ResultsProps> = ({
           </Box>
         )}
         {!selectedBulkActions && (
-          <Box
-            borderRadius={0}
-            px={2}
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
+          <Box borderRadius={0} px={2} display="flex" alignItems="center" justifyContent="space-between">
             <Box fontSize={12}>
               <Typography component="span" variant="subtitle1" fontSize={12}>
                 {t('Showing')}:
@@ -311,115 +272,86 @@ const Results: FC<ResultsProps> = ({
 
         {paginatedFees.length === 0 ? (
           <TableEmptyWrapper title="fees" />
-        )
-          :
-          (
-            <>
-              <TableContainer>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableHeaderCellWrapper padding="checkbox">
-                        {/* <Checkbox
+        ) : (
+          <>
+            <TableContainer>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableHeaderCellWrapper padding="checkbox">
+                      {/* <Checkbox
                         checked={selectedAllschools}
                         indeterminate={selectedSomeschools}
                         onChange={handleSelectAllschools}
                       /> */}
-                        <Grid>{t('ID')}</Grid>
-                      </TableHeaderCellWrapper>
-                      <TableHeaderCellWrapper>{t('Fee Head')}</TableHeaderCellWrapper>
-                      <TableHeaderCellWrapper>{t('Fee')}</TableHeaderCellWrapper>
-                      <TableHeaderCellWrapper>{t('Fee for')}</TableHeaderCellWrapper>
-                      <TableHeaderCellWrapper>{t('Amount')}</TableHeaderCellWrapper>
-                      <TableHeaderCellWrapper>{t('Class')}</TableHeaderCellWrapper>
-                      <TableHeaderCellWrapper>{t('Last date')}</TableHeaderCellWrapper>
-                      <TableHeaderCellWrapper>{t('Late fee')}</TableHeaderCellWrapper>
-                      <TableHeaderCellWrapper align="center">{t('Actions')}</TableHeaderCellWrapper>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {paginatedFees.map((fee) => {
-                      const isschoolselected = selectedItems.includes(
-                        fee.id
-                      );
+                      <Grid>{t('ID')}</Grid>
+                    </TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper>{t('Fee Head')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper>{t('Fee')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper>{t('Fee for')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper>{t('Amount')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper>{t('Class')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper>{t('Last date')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper>{t('Late fee')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper align="center">{t('Actions')}</TableHeaderCellWrapper>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {paginatedFees.map((fee) => {
+                    const isschoolselected = selectedItems.includes(fee.id);
 
-                      return (
-                        <TableRow
-                          hover
-                          key={fee.id}
-                          selected={isschoolselected}
-                        >
-                          <TableBodyCellWrapper padding="checkbox">
-                            {/* <Checkbox
+                    return (
+                      <TableRow hover key={fee.id} selected={isschoolselected}>
+                        <TableBodyCellWrapper padding="checkbox">
+                          {/* <Checkbox
                             checked={isschoolselected}
                             onChange={(event) =>
                               handleSelectOneProject(event, fee.id)
                             }
                             value={isschoolselected}
                           /> */}
-                            {/* <Typography noWrap align="center" variant="h5"> */}
-                            <Grid>
-                              {fee.id}
-                            </Grid>
-                            {/* </Typography> */}
-                          </TableBodyCellWrapper>
-                          <TableBodyCellWrapper>{fee?.fees_head?.title}</TableBodyCellWrapper>
-                          <TableBodyCellWrapper>{fee?.title}</TableBodyCellWrapper>
-                          <TableBodyCellWrapper>{fee?.for}</TableBodyCellWrapper>
-                          <TableBodyCellWrapper>{formatNumber(fee.amount)} {currency}</TableBodyCellWrapper>
-                          <TableBodyCellWrapper>{fee.class?.name}</TableBodyCellWrapper>
-                          <TableBodyCellWrapper color='green'>{dayjs(fee?.last_date).format('YYYY-MM-DD , HH:mm')}</TableBodyCellWrapper>
-                          <TableBodyCellWrapper>{fee?.late_fee ? formatNumber(fee?.late_fee?.toFixed(2)) : 0} {currency}</TableBodyCellWrapper>
+                          {/* <Typography noWrap align="center" variant="h5"> */}
+                          <Grid>{fee.id}</Grid>
+                          {/* </Typography> */}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper>{fee?.fees_head?.title}</TableBodyCellWrapper>
+                        <TableBodyCellWrapper>{fee?.title}</TableBodyCellWrapper>
+                        <TableBodyCellWrapper>{fee?.for}</TableBodyCellWrapper>
+                        <TableBodyCellWrapper>
+                          {formatNumber(fee.amount)} {currency}
+                        </TableBodyCellWrapper>
+                        <TableBodyCellWrapper>{fee.class?.name}</TableBodyCellWrapper>
+                        <TableBodyCellWrapper color="green">{dayjs(fee?.last_date).format('YYYY-MM-DD , HH:mm')}</TableBodyCellWrapper>
+                        <TableBodyCellWrapper>
+                          {fee?.late_fee ? formatNumber(fee?.late_fee?.toFixed(2)) : 0} {currency}
+                        </TableBodyCellWrapper>
 
-                          <TableBodyCellWrapper align="center" width={60}>
-                            <Typography noWrap py={0.25} display="flex" justifyContent="center" columnGap={0.5}>
-                              <Tooltip title={t('Edit')} arrow>
-                                <IconButton
-                                  size='small'
-                                  onClick={() => setEditData(fee)}
-                                  color="primary"
-                                >
-                                  <LaunchTwoToneIcon sx={{ fontSize: 14 }} fontSize="small" />
-                                </IconButton>
-                              </Tooltip>
-                              <Tooltip title={t('Delete')} arrow>
-                                <IconButton
-                                  size='small'
-                                  onClick={() => handleConfirmDelete(fee.id)}
-                                  color="primary"
-                                >
-                                  <DeleteTwoToneIcon sx={{ fontSize: 14, color: "red" }} fontSize="small" />
-                                </IconButton>
-                              </Tooltip>
-                            </Typography>
-                          </TableBodyCellWrapper>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-
-            </>
-          )}
+                        <TableBodyCellWrapper align="center" width={60}>
+                          <Typography noWrap py={0.25} display="flex" justifyContent="center" columnGap={0.5}>
+                            <Tooltip title={t('Edit')} arrow>
+                              <IconButton size="small" onClick={() => setEditData(fee)} color="primary">
+                                <LaunchTwoToneIcon sx={{ fontSize: 14 }} fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title={t('Delete')} arrow>
+                              <IconButton size="small" onClick={() => handleConfirmDelete(fee.id)} color="primary">
+                                <DeleteTwoToneIcon sx={{ fontSize: 14, color: 'red' }} fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          </Typography>
+                        </TableBodyCellWrapper>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
+        )}
       </Card>
 
-
-      <DialogWrapper
-        open={openConfirmDelete}
-        maxWidth="xs"
-        fullWidth
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={closeConfirmDelete}
-      >
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-          p={1}
-        >
+      <DialogWrapper open={openConfirmDelete} maxWidth="xs" fullWidth TransitionComponent={Transition} keepMounted onClose={closeConfirmDelete}>
+        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" p={1}>
           <AvatarError sx={{ width: 50, height: 50 }}>
             <CloseIcon sx={{ p: 1 }} />
           </AvatarError>

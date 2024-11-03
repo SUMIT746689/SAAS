@@ -74,6 +74,10 @@ export const rewrites = async () => {
       destination: 'http://192.168.10.96:3001/:path*',
     },
     {
+      source: '/api/fee/class_wise',
+      destination: 'http://localhost:3001/:path*',
+    },
+    {
       source: '/api/bkash/get-token',
       destination: 'https://tokenized.sandbox.bka.sh/v1.2.0-beta/tokenized/checkout/token/grant',
     },
