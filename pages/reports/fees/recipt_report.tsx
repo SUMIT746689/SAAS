@@ -314,7 +314,7 @@ function FeesPaymentReport() {
 
                             <TableCell>
                               <Typography noWrap variant="h5">
-                                {i?.student?.section?.class?.name}
+                                {i?.student?.class?.name}
                               </Typography>
                             </TableCell>
 
