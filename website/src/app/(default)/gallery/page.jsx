@@ -19,7 +19,7 @@ const page = async () => {
         }
     })
     const gallery = school_info?.gallery?.map(i => ({
-        path: `${process.env.SERVER_HOST}/api/get_file/${i?.path?.replace(/\\/g, '/')}`
+        path: `${process.env.SERVER_HOST}/api/get_file/${i?.url?.replace(/\\/g, '/')}`
     }))
 
     return (
