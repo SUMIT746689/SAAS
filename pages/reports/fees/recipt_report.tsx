@@ -263,7 +263,7 @@ function FeesPaymentReport() {
                       <TableRow>
                         <TableCell>{t('Tracking no')}</TableCell>
                         <TableCell>{t('Student')}</TableCell>
-                        <TableCell>{t('Registration no')}</TableCell>
+                        <TableCell>{t('Batch Name [Entry Time]')}</TableCell>
                         <TableCell>{t('Class roll')}</TableCell>
                         <TableCell>{t('Transaction Date')}</TableCell>
                         <TableCell>{t('Class')}</TableCell>
@@ -298,7 +298,8 @@ function FeesPaymentReport() {
 
                             <TableCell>
                               <Typography noWrap variant="h5">
-                                {i?.student?.class_registration_no}
+                                {i?.student?.batches?.map((batch) => batch.name)}[
+                                {i?.student?.batches?.map((batch) => dayjs?.(batch.std_entry_time).format('h:mm A'))}]
                               </Typography>
                             </TableCell>
                             <TableCell>
@@ -411,8 +412,6 @@ function FeesPaymentReport() {
         {/* <Grid ref={selectedInvoiceRef}> <PaymentInvoice printFees={selectedInvoice} student={selectedInvoice[0]?.student} /> </Grid> */}
       </Dialog>
 
-
-      
       <Grid
         sx={{
           display: 'none'

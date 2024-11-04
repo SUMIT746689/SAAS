@@ -243,13 +243,13 @@ const WebsiteMenu = () => {
         console.log({ dynamicPages: res.data.data });
         setDynamicPageList(res.data?.data?.map((page) => ({ label: `${page.english_title} ( ${page.bangla_title} )`, id: page.id })));
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
 
   useEffect(() => {
     websiteDynamicPageList();
   }, []);
-  useEffect(() => { }, [websiteDynamicPageList]);
+  useEffect(() => {}, [websiteDynamicPageList]);
 
   const websiteMenuList = () => {
     axios
@@ -258,13 +258,13 @@ const WebsiteMenu = () => {
         setMenuInfo(res?.data?.result);
         setParentList(res?.data?.menus);
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
 
   useEffect(() => {
     websiteMenuList();
   }, []);
-  useEffect(() => { }, [websiteMenuList]);
+  useEffect(() => {}, [websiteMenuList]);
 
   // Debounce function
   const debounce = (func, delay) => {
@@ -457,7 +457,7 @@ const WebsiteMenu = () => {
                       name="english_title"
                       placeholder={t('english title here...')}
                       onBlur={handleBlur}
-                      onBlurCapture={async (v) => { }}
+                      onBlurCapture={async (v) => {}}
                       onChange={handleChange}
                       value={values.english_title}
                       variant="outlined"
@@ -478,7 +478,7 @@ const WebsiteMenu = () => {
                       name="bangla_title"
                       placeholder={t('bangla title here...')}
                       onBlur={handleBlur}
-                      onBlurCapture={async (v) => { }}
+                      onBlurCapture={async (v) => {}}
                       onChange={handleChange}
                       value={values.bangla_title}
                       variant="outlined"
@@ -521,7 +521,7 @@ const WebsiteMenu = () => {
                         name="website_link"
                         placeholder={t('website link here...')}
                         onBlur={handleBlur}
-                        onBlurCapture={async (v) => { }}
+                        onBlurCapture={async (v) => {}}
                         onChange={handleChange}
                         value={editData?.link_type === 'custom link' || editData?.link_type === 'external link' ? values.website_link : undefined}
                         variant="outlined"

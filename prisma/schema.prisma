@@ -923,11 +923,12 @@ model WebsiteUi {
   gallery       Json?
   video_gallery Json?
 
-  facebook_link String?
-  youtube_link  String?
-  twitter_link  String?
-  google_link   String?
-  linkedin_link String?
+  facebook_link   String?
+  youtube_link    String?
+  twitter_link    String?
+  google_link     String?
+  google_map_link String?
+  linkedin_link   String?
 
   e_books_section   Json?
   downloads_section Json?

@@ -96,9 +96,10 @@ const Results = ({ data, reFetchData }) => {
 
         facebook_link: data?.facebook_link || '',
         twitter_link: data?.twitter_link || '',
-        google_link: data?.google_link || '',
         linkedin_link: data?.linkedin_link || '',
         youtube_link: data?.youtube_link || '',
+        google_link: data?.google_link || '',
+        google_map_link: data?.google_map_link || '',
 
         gallery: undefined,
         preview_gallery: [],
@@ -864,6 +865,19 @@ const Results = ({ data, reFetchData }) => {
                       handleBlur={handleBlur}
                       handleChange={handleChange}
                       value={values.youtube_link}
+                    />
+                  </Grid>
+                  {/* Google_map_link */}
+                  <Grid item xs={12} md={6}>
+                    <Grid>Google link:</Grid>
+                    <TextFieldWrapper
+                      touched={touched.google_map_link}
+                      errors={errors.google_map_link}
+                      label={t('')}
+                      name="google_map_link"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      value={values.google_map_link}
                     />
                   </Grid>
 

@@ -5,13 +5,10 @@ import { createCampaign, getUsers, sentSms } from './postContent/postContent';
 import { logFile } from 'utilities_api/handleLogFile';
 import { verifyIsMasking, verifyIsUnicode } from 'utilities_api/verify';
 import { handleNumberOfSmsParts } from 'utilities_api/handleNoOfSmsParts';
-
-
 async function post(req, res, refresh_token) {
   try {
     const { sms_gateway_id, campaign_name, recipient_type, role_id, class_id, section_id, name_ids: individual_user_ids, body: custom_body, sms_template_id } = req.body;
     const { school_id, id } = refresh_token;
-
     if (!sms_gateway_id || !recipient_type || !custom_body) throw new Error("required valid datas")
 
     const data = {
