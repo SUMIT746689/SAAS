@@ -4,19 +4,15 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '@/hooks/useAuth';
 import { AcademicYearContext } from '@/contexts/UtilsContextUse';
-
 import dayjs from 'dayjs';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import useNotistick from '@/hooks/useNotistick';
-
 const tableStyle: object = {
   border: '1px solid black',
   borderCollapse: 'collapse',
   minWidth: '36px',
-  textAlign: 'center',
-  // backgroundColor: '#cccccc'
+  textAlign: 'center'
 };
-
 import Head from 'next/head';
 import ExtendedSidebarLayout from 'src/layouts/ExtendedSidebarLayout';
 import { Authenticated } from 'src/components/Authenticated';
@@ -40,8 +36,12 @@ function Attendence() {
   const [selectedSection, setSelectedSection] = useState(null);
   const [academicYear, setAcademicYear] = useContext(AcademicYearContext);
   const { user } = useAuth();
-  console.log({ user })
+  console.log({ user });
   const attendenceRef = useRef();
+
+  const today = dayjs();
+  const formattedToday = parseInt(today.format('D'), 10);
+  console.log({ formattedToday });
 
   useEffect(() => {
     axios
@@ -78,13 +78,19 @@ function Attendence() {
   const handleReportGenerate = async () => {
     try {
       if (selectedSection && selectedDate && academicYear && user) {
-        const response = await axios.get(`/api/attendance/student?school_id=${user?.school_id}&section_id=${selectedSection?.id}&from_date=${selectedDate.slice(0, -2) + '01'}&to_date=${selectedDate.slice(0, -2) + '31'}`)
+        const response = await axios.get(
+          `/api/attendance/student?school_id=${user?.school_id}&section_id=${selectedSection?.id}&from_date=${
+            selectedDate.slice(0, -2) + '01'
+          }&to_date=${selectedDate.slice(0, -2) + '31'}`
+        );
 
         if (response.data.length < 1) {
-          throw new Error('Attendence not taken!')
+          throw new Error('Attendence not taken!');
         }
-        const res = await axios.get(`/api/student?school_id=${user?.school_id}&section_id=${selectedSection?.id}&academic_year_id=${academicYear?.id}`)
-
+        const res = await axios.get(
+          `/api/student?school_id=${user?.school_id}&section_id=${selectedSection?.id}&academic_year_id=${academicYear?.id}`
+        );
+        console.log({ setTargetsectionStudents });
         setTargetsectionStudents(
           res.data.map((i) => {
             const middle_name = i?.student_info?.middle_name;
@@ -117,7 +123,6 @@ function Attendence() {
           });
         }
         setStudents(montAttendence);
-
       }
     } catch (err) {
       setStudents(null);
@@ -126,7 +131,6 @@ function Attendence() {
       // showNotification(err.message, 'error')
       showNotification(err?.response?.data?.message || err?.message, 'error');
     }
-
   };
   console.log({ selectedClass, selectedSection });
   return (
@@ -138,20 +142,10 @@ function Attendence() {
         <PageHeader title={'Students Attendence'} />
       </PageTitleWrapper>
 
-      <Grid
-        sx={{ px: { xs: 2, sm: 4 } }}
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="stretch"
-        spacing={3}
-      >
+      <Grid sx={{ px: { xs: 2, sm: 4 } }} container direction="row" justifyContent="center" alignItems="stretch" spacing={3}>
         <Grid item xs={12}>
-          <Card sx={{ p: 1, pb: 0, mb: 3, display: "grid", gridTemplateColumns: { sm: "1fr 1fr 1fr", md: "1fr 1fr 1fr 1fr 1fr" }, columnGap: 1 }}>
-
-            <Grid item width="100%"
-              // sx={{gridColumnStart:1,gridColumnEnd:3}} 
-              pb={1} >
+          <Card sx={{ p: 1, pb: 0, mb: 3, display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr', md: '1fr 1fr 1fr 1fr 1fr' }, columnGap: 1 }}>
+            <Grid item width="100%" pb={1}>
               <MobileDatePicker
                 label="Select Date"
                 views={['year', 'month']}
@@ -163,11 +157,11 @@ function Attendence() {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    size='small'
+                    size="small"
                     fullWidth
                     sx={{
                       [`& fieldset`]: {
-                        borderRadius: 0.6,
+                        borderRadius: 0.6
                       }
                     }}
                   />
@@ -185,24 +179,16 @@ function Attendence() {
                     label: i.name,
                     id: i.id,
                     has_section: i.has_section
-                  }))
-                  }
+                  }))}
                   value={undefined}
                   handleChange={handleClassSelect}
                 />
               </>
-            )
-              :
-              <EmptyAutoCompleteWrapper
-                minWidth="100%"
-                label={t('Select Class')}
-                placeholder={t('Class...')}
-                options={[]}
-                value={undefined}
-              />
-            }
+            ) : (
+              <EmptyAutoCompleteWrapper minWidth="100%" label={t('Select Class')} placeholder={t('Class...')} options={[]} value={undefined} />
+            )}
 
-            {(selectedClass?.has_section && sections && selectedDate) ? (
+            {selectedClass?.has_section && sections && selectedDate ? (
               <>
                 <AutoCompleteWrapper
                   minWidth="100%"
@@ -211,50 +197,31 @@ function Attendence() {
                   options={sections}
                   value={selectedSection}
                   handleChange={(e, value) => setSelectedSection(value)}
-
                 />
               </>
-            )
-              :
-              <EmptyAutoCompleteWrapper
-                minWidth="100%"
-                label={t('Batch')}
-                placeholder={t('Select batch...')}
-                options={[]}
-                value={undefined}
-              />
-            }
+            ) : (
+              <EmptyAutoCompleteWrapper minWidth="100%" label={t('Batch')} placeholder={t('Select batch...')} options={[]} value={undefined} />
+            )}
 
-            {(user && selectedSection && academicYear) ? (
-              <ButtonWrapper
-                handleClick={() => handleReportGenerate()}
-              >
-                Generate
-              </ButtonWrapper>
-
-            )
-              :
+            {user && selectedSection && academicYear ? (
+              <ButtonWrapper handleClick={() => handleReportGenerate()}>Generate</ButtonWrapper>
+            ) : (
               <DisableButtonWrapper>Generate</DisableButtonWrapper>
-            }
+            )}
 
-            {(user && selectedSection && academicYear && students) ?
+            {user && selectedSection && academicYear && students ? (
               <ReactToPrint
                 content={() => attendenceRef.current}
                 // pageStyle={`{ size: 2.5in 4in }`}
                 trigger={() => (
-                  <ButtonWrapper
-                    startIcon={<LocalPrintshopIcon />}
-                    size='small'
-                    handleClick={undefined}
-                  >
+                  <ButtonWrapper startIcon={<LocalPrintshopIcon />} size="small" handleClick={undefined}>
                     Print
                   </ButtonWrapper>
                 )}
               />
-              :
+            ) : (
               <DisableButtonWrapper>Print</DisableButtonWrapper>
-            }
-
+            )}
           </Card>
 
           <br />
@@ -268,155 +235,255 @@ function Attendence() {
               p: 1,
               borderRadius: 0.5
             }}
-          // justifyContent={'flex-end'}
+            // justifyContent={'flex-end'}
           >
-            {
-              (targetsectionStudents && students)
-                ?
-                <div ref={attendenceRef}>
-                  <Grid container py={2} spacing={2} justifyContent={"space-between"} px={7}>
-
-                    <Grid item>
-                      <Avatar variant="rounded"  >
-                        {/* {user?.school?.image && <img src={`/${user.school.image}`} />} */}
-                      </Avatar>
-                    </Grid>
-
-                    <Grid width={'60%'} item>
-                      <Typography
-                        variant="h3"
-                        align="center"
-                      >
-                        {user?.school?.name}
-                      </Typography>
-                      <Typography variant="h6" align="center" sx={{ borderBottom: 1 }}>
-                        {user?.school?.address}, {user?.school?.phone}
-                      </Typography>
-                      <Typography variant="h6" align="center" >
-                        Class : {selectedClass?.label}, Section : {selectedSection?.label}, Month : {dayjs(selectedDate).format('MMMM, YYYY')}
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h4" >
-                        Class Attendence Report
-                      </Typography>
-
-                    </Grid>
+            {targetsectionStudents && students ? (
+              <div ref={attendenceRef}>
+                <Grid container py={2} spacing={2} justifyContent={'space-between'} px={7}>
+                  <Grid item>
+                    <Avatar variant="rounded">{/* {user?.school?.image && <img src={`/${user.school.image}`} />} */}</Avatar>
                   </Grid>
-                  {/* attendance type */}
-                  <Card sx={{ display: "flex", flexWrap: 'wrap', justifyContent: 'space-between', fontWeight: 600, color: '#4454cc', ml: "auto", columnGap: { xs: 3 }, rowGap: 1, p: 1,my:1, width: { xs: 1, md: 1 / 2 }, borderRadius: 0.5 }} >
-                    <Grid>Present = P</Grid>
-                    <Grid>Holiday = H</Grid>
-                    <Grid>Absent = A</Grid>
-                    <Grid>Bunk = B</Grid>
-                    <Grid>Late = L</Grid>
-                  </Card>
-                  <Table style={{ ...tableStyle, width: '100%' }}>
-                    <thead>
-                      <tr>
-                        {[-1, ...Array(32).keys()].map((i) => (
-                          <th style={tableStyle}>
-                            {i > 1 ? i : i == -1 ? 'Name' : i == 0 ? 'Roll' : i}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
 
-                    <tbody style={{
+                  <Grid width={'60%'} item>
+                    <Typography variant="h3" align="center">
+                      {user?.school?.name}
+                    </Typography>
+                    <Typography variant="h6" align="center" sx={{ borderBottom: 1 }}>
+                      {user?.school?.address}, {user?.school?.phone}
+                    </Typography>
+                    <Typography variant="h6" align="center">
+                      Class : {selectedClass?.label}, Section : {selectedSection?.label}, Month : {dayjs(selectedDate).format('MMMM, YYYY')}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="h4">Class Attendence Report</Typography>
+                  </Grid>
+                </Grid>
+                {/* attendance type */}
+                <Card
+                  sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-between',
+                    fontWeight: 600,
+                    color: '#4454cc',
+                    ml: 'auto',
+                    columnGap: { xs: 3 },
+                    rowGap: 1,
+                    p: 1,
+                    my: 1,
+                    width: { xs: 1, md: 1 / 2 },
+                    borderRadius: 0.5
+                  }}
+                >
+                  <Grid>Present = P</Grid>
+                  <Grid>Holiday = H</Grid>
+                  <Grid>Absent = A</Grid>
+                  <Grid>Bunk = B</Grid>
+                  <Grid>Late = L</Grid>
+                </Card>
+                <Table style={{ ...tableStyle, width: '100%' }}>
+                  <thead>
+                    <tr>
+                      {[-1, ...Array(32).keys()].map((i) => (
+                        <th style={tableStyle}>{i > 1 ? i : i == -1 ? 'Name' : i == 0 ? 'Roll' : i}</th>
+                      ))}
+                    </tr>
+                  </thead>
+
+                  <tbody
+                    style={{
                       overflowX: 'auto',
                       overflowY: 'auto'
-                    }}>
-                      {targetsectionStudents?.map((i) => {
-                        return (
-                          <tr>
-                            {students?.map((j) => {
-                              if (j.student_id_list) {
-                                const found = j.student_id_list.find((st) => st.student_id == i.student_id);
+                    }}
+                  >
+                    {targetsectionStudents?.map((i) => {
+                      return (
+                        <tr>
+                          {students?.map((j, index) => {
+                            if (j.student_id_list) {
+                              const found = j.student_id_list.find((st) => st.student_id == i.student_id);
+                              const today = dayjs();
+                              const formattedToday = parseInt(today.format('D'), 10);
 
-                                if (found) {
-                                  return (
-                                    <td
-                                      style={
-                                        found.status == 'absent'
-                                          ? {
+                              if (found) {
+                                return (
+                                  <td
+                                    style={
+                                      found.status == 'absent'
+                                        ? {
                                             ...tableStyle,
                                             backgroundColor: 'red',
                                             color: 'white'
                                           }
-                                          : found.status == 'late'
-                                            ? {
-                                              ...tableStyle,
-                                              backgroundColor: 'yellow',
-                                              color: 'black'
-                                            }
-                                            : found.status == 'bunk'
-                                              ? {
-                                                ...tableStyle,
-                                                backgroundColor: 'blue',
-                                                color: 'white'
-                                              }
-                                              : {
-                                                ...tableStyle,
-                                                backgroundColor: 'green',
-                                                color: 'white'
-                                              }
-                                      }
+                                        : found.status == 'late'
+                                        ? {
+                                            ...tableStyle,
+                                            backgroundColor: 'yellow',
+                                            color: 'black'
+                                          }
+                                        : found.status == 'bunk'
+                                        ? {
+                                            ...tableStyle,
+                                            backgroundColor: 'blue',
+                                            color: 'white'
+                                          }
+                                        : {
+                                            ...tableStyle,
+                                            backgroundColor: 'green',
+                                            color: 'white'
+                                          }
+                                    }
+                                  >
+                                    {found.status.slice(0, 1)}
+                                  </td>
+                                );
+                              } else {
+                                console.log({ index, formattedToday });
+                                if (index + 1 <= formattedToday) {
+                                  return (
+                                    <td
+                                      style={{
+                                        ...tableStyle,
+                                        backgroundColor: 'red',
+                                        color: 'white',
+                                        textAlign: 'center'
+                                      }}
                                     >
-                                      {found.status.slice(0, 1)}
+                                      &nbsp; &nbsp; A
                                     </td>
                                   );
                                 } else {
-                                  return (
-                                    <td style={tableStyle}> &nbsp; &nbsp; </td>
-                                  );
+                                  return <td style={tableStyle}>&nbsp; &nbsp;</td>;
                                 }
-                              } else {
-                                if (j == 'name')
-                                  return (
-                                    <td
-                                      style={{
-                                        ...tableStyle,
-                                        backgroundColor: '#00997a',
-                                        color: 'white'
-                                      }}
-                                    >
-                                      {i.name}
-                                    </td>
-                                  );
-                                else
-                                  return (
-                                    <td
-                                      style={{
-                                        ...tableStyle,
-                                        backgroundColor: '#00997a',
-                                        color: 'white'
-                                      }}
-                                    >
-                                      {i.class_roll_no}
-                                    </td>
-                                  );
                               }
-                            })}
-                          </tr>
-                        );
-                      })}
-                    </tbody>
+                            } else {
+                              if (j == 'name')
+                                return (
+                                  <td
+                                    style={{
+                                      ...tableStyle,
+                                      backgroundColor: '#00997a',
+                                      color: 'white'
+                                    }}
+                                  >
+                                    {i.name}
+                                  </td>
+                                );
+                              else
+                                return (
+                                  <td
+                                    style={{
+                                      ...tableStyle,
+                                      backgroundColor: '#00997a',
+                                      color: 'white'
+                                    }}
+                                  >
+                                    {i.class_roll_no}
+                                  </td>
+                                );
+                            }
+                          })}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
 
-                    {/* <tfoot>
+                  {/* <tbody
+                    style={{
+                      overflowX: 'auto',
+                      overflowY: 'auto'
+                    }}
+                  >
+                    {targetsectionStudents?.map((i) => {
+                      return (
+                        <tr key={i.student_id}>
+                          {students?.map((j) => {
+                            if (j.student_id_list) {
+                              const found = j.student_id_list.find((st) => st.student_id === i.student_id);
+
+                              const isToday = j.date === formattedToday;
+                              console.log(isToday);
+
+                              if (found) {
+                                return (
+                                  <td
+                                    key={j.date}
+                                    style={
+                                      isToday
+                                        ? { ...tableStyle, backgroundColor: 'green', color: 'white' }
+                                        : found.status === 'absent'
+                                        ? { ...tableStyle, backgroundColor: 'red', color: 'white' }
+                                        : found.status === 'late'
+                                        ? { ...tableStyle, backgroundColor: 'yellow', color: 'black' }
+                                        : found.status === 'bunk'
+                                        ? { ...tableStyle, backgroundColor: 'blue', color: 'white' }
+                                        : { ...tableStyle, backgroundColor: 'green', color: 'white' }
+                                    }
+                                  >
+                                    {isToday ? 'P' : found.status.slice(0, 1)}
+                                  </td>
+                                );
+                              } else {
+                                return (
+                                  <td
+                                    key={j.date}
+                                    style={{
+                                      ...tableStyle,
+                                      backgroundColor: isToday ? 'green' : 'red',
+                                      color: 'white',
+                                      textAlign: 'center'
+                                    }}
+                                  >
+                                    {isToday ? 'P' : 'A'}
+                                  </td>
+                                );
+                              }
+                            } else {
+                              return j === 'name' ? (
+                                <td
+                                  key={j}
+                                  style={{
+                                    ...tableStyle,
+                                    backgroundColor: '#00997a',
+                                    color: 'white'
+                                  }}
+                                >
+                                  {i.name}
+                                </td>
+                              ) : (
+                                <td
+                                  key={j}
+                                  style={{
+                                    ...tableStyle,
+                                    backgroundColor: '#00997a',
+                                    color: 'white'
+                                  }}
+                                >
+                                  {i.class_roll_no}
+                                </td>
+                              );
+                            }
+                          })}
+                        </tr>
+                      );
+                    })}
+                  </tbody> */}
+
+                  {/* <tfoot>
             <tr>
               <td>Sum</td>
               <td>$180</td>
             </tr>
           </tfoot> */}
-                  </Table>
-                </div>
-                :
-                <TableEmptyWrapper title="attendance" />
-            }
-
+                </Table>
+              </div>
+            ) : (
+              <TableEmptyWrapper title="attendance" />
+            )}
           </Card>
-        </Grid >
-      </Grid >
+        </Grid>
+      </Grid>
       <Footer />
     </>
   );
