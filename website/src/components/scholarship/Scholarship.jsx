@@ -367,14 +367,14 @@ console.log({classWiseFees})
 
                   <Grid paddingLeft={42} paddingRight={32}>
                 
-                <DialogActions  sx={{ p: 3  }}>
+                {/* <DialogActions  sx={{ p: 3  }}>
                   <Button variant="outlined" className='border-yellow-600 text-yellow-600'
                    
                     onClick={()=>handleProcessSubmit(values.classes?.id)} 
                     disabled={!values.classes || !values.classes.id}
                   > Process
                   </Button>
-                </DialogActions>
+                </DialogActions> */}
               </Grid>
                 </Grid>
                 {showCard && (
