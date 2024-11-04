@@ -39,6 +39,7 @@ export default async function RootLayout({ children }) {
         facebook_link: true,
         twitter_link: true,
         google_link: true,
+        google_map_link:true,
         linkedin_link: true,
         youtube_link: true,
         english_scholarship_name: true,
@@ -46,6 +47,7 @@ export default async function RootLayout({ children }) {
         is_scholarship_active: true,
       }
     })
+    console.log("school_info........................................jd",{school_info})
 
     const navarDatas = {
       english_scholarship_name: school_info?.english_scholarship_name,
@@ -81,7 +83,7 @@ export default async function RootLayout({ children }) {
             <LanguageContextProvider>
               <Navbar datas={navarDatas || {}} menus={resMenus}></Navbar>
               {children}
-              <Footer />
+              <Footer  school_info={school_info} ></Footer>
             </LanguageContextProvider>
             {/* <LayoutWrapper> */}
             {/* <div className=' px-4'>

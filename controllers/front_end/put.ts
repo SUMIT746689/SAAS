@@ -309,6 +309,9 @@ async function put(req, res, refresh_token) {
         if (fields?.google_link) {
             query['google_link'] = fields?.google_link
         }
+        if (fields?.google_map_link) {
+            query['google_map_link'] = fields?.google_map_link
+        }
         if (fields?.linkedin_link) {
             query['linkedin_link'] = fields?.linkedin_link
         }
@@ -401,6 +404,7 @@ async function put(req, res, refresh_token) {
                 youtube_link: query?.youtube_link || '',
                 twitter_link: query?.twitter_link || '',
                 google_link: query?.google_link || '',
+                google_map_link: query?.google_map_link || '',
                 linkedin_link: query?.linkedin_link || '',
                 gallery: Array.isArray(query?.gallery) ? query?.gallery : [],
                 school: {

@@ -13,7 +13,7 @@ import Results from 'WebsiteDynamicPage/Results';
 const EmailTemplates = () => {
   const [editData, setEditData] = useState();
   const { data: emailTemplates, reFetchData } = useClientFetch('/api/front_end/website_dynamic_pages');
-  
+
   return (
     <>
       <Head>
@@ -27,18 +27,10 @@ const EmailTemplates = () => {
           px={1}
         >
           <PageTitleWrapper>
-            <PageHeader
-              editData={editData}
-              setEditData={setEditData}
-              reFetchData={reFetchData}
-            />
+            <PageHeader editData={editData} setEditData={setEditData} reFetchData={reFetchData} />
           </PageTitleWrapper>
 
-          <Results
-            sessions={emailTemplates?.data || []}
-            setEditData={setEditData}
-            reFetchData={reFetchData}
-          />
+          <Results sessions={emailTemplates?.data || []} setEditData={setEditData} reFetchData={reFetchData} />
         </Grid>
         <Footer />
       </PageBodyWrapper>
@@ -47,7 +39,7 @@ const EmailTemplates = () => {
 };
 
 EmailTemplates.getLayout = (page) => (
-  <Authenticated name='certificate_template'>
+  <Authenticated name="certificate_template">
     <ExtendedSidebarLayout>{page}</ExtendedSidebarLayout>
   </Authenticated>
 );

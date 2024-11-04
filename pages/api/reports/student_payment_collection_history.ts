@@ -60,7 +60,8 @@ const index = async (req, res) => {
                                 },
                                 batches:{
                                     select:{
-                                        name:true
+                                        name:true,
+                                        std_entry_time:true
                                     }
                                 },
                                 // section: {
