@@ -209,8 +209,9 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
   const quickLinks = [
     { color: quickLinksColors[1], linkUrl: "/management/student_fees_collection", icon: < AttendanceIcon style={{ margin: 'auto', width: "15px", height: "15px" }} fillColor={quickLinksColors[1].dark} />, name: "Collect Fee" },
     { color: quickLinksColors[2], linkUrl: "/management/students/registration", icon: <TeacherIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />, name: "Student Registration" },
-    { color: quickLinksColors[1], linkUrl: "/reports/attendence/student/normal", icon: <ReportIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />, name: "Student Attendance" },
-    { color: quickLinksColors[0], linkUrl: "/management/users/entry_other_users", icon: <OnlineAddmissionIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "Staffs" },
+    { color: quickLinksColors[0], linkUrl: "/reports/attendence/student/normal", icon: <ReportIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[0].dark} />, name: "Student Attendance" },
+    { color: quickLinksColors[1], linkUrl: "/management/users/entry_other_users", icon: <OnlineAddmissionIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[1].dark} />, name: "Staffs" },
+    { color: quickLinksColors[2], linkUrl: "/management/teachers", icon: <TeacherIcon style={{ margin: 'auto' }} fillColor={quickLinksColors[2].dark} />, name: "Teachers" },
   ];
 
   return (
@@ -290,26 +291,6 @@ function Header({ drawerOpen, handleDrawerOpen, handleDrawerClose }) {
             ) : null}
           </Box>
         </ClickAwayListener>
-        // <Grid sx={{ position: "relative", display: "flex", columnGap: 1 }}>
-        //   <Grid onClick={handleQuickLinksOpen} sx={{ cursor: "pointer", border: '1px solid white', color: "white", p: 0.5, transform: "rotate(45deg)" }}>
-        //     <RocketIcon sx={{ transform: "rotate(-45deg)", animation: "ease", ":hover": { transform: "rotate(135deg)" } }} />
-        //   </Grid>
-        //   <Modal
-        //     open={quickLink}
-        //     onClose={handleQuickLinksClose}
-        //     aria-labelledby="modal-modal-title"
-        //     aria-describedby="modal-modal-description"
-        //   >
-        //     <Box sx={style}>
-        //       {/* <Typography id="modal-modal-title" variant="h6" component="h2"> */}
-        //       Text in a modal
-        //       {/* </Typography> */}
-        //       {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}> */}
-        //       Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        //       {/* </Typography> */}
-        //     </Box>
-        //   </Modal>
-        // </Grid>
       )}
 
 
@@ -591,7 +572,7 @@ export const DashboardQuickLinkButtonWrapper = ({ color, linkUrl, name, icon }) 
             border: '1px solid',
             transition: 'all 0.2s',
             ':hover': { background: color, transform: 'scale(.95)' },
-            borderRadius: { xs: '10px', md: '18px' },
+            borderRadius: { xs: '10px', md: '12px' },
             borderColor: color.dark,
             background: 'transparent',
             boxShadow: '5px 5px 13px 0px #D1D9E6E5 inset,-5px -5px 10px 0px #FFFFFFE5 inset;,5px -5px 10px 0px #D1D9E633 inset;,-5px 5px 10px 0px #D1D9E633 inset;,-1px -1px 2px 0px #D1D9E680;,1px 1px 2px 0px #FFFFFF4D'
@@ -600,7 +581,7 @@ export const DashboardQuickLinkButtonWrapper = ({ color, linkUrl, name, icon }) 
           <Card sx={{
             // boxShadow: '5px 5px 13px 0px #D1D9E6E5,-5px -5px 10px 0px #FFFFFFE5,5px -5px 10px 0px #D1D9E633,-5px 5px 10px 0px #D1D9E633,-1px -1px 2px 0px #D1D9E680 inset,1px 1px 2px 0px #FFFFFF4D inset',
             boxShadow: 'box-shadow: 5px 5px 13px 0px #D1D9E6E5,-5px -5px 10px 0px #FFFFFFE5,5px -5px 10px 0px #D1D9E633,-5px 5px 10px 0px #D1D9E633,-1px -1px 2px 0px #D1D9E680 inset,1px 1px 2px 0px #FFFFFF4D inset',
-            borderRadius: { xs: '10px', md: '18px' },
+            borderRadius: { xs: '10px', md: '12px' },
             background: color.light
           }}>
             {/* <Grid sx={{ width: { xs: 150, xl: 175 }, height: { xs:80, xl: 101 }, my: "auto", textAlign: "center", display: "flex", flexDirection: 'column', justifyContent: 'space-evenly' }}> */}
