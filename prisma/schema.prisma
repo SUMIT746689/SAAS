@@ -935,9 +935,11 @@ model WebsiteUi {
 
   school_id Int
 
-  english_scholarship_name String?
-  bangla_scholarship_name  String?
-  is_scholarship_active    Boolean @default(false)
+  english_scholarship_name       String?
+  bangla_scholarship_name        String?
+  is_scholarship_active          Boolean @default(false)
+  is_branch_wise_fees_collection Boolean @default(false)
+  branch_wise_addmission         Boolean @default(false)
 
   school             School  @relation(fields: [school_id], references: [id])
   scholarshipClasses Class[]

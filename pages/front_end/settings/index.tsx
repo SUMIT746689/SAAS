@@ -1,51 +1,85 @@
 import { Authenticated } from 'src/components/Authenticated';
 import ExtendedSidebarLayout from 'src/layouts/ExtendedSidebarLayout';
-import Head from 'next/head';
 import React, { useState, MouseEvent, useEffect, useRef } from 'react';
 import { Grid, Typography, Dialog, DialogTitle, DialogContent, TextField } from '@mui/material';
 import useNotistick from '@/hooks/useNotistick';
-import { PageHeaderTitleWrapper } from '@/components/PageHeaderTitle';
-import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { useTranslation } from 'react-i18next';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import { AutoCompleteWrapperWithoutRenderInput } from '@/components/AutoCompleteWrapper';
-import { DialogActionWrapper } from '@/components/DialogWrapper';
+import { Button, Tooltip, IconButton, FormGroup, FormControlLabel, Switch } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import Head from 'next/head';
+import PageTitleWrapper from '@/components/PageTitleWrapper';
+import PageHeader from 'src/content/Management/Attendence/PageHeader';
 import axios from 'axios';
-import Result from './Result';
-import List from '@mui/material/List';
+import { useClientFetch } from '@/hooks/useClientFetch';
 
 const WebsiteMenu = () => {
-  const [menuLabel, setMenuLabel] = useState('');
-  const [menuItemId, setMenuItemId] = useState(null);
-  const [editData, setEditData] = useState(null);
-  const [open, setOpen] = useState(false);
+  const { data, reFetchData } = useClientFetch('/api/front_end/settings');
+  console.log('dat..................a', { data });
   const { showNotification } = useNotistick();
   const { t }: { t: any } = useTranslation();
-  const [websiteMenuOpen, setWebsiteMenuOpen] = useState(false);
-  const childrenRef = useRef(null);
-  const [parentList, setParentList] = useState([]);
-  const [dynamicPageList, setDynamicPageList] = useState([]);
+  const [isSmallSize, setIsSmallSize] = useState(false);
+  const [isOn, setIsOn] = useState(false);
+  // isSmallSize
+  useEffect(() => {
+    const storedValue = localStorage.getItem('isSmallSize');
+    console.log(storedValue);
+    if (storedValue !== null) {
+      setIsSmallSize(JSON.parse(storedValue));
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem('isSmallSize', JSON.stringify(isSmallSize));
+  }, [isSmallSize]);
 
-  const handleCreateAddWebsiteMenu = (event: MouseEvent<HTMLButtonElement>) => {
-    setEditData(null);
-    setOpen(true);
-    setMenuItemId(null);
-    setMenuLabel('');
+  // isOn
+  useEffect(() => {
+    const storedValue = localStorage.getItem('isOn');
+    console.log({ storedValue });
+    if (storedValue !== null) {
+      setIsOn(JSON.parse(storedValue));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('isOn', JSON.stringify(isOn));
+  }, [isOn]);
+
+  const handleBanchWiseFeesCollection = async () => {
+    const res = await axios.put('/api/front_end/settings', {});
   };
 
   return (
     <>
       <Head>
-        <title>Settings</title>
+        <title>Scholarship - Management</title>
       </Head>
-      <PageTitleWrapper>
-        <PageHeaderTitleWrapper name="Settings" handleCreateClassOpen={handleCreateAddWebsiteMenu} disabled={false} />
-      </PageTitleWrapper>
 
-      {/* result component code start */}
-      <Result />
-      {/* result component code end */}
+      <PageTitleWrapper>
+        <PageHeader title={'Settings - Management'} />
+      </PageTitleWrapper>
+      <Grid component={Paper} sx={{ borderRadius: 0.5 }} mx={1} mt={3}>
+        <Grid sx={{ pt: 2, px: 1, pb: 2 }}>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch checked={isSmallSize} onChange={handleBanchWiseFeesCollection} />
+                // <Switch checked={isSmallSize} onChange={() => setIsSmallSize((value) => !value)} inputProps={{ 'aria-label': 'controlled' }} />
+              }
+              label={`Branch Wise Fees Collection: ${isSmallSize ? 'On' : 'Off'}`}
+              labelPlacement="start"
+              sx={{ mr: 'auto' }}
+            />{' '}
+          </FormGroup>
+          <FormGroup>
+            <FormControlLabel
+              control={<Switch checked={isOn} onChange={() => setIsOn((value) => !value)} inputProps={{ 'aria-label': 'controlled' }} />}
+              label={`Branch Wise Addmission: ${isOn ? 'On' : 'Off'}`}
+              labelPlacement="start"
+              sx={{ mr: 'auto' }}
+            />{' '}
+          </FormGroup>
+        </Grid>
+      </Grid>
     </>
   );
 };
