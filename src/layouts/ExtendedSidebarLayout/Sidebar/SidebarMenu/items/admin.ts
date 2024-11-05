@@ -739,6 +739,11 @@ const website_settings: MenuItems[] = [
         icon: CameraFrontIcon,
         link: '/front_end/programs'
       },
+       {
+        name: 'settings',
+        icon: CameraFrontIcon,
+        link: '/front_end/settings'
+      },
       {
         name: 'Scholarship',
         icon: CameraFrontIcon,

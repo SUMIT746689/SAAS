@@ -1,7 +1,6 @@
 import get from 'controllers/front_end/get';
 import put from 'controllers/front_end/put';
 import { logFile } from 'utilities_api/handleLogFile';
-
 export const config = {
   api: {
     bodyParser: false
