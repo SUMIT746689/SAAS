@@ -298,8 +298,7 @@ function FeesPaymentReport() {
 
                             <TableCell>
                               <Typography noWrap variant="h5">
-                                {i?.student?.batches?.map((batch) => batch.name)}[
-                                {i?.student?.batches?.map((batch) => dayjs?.(batch.std_entry_time).format('h:mm A'))}]
+                                {i?.student?.batches?.map((batch) => `${batch.name} [${batch.std_entry_time ? dayjs?.(batch.std_entry_time).format('h:mm A') : ' '}]`).join(', ')}
                               </Typography>
                             </TableCell>
                             <TableCell>
@@ -338,7 +337,7 @@ function FeesPaymentReport() {
                             </TableCell>
 
                             <TableCell>
-                              <Typography noWrap variant="h5">
+                              <Typography noWrap variant="h5" textAlign="right">
                                 {i?.collected_amount}
                               </Typography>
                             </TableCell>
@@ -367,12 +366,6 @@ function FeesPaymentReport() {
                                 </ButtonWrapper>
                               </Typography>
                             </TableCell>
-
-                            {/* <TableCell>
-                                                                <Typography noWrap variant="h5">
-                                                                    {total?.toFixed(2)}
-                                                                </Typography>
-                                                            </TableCell> */}
                           </TableRow>
                         );
                       })}
@@ -380,8 +373,8 @@ function FeesPaymentReport() {
                     <TableFooter>
                       <TableRow>
                         <TableCell colSpan={8}></TableCell>
-                        <TableCell>{t('Total Collected amount')}</TableCell>
-                        <TableCell>{datas?.SumCollectedAmount}</TableCell>
+                        <TableCell sx={{textAlign:"right",color:"black", fontWeight:500}}>{t('Total Collected amount')}</TableCell>
+                        <TableCell sx={{textAlign:"right",color:"black", fontWeight:500}}>{datas?.SumCollectedAmount}</TableCell>
                         {/* <TableCell>{t('Total')}</TableCell> */}
                         {/* <TableCell>{datas?.sumTotal}</TableCell> */}
                       </TableRow>

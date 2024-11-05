@@ -107,7 +107,9 @@ const DesignInvoice = ({ schoolData, selectedInvoice }) => {
                 ].join(' ')}
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
-                : {selectedInvoice[0]?.student?.section?.name}
+               : {selectedInvoice[0]?.student?.batches?.map((batch) => `${batch.name}[${batch.std_entry_time ? dayjs?.(batch.std_entry_time).format('h:mm A') : ' ' }]`).join(', ')}
+                              
+                {/* : {selectedInvoice[0]?.student?.section?.name} */}
               </Typography>
             </Grid>
           </Grid>
@@ -128,7 +130,7 @@ const DesignInvoice = ({ schoolData, selectedInvoice }) => {
                 : {formattedDate}
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
-                : {selectedInvoice[0]?.student?.section?.class?.name}
+                : {selectedInvoice[0]?.student?.class?.name}
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
                 : {selectedInvoice[0]?.student?.class_roll_no}

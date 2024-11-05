@@ -21,6 +21,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   const { showNotification } = useNotistick();
   const [dynamicContent, setDynamicContent] = useState([]);
   const [programsInfo, setProgramsInfo] = useState([]);
+  const bannerPhotoRef = useRef();
   useEffect(() => {
     if (editData) setOpen(true);
   }, [editData]);
@@ -76,7 +77,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
       .then((res) => {
         setProgramsInfo(res.data);
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
   useEffect(() => {
     programsList();
@@ -146,6 +147,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                           accept="image/*"
                           handleChangeFile={(e) => handleFileChange(e, setFieldValue, 'banner_photo', 'preview_banner_photo')}
                           label="Banner Photo"
+                          ref={bannerPhotoRef}
                         />
                       </Grid>
                       <Grid item>
@@ -155,7 +157,8 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                               data={image}
                               index={index}
                               key={index}
-                              handleRemove={() => handleFileRemove(setFieldValue, 'banner_photo', 'preview_banner_photo')}
+                              // @ts-ignore
+                              handleRemove={() => handleFileRemove(setFieldValue, 'banner_photo', 'preview_banner_photo', bannerPhotoRef.current.resetInput())}
                             />
                           </>
                         ))}

@@ -1,5 +1,5 @@
 import { Button, Card, FormControl, Grid, InputLabel, TextField } from '@mui/material';
-import { FC } from 'react';
+import { FC, forwardRef, useImperativeHandle, useRef } from 'react';
 import { SearchingButtonWrapper } from '@/components/ButtonWrapper';
 import Image from 'next/image';
 import { getFile } from '@/utils/utilitY-functions';
@@ -187,19 +187,29 @@ export const FileUploadFieldWrapper = ({ htmlFor, label, name, value, accept = '
   );
 };
 
-export const NewFileUploadFieldWrapper = ({
+export const NewFileUploadFieldWrapper = forwardRef<any, any>(({
   htmlFor,
   accept = 'image',
   multiple = false,
   handleChangeFile,
   label = 'Upload',
   height = 60,
-  marginBottom = 1
-}) => {
+  marginBottom = 1,
+}, ref) => {
+
+  const inputRef = useRef(null);
+
+  useImperativeHandle(ref, () => ({
+    resetInput() {
+      if (!inputRef.current?.value) return;
+      inputRef.current.value = null
+    }
+  }));
+
   return (
     <Grid pb="1" mb={marginBottom} sx={{ position: 'relative', height: height }}>
       <label htmlFor={htmlFor}>
-        <input
+        <input ref={inputRef}
           accept={`${accept}/*`}
           style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 1, opacity: 0, cursor: 'pointer' }}
           id={htmlFor}
@@ -217,7 +227,7 @@ export const NewFileUploadFieldWrapper = ({
       </label>
     </Grid>
   );
-};
+});
 
 export const PreviewImageCard = ({ data, index, handleRemove }) => {
   const { src, name } = data;
