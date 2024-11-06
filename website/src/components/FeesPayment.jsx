@@ -16,6 +16,7 @@ import { SiGoogleclassroom } from "react-icons/si";
 import { GiRadarCrossSection } from "react-icons/gi";
 import { FaQuidditch } from "react-icons/fa";
 const FeesPayment = ({ allBranches,  feesPamentDatas, bkashActivationInfo, serverHost }) => {
+    console.log({allBranches})
     const {is_branch_wise_fees_collection, branch_wise_addmission} = feesPamentDatas
     const { t } = useTranslation();
     const theme = useTheme();
@@ -28,6 +29,7 @@ const FeesPayment = ({ allBranches,  feesPamentDatas, bkashActivationInfo, serve
     // const [selectedBranchId, setSelectedBranchId] = useState();
     const selectedAllUsers = selectedItems.length === lists.length;
     const selectedSomeUsers = selectedItems.length > 0 && selectedItems.length < lists.length;
+
     const handleFormSubmit = async (
         _values,
         { resetForm, setErrors, setStatus, setSubmitting }
@@ -78,7 +80,8 @@ const FeesPayment = ({ allBranches,  feesPamentDatas, bkashActivationInfo, serve
                 setStatus({ success: true });
                 setSubmitting(false);
             };
-            const res = await axios.get(`${serverHost}/api/student_payment_collect/websites?branch_id=${_values.branch_id}&student_id=${_values.student_id}&phone_number=${_values.phone_number}`);
+
+            const res = await axios.get(`${serverHost}/api/student_payment_collect/websites?branch_id=${ !is_branch_wise_fees_collection ? allBranches[0].id :_values.branch_id}&student_id=${_values.student_id}&phone_number=${_values.phone_number}`);
             setLists(res.data?.data?.fees);
             setStdInfo(res.data?.data?.stdInfo);
 
@@ -150,7 +153,7 @@ const FeesPayment = ({ allBranches,  feesPamentDatas, bkashActivationInfo, serve
             console.log(err);
 
         }
-    }
+    };
     return (
         <Grid maxWidth={1300} mx="auto" pb={10} >
             <Typography variant="h4" gutterBottom py={6} align="center">
@@ -164,10 +167,16 @@ const FeesPayment = ({ allBranches,  feesPamentDatas, bkashActivationInfo, serve
                         phone_number: '',
                         submit: null
                     }}
-                    validationSchema={Yup.object().shape({
-                        branch_id: Yup.number().required(
-                            t('The branch is required')
-                        ),
+                    validationSchema = {Yup.object().shape({
+                        
+                        branch_id: is_branch_wise_fees_collection ? Yup.number().required(t('The branch is required') ) : undefined,
+                        // branch_id: Yup.number()
+                        //     .when('is_branch_wise_fees_collection', {
+                        //      is: true,
+                        //      then: Yup.number().required(t('The branch is required')),
+                        //      otherwise: Yup.number().nullable(),  // or any other validation if needed
+                        //     }),
+
                         student_id: Yup.string().required(
                             t('The student id is required')
                         ),

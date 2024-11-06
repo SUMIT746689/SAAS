@@ -35,19 +35,6 @@ const page = async () => {
         }
     });
 
-    const allBranches = [{ label: resSchoolAndBranches.name, id: resSchoolAndBranches.id, isAdmin: true, }]
-    resSchoolAndBranches.School?.forEach(branch_school => {
-        allBranches.push({
-            label: branch_school.name,
-            id: branch_school.id,
-            isAdmin: false
-        }) 
-    });
-
-    const bkashActivationInfo = school_info.find(school => school?.title === "bkash");
-    const serverHost = process.env.SERVER_HOST;
-
-    
     const schoolInfo = await prisma.websiteUi.findFirst({
         where: {
           school: {
@@ -67,15 +54,27 @@ const page = async () => {
           is_branch_wise_fees_collection: true,
           branch_wise_addmission: true,
         }
-      })
+    })
       
-      const feesPamentDatas = {
-          is_branch_wise_fees_collection: schoolInfo?.is_branch_wise_fees_collection,
-          branch_wise_addmission: schoolInfo?.branch_wise_addmission,
-          
-        }
-        
-        console.log("feesPamentDatas........................................jd",{feesPamentDatas})
+    const allBranches = [{ label: resSchoolAndBranches.name, id: resSchoolAndBranches.id, isAdmin: true, }]
+    !schoolInfo?.is_branch_wise_fees_collection && resSchoolAndBranches.School?.forEach(branch_school => {
+        allBranches.push({
+            label: branch_school.name,
+            id: branch_school.id,
+            isAdmin: false
+        }) 
+    });
+
+    const bkashActivationInfo = school_info.find(school => school?.title === "bkash");
+    const serverHost = process.env.SERVER_HOST;
+
+    const feesPamentDatas = {
+        is_branch_wise_fees_collection: schoolInfo?.is_branch_wise_fees_collection,
+        branch_wise_addmission: schoolInfo?.branch_wise_addmission,
+
+      }
+
+    console.log("feesPamentDatas........................................jd",{feesPamentDatas})
 
     return (
         <>
