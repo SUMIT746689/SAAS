@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma_client';
 import dayjs from 'dayjs';
+import { isDateValid } from 'utilities_api/handleDate';
 import { logFile } from 'utilities_api/handleLogFile';
 
 const index = async (req, res) => {
@@ -8,50 +9,16 @@ const index = async (req, res) => {
 
     switch (method) {
       case 'GET':
-        const { start_date, end_date, selected_class, selected_group, selected_section } = req.query;
+        const { from_date, to_date, selected_class, selected_group, selected_section } = req.query;
 
-        if (!start_date || !end_date || !selected_section) throw new Error('provide required information');
-
-        // date formating code start
-        let start_date_ = new Date(new Date(start_date).setHours(0, 0, 0, 0));
-        let end_date_ = new Date(new Date(end_date).setHours(23, 59, 59, 999));
-
-        // let hoursToSubtract = 6;
-        // let new_start_date = subtractHours(start_date_, hoursToSubtract);
-        // let new_end_date = subtractHours(end_date_, hoursToSubtract);
-        // console.log({ start_date_, end_date_ });
-        // date formating code end
+        if (!isDateValid(from_date) || !isDateValid(to_date)) throw new Error('required from date / to_date is not founds');
+        if (!selected_section) throw new Error('provide required information');
 
         const groupWise = {};
 
         if (selected_group) {
           groupWise['group_id'] = { in: selected_group?.split(',').map(Number) };
         }
-
-        // findount fees
-        // const fetchStdFees = await prisma.studentFee.findMany({
-        //   where: {
-        //     student: {
-        //       section_id: {
-        //         in: selected_section?.split(',').map(Number)
-        //       },
-        //       ...groupWise
-        //     },
-        //     collection_date: {
-        //       gte: start_date_,
-        //       lte: end_date_
-        //     }
-        //   },
-        //   include: {
-        //     student: {
-        //       include: {
-        //         student_info: true,
-        //         section: true,
-        //         group: true
-        //       }
-        //     }
-        //   }
-        // });
 
         const fetchStdFees = await prisma.studentFee.findMany({
           where: {
@@ -63,14 +30,11 @@ const index = async (req, res) => {
                   }
                 }
               },
-              // section_id: {
-              //   in: selected_section?.split(',').map(Number)
-              // },
               ...groupWise
             },
             collection_date: {
-              gte: start_date_,
-              lte: end_date_
+              gte: from_date,
+              lte: to_date
             }
           },
           select: {

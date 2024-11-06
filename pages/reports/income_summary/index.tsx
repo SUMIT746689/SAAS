@@ -22,6 +22,7 @@ import useNotistick from '@/hooks/useNotistick';
 import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
 import { useReactToPrint } from 'react-to-print';
 import { useAuth } from '@/hooks/useAuth';
+import { handleEndDate, handleStartDate } from '@/utils/customizeDate';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(even)': {
@@ -158,7 +159,7 @@ const IncomeSummary = () => {
   const handleSearch = () => {
     setIsLoading(true);
     axios
-      .get(`/api/reports/income_summary?from_date=${startDate}&to_date=${endDate}`)
+      .get(`/api/reports/income_summary?from_date=${handleStartDate(startDate)}&to_date=${handleEndDate(endDate)}`)
       .then(({ data }) => {
         if (data?.result) {
           setTotalFees(data?.result?.fees);

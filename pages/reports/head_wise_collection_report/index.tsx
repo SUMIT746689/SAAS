@@ -22,6 +22,7 @@ import useNotistick from '@/hooks/useNotistick';
 import { formatNumber } from '@/utils/numberFormat';
 import { useAuth } from '@/hooks/useAuth';
 import { useReactToPrint } from 'react-to-print';
+import { handleEndDate, handleStartDate } from '@/utils/customizeDate';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(even)': {
@@ -116,7 +117,7 @@ const HeadWiseCollectionReport = () => {
     setIsLoading(true);
 
     axios
-      .get(`/api/reports/head_wise_collections?from_date=${startDate}&to_date=${endDate}`)
+      .get(`/api/reports/head_wise_collections?from_date=${handleStartDate(startDate)}&to_date=${handleEndDate(endDate)}`)
       .then(({ data }) => {
         setReports(data);
         setTotal(data.reduce((prev, curr) => prev + curr.total_collected_amt, 0));

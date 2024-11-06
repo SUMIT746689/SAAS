@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma_client';
 
 import { academicYearVerify, authenticate } from 'middleware/authenticate';
+import { isDateValid } from 'utilities_api/handleDate';
 import { logFile } from 'utilities_api/handleLogFile';
 
 const index = async (req, res) => {
@@ -11,10 +12,7 @@ const index = async (req, res) => {
       case 'GET':
         const { from_date, to_date } = req.query;
 
-        const isoFromDate = new Date(new Date(from_date).setHours(0, 0, 0, 0)).toISOString();
-        const isoToDate = new Date(new Date(to_date).setHours(23, 59, 59, 999)).toISOString();
-
-        if (!from_date || !to_date) throw new Error('required fields is not founds');
+        if (!isDateValid(from_date) || !isDateValid(to_date)) throw new Error('required from date / to_date is not founds');
 
         const expenseData = await prisma.transaction.aggregate({
           _sum: {
@@ -22,8 +20,8 @@ const index = async (req, res) => {
           },
           where: {
             created_at: {
-              gte: isoFromDate,
-              lte: isoToDate
+              gte: from_date,
+              lte: to_date
             },
             voucher_type: 'debit'
           }

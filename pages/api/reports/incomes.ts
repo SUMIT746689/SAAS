@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma_client';
 import { academicYearVerify, authenticate } from 'middleware/authenticate';
+import { isDateValid } from 'utilities_api/handleDate';
 import { logFile } from 'utilities_api/handleLogFile';
 
 const index = async (req, res, refresh_token, dcrypt_academic_year) => {
@@ -11,10 +12,7 @@ const index = async (req, res, refresh_token, dcrypt_academic_year) => {
         const { school_id } = refresh_token;
         const { from_date, to_date } = req.query;
 
-        if (!from_date || !to_date) throw new Error('required fields is not founds');
-
-        const isoFromDate = new Date(new Date(from_date).setHours(0, 0, 0, 0)).toISOString();
-        const isoToDate = new Date(new Date(to_date).setHours(23, 59, 59, 999)).toISOString();
+        if (!isDateValid(from_date) || !isDateValid(to_date)) throw new Error('required from date / to_date is not founds');
 
         const resvoucherTrans = await prisma.$queryRaw`
               WITH voucherWiseTranGroup AS 
@@ -25,7 +23,7 @@ const index = async (req, res, refresh_token, dcrypt_academic_year) => {
                   FROM transactions
                   WHERE voucher_type = "credit" 
                   AND school_id=${school_id} 
-                  AND created_at >= ${isoFromDate} AND created_at <= ${isoToDate}
+                  AND created_at >= ${from_date} AND created_at <= ${to_date}
                   GROUP BY voucher_id
                   ORDER BY max(created_at) DESC
                 ),

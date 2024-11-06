@@ -38,6 +38,7 @@ import { ButtonWrapper } from '@/components/ButtonWrapper';
 import PaymentInvoice from '@/content/Management/StudentFeesCollection/PaymentInvoice';
 import { useClientFetch } from 'src/hooks/useClientFetch';
 import { Data } from '@/models/front_end';
+import { handleEndDate, handleStartDate } from '@/utils/customizeDate';
 
 const tableStyle: object = {
   border: '1px solid black',
@@ -105,13 +106,10 @@ function FeesPaymentReport() {
   }, []);
 
   const getData = (startDate, endDate) => {
-    const tempToDate = new Date(endDate);
-    tempToDate.setDate(tempToDate.getDate() + 1);
+
     axios
       .get(
-        `/api/reports/student_payment_collection_history?from_date=${dayjs(startDate).format('YYYY-MM-DD')}&to_date=${dayjs(tempToDate).format(
-          'YYYY-MM-DD'
-        )}${selectedAccount ? `&account_id=${selectedAccount?.id}` : ''}`
+        `/api/reports/student_payment_collection_history?from_date=${handleStartDate(startDate)}&to_date=${handleEndDate(endDate)}${selectedAccount ? `&account_id=${selectedAccount?.id}` : ''}`
       )
       .then((res) => {
         let sumTotal = 0,
@@ -373,8 +371,8 @@ function FeesPaymentReport() {
                     <TableFooter>
                       <TableRow>
                         <TableCell colSpan={8}></TableCell>
-                        <TableCell sx={{textAlign:"right",color:"black", fontWeight:500}}>{t('Total Collected amount')}</TableCell>
-                        <TableCell sx={{textAlign:"right",color:"black", fontWeight:500}}>{datas?.SumCollectedAmount}</TableCell>
+                        <TableCell sx={{ textAlign: "right", color: "black", fontWeight: 500 }}>{t('Total Collected amount')}</TableCell>
+                        <TableCell sx={{ textAlign: "right", color: "black", fontWeight: 500 }}>{datas?.SumCollectedAmount}</TableCell>
                         {/* <TableCell>{t('Total')}</TableCell> */}
                         {/* <TableCell>{datas?.sumTotal}</TableCell> */}
                       </TableRow>

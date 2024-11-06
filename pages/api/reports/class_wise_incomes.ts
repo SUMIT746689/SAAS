@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma_client';
 import dayjs from 'dayjs';
 import { academicYearVerify, authenticate } from 'middleware/authenticate';
+import { isDateValid } from 'utilities_api/handleDate';
 import { logFile } from 'utilities_api/handleLogFile';
 
 const index = async (req, res, refresh_token, dcrypt_academic_year) => {
@@ -14,19 +15,15 @@ const index = async (req, res, refresh_token, dcrypt_academic_year) => {
         const { from_date, to_date, class_ids } = req.query;
         const class_ids_ = class_ids.split(',').map((cls_id) => Number(cls_id));
 
-        const isoFromDate = new Date(new Date(from_date).setHours(0, 0, 0, 0)).toISOString();
-        const isoToDate = new Date(new Date(to_date).setHours(23, 59, 59, 999)).toISOString();
+        if (!isDateValid(from_date) || !isDateValid(to_date)) throw new Error('required from date / to_date is not founds');
 
-
-
-        if (!from_date || !to_date || !class_ids) throw new Error('required fields is not founds');
-
+        if (!class_ids) throw new Error('classes fields is not founds');
 
         const studentFees = await prisma.studentFee.findMany({
           where: {
             collection_date: {
-              gte: isoFromDate,
-              lte: isoToDate
+              gte: from_date,
+              lte: to_date
             },
             student: {
               academic_year_id,

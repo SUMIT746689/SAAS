@@ -23,6 +23,7 @@ import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
 import { formatNumber } from '@/utils/numberFormat';
 import { useReactToPrint } from 'react-to-print';
 import { useAuth } from '@/hooks/useAuth';
+import { handleEndDate, handleStartDate } from '@/utils/customizeDate';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(even)': {
@@ -64,7 +65,7 @@ const ClassWiseIncome = () => {
     setIsLoading(true);
     const class_ids = selectedCls?.map((cls) => cls.id);
     axios
-      .get(`/api/reports/class_wise_incomes?from_date=${startDate}&to_date=${endDate}&class_ids=${class_ids}`)
+      .get(`/api/reports/class_wise_incomes?from_date=${handleStartDate(startDate)}&to_date=${handleEndDate(endDate)}&class_ids=${class_ids}`)
       .then(({ data }) => {
         let total_collected_amt = 0;
 

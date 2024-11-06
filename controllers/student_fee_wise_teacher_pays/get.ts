@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma_client';
 import { authenticate } from 'middleware/authenticate';
+import { isDateValid } from 'utilities_api/handleDate';
 import { logFile } from 'utilities_api/handleLogFile';
 
 async function get(req, res, refresh_token) {
@@ -7,6 +8,7 @@ async function get(req, res, refresh_token) {
    
     const {from_date, to_date, selected_teacher} = req.query;
   
+    if (!isDateValid(from_date) || !isDateValid(to_date)) throw new Error('required from date / to_date is not founds');
     
     const where = {}
     if(selected_teacher) {
@@ -22,8 +24,6 @@ async function get(req, res, refresh_token) {
                 created_at: {
                     gte:from_date,
                     lte:to_date,
-                    // gte: new Date(new Date(from_date).setHours(0, 0, 0, 0)),
-                    // lte: new Date(new Date(to_date).setHours(23, 59, 59, 999))
                   },
                   ...where
             },

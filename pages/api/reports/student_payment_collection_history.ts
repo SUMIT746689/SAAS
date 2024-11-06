@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma_client';
 import dayjs from 'dayjs';
+import { isDateValid } from 'utilities_api/handleDate';
 import { logFile } from 'utilities_api/handleLogFile';
 
 const index = async (req, res) => {
@@ -9,6 +10,9 @@ const index = async (req, res) => {
         switch (method) {
             case 'GET':
                 const { from_date, to_date, payment_method, collected_by, account_id, student_id } = req.query;
+
+                if (!isDateValid(from_date) || !isDateValid(to_date)) throw new Error('required from date / to_date is not founds');
+
                 const query = {};
                 if (payment_method) {
                     query['payment_method'] = payment_method
@@ -26,8 +30,10 @@ const index = async (req, res) => {
                 const data = await prisma.studentFee.findMany({
                     where: {
                         created_at: {
-                            gte: new Date(new Date(from_date).setUTCHours(0, 0, 0, 0)),
-                            lte: new Date(new Date(to_date).setUTCHours(23, 59, 59, 999))
+                            gte: from_date,
+                            lte: to_date,
+                            // gte: new Date(new Date(from_date).setUTCHours(0, 0, 0, 0)),
+                            // lte: new Date(new Date(to_date).setUTCHours(23, 59, 59, 999))
                         },
                         ...query
 
@@ -58,10 +64,10 @@ const index = async (req, res) => {
                                         name: true,
                                     }
                                 },
-                                batches:{
-                                    select:{
-                                        name:true,
-                                        std_entry_time:true
+                                batches: {
+                                    select: {
+                                        name: true,
+                                        std_entry_time: true
                                     }
                                 },
                                 // section: {

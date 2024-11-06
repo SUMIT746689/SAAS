@@ -38,6 +38,7 @@ import { ButtonWrapper } from '@/components/ButtonWrapper';
 import PaymentInvoice from '@/content/Management/StudentFeesCollection/PaymentInvoice';
 import { useClientFetch } from 'src/hooks/useClientFetch';
 import { Data } from '@/models/front_end';
+import { handleEndDate, handleStartDate } from '@/utils/customizeDate';
 
 const tableStyle: object = {
   border: '1px solid black',
@@ -118,9 +119,9 @@ function TeacherReport() {
     // tempToDate.setDate(tempToDate.getDate() + 1);
     let url;
     if (selectedTeacher) {
-      url = `/api/student_fee_wise_teacher_pays?from_date=${startDate}&to_date=${endDate}&selected_teacher=${selectedTeacher.id}`;
+      url = `/api/student_fee_wise_teacher_pays?from_date=${handleStartDate(startDate)}&to_date=${handleEndDate(endDate)}&selected_teacher=${selectedTeacher.id}`;
     } else {
-      url = `/api/student_fee_wise_teacher_pays?from_date=${startDate}&to_date=${endDate}`;
+      url = `/api/student_fee_wise_teacher_pays?from_date=${handleStartDate(startDate)}&to_date=${handleEndDate(endDate)}`;
     }
     axios
       .get(url)

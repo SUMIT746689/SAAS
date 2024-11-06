@@ -24,6 +24,7 @@ import { styled } from '@mui/material/styles';
 import { formatNumber } from '@/utils/numberFormat';
 import { useAuth } from '@/hooks/useAuth';
 import { useReactToPrint } from 'react-to-print';
+import { handleEndDate, handleStartDate } from '@/utils/customizeDate';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(even)': {
@@ -241,7 +242,7 @@ const StudentCollectionReport = () => {
     }
 
     return axios.get(
-      `/api/reports/student_collections?start_date=${startDate}&end_date=${endDate}&selected_class=${selectedClass?.id}&selected_group=${
+      `/api/reports/student_collections?from_date=${handleStartDate(startDate)}&to_date=${handleEndDate(endDate)}&selected_class=${selectedClass?.id}&selected_group=${
         groupQueryArr?.length > 0 ? groupQueryArr : ''
       }&selected_section=${groupSectionArr}`
     );
