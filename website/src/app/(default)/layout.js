@@ -47,7 +47,7 @@ export default async function RootLayout({ children }) {
         is_scholarship_active: true,
       }
     })
-    console.log("school_info........................................jd",{school_info})
+    // console.log("school_info........................................jd",{school_info})
 
     const navarDatas = {
       english_scholarship_name: school_info?.english_scholarship_name,

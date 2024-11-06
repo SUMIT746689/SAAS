@@ -15,24 +15,19 @@ import { AiOutlineIdcard } from "react-icons/ai";
 import { SiGoogleclassroom } from "react-icons/si";
 import { GiRadarCrossSection } from "react-icons/gi";
 import { FaQuidditch } from "react-icons/fa";
-
-
-const FeesPayment = ({ allBranches,  is_branch_active, bkashActivationInfo, serverHost }) => {
+const FeesPayment = ({ allBranches,  feesPamentDatas, bkashActivationInfo, serverHost }) => {
+    const {is_branch_wise_fees_collection, branch_wise_addmission} = feesPamentDatas
     const { t } = useTranslation();
     const theme = useTheme();
     const { showNotification } = useNotistick();
-
     const [stdInfo, setStdInfo] = useState();
     const [lists, setLists] = useState([]);
     const [selectedItems, setSelectedUsers] = useState([]);
     const [selectedPayAmt, setSelectedPayAmt] = useState(0);
     const router = useRouter();
     // const [selectedBranchId, setSelectedBranchId] = useState();
-
     const selectedAllUsers = selectedItems.length === lists.length;
     const selectedSomeUsers = selectedItems.length > 0 && selectedItems.length < lists.length;
-
-
     const handleFormSubmit = async (
         _values,
         { resetForm, setErrors, setStatus, setSubmitting }
@@ -98,13 +93,10 @@ const FeesPayment = ({ allBranches,  is_branch_active, bkashActivationInfo, serv
             setSubmitting(false);
         }
     };
-
-
     const handleSelectAllUsers = (event) => {
         setSelectedPayAmt(event.target.checked ? lists.reduce((prev, curr) => prev + curr.due, 0) : 0);
         setSelectedUsers(event.target.checked ? lists.map((list) => list.id) : []);
     };
-
     const handleSelectOneUser = (_eventEvent, userId, due) => {
         if (!selectedItems.includes(userId)) {
             setSelectedPayAmt(amt => amt + due);
@@ -114,11 +106,8 @@ const FeesPayment = ({ allBranches,  is_branch_active, bkashActivationInfo, serv
             setSelectedUsers((prevSelected) => prevSelected.filter((id) => id !== userId));
         }
     };
-
     const handlePayment = async () => {
-
         const pay_fees = [];
-
         lists.forEach((fee) => {
             if (!selectedItems.includes(fee.id)) return;
             pay_fees.push({
@@ -162,8 +151,6 @@ const FeesPayment = ({ allBranches,  is_branch_active, bkashActivationInfo, serv
 
         }
     }
-    // console.log({ stdInfo })
-
     return (
         <Grid maxWidth={1300} mx="auto" pb={10} >
             <Typography variant="h4" gutterBottom py={6} align="center">
@@ -204,7 +191,7 @@ const FeesPayment = ({ allBranches,  is_branch_active, bkashActivationInfo, serv
                                     {/* <Grid container item sx={{ display: "flex", justifyContent: "center", alignItems: "start", gap: 2 }}> */}
 
                                     {/*all branches */}
-                                    {/* {is_branch_active && ( */}
+                                    {is_branch_wise_fees_collection && (
                                     <Grid item xs={12}>
                                         <Grid>
                                             <Box
@@ -256,7 +243,7 @@ const FeesPayment = ({ allBranches,  is_branch_active, bkashActivationInfo, serv
                                             />
                                         </Grid>
                                     </Grid>
-                                 {/* )} */}
+                                 )} 
 
 
                                     {/* student id */}

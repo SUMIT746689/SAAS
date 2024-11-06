@@ -3,7 +3,6 @@ import FeesPament from '@/components/FeesPayment'
 import { headers } from 'next/headers';
 import prisma from '@/lib/prisma_client';
 import NotificationProvider from '@/components/NotificationProvider';
-
 const page = async () => {
     const headersList = headers();
     const domain = headersList.get('host');
@@ -48,10 +47,40 @@ const page = async () => {
     const bkashActivationInfo = school_info.find(school => school?.title === "bkash");
     const serverHost = process.env.SERVER_HOST;
 
+    
+    const schoolInfo = await prisma.websiteUi.findFirst({
+        where: {
+          school: {
+            domain: domain
+          }
+        },
+        select: {
+          school: {
+            select: {
+              name: true,
+              address: true,
+              email: true,
+              phone: true
+  
+            }
+          },
+          is_branch_wise_fees_collection: true,
+          branch_wise_addmission: true,
+        }
+      })
+      
+      const feesPamentDatas = {
+          is_branch_wise_fees_collection: schoolInfo?.is_branch_wise_fees_collection,
+          branch_wise_addmission: schoolInfo?.branch_wise_addmission,
+          
+        }
+        
+        console.log("feesPamentDatas........................................jd",{feesPamentDatas})
+
     return (
         <>
             <NotificationProvider>
-                <FeesPament allBranches={allBranches} bkashActivationInfo={bkashActivationInfo} serverHost={serverHost} />
+                <FeesPament allBranches={allBranches} bkashActivationInfo={bkashActivationInfo} serverHost={serverHost} feesPamentDatas={feesPamentDatas}/>
             </NotificationProvider>
         </>
     )
