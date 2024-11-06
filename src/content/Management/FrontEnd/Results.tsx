@@ -869,7 +869,7 @@ const Results = ({ data, reFetchData }) => {
                   </Grid>
                   {/* Google_map_link */}
                   <Grid item xs={12} md={6}>
-                    <Grid>Google link:</Grid>
+                    <Grid>Google Map link:</Grid>
                     <TextFieldWrapper
                       touched={touched.google_map_link}
                       errors={errors.google_map_link}

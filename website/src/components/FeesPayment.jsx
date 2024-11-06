@@ -17,7 +17,7 @@ import { GiRadarCrossSection } from "react-icons/gi";
 import { FaQuidditch } from "react-icons/fa";
 
 
-const FeesPayment = ({ allBranches, bkashActivationInfo, serverHost }) => {
+const FeesPayment = ({ allBranches,  is_branch_active, bkashActivationInfo, serverHost }) => {
     const { t } = useTranslation();
     const theme = useTheme();
     const { showNotification } = useNotistick();
@@ -204,6 +204,7 @@ const FeesPayment = ({ allBranches, bkashActivationInfo, serverHost }) => {
                                     {/* <Grid container item sx={{ display: "flex", justifyContent: "center", alignItems: "start", gap: 2 }}> */}
 
                                     {/*all branches */}
+                                    {/* {is_branch_active && ( */}
                                     <Grid item xs={12}>
                                         <Grid>
                                             <Box
@@ -255,6 +256,7 @@ const FeesPayment = ({ allBranches, bkashActivationInfo, serverHost }) => {
                                             />
                                         </Grid>
                                     </Grid>
+                                 {/* )} */}
 
 
                                     {/* student id */}

@@ -923,21 +923,23 @@ model WebsiteUi {
   gallery       Json?
   video_gallery Json?
 
-  facebook_link   String?
-  youtube_link    String?
-  twitter_link    String?
-  google_link     String?
-  google_map_link String?
-  linkedin_link   String?
+  facebook_link   String? @db.LongText
+  youtube_link    String? @db.LongText
+  twitter_link    String? @db.LongText
+  google_link     String? @db.LongText
+  google_map_link String? @db.LongText
+  linkedin_link   String? @db.LongText
 
   e_books_section   Json?
   downloads_section Json?
 
   school_id Int
 
-  english_scholarship_name String?
-  bangla_scholarship_name  String?
-  is_scholarship_active    Boolean @default(false)
+  english_scholarship_name       String?
+  bangla_scholarship_name        String?
+  is_scholarship_active          Boolean @default(false)
+  is_branch_wise_fees_collection Boolean @default(false)
+  branch_wise_addmission         Boolean @default(false)
 
   school             School  @relation(fields: [school_id], references: [id])
   scholarshipClasses Class[]

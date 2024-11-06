@@ -4,6 +4,9 @@ import Link from "next/link";
 import { FaMapMarkerAlt } from "react-icons/fa";
 export default function Footer({school_info}) {
 	console.log("school_info_________school_info_________________________" , {school_info})
+	
+
+	const { google_map_link } = school_info;
 
 
 	return (
@@ -80,7 +83,7 @@ export default function Footer({school_info}) {
 								</svg>
 							</a>
 							
-							<Link href={`${school_info?.google_map_link}`} className="text-2xl ">
+							<Link href={google_map_link || '#'} className="text-2xl ">
 							<FaMapMarkerAlt />
 							</Link>
 							

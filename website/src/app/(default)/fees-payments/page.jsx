@@ -42,7 +42,7 @@ const page = async () => {
             label: branch_school.name,
             id: branch_school.id,
             isAdmin: false
-        })
+        }) 
     });
 
     const bkashActivationInfo = school_info.find(school => school?.title === "bkash");

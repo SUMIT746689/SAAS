@@ -305,6 +305,7 @@ function Attendence() {
                               const found = j.student_id_list.find((st) => st.student_id == i.student_id);
                               const today = dayjs();
                               const formattedToday = parseInt(today.format('D'), 10);
+                              console.log({ index, formattedToday });
 
                               if (found) {
                                 return (
@@ -339,8 +340,8 @@ function Attendence() {
                                   </td>
                                 );
                               } else {
-                                console.log({ index, formattedToday });
-                                if (index + 1 <= formattedToday) {
+                                // console.log({ index, formattedToday });
+                                if (index - 1 <= formattedToday) {
                                   return (
                                     <td
                                       style={{
@@ -388,87 +389,6 @@ function Attendence() {
                       );
                     })}
                   </tbody>
-
-                  {/* <tbody
-                    style={{
-                      overflowX: 'auto',
-                      overflowY: 'auto'
-                    }}
-                  >
-                    {targetsectionStudents?.map((i) => {
-                      return (
-                        <tr key={i.student_id}>
-                          {students?.map((j) => {
-                            if (j.student_id_list) {
-                              const found = j.student_id_list.find((st) => st.student_id === i.student_id);
-
-                              const isToday = j.date === formattedToday;
-                              console.log(isToday);
-
-                              if (found) {
-                                return (
-                                  <td
-                                    key={j.date}
-                                    style={
-                                      isToday
-                                        ? { ...tableStyle, backgroundColor: 'green', color: 'white' }
-                                        : found.status === 'absent'
-                                        ? { ...tableStyle, backgroundColor: 'red', color: 'white' }
-                                        : found.status === 'late'
-                                        ? { ...tableStyle, backgroundColor: 'yellow', color: 'black' }
-                                        : found.status === 'bunk'
-                                        ? { ...tableStyle, backgroundColor: 'blue', color: 'white' }
-                                        : { ...tableStyle, backgroundColor: 'green', color: 'white' }
-                                    }
-                                  >
-                                    {isToday ? 'P' : found.status.slice(0, 1)}
-                                  </td>
-                                );
-                              } else {
-                                return (
-                                  <td
-                                    key={j.date}
-                                    style={{
-                                      ...tableStyle,
-                                      backgroundColor: isToday ? 'green' : 'red',
-                                      color: 'white',
-                                      textAlign: 'center'
-                                    }}
-                                  >
-                                    {isToday ? 'P' : 'A'}
-                                  </td>
-                                );
-                              }
-                            } else {
-                              return j === 'name' ? (
-                                <td
-                                  key={j}
-                                  style={{
-                                    ...tableStyle,
-                                    backgroundColor: '#00997a',
-                                    color: 'white'
-                                  }}
-                                >
-                                  {i.name}
-                                </td>
-                              ) : (
-                                <td
-                                  key={j}
-                                  style={{
-                                    ...tableStyle,
-                                    backgroundColor: '#00997a',
-                                    color: 'white'
-                                  }}
-                                >
-                                  {i.class_roll_no}
-                                </td>
-                              );
-                            }
-                          })}
-                        </tr>
-                      );
-                    })}
-                  </tbody> */}
 
                   {/* <tfoot>
             <tr>
