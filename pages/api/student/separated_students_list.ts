@@ -1,27 +1,23 @@
 import prisma from '@/lib/prisma_client';
 import { authenticate } from 'middleware/authenticate';
 import { logFile } from 'utilities_api/handleLogFile';
-
 async function get(req, res, refresh_token) {
   const { section_id, academic_year_id, class_id } = req.query;
-
   const where = {};
-
   if (section_id) {
     const Id_s = section_id.split(',').map((id) => parseInt(id, 10));
-
-    where['section_id'] = {
+    where['batches'] = {
       in: Id_s
     };
-  } else if (class_id) {
-    where['section'] = {
-      class_id: parseInt(class_id)
-    };
-  }
+  } 
+  // else if (class_id) {
+  //   where['section'] = {
+  //     class_id: parseInt(class_id)
+  //   };
+  // }
   if (academic_year_id) where['academic_year_id'] = parseInt(academic_year_id);
-
   const students = await prisma.student.findMany({
-    where: {
+    where: {class_id: parseInt(class_id),
       ...where,
       is_separate: true,
       student_info: {

@@ -1,23 +1,17 @@
 import Head from 'next/head';
-
 import { useState } from 'react';
-
 import ExtendedSidebarLayout from 'src/layouts/ExtendedSidebarLayout';
 import { Authenticated } from 'src/components/Authenticated';
-
 import PageHeader from 'src/content/Management/SchoolBranches/PageHeader';
 import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
-
 import { Grid } from '@mui/material';
 import Results from 'src/content/Management/SchoolBranches/Results';
 import { useClientFetch } from 'src/hooks/useClientFetch';
-
 function Managementschools() {
   const [editSchool, setEditSchool] = useState(null);
   const { data: schools, reFetchData, error } = useClientFetch('/api/school/school_branches');
   const [openSubscriptionModal, setOpenopenSubscriptionModal] = useState(false);
-
   return (
     <>
       <Head>
@@ -62,11 +56,9 @@ function Managementschools() {
     </>
   );
 }
-
 Managementschools.getLayout = (page) => (
   <Authenticated name="user">
     <ExtendedSidebarLayout>{page}</ExtendedSidebarLayout>
   </Authenticated>
 );
-
 export default Managementschools;

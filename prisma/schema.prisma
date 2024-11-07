@@ -362,8 +362,6 @@ model Student {
   subjects    Subject[]       @relation("student_subjects")
   batches     Section[]       @relation("students_to_batches")
 
-  // StudentClassSubjects StudentClassSubjects[]
-
   @@map("students")
 }
 
