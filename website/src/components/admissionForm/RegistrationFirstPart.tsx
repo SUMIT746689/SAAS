@@ -2,9 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
-
 import dayjs, { Dayjs } from 'dayjs';
-
 import { Grid, DialogActions, DialogContent, TextField, CircularProgress, Button, Box, Autocomplete } from '@mui/material';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -38,6 +36,7 @@ function RegistrationFirstPart({ setTotalFormData, setActiveStep, handleCreateCl
           phone: undefined,
           email: '',
           national_id: '',
+          branch: '',
           student_photo: null
         }}
         validationSchema={Yup.object().shape({
@@ -68,7 +67,7 @@ function RegistrationFirstPart({ setTotalFormData, setActiveStep, handleCreateCl
         }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
-          console.log({ errors });
+          console.log({ values });
           return (
             <form onSubmit={handleSubmit}>
               <DialogContent
@@ -289,8 +288,8 @@ function RegistrationFirstPart({ setTotalFormData, setActiveStep, handleCreateCl
                       />
                     </Grid>
 
-                    {/* national_id */}
-                    <Grid item xs={12} sm={6} md={4}>
+                    <Grid item xs={12} sm={6} md={6}>
+                      {/* national_id */}
                       <TextField
                         size="small"
                         sx={{
@@ -309,21 +308,38 @@ function RegistrationFirstPart({ setTotalFormData, setActiveStep, handleCreateCl
                         value={values.national_id}
                         variant="outlined"
                       />
-                      <Grid item xs={12}>
-                        <Grid>
-                          <Box
-                            pr={3}
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Autocomplete
+                        disablePortal
+                        options={allBranches || []}
+                        value={values.branch}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            required
+                            size="small"
                             sx={{
-                              // pt: `${theme.spacing(1)}`
-                              pb: { xs: 1, md: 0 }
+                              '& fieldset': {
+                                borderRadius: '3px'
+                              }
                             }}
-                            alignSelf="center"
-                          >
-                            <b>
-                              {t('Select Branch')}: <span>*</span>
-                            </b>
-                          </Box>
-                        </Grid>
+                            variant="outlined"
+                            fullWidth
+                            // error={Boolean(touched.branch_id && errors.branch_id)}
+                            // @ts-ignore
+                            helperText={touched.branch_id && errors.branch_id}
+                            onBlur={handleBlur}
+                            label={t('Select Branch')}
+                          />
+                        )}
+                        onChange={(event, value) => {
+                          setFieldValue('branch_id', value.id);
+                          setFieldValue('branch', value);
+                          // setSelectedBranchId(value?.id || null)
+                        }}
+                      />
+                      {/* <Grid item xs={12} sm={6} md={6}>
                         <Grid
                           sx={
                             {
@@ -332,38 +348,8 @@ function RegistrationFirstPart({ setTotalFormData, setActiveStep, handleCreateCl
                           }
                           item
                           xs={12}
-                        >
-                          <Autocomplete
-                            disablePortal
-                            options={allBranches || []}
-                            value={values.branch}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                required
-                                size="small"
-                                sx={{
-                                  '& fieldset': {
-                                    borderRadius: '3px'
-                                  }
-                                }}
-                                variant="outlined"
-                                fullWidth
-                                // error={Boolean(touched.branch_id && errors.branch_id)}
-                                // @ts-ignore
-                                helperText={touched.branch_id && errors.branch_id}
-                                onBlur={handleBlur}
-                                // label={t('Select Branch')}
-                              />
-                            )}
-                            onChange={(event, value) => {
-                              setFieldValue('branch_id', value.id);
-                              setFieldValue('branch', value);
-                              // setSelectedBranchId(value?.id || null)
-                            }}
-                          />
-                        </Grid>
-                      </Grid>
+                        ></Grid>
+                      </Grid> */}
                     </Grid>
                   </Grid>
                 </Grid>
