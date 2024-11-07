@@ -13,8 +13,7 @@ import Link from 'next/link';
 import PdfDatas from './admissionForm/PdfDatas';
 import { useReactToPrint } from 'react-to-print';
 import { SnackbarProvider } from 'notistack';
-
-const OnlineAdmission = ({ classes, academicYears, serverHost, school_id, studentAdmissionForm, school }) => {
+const OnlineAdmission = ({  allBranches, classes, academicYears, serverHost, school_id, feesPamentDatas, studentAdmissionForm, school }) => {
   const router = useRouter();
   const { t } = useTranslation();
   const [activeStep, setActiveStep] = useState(0);
@@ -24,11 +23,10 @@ const OnlineAdmission = ({ classes, academicYears, serverHost, school_id, studen
   const componentRef = useRef(null);
   const central = useRef(null);
   const [pdfDatas, setPdfDatas] = useState({});
-
+  console.log({allBranches}, {feesPamentDatas})
   const handleCreateClassClose = () => {
     router.push('/online-admission');
   };
-
   const handlePrint = useReactToPrint({
     content: () => componentRef.current
   });
@@ -55,7 +53,6 @@ const OnlineAdmission = ({ classes, academicYears, serverHost, school_id, studen
               </Grid>
             )}
             <br />
-
             <Grid>
               <Steps activeStep={activeStep} setActiveStep={setActiveStep} />
             </Grid>
@@ -76,6 +73,8 @@ const OnlineAdmission = ({ classes, academicYears, serverHost, school_id, studen
               >
                 {activeStep === 0 && (
                   <RegistrationFirstPart
+                    feesPamentDatas={feesPamentDatas}
+                    allBranches={allBranches}
                     setTotalFormData={setTotalFormData}
                     setActiveStep={setActiveStep}
                     handleCreateClassClose={handleCreateClassClose}
@@ -106,8 +105,6 @@ const OnlineAdmission = ({ classes, academicYears, serverHost, school_id, studen
                   />
                 )}
               </Grid>
-
-              {/* <Data ref={central}>{marged?.map(i=><React.Fragment>{i}</React.Fragment>)}</Data> */}
             </Grid>
           </Grid>
         </LocalizationProvider>
@@ -119,7 +116,6 @@ const OnlineAdmission = ({ classes, academicYears, serverHost, school_id, studen
             </Button>
           </Grid>
         )}
-
         <Grid sx={{ height: 0, overflow: 'hidden' }}>
           <Grid ref={componentRef}>
             <PdfDatas school={school} values={pdfDatas} serverHost={serverHost} />
@@ -129,9 +125,7 @@ const OnlineAdmission = ({ classes, academicYears, serverHost, school_id, studen
     </>
   );
 };
-
 const Data = ({ children }) => {
   return <>{children}</>;
 };
-
 export default OnlineAdmission;

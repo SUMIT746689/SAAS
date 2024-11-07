@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import dayjs, { Dayjs } from 'dayjs';
 
-import { Grid, DialogActions, DialogContent, TextField, CircularProgress, Button } from '@mui/material';
+import { Grid, DialogActions, DialogContent, TextField, CircularProgress, Button, Box, Autocomplete } from '@mui/material';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
@@ -14,12 +14,14 @@ import FormLabel from '@mui/material/FormLabel';
 
 import { MobileDatePicker, MobileDateTimePicker } from '@mui/lab';
 import useNotistick from '../../hooks/useNotistick';
-
-function RegistrationFirstPart({ setTotalFormData, setActiveStep, handleCreateClassClose }) {
+function RegistrationFirstPart({ setTotalFormData, setActiveStep, handleCreateClassClose, feesPamentDatas, allBranches }) {
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
   const [gender, setGender] = useState('male');
   const registration1stPart = useRef(null);
+
+  // console.log({ allBranches });
+  const { is_branch_wise_fees_collection, branch_wise_addmission } = feesPamentDatas;
 
   return (
     <>
@@ -66,7 +68,6 @@ function RegistrationFirstPart({ setTotalFormData, setActiveStep, handleCreateCl
         }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => {
-          // console.log("T__values__",values);
           console.log({ errors });
           return (
             <form onSubmit={handleSubmit}>
@@ -140,73 +141,6 @@ function RegistrationFirstPart({ setTotalFormData, setActiveStep, handleCreateCl
                         variant="outlined"
                       />
                     </Grid>
-
-                    {/* admission_no   */}
-                    {/* <Grid item xs={12}>
-                      <TextField
-                        // required
-                        size="small"
-                        sx={{
-                          '& fieldset': {
-                            borderRadius: '3px'
-                          }
-                        }}
-                        error={Boolean(
-                          touched.admission_no && errors.admission_no
-                        )}
-                        fullWidth
-                        // @ts-ignore
-                        helperText={touched.admission_no && errors.admission_no}
-                        label={t('Admission no')}
-                        name="admission_no"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.admission_no}
-                        variant="outlined"
-                      />
-                    </Grid> */}
-
-                    {/* admission_date */}
-                    {/* <Grid item xs={12} md={6}>
-
-                      <MobileDateTimePicker
-                        label="admission Date"
-                        inputFormat='dd/MM/yyyy hh:mm a'
-                        value={values.admission_date}
-                        renderInput={(params) => (
-                          <TextField
-                            required
-                            fullWidth
-                            size="small"
-                            name='admission_date'
-                            onBlur={handleBlur}
-                            sx={{
-                              '& fieldset': {
-                                borderRadius: '3px'
-                              },
-                              // color:"red"
-                            }}
-                            {...params}
-                          />
-                        )}
-                        onChange={(n: any) => {
-                          const newValue = dayjs(n)
-
-                          // dayjs(newValue).format('H:m:ss')
-                          if (n) {
-                            console.log("admission_date__", newValue);
-                            //@ts-ignore
-                            setFieldValue('admission_date', newValue);
-
-                          }
-                        }}
-
-
-                      />
-                      {
-                        errors.admission_date && <span style={{ color: 'red' }}> Admission date are required</span>
-                      }
-                    </Grid> */}
 
                     {/* date_of_birth */}
                     <Grid item xs={12} md={6}>
@@ -356,7 +290,7 @@ function RegistrationFirstPart({ setTotalFormData, setActiveStep, handleCreateCl
                     </Grid>
 
                     {/* national_id */}
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sm={6} md={4}>
                       <TextField
                         size="small"
                         sx={{
@@ -375,6 +309,61 @@ function RegistrationFirstPart({ setTotalFormData, setActiveStep, handleCreateCl
                         value={values.national_id}
                         variant="outlined"
                       />
+                      <Grid item xs={12}>
+                        <Grid>
+                          <Box
+                            pr={3}
+                            sx={{
+                              // pt: `${theme.spacing(1)}`
+                              pb: { xs: 1, md: 0 }
+                            }}
+                            alignSelf="center"
+                          >
+                            <b>
+                              {t('Select Branch')}: <span>*</span>
+                            </b>
+                          </Box>
+                        </Grid>
+                        <Grid
+                          sx={
+                            {
+                              // mb: `${theme.spacing(3)}`
+                            }
+                          }
+                          item
+                          xs={12}
+                        >
+                          <Autocomplete
+                            disablePortal
+                            options={allBranches || []}
+                            value={values.branch}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                required
+                                size="small"
+                                sx={{
+                                  '& fieldset': {
+                                    borderRadius: '3px'
+                                  }
+                                }}
+                                variant="outlined"
+                                fullWidth
+                                // error={Boolean(touched.branch_id && errors.branch_id)}
+                                // @ts-ignore
+                                helperText={touched.branch_id && errors.branch_id}
+                                onBlur={handleBlur}
+                                // label={t('Select Branch')}
+                              />
+                            )}
+                            onChange={(event, value) => {
+                              setFieldValue('branch_id', value.id);
+                              setFieldValue('branch', value);
+                              // setSelectedBranchId(value?.id || null)
+                            }}
+                          />
+                        </Grid>
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>

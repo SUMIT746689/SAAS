@@ -18,7 +18,6 @@ const page = async () => {
             is_active: true,
         }
     });
-
     const resSchoolAndBranches = await prisma.school.findFirst({
         where: {
             domain: domain
@@ -34,7 +33,7 @@ const page = async () => {
             }
         }
     });
-
+    console.log("resSchoolAndBranches............/",JSON.stringify(resSchoolAndBranches, null,3))
     const schoolInfo = await prisma.websiteUi.findFirst({
         where: {
           school: {
@@ -73,8 +72,6 @@ const page = async () => {
         branch_wise_addmission: schoolInfo?.branch_wise_addmission,
 
       }
-
-    console.log("feesPamentDatas........................................jd",{feesPamentDatas})
 
     return (
         <>
