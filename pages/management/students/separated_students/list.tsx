@@ -4,11 +4,8 @@ import Head from 'next/head';
 import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import ExtendedSidebarLayout from 'src/layouts/ExtendedSidebarLayout';
 import { Authenticated } from 'src/components/Authenticated';
-
 import { Card, Chip, Dialog, DialogTitle, Grid, Typography, Box, TextField, InputAdornment } from '@mui/material';
-
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
-
 import Results from '@/content/Management/Students/separated_students/list/Results';
 // import RegistrationFirstPart from '@/content/Management/Students/RegistrationFirstPart';
 import { useTranslation } from 'next-i18next';
@@ -29,13 +26,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 function SeparatedStudentsList() {
   const [students, setStudents] = useContext<any[]>(Students);
-
   const { t }: { t: any } = useTranslation();
   const router = useRouter();
   const [academicYear, setAcademicYear] = useContext(AcademicYearContext);
   const { user } = useAuth();
   const { showNotification } = useNotistick();
-
   const [sections, setSections] = useState(null);
   const [selectedClass, setSelectedClass] = useState(null);
   const [selectedSection, setSelectedSection] = useState(null);
@@ -46,7 +41,6 @@ function SeparatedStudentsList() {
   const [selectedItems, setSelectedUsers] = useState<string[]>([]);
   const [query, setQuery] = useState<string>('');
   const idCard = useRef();
-
   const { data: classes } = useClientFetch(`/api/class?school_id=${user?.school_id}`);
 
   useEffect(() => {
@@ -165,7 +159,7 @@ function SeparatedStudentsList() {
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid item>
             <Typography variant="h3" component="h3" gutterBottom>
-              {t('Separated Students List')}
+              {t('Separated Students ListYY')}
             </Typography>
           </Grid>
         </Grid>

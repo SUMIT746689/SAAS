@@ -460,8 +460,8 @@ console.log({classWiseFees})
 
       {/* pdf show */}
       {Object?.keys(pdfDatas).length > 0 && (
-        <Grid display="grid" sx={{ width: '100%', pb: 8 }}>
-          <Button variant="outlined" onClick={handlePrint} sx={{ mx: 'auto' }}>
+        <Grid display="grid"  sx={{ width: '100%', pb: 8 }}>
+          <Button   className='bg-pink-500 text-white font-bold hover:text-purple-900 hover:bg-pink-500'  variant="outlined" onClick={handlePrint} sx={{ mx: 'auto' }}>
             Download Form
           </Button>
         </Grid>

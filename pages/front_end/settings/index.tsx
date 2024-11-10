@@ -11,49 +11,28 @@ import PageTitleWrapper from '@/components/PageTitleWrapper';
 import PageHeader from 'src/content/Management/Attendence/PageHeader';
 import axios from 'axios';
 import { useClientFetch } from '@/hooks/useClientFetch';
-
-const WebsiteMenu = () => {
+const Settings = () => {
   const { data, reFetchData } = useClientFetch('/api/front_end/settings');
-  console.log('dat..................a', { data });
-  const { showNotification } = useNotistick();
-  const { t }: { t: any } = useTranslation();
-  const [isSmallSize, setIsSmallSize] = useState(false);
-  const [isOn, setIsOn] = useState(false);
-  // isSmallSize
-  useEffect(() => {
-    const storedValue = localStorage.getItem('isSmallSize');
-    console.log(storedValue);
-    if (storedValue !== null) {
-      setIsSmallSize(JSON.parse(storedValue));
-    }
-  }, []);
-  useEffect(() => {
-    localStorage.setItem('isSmallSize', JSON.stringify(isSmallSize));
-  }, [isSmallSize]);
-
-  // isOn
-  useEffect(() => {
-    const storedValue = localStorage.getItem('isOn');
-    console.log({ storedValue });
-    if (storedValue !== null) {
-      setIsOn(JSON.parse(storedValue));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('isOn', JSON.stringify(isOn));
-  }, [isOn]);
-
+  console.log('dataaaaa........', { data: data?.is_branch_wise_fees_collection }, { data: data?.branch_wise_addmission });
   const handleBanchWiseFeesCollection = async () => {
-    const res = await axios.put('/api/front_end/settings', {});
+    console.log('isSmallSize...........', !data?.is_branch_wise_fees_collection);
+    const res = await axios.put('/api/front_end/settings', {
+      is_branch_wise_fees_collection: !data?.is_branch_wise_fees_collection
+    });
+    reFetchData();
   };
-
+  const handleBranchWiseAddmission = async () => {
+    console.log('isSmallSize...........', !data?.branch_wise_addmission);
+    const res = await axios.put('/api/front_end/settings', {
+      branch_wise_addmission: !data?.branch_wise_addmission
+    });
+    reFetchData();
+  };
   return (
     <>
       <Head>
         <title>Scholarship - Management</title>
       </Head>
-
       <PageTitleWrapper>
         <PageHeader title={'Settings - Management'} />
       </PageTitleWrapper>
@@ -61,19 +40,16 @@ const WebsiteMenu = () => {
         <Grid sx={{ pt: 2, px: 1, pb: 2 }}>
           <FormGroup>
             <FormControlLabel
-              control={
-                <Switch checked={isSmallSize} onChange={handleBanchWiseFeesCollection} />
-                // <Switch checked={isSmallSize} onChange={() => setIsSmallSize((value) => !value)} inputProps={{ 'aria-label': 'controlled' }} />
-              }
-              label={`Branch Wise Fees Collection: ${isSmallSize ? 'On' : 'Off'}`}
+              control={<Switch checked={data?.is_branch_wise_fees_collection} onChange={handleBanchWiseFeesCollection} />}
+              label={`Branch Wise Fees Collection: ${data?.is_branch_wise_fees_collection ? 'On' : 'Off'}`}
               labelPlacement="start"
               sx={{ mr: 'auto' }}
             />{' '}
           </FormGroup>
           <FormGroup>
             <FormControlLabel
-              control={<Switch checked={isOn} onChange={() => setIsOn((value) => !value)} inputProps={{ 'aria-label': 'controlled' }} />}
-              label={`Branch Wise Addmission: ${isOn ? 'On' : 'Off'}`}
+              control={<Switch checked={data?.branch_wise_addmission} onChange={handleBranchWiseAddmission} />}
+              label={`branch_wise_addmission: ${data?.branch_wise_addmission ? 'On' : 'Off'}`}
               labelPlacement="start"
               sx={{ mr: 'auto' }}
             />{' '}
@@ -83,10 +59,9 @@ const WebsiteMenu = () => {
     </>
   );
 };
-
-WebsiteMenu.getLayout = (page) => (
+Settings.getLayout = (page) => (
   <Authenticated requiredPermissions={['create_website_menu', 'show_website_menu']}>
     <ExtendedSidebarLayout>{page}</ExtendedSidebarLayout>
   </Authenticated>
 );
-export default WebsiteMenu;
+export default Settings;
