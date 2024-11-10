@@ -141,7 +141,7 @@ const HeadWiseCollectionReport = () => {
       </Grid>
 
       <Head>
-        <title>Head_Wise_Collection_Report</title>
+        <title>Head_Wise_Collection_Report ( All Academic Year )</title>
       </Head>
       <Typography
         variant="h4"
@@ -152,7 +152,7 @@ const HeadWiseCollectionReport = () => {
         }}
         px={2}
       >
-        Head Wise Collection Report
+        Head_Wise_Collection_Report ( All Academic Year )
       </Typography>
       {/* searching part code start */}
       <Grid display="grid" gridTemplateColumns="1fr" rowGap={{ xs: 1, md: 0 }} px={1} mt={1} minHeight="fit-content">

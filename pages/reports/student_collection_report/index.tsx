@@ -49,6 +49,7 @@ const TableContent = ({ studentFees, selectedClass, totalPreviousAmt, totalDisco
             <TableHeaderCellWrapper>Fees Name</TableHeaderCellWrapper>
             <TableHeaderCellWrapper>Student Id</TableHeaderCellWrapper>
             <TableHeaderCellWrapper>Student Name</TableHeaderCellWrapper>
+            <TableHeaderCellWrapper>Collection Date</TableHeaderCellWrapper>
             <TableHeaderCellWrapper>Class</TableHeaderCellWrapper>
             <TableHeaderCellWrapper>Group</TableHeaderCellWrapper>
             <TableHeaderCellWrapper>Batch</TableHeaderCellWrapper>
@@ -79,9 +80,10 @@ const TableContent = ({ studentFees, selectedClass, totalPreviousAmt, totalDisco
                 <TableBodyCellWrapper>{`${item.student.student_info.first_name ? item.student.student_info.first_name + ' ' : ''}
                 ${item.student.student_info.middle_name ? item.student.student_info.middle_name + ' ' : ''}
                 ${item.student.student_info.last_name ? item.student.student_info.last_name + ' ' : ''}`}</TableBodyCellWrapper>
+                <TableBodyCellWrapper>{item?.collection_date ? dayjs(item?.collection_date).format('DD-MM-YYYY, hh:mm a'): ''}</TableBodyCellWrapper>
                 <TableBodyCellWrapper>{selectedClass?.label}</TableBodyCellWrapper>
                 <TableBodyCellWrapper>{item.student?.group?.title}</TableBodyCellWrapper>
-                <TableBodyCellWrapper>{item.student.section?.name}</TableBodyCellWrapper>
+                <TableBodyCellWrapper>{Array.isArray(item?.student?.batches) && item?.student?.batches.map(batch => batch.name).join(', ')}</TableBodyCellWrapper>
                 <TableBodyCellWrapper>{item.student?.class_roll_no}</TableBodyCellWrapper>
                 {/* <TableBodyCellWrapper align="right">{formatNumber(item.total_payable || 0)}</TableBodyCellWrapper> */}
                 <TableBodyCellWrapper align="right">{formatNumber(item.collected_amount || 0)}</TableBodyCellWrapper>
@@ -146,7 +148,7 @@ const StudentCollectionReport = () => {
   const [endDate, setEndDate] = useState<any>(dayjs(Date.now()));
   const [selectedClass, setSelectedClass] = useState(null);
   const [sections, setSections] = useState<Array<any>>([]);
-  const [selectedSection, setSelectedSection] = useState(null);
+  const [selectedSection, setSelectedSection] = useState([]);
   const [groups, setGroups] = useState<Array<any>>([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [studentFees, setStudentFees] = useState<Array<any>>([]);
@@ -188,10 +190,10 @@ const StudentCollectionReport = () => {
         };
       });
       setSections([
-        {
-          label: 'Select all',
-          id: null
-        },
+        // {
+        //   label: 'Select all',
+        //   id: null
+        // },
         ...setTargetSection
       ]);
       const setTargetGroup = targetClassSections?.Group?.map((i) => {
@@ -209,41 +211,42 @@ const StudentCollectionReport = () => {
         ...setTargetGroup
       ]);
       if (!newValue.has_section) {
-        setSelectedSection({
+        setSelectedSection([{
           label: targetClassSections?.sections[0]?.name,
           id: targetClassSections?.sections[0]?.id
-        });
+        }]);
       } else {
-        setSelectedSection(null);
+        setSelectedSection([]);
       }
     } else {
       setSections([]);
-      setSelectedSection(null);
+      setSelectedSection([]);
       setGroups([]);
-      setSelectedGroup(null);
+      setSelectedGroup([]);
     }
   };
 
   // fetch student related data code start
   const getStudentInfo = () => {
-    let groupSectionArr = [selectedSection?.id];
+    // console.log({ selectedSection });
+    let groupSectionArr = selectedSection?.map(section => section.id);
+    // console.log({ groupSectionArr });
     let groupQueryArr = [selectedGroup?.id];
-    if (!selectedSection?.id) {
-      groupSectionArr = sections
-        ?.map((item) => {
-          return item.id;
-        })
-        ?.filter((item) => {
-          return item !== null;
-        });
-    }
+    // if (!selectedSection?.id) {
+    //   groupSectionArr = sections
+    //     ?.map((item) => {
+    //       return item.id;
+    //     })
+    //     ?.filter((item) => {
+    //       return item !== null;
+    //     });
+    // }
     if (!selectedGroup?.id) {
       groupQueryArr = [];
     }
 
     return axios.get(
-      `/api/reports/student_collections?from_date=${handleStartDate(startDate)}&to_date=${handleEndDate(endDate)}&selected_class=${selectedClass?.id}&selected_group=${
-        groupQueryArr?.length > 0 ? groupQueryArr : ''
+      `/api/reports/student_collections?from_date=${handleStartDate(startDate)}&to_date=${handleEndDate(endDate)}&selected_class=${selectedClass?.id}&selected_group=${groupQueryArr?.length > 0 ? groupQueryArr : ''
       }&selected_section=${groupSectionArr}`
     );
   };
@@ -449,6 +452,7 @@ const StudentCollectionReport = () => {
                   label="Select Batch"
                   placeholder="Select a Batch"
                   handleChange={handleSectionSelect}
+                  multiple={true}
                 />
               </Grid>
 

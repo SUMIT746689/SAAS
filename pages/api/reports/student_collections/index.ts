@@ -1,11 +1,14 @@
 import prisma from '@/lib/prisma_client';
 import dayjs from 'dayjs';
+import { academicYearVerify, authenticate } from 'middleware/authenticate';
 import { isDateValid } from 'utilities_api/handleDate';
 import { logFile } from 'utilities_api/handleLogFile';
 
-const index = async (req, res) => {
+const index = async (req, res, refresh_token, academic_year) => {
   try {
     const { method } = req;
+    const { school_id } = refresh_token;
+    const { id: academic_year_id } = academic_year;
 
     switch (method) {
       case 'GET':
@@ -22,11 +25,15 @@ const index = async (req, res) => {
 
         const fetchStdFees = await prisma.studentFee.findMany({
           where: {
+            fee: {
+              school_id,
+              academic_year_id
+            },
             student: {
               batches: {
                 some: {
                   id: {
-                    in: selected_section?.split(',').map(Number)
+                    in: selected_section?.split(',').map(Number),
                   }
                 }
               },
@@ -39,6 +46,7 @@ const index = async (req, res) => {
           },
           select: {
             on_time_discount: true,
+            collection_date: true,
             fee: {
               select: {
                 id: true,
@@ -101,4 +109,4 @@ const index = async (req, res) => {
   }
 };
 
-export default index;
+export default authenticate(academicYearVerify(index));

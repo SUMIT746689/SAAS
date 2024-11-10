@@ -45,7 +45,7 @@ const tableStyle: object = {
   borderCollapse: 'collapse',
   textAlign: 'center',
   padding: '2px',
-  fontSize: '0.8em'
+  fontSize: '0.6em'
   // backgroundColor: '#cccccc'
 };
 function FeesPaymentReport() {
@@ -433,16 +433,14 @@ function FeesPaymentReport() {
               <tr>
                 <th style={tableStyle}>{t('Invoice no')}</th>
                 <th style={tableStyle}>{t('Student')}</th>
-                <th style={tableStyle}>{t('Registration no')}</th>
+                <th style={tableStyle}>{t('Class')}</th>
+                <th style={tableStyle}>{t('Batch')}</th>
                 <th style={tableStyle}>{t('Class roll')}</th>
                 <th style={tableStyle}>{t('Transaction Date')}</th>
-                <th style={tableStyle}>{t('Class')}</th>
                 <th style={tableStyle}>{t('Collected by')}</th>
                 <th style={tableStyle}>{t('Payment via')}</th>
                 <th style={tableStyle}>{t('Fee title')}</th>
                 <th style={tableStyle}>{t('Collected amount')}</th>
-                {/* <th style={tableStyle}>{t('Discount')}</th> */}
-                {/* <th style={tableStyle}>{t('Total')}</th> */}
               </tr>
             </thead>
             <tbody
@@ -459,32 +457,24 @@ function FeesPaymentReport() {
                 if (i?.student?.student_info?.last_name) {
                   name += i?.student?.student_info?.last_name;
                 }
-                // const total = i?.collected_amount - i?.student?.discount
-                // const total = i?.collected_amount
-
                 return (
                   <tr>
-                    <td style={tableStyle}>{i?.id}</td>
+                    <td style={tableStyle}>{i?.transaction?.tracking_number}</td>
                     <td style={tableStyle}>{name}</td>
-                    <td style={tableStyle}>{i?.student?.class_registration_no}</td>
+                    <td style={tableStyle}>{i?.student?.class?.name}</td>
+                    <td style={tableStyle}>{i?.student?.batches?.map((batch) => `${batch.name}[${batch.std_entry_time ? dayjs?.(batch.std_entry_time).format('h:mm A') : ' '}]`).join(', ')}</td>
                     <td style={tableStyle}>{i?.student?.class_roll_no}</td>
-                    <td style={tableStyle}>{dayjs(i?.created_at).format('MMMM D, YYYY h:mm A')}</td>
-                    <td style={tableStyle}>{i?.student?.section?.class?.name}</td>
+                    <td style={tableStyle}>{dayjs(i?.created_at).format('DD/MM/YYYY h:mm A')}</td>
                     <td style={tableStyle}>{i?.collected_by_user?.username}</td>
                     <td style={tableStyle}>{i?.payment_method}</td>
                     <td style={tableStyle}>{i?.fee?.title}</td>
-                    <td style={tableStyle}>{i?.collected_amount}</td>
-                    {/* <td style={tableStyle}>{i?.student?.discount}</td> */}
-                    {/* <td style={tableStyle}>{total?.toFixed(2)}</td> */}
+                    <td style={{ ...tableStyle, textAlign: "end" }}>{i?.collected_amount}</td>
                   </tr>
                 );
               })}
               <tr>
-                <td style={tableStyle} colSpan={8}></td>
-                <td style={tableStyle}>{t('Total Collected amount')}</td>
-                <td style={tableStyle}>{datas?.SumCollectedAmount}</td>
-                {/* <td style={tableStyle}>{t('Total')}</td> */}
-                {/* <td style={tableStyle}>{datas?.sumTotal}</td> */}
+                <td style={{ ...tableStyle, textAlign: "end" }} colSpan={9}>{t('Total Collected amount')}</td>
+                <td style={{ ...tableStyle, textAlign: "end" }}>{datas?.SumCollectedAmount}</td>
               </tr>
             </tbody>
           </Table>
