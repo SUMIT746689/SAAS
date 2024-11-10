@@ -24,6 +24,7 @@ import {
   Tooltip,
   IconButton
 } from '@mui/material';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { TransitionProps } from '@mui/material/transitions';
 import CloseIcon from '@mui/icons-material/Close';
 import type { User } from 'src/models/user';
@@ -502,17 +503,26 @@ const Results = ({ query, setQuery, selectedItems, setSelectedUsers, students, r
                           </IconButton>
                         </Tooltip>
 
-                        <Tooltip title={t('Unseparate List')} arrow>
+                        {/* <Tooltip title={t('Unseparate List')} arrow>
                           <IconButton sx={ActionStyle} color="primary" size="small">
                             <VisibilityIcon
                               onClick={() => {
                                 handleActiveSeparateStudent(i);
-                                // activeSeparateStudent(true);
-                                // activeSeparateStudent(true);
                               }}
                               fontSize="small"
                             />
                           </IconButton>
+                        </Tooltip> */}
+                        <Tooltip title={t('Unseparate List')} arrow>
+                          <PersonRemoveIcon
+                            sx={ActionStyle}
+                            color="primary"
+                            size="small"
+                            onClick={() => {
+                              handleActiveSeparateStudent(i);
+                            }}
+                            fontSize="small"
+                          />
                         </Tooltip>
                       </TableBodyCellWrapper>
                     </TableRow>
