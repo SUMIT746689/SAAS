@@ -1,14 +1,22 @@
 import prisma from '@/lib/prisma_client';
 import dayjs from 'dayjs';
+import { academicYearVerify, authenticate } from 'middleware/authenticate';
+import { isDateValid } from 'utilities_api/handleDate';
 import { logFile } from 'utilities_api/handleLogFile';
 
-const index = async (req, res) => {
+const index = async (req, res, refresh_token, academic_year) => {
     try {
         const { method } = req;
+        const { school_id } = refresh_token;
+        const { id: academic_year_id } = academic_year;
+        console.log({ refresh_token })
 
         switch (method) {
             case 'GET':
                 const { from_date, to_date, payment_method, collected_by, account_id, student_id } = req.query;
+
+                if (!isDateValid(from_date) || !isDateValid(to_date)) throw new Error('required from date / to_date is not founds');
+
                 const query = {};
                 if (payment_method) {
                     query['payment_method'] = payment_method
@@ -25,9 +33,12 @@ const index = async (req, res) => {
 
                 const data = await prisma.studentFee.findMany({
                     where: {
+                        fee: { school_id, academic_year_id },
                         created_at: {
-                            gte: new Date(new Date(from_date).setUTCHours(0, 0, 0, 0)),
-                            lte: new Date(new Date(to_date).setUTCHours(23, 59, 59, 999))
+                            gte: from_date,
+                            lte: to_date,
+                            // gte: new Date(new Date(from_date).setUTCHours(0, 0, 0, 0)),
+                            // lte: new Date(new Date(to_date).setUTCHours(23, 59, 59, 999))
                         },
                         ...query
 
@@ -58,25 +69,12 @@ const index = async (req, res) => {
                                         name: true,
                                     }
                                 },
-                                batches:{
-                                    select:{
-                                        name:true,
-                                        std_entry_time:true
+                                batches: {
+                                    select: {
+                                        name: true,
+                                        std_entry_time: true
                                     }
                                 },
-                                // section: {
-                                //     select: {
-                                //         name: true,
-
-                                //         class: {
-                                //             select: {
-                                //                 id: true,
-                                //                 name: true
-                                //             }
-                                //         }
-                                //     }
-                                // },
-
                             }
                         },
                         fee: {
@@ -119,5 +117,4 @@ const index = async (req, res) => {
     }
 };
 
-export default index;
-
+export default authenticate(academicYearVerify(index))

@@ -13,10 +13,6 @@ const DesignInvoice = ({ schoolData, selectedInvoice }) => {
   const { user } = useAuth();
   const [word, setWord] = useState(numberToWordConverter(selectedInvoice[0]?.collected_amount | 0));
   const [calDiscount, setCalDiscount] = useState<Number>(0);
-  // date
-  let date = dayjs(new Date(selectedInvoice[0]?.collection_date));
-  date = date.subtract(1, 'day');
-  let formattedDate = date.format('DD-MM-YYYY');
 
   useEffect(() => {
     // calculate discount
@@ -107,7 +103,9 @@ const DesignInvoice = ({ schoolData, selectedInvoice }) => {
                 ].join(' ')}
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
-                : {selectedInvoice[0]?.student?.section?.name}
+               : {selectedInvoice[0]?.student?.batches?.map((batch) => `${batch.name}[${batch.std_entry_time ? dayjs?.(batch.std_entry_time).format('h:mm A') : ' ' }]`).join(', ')}
+                              
+                {/* : {selectedInvoice[0]?.student?.section?.name} */}
               </Typography>
             </Grid>
           </Grid>
@@ -125,10 +123,10 @@ const DesignInvoice = ({ schoolData, selectedInvoice }) => {
             </Grid>
             <Grid sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
               <Typography variant="body1" sx={{ color: '#000' }}>
-                : {formattedDate}
+                : {dayjs(selectedInvoice[0]?.collection_date).format('DD/MM/YYYY')}
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
-                : {selectedInvoice[0]?.student?.section?.class?.name}
+                : {selectedInvoice[0]?.student?.class?.name}
               </Typography>
               <Typography variant="body1" sx={{ color: '#000' }}>
                 : {selectedInvoice[0]?.student?.class_roll_no}

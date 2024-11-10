@@ -24,6 +24,7 @@ import useNotistick from '@/hooks/useNotistick';
 import { useReactToPrint } from 'react-to-print';
 import { formatNumber } from '@/utils/numberFormat';
 import { useAuth } from '@/hooks/useAuth';
+import { handleEndDate, handleStartDate } from '@/utils/customizeDate';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(even)': {
@@ -65,7 +66,7 @@ const IncomeReport = () => {
     setIsLoading(true);
 
     axios
-      .get(`/api/reports/expenses?from_date=${startDate}&to_date=${endDate}`)
+      .get(`/api/reports/expenses?from_date=${handleStartDate(startDate)}&to_date=${handleEndDate(endDate)}`)
       .then(({ data }) => {
         setReports(data);
         setTotal(data.reduce((prev, curr) => prev + curr.total_amount, 0));

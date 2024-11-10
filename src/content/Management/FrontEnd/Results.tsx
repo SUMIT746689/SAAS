@@ -219,7 +219,7 @@ const Results = ({ data, reFetchData }) => {
                             data={image}
                             index={index}
                             key={index}
-                            handleRemove={() => handleFileRemove(setFieldValue, 'carousel_image', 'preview_carousel_image')}
+                            handleRemove={() =>handleFileRemove(setFieldValue, 'carousel_image', 'preview_carousel_image')}
                           />
                         </>
                       ))}

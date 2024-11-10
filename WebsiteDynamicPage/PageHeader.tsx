@@ -21,6 +21,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   const [open, setOpen] = useState(false);
   const { showNotification } = useNotistick();
   const [dynamicContent, setDynamicContent] = useState([]);
+  const featureImageRef = useRef();
 
   useEffect(() => {
     if (editData) setOpen(true);
@@ -201,7 +202,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                     />
 
                     {/* english description */}
-                    <Grid container pb={5}>
+                    <Grid container pb={1} >
                       <Grid>Description (English): *</Grid>
                       <RichTextEditorWrapper
                         // height='200px'
@@ -219,7 +220,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                     </Grid>
 
                     {/* bangla description */}
-                    <Grid container pb={6}>
+                    <Grid container pb={1}>
                       <Grid>Description (বাংলা): *</Grid>
                       <RichTextEditorWrapper
                         // height='200px'
@@ -244,6 +245,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                           accept="image/*"
                           handleChangeFile={(e) => handleFileChange(e, setFieldValue, 'feature_photo', 'preview_feature_photo')}
                           label="Feature Photo"
+                          ref={featureImageRef}
                         />
                       </Grid>
                       <Grid item>
@@ -253,7 +255,8 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                               data={image}
                               index={index}
                               key={index}
-                              handleRemove={() => handleFileRemove(setFieldValue, 'feature_photo', 'preview_feature_photo')}
+                              // @ts-ignore
+                              handleRemove={() => handleFileRemove(setFieldValue, 'feature_photo', 'preview_feature_photo', featureImageRef.current.resetInput)}
                             />
                           </>
                         ))}

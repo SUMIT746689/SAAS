@@ -38,13 +38,14 @@ import { ButtonWrapper } from '@/components/ButtonWrapper';
 import PaymentInvoice from '@/content/Management/StudentFeesCollection/PaymentInvoice';
 import { useClientFetch } from 'src/hooks/useClientFetch';
 import { Data } from '@/models/front_end';
+import { handleEndDate, handleStartDate } from '@/utils/customizeDate';
 
 const tableStyle: object = {
   border: '1px solid black',
   borderCollapse: 'collapse',
   textAlign: 'center',
   padding: '2px',
-  fontSize: '0.8em'
+  fontSize: '0.6em'
   // backgroundColor: '#cccccc'
 };
 function FeesPaymentReport() {
@@ -105,13 +106,10 @@ function FeesPaymentReport() {
   }, []);
 
   const getData = (startDate, endDate) => {
-    const tempToDate = new Date(endDate);
-    tempToDate.setDate(tempToDate.getDate() + 1);
+
     axios
       .get(
-        `/api/reports/student_payment_collection_history?from_date=${dayjs(startDate).format('YYYY-MM-DD')}&to_date=${dayjs(tempToDate).format(
-          'YYYY-MM-DD'
-        )}${selectedAccount ? `&account_id=${selectedAccount?.id}` : ''}`
+        `/api/reports/student_payment_collection_history?from_date=${handleStartDate(startDate)}&to_date=${handleEndDate(endDate)}${selectedAccount ? `&account_id=${selectedAccount?.id}` : ''}`
       )
       .then((res) => {
         let sumTotal = 0,
@@ -298,8 +296,7 @@ function FeesPaymentReport() {
 
                             <TableCell>
                               <Typography noWrap variant="h5">
-                                {i?.student?.batches?.map((batch) => batch.name)}[
-                                {i?.student?.batches?.map((batch) => dayjs?.(batch.std_entry_time).format('h:mm A'))}]
+                                {i?.student?.batches?.map((batch) => `${batch.name} [${batch.std_entry_time ? dayjs?.(batch.std_entry_time).format('h:mm A') : ' '}]`).join(', ')}
                               </Typography>
                             </TableCell>
                             <TableCell>
@@ -338,7 +335,7 @@ function FeesPaymentReport() {
                             </TableCell>
 
                             <TableCell>
-                              <Typography noWrap variant="h5">
+                              <Typography noWrap variant="h5" textAlign="right">
                                 {i?.collected_amount}
                               </Typography>
                             </TableCell>
@@ -367,12 +364,6 @@ function FeesPaymentReport() {
                                 </ButtonWrapper>
                               </Typography>
                             </TableCell>
-
-                            {/* <TableCell>
-                                                                <Typography noWrap variant="h5">
-                                                                    {total?.toFixed(2)}
-                                                                </Typography>
-                                                            </TableCell> */}
                           </TableRow>
                         );
                       })}
@@ -380,8 +371,8 @@ function FeesPaymentReport() {
                     <TableFooter>
                       <TableRow>
                         <TableCell colSpan={8}></TableCell>
-                        <TableCell>{t('Total Collected amount')}</TableCell>
-                        <TableCell>{datas?.SumCollectedAmount}</TableCell>
+                        <TableCell sx={{ textAlign: "right", color: "black", fontWeight: 500 }}>{t('Total Collected amount')}</TableCell>
+                        <TableCell sx={{ textAlign: "right", color: "black", fontWeight: 500 }}>{datas?.SumCollectedAmount}</TableCell>
                         {/* <TableCell>{t('Total')}</TableCell> */}
                         {/* <TableCell>{datas?.sumTotal}</TableCell> */}
                       </TableRow>
@@ -442,16 +433,14 @@ function FeesPaymentReport() {
               <tr>
                 <th style={tableStyle}>{t('Invoice no')}</th>
                 <th style={tableStyle}>{t('Student')}</th>
-                <th style={tableStyle}>{t('Registration no')}</th>
+                <th style={tableStyle}>{t('Class')}</th>
+                <th style={tableStyle}>{t('Batch')}</th>
                 <th style={tableStyle}>{t('Class roll')}</th>
                 <th style={tableStyle}>{t('Transaction Date')}</th>
-                <th style={tableStyle}>{t('Class')}</th>
                 <th style={tableStyle}>{t('Collected by')}</th>
                 <th style={tableStyle}>{t('Payment via')}</th>
                 <th style={tableStyle}>{t('Fee title')}</th>
                 <th style={tableStyle}>{t('Collected amount')}</th>
-                {/* <th style={tableStyle}>{t('Discount')}</th> */}
-                {/* <th style={tableStyle}>{t('Total')}</th> */}
               </tr>
             </thead>
             <tbody
@@ -468,32 +457,24 @@ function FeesPaymentReport() {
                 if (i?.student?.student_info?.last_name) {
                   name += i?.student?.student_info?.last_name;
                 }
-                // const total = i?.collected_amount - i?.student?.discount
-                // const total = i?.collected_amount
-
                 return (
                   <tr>
-                    <td style={tableStyle}>{i?.id}</td>
+                    <td style={tableStyle}>{i?.transaction?.tracking_number}</td>
                     <td style={tableStyle}>{name}</td>
-                    <td style={tableStyle}>{i?.student?.class_registration_no}</td>
+                    <td style={tableStyle}>{i?.student?.class?.name}</td>
+                    <td style={tableStyle}>{i?.student?.batches?.map((batch) => `${batch.name}[${batch.std_entry_time ? dayjs?.(batch.std_entry_time).format('h:mm A') : ' '}]`).join(', ')}</td>
                     <td style={tableStyle}>{i?.student?.class_roll_no}</td>
-                    <td style={tableStyle}>{dayjs(i?.created_at).format('MMMM D, YYYY h:mm A')}</td>
-                    <td style={tableStyle}>{i?.student?.section?.class?.name}</td>
+                    <td style={tableStyle}>{dayjs(i?.created_at).format('DD/MM/YYYY h:mm A')}</td>
                     <td style={tableStyle}>{i?.collected_by_user?.username}</td>
                     <td style={tableStyle}>{i?.payment_method}</td>
                     <td style={tableStyle}>{i?.fee?.title}</td>
-                    <td style={tableStyle}>{i?.collected_amount}</td>
-                    {/* <td style={tableStyle}>{i?.student?.discount}</td> */}
-                    {/* <td style={tableStyle}>{total?.toFixed(2)}</td> */}
+                    <td style={{ ...tableStyle, textAlign: "end" }}>{i?.collected_amount}</td>
                   </tr>
                 );
               })}
               <tr>
-                <td style={tableStyle} colSpan={8}></td>
-                <td style={tableStyle}>{t('Total Collected amount')}</td>
-                <td style={tableStyle}>{datas?.SumCollectedAmount}</td>
-                {/* <td style={tableStyle}>{t('Total')}</td> */}
-                {/* <td style={tableStyle}>{datas?.sumTotal}</td> */}
+                <td style={{ ...tableStyle, textAlign: "end" }} colSpan={9}>{t('Total Collected amount')}</td>
+                <td style={{ ...tableStyle, textAlign: "end" }}>{datas?.SumCollectedAmount}</td>
               </tr>
             </tbody>
           </Table>

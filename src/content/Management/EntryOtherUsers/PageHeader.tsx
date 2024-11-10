@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -76,8 +76,10 @@ function PageHeader({
   const [previewResume, setPreviewResume] = useState([]);
   const [photo, setPhoto] = useState([]);
   const [previewPhoto, setPreviewPhoto] = useState([]);
-  const { user }: any = useAuth();
+  const resumeFileRef = useRef();
+  const photoRef = useRef();
 
+  const { user }: any = useAuth();
   const { showNotification } = useNotistick();
   const theme = useTheme();
 
@@ -1126,6 +1128,7 @@ function PageHeader({
                         // multiple={true}
                         accept="application/pdf, application/vnd.ms-excel"
                         handleChangeFile={(e) => handleFileChange(e, setResume, setPreviewResume)}
+                        ref={resumeFileRef}
                       />
                       <Grid
                         sx={{
@@ -1198,6 +1201,7 @@ function PageHeader({
                         // multiple={true}
                         accept="image"
                         handleChangeFile={(e) => handleFileChange(e, setPhoto, setPreviewPhoto)}
+                        ref={photoRef}
                       />
                       <Grid
                         sx={{

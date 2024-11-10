@@ -5,7 +5,7 @@ import { Grid, DialogContent, Card, DialogActions, Button, CircularProgress, Chi
 import axios from 'axios';
 import useNotistick from '@/hooks/useNotistick';
 import { DisableTextWrapper, NewFileUploadFieldWrapper, TextAreaWrapper, TextFieldWrapper } from '@/components/TextFields';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { read, utils } from "xlsx";
 import { AutoCompleteWrapper } from '@/components/AutoCompleteWrapper';
 import Link from 'next/dist/client/link';
@@ -17,7 +17,8 @@ function PageHeader({ sms_gateway }) {
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
   const [selectSheetHeaders, setSelectSheetHeaders] = useState([]);
-
+  const fileUploadRef = useRef();
+  
   const handleFormSubmit = async (_values, { resetForm, setErrors, setStatus, setSubmitting }) => {
     try {
 
@@ -229,6 +230,7 @@ function PageHeader({ sms_gateway }) {
                         htmlFor="file_upload"
                         accept=".xlsx, .xls, .csv, text/csv"
                         handleChangeFile={(event) => { handleFileChange(event, setFieldValue) }}
+                        ref={fileUploadRef}
                       />
                     </Grid>
 

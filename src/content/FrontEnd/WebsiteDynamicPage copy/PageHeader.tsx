@@ -21,7 +21,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   const [open, setOpen] = useState(false);
   const { showNotification } = useNotistick();
   const [dynamicContent, setDynamicContent] = useState([]);
-
+  const featurePhotoRef  = useRef();
   useEffect(() => {
     if (editData) setOpen(true);
   }, [editData])
@@ -262,6 +262,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                           accept="image/*"
                           handleChangeFile={(e) => handleFileChange(e, setFieldValue, "feature_photo", "preview_feature_photo")}
                           label='Feature Photo'
+                          ref={featurePhotoRef}
                         />
                       </Grid>
                       <Grid item>
@@ -272,7 +273,8 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                                 data={image}
                                 index={index}
                                 key={index}
-                                handleRemove={() => handleFileRemove(setFieldValue, "feature_photo", "preview_feature_photo")}
+                                // @ts-ignore
+                                handleRemove={() => handleFileRemove(setFieldValue, "feature_photo", "preview_feature_photo", featurePhotoRef.current.resetInput)}
                               />
                             </>
                           ))

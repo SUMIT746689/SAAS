@@ -27,7 +27,7 @@ import {
   TextFieldWrapper,
   DisableTextWrapper
 } from '@/components/TextFields';
-import { useState, ChangeEvent, useEffect, useCallback, useContext } from 'react';
+import { useState, ChangeEvent, useEffect, useCallback, useContext, useRef } from 'react';
 import { getFile } from '@/utils/utilitY-functions';
 const persionNameList = ['Student Photo', 'Guardian Photo', 'Father Photo', 'Mother Photo'];
 
@@ -55,6 +55,7 @@ const MultipleStudentPhotoUpload = () => {
   const [students, setStudents] = useContext<any[]>(Students);
   const [academicYear, setAcademicYear] = useContext(AcademicYearContext);
   const [previousValues, setPreviousValues] = useState<Array<any>>([]);
+  const userPhotoRef = useRef();
 
   const handlePersionSelect = (event: ChangeEvent<HTMLInputElement>, newValue) => {
     setSelectedPerson(newValue);
@@ -106,8 +107,7 @@ const MultipleStudentPhotoUpload = () => {
     try {
       if (academicYear && selectedSection) {
         const res = await axios.get(
-          `/api/student/?${selectedSection.id == 'all' ? `class_id=${selectedClass?.id}` : `section_id=${selectedSection?.id}`}&academic_year_id=${
-            academicYear?.id
+          `/api/student/?${selectedSection.id == 'all' ? `class_id=${selectedClass?.id}` : `section_id=${selectedSection?.id}`}&academic_year_id=${academicYear?.id
           }`
         );
 
@@ -212,7 +212,7 @@ const MultipleStudentPhotoUpload = () => {
               index={item?.student_photo}
               key={item?.student_photo}
               // handleRemove={() => handleRemove(id, setFieldValue, 'user_photo', 'preview_user_photo')}
-              handleRemove={() => {}}
+              handleRemove={() => { }}
               removeBtn={false}
             />
           );
@@ -229,7 +229,7 @@ const MultipleStudentPhotoUpload = () => {
               index={item?.guardian_photo}
               key={item?.guardian_photo}
               // handleRemove={() => handleRemove(id, setFieldValue, 'user_photo', 'preview_user_photo')}
-              handleRemove={() => {}}
+              handleRemove={() => { }}
               removeBtn={false}
             />
           );
@@ -246,7 +246,7 @@ const MultipleStudentPhotoUpload = () => {
               index={item?.student_info?.father_photo}
               key={item?.student_info?.father_photo}
               // handleRemove={() => handleRemove(id, setFieldValue, 'user_photo', 'preview_user_photo')}
-              handleRemove={() => {}}
+              handleRemove={() => { }}
               removeBtn={false}
             />
           );
@@ -263,7 +263,7 @@ const MultipleStudentPhotoUpload = () => {
               index={item?.student_info?.mother_photo}
               key={item?.student_info?.mother_photo}
               // handleRemove={() => handleRemove(id, setFieldValue, 'user_photo', 'preview_user_photo')}
-              handleRemove={() => {}}
+              handleRemove={() => { }}
               removeBtn={false}
             />
           );
@@ -300,7 +300,7 @@ const MultipleStudentPhotoUpload = () => {
             formData.append(key, fileObj[key]);
           }
         });
-      } catch (error) {}
+      } catch (error) { }
     }
 
     // updated code start
@@ -535,9 +535,8 @@ const MultipleStudentPhotoUpload = () => {
                             <TableBodyCellWrapper>
                               <Grid py={0.5}>{i + 1}</Grid>{' '}
                             </TableBodyCellWrapper>
-                            <TableBodyCellWrapper>{`${item.student_info.first_name ? item.student_info.first_name + ' ' : ''}${
-                              item.student_info.middle_name ? item.student_info.middle_name + ' ' : ''
-                            }${item.student_info.last_name ? item.student_info.last_name + ' ' : ''}`}</TableBodyCellWrapper>
+                            <TableBodyCellWrapper>{`${item.student_info.first_name ? item.student_info.first_name + ' ' : ''}${item.student_info.middle_name ? item.student_info.middle_name + ' ' : ''
+                              }${item.student_info.last_name ? item.student_info.last_name + ' ' : ''}`}</TableBodyCellWrapper>
                             {selectedPerson && (
                               <TableBodyCellWrapper>
                                 <Grid py={0.5}>
@@ -552,6 +551,7 @@ const MultipleStudentPhotoUpload = () => {
                                     label={`${selectedPerson ? `Upload ${selectedPerson}` : 'Upload Student Photo'}`}
                                     height={40}
                                     marginBottom={0}
+                                    ref={userPhotoRef}
                                   />
                                 </Grid>
                               </TableBodyCellWrapper>
