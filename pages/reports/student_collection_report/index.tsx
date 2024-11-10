@@ -97,16 +97,15 @@ const TableContent = ({ studentFees, selectedClass, totalPreviousAmt, totalDisco
             );
           })}
         </TableBody>
-        {/* <TableFooter>
-          <TableFooterCellWrapper colSpan={8} align="right">
+        <TableFooter>
+          <TableFooterCellWrapper colSpan={11} align="right">
             Total
           </TableFooterCellWrapper>
-
-          <TableFooterCellWrapper align="right">{totalPreviousAmt}</TableFooterCellWrapper>
-          <TableFooterCellWrapper align="right">{totalDiscountAmt}</TableFooterCellWrapper>
+          {/* <TableFooterCellWrapper align="right">{totalPreviousAmt}</TableFooterCellWrapper> */}
+          {/* <TableFooterCellWrapper align="right">{totalDiscountAmt}</TableFooterCellWrapper> */}
           <TableFooterCellWrapper align="right">{totalPaymentAmt}</TableFooterCellWrapper>
-          <TableFooterCellWrapper align="right">{totalDueAmt}</TableFooterCellWrapper>
-        </TableFooter> */}
+          {/* <TableFooterCellWrapper align="right">{totalDueAmt}</TableFooterCellWrapper> */}
+        </TableFooter>
       </Table>
     </TableContainer>
   );
