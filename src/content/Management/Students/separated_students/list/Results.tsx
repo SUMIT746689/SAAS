@@ -46,7 +46,8 @@ const DialogWrapper = styled(Dialog)(
 `
 );
 const ActionStyle: object = {
-  height: '20px'
+  height: '20px',
+  cursor:"pointer"
 };
 
 const Transition = forwardRef(function Transition(props: TransitionProps & { children: ReactElement<any, any> }, ref: Ref<unknown>) {
@@ -111,7 +112,9 @@ const Results = ({ query, setQuery, selectedItems, setSelectedUsers, students, r
     const res = await axios.post(`/api/student/active-separate-student`, {
       student_id: i.id
     });
-    console.log(res.data);
+    refetch();
+    showNotification('successfully active student')
+    // console.log(res.data);
   };
 
   const [filters, setFilters] = useState<{ role?: string }>({
@@ -489,21 +492,22 @@ const Results = ({ query, setQuery, selectedItems, setSelectedUsers, students, r
                       </TableBodyCellWrapper>
 
                       <TableBodyCellWrapper>
-                        <Tooltip title={t('View Profile')} arrow>
-                          <IconButton
-                            sx={ActionStyle}
-                            color="primary"
-                            onClick={() => {
-                              setSelectedStudent(i);
-                              setStudentProfileModal(true);
-                            }}
-                            size="small"
-                          >
-                            <VisibilityIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
+                        <Grid display="flex" gap={2}>
+                          <Tooltip title={t('View Profile')} arrow>
+                            <IconButton
+                              sx={ActionStyle}
+                              color="primary"
+                              onClick={() => {
+                                setSelectedStudent(i);
+                                setStudentProfileModal(true);
+                              }}
+                              size="small"
+                            >
+                              <VisibilityIcon fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
 
-                        {/* <Tooltip title={t('Unseparate List')} arrow>
+                          {/* <Tooltip title={t('Unseparate List')} arrow>
                           <IconButton sx={ActionStyle} color="primary" size="small">
                             <VisibilityIcon
                               onClick={() => {
@@ -513,17 +517,18 @@ const Results = ({ query, setQuery, selectedItems, setSelectedUsers, students, r
                             />
                           </IconButton>
                         </Tooltip> */}
-                        <Tooltip title={t('Unseparate List')} arrow>
-                          <PersonRemoveIcon
-                            sx={ActionStyle}
-                            color="primary"
-                            size="small"
-                            onClick={() => {
-                              handleActiveSeparateStudent(i);
-                            }}
-                            fontSize="small"
-                          />
-                        </Tooltip>
+                          <Tooltip title={t('Active Student')} arrow>
+                            <PersonRemoveIcon
+                              sx={ActionStyle}
+                              color="primary"
+                              onClick={() => {
+                                handleActiveSeparateStudent(i);
+                              }}
+                              fontSize="small"
+                              
+                            />
+                          </Tooltip>
+                        </Grid>
                       </TableBodyCellWrapper>
                     </TableRow>
                   );

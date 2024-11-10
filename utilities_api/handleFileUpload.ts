@@ -17,7 +17,7 @@ export const handleFileChange = (e, setFieldValue, field, preview_field) => {
     setFieldValue(preview_field, imgPrev);
 };
 
-export const handleFileRemove = (setFieldValue, field, preview_field, resetFileInput) => {
+export const handleFileRemove = (setFieldValue, field, preview_field, resetFileInput= null) => {
     setFieldValue(field, '');
     setFieldValue(preview_field, []);
     if(resetFileInput) resetFileInput();
