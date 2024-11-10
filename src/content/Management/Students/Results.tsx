@@ -1,12 +1,4 @@
-import {
-  ChangeEvent,
-  useState,
-  ReactElement,
-  Ref,
-  forwardRef,
-  useEffect,
-  FC,
-} from 'react';
+import { ChangeEvent, useState, ReactElement, Ref, forwardRef, useEffect, FC } from 'react';
 
 import PropTypes from 'prop-types';
 import {
@@ -30,7 +22,7 @@ import {
   styled,
   TablePagination,
   Grid,
-  Switch,
+  Switch
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import CloseIcon from '@mui/icons-material/Close';
@@ -84,15 +76,12 @@ const ButtonError = styled(Button)(
 
 const ActionStyle: object = {
   height: '20px'
-}
+};
 interface Filters {
   role?: string;
 }
 
-const Transition = forwardRef(function Transition(
-  props: TransitionProps & { children: ReactElement<any, any> },
-  ref: Ref<unknown>
-) {
+const Transition = forwardRef(function Transition(props: TransitionProps & { children: ReactElement<any, any> }, ref: Ref<unknown>) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
@@ -134,16 +123,17 @@ const applyFilters = (users, query, filters) => {
   });
 };
 
-const applyPagination = (
-  users: User[],
-  page: number,
-  limit: number
-): User[] => {
+const applyPagination = (users: User[], page: number, limit: number): User[] => {
   return users?.slice(page * limit, page * limit + limit);
 };
 
-const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCard: any, fee: any[] }> = ({ students, refetch, discount, idCard, fee }) => {
-
+const Results: FC<{ students: any[]; refetch: () => void; discount: any[]; idCard: any; fee: any[] }> = ({
+  students,
+  refetch,
+  discount,
+  idCard,
+  fee
+}) => {
   const [selectedItems, setSelectedUsers] = useState([]);
   const { t }: { t: any } = useTranslation();
   const { showNotification } = useNotistick();
@@ -166,60 +156,50 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
     setLimit(parseInt(event.target.value));
   };
 
-
   const handleSelectAllUsers = (event: ChangeEvent<HTMLInputElement>): void => {
     setSelectedUsers(event.target.checked ? students.map((user) => user.id) : []);
   };
 
-  const handleSelectOneUser = (
-    _event: ChangeEvent<HTMLInputElement>,
-    userId: string
-  ): void => {
+  const handleSelectOneUser = (_event: ChangeEvent<HTMLInputElement>, userId: string): void => {
     if (!selectedItems.includes(userId)) {
       setSelectedUsers((prevSelected) => [...prevSelected, userId]);
     } else {
-      setSelectedUsers((prevSelected) =>
-        prevSelected.filter((id) => id !== userId)
-      );
+      setSelectedUsers((prevSelected) => prevSelected.filter((id) => id !== userId));
     }
   };
 
   const filteredClasses = applyFilters(students, query, filters);
   const paginatedClasses = applyPagination(filteredClasses, page, limit);
   const selectedBulkActions = selectedItems.length > 0;
-  const selectedSomeUsers =
-    selectedItems.length > 0 && selectedItems.length < students.length;
+  const selectedSomeUsers = selectedItems.length > 0 && selectedItems.length < students.length;
   const selectedAllUsers = selectedItems.length === students.length;
 
-
   const [openConfirmDelete, setOpenConfirmDelete] = useState(null);
-
 
   const closeConfirmDelete = () => {
     setOpenConfirmDelete(null);
   };
 
   const handleDeleteCompleted = () => {
-
-    axios.delete(`/api/student/${openConfirmDelete}`)
-      .then(res => {
+    axios
+      .delete(`/api/student/${openConfirmDelete}`)
+      .then((res) => {
         setOpenConfirmDelete(null);
         refetch();
         showNotification('The student has been removed');
       })
-      .catch(err => {
+      .catch((err) => {
         setOpenConfirmDelete(null);
         showNotification('Student deletion failed !', 'error');
-      })
+      });
   };
   const handleConfirmDelete = (id) => {
-    setOpenConfirmDelete(id)
-  }
+    setOpenConfirmDelete(id);
+  };
   // console.log(selectedStudent);
 
   return (
     <>
-
       <Dialog
         fullWidth
         maxWidth="lg"
@@ -229,141 +209,239 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
         }}
         sx={{ paddingX: { xs: 3, md: 0 } }}
       >
-        <Grid sx={{
-          display: 'grid',
-          gridTemplateColumns: {
-            md: '25% 75%',
-            sm: 'auto'
-          },
-          p: 2
-        }}>
-          <Grid sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-            gap: 2,
+        <Grid
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              md: '25% 75%',
+              sm: 'auto'
+            },
             p: 2
-          }}>
-            <Image src={getFile(selectedStudent?.student_photo)}
+          }}
+        >
+          <Grid
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
+              gap: 2,
+              p: 2
+            }}
+          >
+            <Image
+              src={getFile(selectedStudent?.student_photo)}
               height={150}
               width={150}
-              alt='Student photo'
-              loading='lazy'
+              alt="Student photo"
+              loading="lazy"
               style={{
                 borderRadius: '50%'
               }}
             />
-            <Typography variant='h3' align='center'>{[selectedStudent?.student_info?.first_name, selectedStudent?.student_info?.middle_name, selectedStudent?.student_info?.last_name]?.join(' ')}</Typography>
-            <Typography variant='h4' align='center'>Class registration no : {selectedStudent?.class_registration_no}</Typography>
+            <Typography variant="h3" align="center">
+              {[
+                selectedStudent?.student_info?.first_name,
+                selectedStudent?.student_info?.middle_name,
+                selectedStudent?.student_info?.last_name
+              ]?.join(' ')}
+            </Typography>
+            <Typography variant="h4" align="center">
+              Class registration no : {selectedStudent?.class_registration_no}
+            </Typography>
 
-            <Grid sx={{
-              display: 'grid',
-              gridTemplateColumns: 'auto auto',
-              gap: 3
-            }}>
-              <Typography variant='h6'>Group : <br /> {selectedStudent?.group?.title}</Typography>
-              <Typography variant='h6'>Admission date : <br /> {dayjs(selectedStudent?.created_at).format('DD/MM/YYYY')}</Typography>
-              <Typography variant='h6'>Academic year : <br /> {selectedStudent?.academic_year?.title}</Typography>
-              <Typography variant='h6'>Roll : <br /> {selectedStudent?.class_roll_no}</Typography>
-              <Typography variant='h6'>Class : <br /> {selectedStudent?.section?.class?.name}</Typography>
-              <Typography variant='h6'>Section : <br /> {selectedStudent?.section?.name}</Typography>
-              <Typography variant='h6'>Date of birth : <br /> {dayjs(selectedStudent?.student_info?.date_of_birth).format('DD/MM/YYYY')}</Typography>
-              <Typography variant='h6'>Blood group : <br /> {selectedStudent?.student_info?.blood_group}</Typography>
-
+            <Grid
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: 'auto auto',
+                gap: 3
+              }}
+            >
+              <Typography variant="h6">
+                Group : <br /> {selectedStudent?.group?.title}
+              </Typography>
+              <Typography variant="h6">
+                Admission date : <br /> {dayjs(selectedStudent?.created_at).format('DD/MM/YYYY')}
+              </Typography>
+              <Typography variant="h6">
+                Academic year : <br /> {selectedStudent?.academic_year?.title}
+              </Typography>
+              <Typography variant="h6">
+                Roll : <br /> {selectedStudent?.class_roll_no}
+              </Typography>
+              <Typography variant="h6">
+                Class : <br /> {selectedStudent?.section?.class?.name}
+              </Typography>
+              <Typography variant="h6">
+                Section : <br /> {selectedStudent?.section?.name}
+              </Typography>
+              <Typography variant="h6">
+                Date of birth : <br /> {dayjs(selectedStudent?.student_info?.date_of_birth).format('DD/MM/YYYY')}
+              </Typography>
+              <Typography variant="h6">
+                Blood group : <br /> {selectedStudent?.student_info?.blood_group}
+              </Typography>
             </Grid>
-            <Typography variant='h5'>First admission date : {dayjs(selectedStudent?.student_info?.admission_date).format('DD/MM/YYYY')}</Typography>
-
+            <Typography variant="h5">First admission date : {dayjs(selectedStudent?.student_info?.admission_date).format('DD/MM/YYYY')}</Typography>
           </Grid>
 
-          <Grid sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
-            p: 2,
-            borderLeft: {
-              md: '1px solid lightgrey'
-            }
-          }}>
+          <Grid
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 2,
+              p: 2,
+              borderLeft: {
+                md: '1px solid lightgrey'
+              }
+            }}
+          >
             <Grid>
-              <Typography align='center' variant='h3' p={2} borderBottom={'1px dashed lightgrey'}>Basic Information</Typography>
-              <Grid sx={{
-                display: 'grid',
-                gridTemplateColumns: {
-                  md: 'auto auto',
-                  sm: 'auto'
-                },
-                gap: 2
-              }}>
-                <Grid sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 1.5,
-                  pt: 2
-                }}>
-                  <Typography variant='h6'>User name :<br /><Typography variant='h5'> {selectedStudent?.student_info?.user?.username}</Typography> </Typography>
-                  <Typography variant='h6'>Gender :<br /><Typography variant='h5'>  {selectedStudent?.student_info?.gender}</Typography></Typography>
-                  <Typography variant='h6'>Phone :<br /> <Typography variant='h5'> {selectedStudent?.student_info?.phone}</Typography></Typography>
-                  <Typography variant='h6'>Religion :<br /><Typography variant='h5'>  {selectedStudent?.student_info?.religion}</Typography></Typography>
+              <Typography align="center" variant="h3" p={2} borderBottom={'1px dashed lightgrey'}>
+                Basic Information
+              </Typography>
+              <Grid
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: {
+                    md: 'auto auto',
+                    sm: 'auto'
+                  },
+                  gap: 2
+                }}
+              >
+                <Grid
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1.5,
+                    pt: 2
+                  }}
+                >
+                  <Typography variant="h6">
+                    User name :<br />
+                    <Typography variant="h5"> {selectedStudent?.student_info?.user?.username}</Typography>{' '}
+                  </Typography>
+                  <Typography variant="h6">
+                    Gender :<br />
+                    <Typography variant="h5"> {selectedStudent?.student_info?.gender}</Typography>
+                  </Typography>
+                  <Typography variant="h6">
+                    Phone :<br /> <Typography variant="h5"> {selectedStudent?.student_info?.phone}</Typography>
+                  </Typography>
+                  <Typography variant="h6">
+                    Religion :<br />
+                    <Typography variant="h5"> {selectedStudent?.student_info?.religion}</Typography>
+                  </Typography>
                 </Grid>
-                <Grid borderLeft={'1px dashed lightgrey'} pl={2} sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 1.5,
-                  pt: 2
-                }}>
-                  <Typography variant='h6'>Email :<br /><Typography variant='h5'>  {selectedStudent?.student_info?.email}</Typography></Typography>
-                  <Typography variant='h6'>Birth certificate or NID :<br /><Typography variant='h5'> {selectedStudent?.student_info?.national_id}</Typography> </Typography>
-                  <Typography variant='h6'>Previous school :<br /><Typography variant='h5'>  {selectedStudent?.student_info?.previous_school}</Typography></Typography>
-                  <Typography variant='h6'>Present address :<br /><Typography variant='h5'>{selectedStudent?.student_present_address} </Typography> </Typography>
-                  <Typography variant='h6'>Permanent address :<br /><Typography variant='h5'>  {selectedStudent?.student_info?.student_permanent_address}</Typography></Typography>
+                <Grid
+                  borderLeft={'1px dashed lightgrey'}
+                  pl={2}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1.5,
+                    pt: 2
+                  }}
+                >
+                  <Typography variant="h6">
+                    Email :<br />
+                    <Typography variant="h5"> {selectedStudent?.student_info?.email}</Typography>
+                  </Typography>
+                  <Typography variant="h6">
+                    Birth certificate or NID :<br />
+                    <Typography variant="h5"> {selectedStudent?.student_info?.national_id}</Typography>{' '}
+                  </Typography>
+                  <Typography variant="h6">
+                    Previous school :<br />
+                    <Typography variant="h5"> {selectedStudent?.student_info?.previous_school}</Typography>
+                  </Typography>
+                  <Typography variant="h6">
+                    Present address :<br />
+                    <Typography variant="h5">{selectedStudent?.student_present_address} </Typography>{' '}
+                  </Typography>
+                  <Typography variant="h6">
+                    Permanent address :<br />
+                    <Typography variant="h5"> {selectedStudent?.student_info?.student_permanent_address}</Typography>
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
 
             <Grid>
-              <Typography align='center' variant='h3' p={2} borderBottom={'1px dashed lightgrey'}>Guardian Information</Typography>
-              <Grid sx={{
-                display: 'grid',
-                gridTemplateColumns: {
-                  md: 'auto auto',
-                  sm: 'auto'
-                },
-                gap: 2
-              }}>
-                <Grid sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 1.5,
-                  pt: 2
-                }}>
-                  <Typography variant='h6'>Guardian name :<br /><Typography variant='h5'> {selectedStudent?.guardian_name}</Typography></Typography>
-                  <Typography variant='h6'>Relation with guardian :<br /><Typography variant='h5'> {selectedStudent?.relation_with_guardian}</Typography></Typography>
-                  <Typography variant='h6'>Guardian phone :<br /><Typography variant='h5'> {selectedStudent?.guardian_phone}</Typography></Typography>
-                  <Typography variant='h6'>Guardian profession :<br /><Typography variant='h5'> {selectedStudent?.guardian_profession}</Typography></Typography>
+              <Typography align="center" variant="h3" p={2} borderBottom={'1px dashed lightgrey'}>
+                Guardian Information
+              </Typography>
+              <Grid
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: {
+                    md: 'auto auto',
+                    sm: 'auto'
+                  },
+                  gap: 2
+                }}
+              >
+                <Grid
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1.5,
+                    pt: 2
+                  }}
+                >
+                  <Typography variant="h6">
+                    Guardian name :<br />
+                    <Typography variant="h5"> {selectedStudent?.guardian_name}</Typography>
+                  </Typography>
+                  <Typography variant="h6">
+                    Relation with guardian :<br />
+                    <Typography variant="h5"> {selectedStudent?.relation_with_guardian}</Typography>
+                  </Typography>
+                  <Typography variant="h6">
+                    Guardian phone :<br />
+                    <Typography variant="h5"> {selectedStudent?.guardian_phone}</Typography>
+                  </Typography>
+                  <Typography variant="h6">
+                    Guardian profession :<br />
+                    <Typography variant="h5"> {selectedStudent?.guardian_profession}</Typography>
+                  </Typography>
                 </Grid>
-                <Grid borderLeft={'1px dashed lightgrey'} pl={2} sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 1.5,
-                  pt: 2
-                }}>
-                  <Typography variant='h6'>Father's name :<br /> <Typography variant='h5'>{selectedStudent?.student_info?.father_name}</Typography></Typography>
-                  <Typography variant='h6'>Father's phone :<br /> <Typography variant='h5'>{selectedStudent?.student_info?.father_phone}</Typography></Typography>
-                  <Typography variant='h6'>Father's profession :<br /> <Typography variant='h5'>{selectedStudent?.student_info?.father_profession}</Typography></Typography>
+                <Grid
+                  borderLeft={'1px dashed lightgrey'}
+                  pl={2}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1.5,
+                    pt: 2
+                  }}
+                >
+                  <Typography variant="h6">
+                    Father's name :<br /> <Typography variant="h5">{selectedStudent?.student_info?.father_name}</Typography>
+                  </Typography>
+                  <Typography variant="h6">
+                    Father's phone :<br /> <Typography variant="h5">{selectedStudent?.student_info?.father_phone}</Typography>
+                  </Typography>
+                  <Typography variant="h6">
+                    Father's profession :<br /> <Typography variant="h5">{selectedStudent?.student_info?.father_profession}</Typography>
+                  </Typography>
 
-                  <Typography variant='h6'>Mother's name :<br /> <Typography variant='h5'>{selectedStudent?.student_info?.mother_name}</Typography></Typography>
-                  <Typography variant='h6'>Mother's phone :<br /> <Typography variant='h5'>{selectedStudent?.student_info?.mother_phone}</Typography></Typography>
-                  <Typography variant='h6'>Mother's profession :<br /> <Typography variant='h5'>  {selectedStudent?.student_info?.mother_profession}</Typography></Typography>
-
+                  <Typography variant="h6">
+                    Mother's name :<br /> <Typography variant="h5">{selectedStudent?.student_info?.mother_name}</Typography>
+                  </Typography>
+                  <Typography variant="h6">
+                    Mother's phone :<br /> <Typography variant="h5">{selectedStudent?.student_info?.mother_phone}</Typography>
+                  </Typography>
+                  <Typography variant="h6">
+                    Mother's profession :<br /> <Typography variant="h5"> {selectedStudent?.student_info?.mother_profession}</Typography>
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
-
           </Grid>
         </Grid>
       </Dialog>
-
 
       {/* Discount and waiver fee section */}
       <Dialog
@@ -377,21 +455,24 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
         sx={{ paddingX: { xs: 3, md: 0 } }}
       >
         <Grid item container flexDirection={'column'} sx={{ p: 4 }}>
-          <Typography fontSize={20} fontWeight={'bold'}>Discount (Fee, month, discount title (discount amount, discount type))</Typography>
+          <Typography fontSize={20} fontWeight={'bold'}>
+            Discount (Fee, month, discount title (discount amount, discount type))
+          </Typography>
           <br />
-          <Grid item container display={'grid'} p={1} border={'1px solid lightGray'} borderRadius={'4px'} sx={{ gridTemplateColumns: { sm: 'repeat(2, minmax(0, 1fr))', md: 'repeat(3, minmax(0, 1fr))' }, gap: { xs: 0.5, sm: 1 } }}>
-            {
-              discount?.map((i: any) => {
-                const subjects = selectedStudent?.subjects?.map(sub => sub.id);
-                if (i?.subject_id && !subjects?.includes(i.subject_id)) return;
-                return <SingleDiscount
-                  key={i.id}
-                  selectedUser={selectedStudent}
-                  singleDiscount={i}
-                />
-              }
-              )
-            }
+          <Grid
+            item
+            container
+            display={'grid'}
+            p={1}
+            border={'1px solid lightGray'}
+            borderRadius={'4px'}
+            sx={{ gridTemplateColumns: { sm: 'repeat(2, minmax(0, 1fr))', md: 'repeat(3, minmax(0, 1fr))' }, gap: { xs: 0.5, sm: 1 } }}
+          >
+            {discount?.map((i: any) => {
+              const subjects = selectedStudent?.subjects?.map((sub) => sub.id);
+              if (i?.subject_id && !subjects?.includes(i.subject_id)) return;
+              return <SingleDiscount key={i.id} selectedUser={selectedStudent} singleDiscount={i} />;
+            })}
           </Grid>
           <br />
           {/* <Typography fontSize={20} fontWeight={'bold'}>Waiver fee (Fee, month, subject)</Typography>
@@ -414,19 +495,13 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
       </Dialog>
 
       <Card sx={{ minHeight: 'calc(100vh - 410px)', borderRadius: 0 }}>
-
         {/* {selectedBulkActions && (
           <Box p={2}>
             <BulkActions />
           </Box>
         )} */}
         {/* {!selectedBulkActions && ( */}
-        <Box
-          px={2}
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-        >
+        <Box px={2} display="flex" alignItems="center" justifyContent="space-between">
           <Box>
             <Typography component="span" variant="subtitle1">
               {t('Showing')}:
@@ -462,15 +537,11 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
           </>
         ) : (
           <TableContainer>
-            <Table size='small'>
+            <Table size="small">
               <TableHead>
                 <TableRow>
                   <TableHeaderCellWrapper padding="checkbox">
-                    <Checkbox
-                      checked={selectedAllUsers}
-                      indeterminate={selectedSomeUsers}
-                      onChange={handleSelectAllUsers}
-                    />
+                    <Checkbox checked={selectedAllUsers} indeterminate={selectedSomeUsers} onChange={handleSelectAllUsers} />
                   </TableHeaderCellWrapper>
                   <TableHeaderCellWrapper>{t('User id')}</TableHeaderCellWrapper>
                   <TableHeaderCellWrapper>{t('User Name')}</TableHeaderCellWrapper>
@@ -492,35 +563,17 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
                   return (
                     <TableRow hover key={i.id} selected={isUserSelected}>
                       <TableHeaderCellWrapper padding="checkbox">
-                        <Checkbox
-                          checked={isUserSelected}
-                          onChange={(event) =>
-                            handleSelectOneUser(event, i.id)
-                          }
-                          value={isUserSelected}
-                        />
+                        <Checkbox checked={isUserSelected} onChange={(event) => handleSelectOneUser(event, i.id)} value={isUserSelected} />
                       </TableHeaderCellWrapper>
-                      <TableBodyCellWrapper>
-                        {i?.student_info?.user?.id}
-                      </TableBodyCellWrapper>
-                      <TableBodyCellWrapper>
-                        {i?.student_info?.user?.username}
-                      </TableBodyCellWrapper>
+                      <TableBodyCellWrapper>{i?.student_info?.user?.id}</TableBodyCellWrapper>
+                      <TableBodyCellWrapper>{i?.student_info?.user?.username}</TableBodyCellWrapper>
                       <TableBodyCellWrapper>
                         {[i?.student_info?.first_name, i?.student_info?.middle_name, i?.student_info?.last_name].join(' ')}
                       </TableBodyCellWrapper>
-                      <TableBodyCellWrapper>
-                        {i?.student_info?.student_id}
-                      </TableBodyCellWrapper>
-                      <TableBodyCellWrapper>
-                        {i?.class?.name}
-                      </TableBodyCellWrapper>
-                      <TableBodyCellWrapper>
-                        {i?.class_roll_no}
-                      </TableBodyCellWrapper>
-                      <TableBodyCellWrapper>
-                        {i?.batches?.map(batch => batch.name)?.join(', ')}
-                      </TableBodyCellWrapper>
+                      <TableBodyCellWrapper>{i?.student_info?.student_id}</TableBodyCellWrapper>
+                      <TableBodyCellWrapper>{i?.class?.name}</TableBodyCellWrapper>
+                      <TableBodyCellWrapper>{i?.class_roll_no}</TableBodyCellWrapper>
+                      <TableBodyCellWrapper>{i?.batches?.map((batch) => batch.name)?.join(', ')}</TableBodyCellWrapper>
                       <TableBodyCellWrapper>
                         <a href={`tel:${i?.student_info?.phone}`}>{i?.student_info?.phone}</a>
                       </TableBodyCellWrapper>
@@ -535,29 +588,26 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
                         }}
                       > */}
                       <TableBodyCellWrapper>
-                        <Grid py={0.25} mx="auto" display="flex" justifyContent="center" columnGap={1} >
-                          <Tooltip title={t('View Profile')} arrow >
+                        <Grid py={0.25} mx="auto" display="flex" justifyContent="center" columnGap={1}>
+                          <Tooltip title={t('View Profile')} arrow>
                             <IconButton
                               sx={ActionStyle}
                               color="primary"
                               onClick={() => {
-                                setSelectedStudent(i)
-                                setStudentProfileModal(true)
+                                setSelectedStudent(i);
+                                setStudentProfileModal(true);
                               }}
                               size="small"
-
                             >
                               <VisibilityIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
 
                           <Tooltip title={t('Edit')} arrow>
-                            <IconButton
-                              color="primary"
-                              sx={ActionStyle}
-                              size='small'
-                            >
-                              <NextLink href={`/students/${i.id}/edit`}><LaunchTwoToneIcon fontSize="small" /></NextLink>
+                            <IconButton color="primary" sx={ActionStyle} size="small">
+                              <NextLink href={`/students/${i.id}/edit`}>
+                                <LaunchTwoToneIcon fontSize="small" />
+                              </NextLink>
                             </IconButton>
                           </Tooltip>
 
@@ -566,8 +616,8 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
                               sx={ActionStyle}
                               color="primary"
                               onClick={() => {
-                                setSelectedStudent(i)
-                                setDiscountModal(true)
+                                setSelectedStudent(i);
+                                setDiscountModal(true);
                               }}
                               size="small"
                             >
@@ -576,12 +626,7 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
                           </Tooltip>
 
                           <Tooltip title={t('Delete')} arrow>
-                            <IconButton
-                              sx={ActionStyle}
-                              onClick={() => handleConfirmDelete(i.id)}
-                              color="primary"
-                              size="small"
-                            >
+                            <IconButton sx={ActionStyle} onClick={() => handleConfirmDelete(i.id)} color="primary" size="small">
                               <DeleteTwoToneIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
@@ -595,16 +640,18 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
             </Table>
           </TableContainer>
         )}
-      </Card >
+      </Card>
       <div style={{ display: 'none', visibility: 'hidden' }}>
         <Grid ref={idCard} display={'grid'} gridTemplateColumns={'1fr 1fr'} container gap={1.5}>
-          {students?.filter?.(j => selectedItems.includes(j.id))?.map(
-            (i, index) => {
-
+          {students
+            ?.filter?.((j) => selectedItems.includes(j.id))
+            ?.map((i, index) => {
               const user = {
                 id: i?.class_roll_no,
                 class_registration_no: i?.class_registration_no,
-                name: `${i?.student_info?.first_name ? i?.student_info?.first_name : ''} ${i?.student_info?.middle_name ? i?.student_info?.middle_name : ''} ${i?.student_info?.last_name ? i?.student_info?.last_name : ''}`,
+                name: `${i?.student_info?.first_name ? i?.student_info?.first_name : ''} ${
+                  i?.student_info?.middle_name ? i?.student_info?.middle_name : ''
+                } ${i?.student_info?.last_name ? i?.student_info?.last_name : ''}`,
                 schoolName: i?.student_info?.school?.name,
                 class: i?.section?.class?.name,
                 roll: i?.class_roll_no,
@@ -615,15 +662,21 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
                 birthDate: dayjs(i?.student_info?.date_of_birth).format('DD/MM/YYYY'),
                 photo: i?.student_photo ? getFile(i?.student_photo) : '/dumy_student.png'
               };
-              return <Grid sx={{
-                pageBreakAfter: (index + 1) % 8 == 0 ? 'always' : 'avoid',
-                p: '5px'
-              }}> <IdentityCard user={user} /></Grid>
-            }
-          )}
+              return (
+                <Grid
+                  sx={{
+                    pageBreakAfter: (index + 1) % 8 == 0 ? 'always' : 'avoid',
+                    p: '5px'
+                  }}
+                >
+                  {' '}
+                  <IdentityCard user={user} />
+                </Grid>
+              );
+            })}
         </Grid>
       </div>
-      
+
       <DialogWrapper
         open={openConfirmDelete ? true : false}
         maxWidth="sm"
@@ -632,13 +685,7 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
         keepMounted
         onClose={closeConfirmDelete}
       >
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-          p={5}
-        >
+        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" p={5}>
           <AvatarError>
             <CloseIcon />
           </AvatarError>
@@ -651,8 +698,7 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
             }}
             variant="h3"
           >
-            {t('Are you sure you want to permanently delete this student')}
-            ?
+            {t('Are you sure you want to permanently delete this student')}?
           </Typography>
 
           <Box>
@@ -680,20 +726,13 @@ const Results: FC<{ students: any[], refetch: () => void, discount: any[], idCar
           </Box>
         </Box>
       </DialogWrapper>
-
-
     </>
   );
 };
 
 const SingleFee = ({ singleFee, selectedUser }) => {
-
   const [checked, setChecked] = useState(
-    selectedUser && selectedUser?.waiver_fees?.length > 0
-      ? selectedUser?.waiver_fees.find((j) => j.id == singleFee.id)
-        ? true
-        : false
-      : false
+    selectedUser && selectedUser?.waiver_fees?.length > 0 ? (selectedUser?.waiver_fees.find((j) => j.id == singleFee.id) ? true : false) : false
   );
 
   const handleWaiverFeeUpdate = (e) => {
@@ -705,7 +744,6 @@ const SingleFee = ({ singleFee, selectedUser }) => {
         })
         .then(() => {
           setChecked(false);
-
         })
         .catch((err) => {
           console.log(err);
@@ -718,32 +756,31 @@ const SingleFee = ({ singleFee, selectedUser }) => {
         })
         .then(() => {
           setChecked(true);
-
         })
         .catch((err) => {
           console.log(err);
         });
     }
   };
-  console.log({ singleFee })
+  console.log({ singleFee });
   return (
-    <Box display={'flex'} justifyContent="space-between" borderRadius={0.4} sx={{ backgroundColor: '#f5f5f5', ":hover": { backgroundColor: '#d4d4d4', boxShadow: '1px 1px 1px solid #cbd5e1' } }} key={singleFee.id}>
-      <Typography sx={{ my: 'auto', textTransform: 'capitalize', fontSize: { xs: 7, md: 10 }, pl: 0.5 }}>
-        {singleFee?.label}
-      </Typography>
+    <Box
+      display={'flex'}
+      justifyContent="space-between"
+      borderRadius={0.4}
+      sx={{ backgroundColor: '#f5f5f5', ':hover': { backgroundColor: '#d4d4d4', boxShadow: '1px 1px 1px solid #cbd5e1' } }}
+      key={singleFee.id}
+    >
+      <Typography sx={{ my: 'auto', textTransform: 'capitalize', fontSize: { xs: 7, md: 10 }, pl: 0.5 }}>{singleFee?.label}</Typography>
       <Switch sx={{ my: 'auto' }} checked={checked} onChange={handleWaiverFeeUpdate} />
     </Box>
   );
 };
 
 const SingleDiscount = ({ singleDiscount, selectedUser }) => {
-  console.log({ singleDiscount })
+  console.log({ singleDiscount });
   const [checked, setChecked] = useState(
-    selectedUser && selectedUser?.discount?.length > 0
-      ? selectedUser?.discount.find((j) => j.id == singleDiscount.id)
-        ? true
-        : false
-      : false
+    selectedUser && selectedUser?.discount?.length > 0 ? (selectedUser?.discount.find((j) => j.id == singleDiscount.id) ? true : false) : false
   );
 
   const handleDiscountUpdate = (e) => {
@@ -755,7 +792,6 @@ const SingleDiscount = ({ singleDiscount, selectedUser }) => {
         })
         .then(() => {
           setChecked(false);
-
         })
         .catch((err) => {
           console.log(err);
@@ -768,7 +804,6 @@ const SingleDiscount = ({ singleDiscount, selectedUser }) => {
         })
         .then(() => {
           setChecked(true);
-
         })
         .catch((err) => {
           console.log(err);
@@ -777,15 +812,18 @@ const SingleDiscount = ({ singleDiscount, selectedUser }) => {
   };
 
   return (
-    <Box display={'flex'} justifyContent="space-between" borderRadius={0.4} sx={{ backgroundColor: '#f5f5f5', ":hover": { backgroundColor: '#d4d4d4', boxShadow: '1px 1px 1px solid #cbd5e1' } }} key={singleDiscount.id}>
-      <Typography sx={{ my: 'auto', textTransform: 'capitalize', fontSize: { xs: 7, md: 10 }, pl: 0.5 }}>
-        {singleDiscount?.label}
-      </Typography>
+    <Box
+      display={'flex'}
+      justifyContent="space-between"
+      borderRadius={0.4}
+      sx={{ backgroundColor: '#f5f5f5', ':hover': { backgroundColor: '#d4d4d4', boxShadow: '1px 1px 1px solid #cbd5e1' } }}
+      key={singleDiscount.id}
+    >
+      <Typography sx={{ my: 'auto', textTransform: 'capitalize', fontSize: { xs: 7, md: 10 }, pl: 0.5 }}>{singleDiscount?.label}</Typography>
       <Switch sx={{ my: 'auto' }} checked={checked} onChange={handleDiscountUpdate} />
     </Box>
   );
 };
-
 
 Results.propTypes = {
   students: PropTypes.array.isRequired

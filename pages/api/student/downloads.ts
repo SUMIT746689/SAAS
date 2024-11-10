@@ -1,7 +1,5 @@
 import get from 'controllers/students/downloads/get';
 import { logFile } from 'utilities_api/handleLogFile';
-
-
 const index = async (req, res) => {
   const { method } = req;
 

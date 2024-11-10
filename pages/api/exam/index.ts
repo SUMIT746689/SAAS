@@ -153,7 +153,7 @@ const index = async (req, res, refresh_token) => {
                         exam_id: parseInt(req.body.exam_id)
                     }
                 })
-                console.log("isResultPublished___", isResultPublished);
+                // console.log("isResultPublished___", isResultPublished);
 
 
                 if (!isResultPublished) {
