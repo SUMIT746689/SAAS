@@ -83,7 +83,7 @@ export default async function RootLayout({ children }) {
             <LanguageContextProvider>
               <Navbar datas={navarDatas || {}} menus={resMenus}></Navbar>
               {children}
-              <Footer  school_info={school_info} ></Footer>
+              <Footer  school_info={school_info} datas={navarDatas}></Footer>
             </LanguageContextProvider>
             {/* <LayoutWrapper> */}
             {/* <div className=' px-4'>
