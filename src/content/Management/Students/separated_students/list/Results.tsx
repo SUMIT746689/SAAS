@@ -96,14 +96,23 @@ const applyPagination = (users, page, limit) => {
 
 const Results = ({ query, setQuery, selectedItems, setSelectedUsers, students, refetch, discount, idCard, fee }) => {
   // const [selectedItems, setSelectedUsers] = useState<string[]>([]);
-
   const { t } = useTranslation();
   const { showNotification } = useNotistick();
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [studentProfileModal, setStudentProfileModal] = useState(false);
   const [page, setPage] = useState<number>(0);
+  // const [activeSeparateStudent, setActiveSeparateStudent] = useState(false);
   const [limit, setLimit] = useState<number>(20);
   // const [query, setQuery] = useState<string>('');
+
+  const handleActiveSeparateStudent = async (i) => {
+    console.log(i.id);
+    const res = await axios.post(`/api/student/active-separate-student`, {
+      student_id: i.id
+    });
+    console.log(res.data);
+  };
+
   const [filters, setFilters] = useState<{ role?: string }>({
     role: null
   });
@@ -143,7 +152,7 @@ const Results = ({ query, setQuery, selectedItems, setSelectedUsers, students, r
   const endIndex = startIndex + limit;
   const selectedSomeUsers = selectedItems.length > 0 && selectedItems.length < paginatedClasses.length;
   const selectedAllUsers = paginatedClasses.every((student) => selectedItems.includes(student.id));
-
+  // console.log({ paginatedClasses });
   return (
     <>
       {/* view students profile code start*/}
@@ -477,6 +486,7 @@ const Results = ({ query, setQuery, selectedItems, setSelectedUsers, students, r
                       <TableBodyCellWrapper>
                         <a href={`tel:${i?.student_info?.phone}`}>{i?.student_info?.phone}</a>
                       </TableBodyCellWrapper>
+
                       <TableBodyCellWrapper>
                         <Tooltip title={t('View Profile')} arrow>
                           <IconButton
@@ -489,6 +499,19 @@ const Results = ({ query, setQuery, selectedItems, setSelectedUsers, students, r
                             size="small"
                           >
                             <VisibilityIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title={t('Unseparate List')} arrow>
+                          <IconButton sx={ActionStyle} color="primary" size="small">
+                            <VisibilityIcon
+                              onClick={() => {
+                                handleActiveSeparateStudent(i);
+                                // activeSeparateStudent(true);
+                                // activeSeparateStudent(true);
+                              }}
+                              fontSize="small"
+                            />
                           </IconButton>
                         </Tooltip>
                       </TableBodyCellWrapper>
