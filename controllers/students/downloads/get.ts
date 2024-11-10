@@ -36,13 +36,14 @@ async function get(req, res, refresh_token, dcryptAcademicYear) {
                 group: {
                     select: { title: true }
                 },
+                
                 // academic_year: { select: { title: true } }
             }
         });
 
 
 
-        console.log("resStd..........................", {resStd}, null,3 )
+        console.log("resStd..........................",JSON.stringify(resStd,null,3) )
 
         const uploadFilePath = path.join(process.cwd(), `${process.env.FILESFOLDER}`, uploadFolderName, fileName);
 
@@ -106,9 +107,7 @@ const generateExcelFile = (datas, academic_year_title, uploadFilePath) => {
         const writeStream = fs.createWriteStream(uploadFilePath);
         const headerList = [
             "Student Id", "Student Name", "Academic Year", "Class",  "Group",
-
-            // "Shift", "Section", 
-            "Branch", "Roll", "Subjects", "Blood Group", "Father Name", "Mother Name", "Guardian Name"
+            "Branch", "Roll","PhoneNo", "Subjects", "Blood Group", "Father Name", "Mother Name", "Guardian Name"
             , "Guardian Mobile Number", "Address"
         ]
         let header = headerList.join("\t") + "\n";
@@ -128,7 +127,8 @@ const generateExcelFile = (datas, academic_year_title, uploadFilePath) => {
                 // student.section.class.has_section ? student.section.name : '',
                 batches,
                 student.class_roll_no,
-
+                student.student_info.phone || '',
+                // "0199292929",
                 subjects,
                 student.student_info.blood_group || '',
                 student.student_info.father_name || '',
@@ -138,12 +138,13 @@ const generateExcelFile = (datas, academic_year_title, uploadFilePath) => {
                 student.student_present_address || ''
             ];
             writeStream.write(row.join('\t') + "\n");
+            console.log(student.student_info.phone)
         });
         writeStream.close((err) => {
             if (err) return reject(err);
             resolve(uploadFilePath);
+        })
         });
-    })
 };
 
 const removeFiles = (path) => {

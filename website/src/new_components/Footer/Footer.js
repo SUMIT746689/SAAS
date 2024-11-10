@@ -69,8 +69,6 @@ export default function Footer({school_info,datas}) {
 							<p className="font-bold">Address : Gulshan Link Road</p>
 							<p className="font-bold ">Contact No : <span>01302564259</span></p>
 							<p className="font-bold">Email : mukta@gmail.com</p>
-							
-							
 						</div>
 					</div> */}
 					<div className="mx-auto ">
