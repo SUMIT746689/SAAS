@@ -34,8 +34,9 @@ const DynamicPage = ({ datas, serverHost }) => {
                         <>
                             <div>
                             </div>
-                            <div   > {datas.pdf_url}
-                                {/* <img src={`${serverHost}/api/get_file/${datas?.pdf_url}`} /> */}
+                            <div> 
+                                {/* <button>hi</button> */}
+                                {/* {datas.pdf_url} */}
                             </div>
                         </>
                         :

@@ -19,12 +19,14 @@ export default function Footer({school_info,datas}) {
 					{/* <div> */}
 						<Image src={header_image} alt="header image" width={80} height={32} />
 					{/* </div> */}
-						<div className="text-base font-normal"><p className="text-black">©2024 Edu360 </p>
+						<div className=" text-sm  ">
+							{/* <p className="text-black">©2024 Edu360 </p> */}
 							<p>Powered by: 
 						<Image src="/edu.png" alt="edu image" width={80} height={32} />
 							</p>
 
-							<p>MRAM Technologies Ltd.</p></div>
+							<p>MRAM Technologies Ltd.</p>
+							</div>
 					</div>
 					<div className="lg:space-y-2 space-y-0  mx-auto">
 						<h3 className=" text-[#1F1C14] font-semibold text-2xl">Quick links</h3>
@@ -71,22 +73,41 @@ export default function Footer({school_info,datas}) {
 							<p className="font-bold">Email : mukta@gmail.com</p>
 						</div>
 					</div> */}
-					<div className="mx-auto ">
+					<div className="mx-auto flex flex-col gap-4">
 						<div className="flex justify-start lg:space-x-3 space-y-1">
-							<Link href={facebook_link || '#'} className="text-2xl  text-green-600">
+							<Link href={facebook_link || '#'} className="text-3xl  text-fuchsia-950">
 							<FaFacebook />
 							</Link>
-						    <Link href={youtube_link || '#'} className="text-2xl text-red-800">
+						    {/* <Link href={youtube_link || '#'} className="text-2xl text-red-800">
 							<FaYoutube />
-							</Link>
-							<Link href={google_map_link || '#'} className="text-2xl text-blue-800">
+							</Link> */}
+						</div>
+						
+						<div  className="flex justify-start lg:space-x-3 space-y-1">	
+							<Link href={google_map_link || '#'} className="text-3xl text-blue-700">
 							<FaMapMarkerAlt />
 							</Link>
-							<Link href={twitter_link || '#'} className="text-2xl  text-pink-700">
+							{/* <Link href={twitter_link || '#'} className="text-2xl  text-pink-700">
+							<FaTwitter />
+							</Link> */}
+ 						</div>
+						<div className="flex justify-start lg:space-x-3 space-y-1">
+							{/* <Link href={facebook_link || '#'} className="text-2xl  text-green-600">
+							<FaFacebook />
+							</Link> */}
+						    <Link href={youtube_link || '#'} className="text-3xl text-red-800">
+							<FaYoutube />
+							</Link>
+						</div>
+						
+						<div  className="flex justify-start lg:space-x-3 space-y-1">	
+							{/* <Link href={google_map_link || '#'} className="text-2xl text-blue-800">
+							<FaMapMarkerAlt />
+							</Link> */}
+							<Link href={twitter_link || '#'} className="text-3xl  text-pink-700">
 							<FaTwitter />
 							</Link>
-							
-						</div>
+ 						</div>
 					</div>
 				</div>
 			</footer>
