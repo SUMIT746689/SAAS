@@ -1,9 +1,11 @@
 import prisma from '@/lib/prisma_client';
+import { academicYearVerify, authenticate } from 'middleware/authenticate';
 import { logFile } from 'utilities_api/handleLogFile';
 
-const index = async (req, res) => {
+const index = async (req, res, refresh_token, academic_year) => {
   try {
     const { method } = req;
+    const { school_id } = refresh_token;
 
     switch (method) {
       case 'GET':
@@ -20,7 +22,8 @@ const index = async (req, res) => {
           where: {
             fee: {
               fees_month: month_name.toLowerCase(),
-              class_id: parseInt(selected_class)
+              class_id: parseInt(selected_class),
+              school_id
             },
             student: {
               id: {
@@ -91,7 +94,80 @@ const index = async (req, res) => {
           }
         });
 
+        console.log('hi...', JSON.stringify(studentDueInfo, null, 4))
 
+        const resStd = await prisma.fee.findMany({
+          where: {
+            fees_month: month_name.toLowerCase(),
+            school_id,
+          },
+          include: {
+            class: {
+              select: {
+                Student: {
+                  // include: {
+                  //   discount:true,
+                  // },
+                  select: {
+                    id: true,
+                    academic_year: {
+                      select: {
+                        title: true
+                      }
+                    },
+                    class_roll_no: true,
+                    batches: {
+                      select: {
+                        name: true
+                      }
+                    },
+                    group: {
+                      select: {
+                        title: true
+                      }
+                    },
+                    student_info: {
+                      select: {
+                        student_id: true,
+                        father_name: true,
+                        middle_name: true,
+                        last_name: true
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            Discount: true,
+            fees_head: {
+              select: {
+                title: true,
+              }
+            },
+            student_fees: {
+              include: {
+                student: {
+                  include: {
+                    discount: true
+                  }
+                },
+
+              }
+            }
+          }
+        });
+
+        const resStd_ = await prisma.student.findMany({
+          where: {
+            id: selected_student?.split(',').map(Number),
+            class_id: parseInt(selected_class),
+          },
+          // select:{
+            
+          // }
+        });
+
+        console.log('all Fees', JSON.stringify(resStd, null, 4))
 
         res.status(200).json({
           status: true,
@@ -110,4 +186,4 @@ const index = async (req, res) => {
   }
 };
 
-export default index;
+export default authenticate(academicYearVerify(index));
