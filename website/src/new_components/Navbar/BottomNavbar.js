@@ -87,12 +87,13 @@ export default function BottomNavbar({ menus: menuItems }) {
   function buildNestedNavbar(menuItems) {
     const menuMap = {};
     const nestedMenu = [];
-
+console.log({menuItems})
     // First, map all menu items by their id
     menuItems.forEach(item => {
+      console.log({item})
       let website_link = '';
       if (item.link_type === 'page link' || item.link_type === 'external link') website_link = item.website_link;
-      else if (item.link_type === "dynamic page link") website_link = `/dynamic-pages/${item.websiteDynamicPage.id}`;
+      else if (item.link_type === "dynamic page link") website_link = `/dynamic-pages/${item.websiteDynamicPage?.id}`;
       menuMap[item.id] = { ...item, website_link, title: item[`${language}_title`], children: [] };
     });
 

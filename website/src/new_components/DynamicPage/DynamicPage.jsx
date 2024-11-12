@@ -3,6 +3,7 @@ import { LanguageContext } from "@/app/context/language";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 const DynamicPage = ({ datas, serverHost }) => {
+    console.log({datas})
     const { t } = useTranslation();
     const { language } = useContext(LanguageContext)
     return (
@@ -23,6 +24,19 @@ const DynamicPage = ({ datas, serverHost }) => {
                             </div>
                             <div>
                                 <img src={`${serverHost}/api/get_file/${datas?.feature_photo}`} />
+                            </div>
+                        </>
+                        :
+                        ''
+                }
+                {
+                    datas?.pdf_url ?
+                        <>
+                            <div>
+                            </div>
+                            <div> 
+                                {/* <button>hi</button> */}
+                                {/* {datas.pdf_url} */}
                             </div>
                         </>
                         :

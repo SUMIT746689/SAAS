@@ -21,6 +21,7 @@ const scrollAnimation = keyframes`
 `;
 
 export default function Banner({ carouselImages, serverHost, notices }) {
+    console.log({notices})
 
     const { language } = useContext(LanguageContext);
 console.log({notices})

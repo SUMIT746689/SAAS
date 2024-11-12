@@ -71,6 +71,7 @@ export default async function RootLayout({ children }) {
         }
       }
     });
+    console.log("resMenus...................",{resMenus})
 
     return (
       school_info ?
