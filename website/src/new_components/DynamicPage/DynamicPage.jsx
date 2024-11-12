@@ -1,5 +1,6 @@
 "use client"
 import { LanguageContext } from "@/app/context/language";
+import Link from "next/link";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 const DynamicPage = ({ datas, serverHost }) => {
@@ -20,7 +21,6 @@ const DynamicPage = ({ datas, serverHost }) => {
                     datas?.feature_photo ?
                         <>
                             <div>
-
                             </div>
                             <div>
                                 <img src={`${serverHost}/api/get_file/${datas?.feature_photo}`} />
@@ -30,20 +30,16 @@ const DynamicPage = ({ datas, serverHost }) => {
                         ''
                 }
                 {
-                    datas?.pdf_url ?
-                        <>
-                            <div>
-                            </div>
-                            <div> 
-                                {/* <button>hi</button> */}
-                                {/* {datas.pdf_url} */}
-                            </div>
-                        </>
-                        :
-                        ''
-                }
-
-            </div>
+                        datas?.pdf_url ?
+                        <button className="bg-orange-500 text-slate-100 font-bold py-2 px-4 mt-4">
+                        <Link href={`${serverHost}/api/get_file/${datas?.pdf_url}`} >
+                        Show File
+                        </Link>
+                        </button>
+                    :
+                    ''
+                 }
+        </div>
 
         </>
     )
