@@ -1,11 +1,11 @@
 import prisma from '@/lib/prisma_client';
-import { authenticate } from 'middleware/authenticate';
+import { academicYearVerify, authenticate } from 'middleware/authenticate';
 import { logFile } from 'utilities_api/handleLogFile';
-import { dcrypt } from 'utilities_api/hashing';
 
-async function get(req, res, refresh_token) {
+async function get(req, res, refresh_token, academic_year) {
   try {
-    const { section_id, academic_year_id, class_id } = req.query;
+    const { section_id, class_id } = req.query;
+    const { id: academic_year_id } = req
     const { role, school_id } = refresh_token;
     const where = {};
 
@@ -86,4 +86,4 @@ async function get(req, res, refresh_token) {
   }
 }
 
-export default authenticate(get);
+export default authenticate(academicYearVerify(get));

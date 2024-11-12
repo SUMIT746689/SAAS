@@ -395,7 +395,7 @@ const StudentDueReport = () => {
       </Grid>
 
       <Head>
-        <title>Student_Due_Report</title>
+        <title>Student Due Report</title>
       </Head>
       <Typography
         variant="h4"
