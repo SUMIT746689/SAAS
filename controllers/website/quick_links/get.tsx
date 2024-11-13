@@ -10,8 +10,8 @@ const Get = async (req, res, refresh_token) => {
         school_id
       },
       include: {
-        websiteDynamicPage: true,
-        parent: true
+        websiteDynamicPage: true
+        // parent: true
       }
     });
 

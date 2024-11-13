@@ -31,23 +31,23 @@ export default function Footer({school_info,datas ,resQuickDatas}) {
 					</div>
 
 
-					{resQuickDatas.forEach(item => {
-					<div>
-						<div>{item.english_title}</div>
-					<div>{item.bangla_title}</div>
-					<div>{item.link_type}</div>
-					<div>{item.website_link}</div>
-					</div>
-					})}
+					
 
 
 					<div className="lg:space-y-2 space-y-0  mx-auto">
 						<h3 className=" text-[#1F1C14] font-semibold text-2xl">Quick links</h3>
 						<ul className="space-y-2 text-sm">
+						{resQuickDatas.map(item => (
+							// console.log({item})
 							<li>
-								<a rel="text-base font-normal" href="#">{english_title}</a>
+								<a rel="text-base font-normal" href="#">{item.english_title}</a>
 							</li>
-							<li>
+						))}
+
+						{/* {
+							[1,2,3,4,5,6,7].map(v=><div>{v}</div>)
+						}						 */}
+							{/* <li>
 								<a rel="text-base font-normal" href="#">About</a>
 							</li>
 							<li>
@@ -61,7 +61,7 @@ export default function Footer({school_info,datas ,resQuickDatas}) {
 							</li>
 							<li>
 								<a rel="text-base font-normal" href="#">Contact</a>
-							</li>
+							</li> */}
 						</ul>
 					</div>
 

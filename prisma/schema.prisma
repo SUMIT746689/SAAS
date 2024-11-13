@@ -1879,7 +1879,6 @@ enum WebsiteMenuStatus {
 
 model websiteQuickLinks {
   id              Int               @id @default(autoincrement())
-  parent_id       Int?
   english_title   String
   bangla_title    String?
   link_type       String
@@ -1890,8 +1889,6 @@ model websiteQuickLinks {
 
   websiteDynamicPage WebsiteDynamicPage? @relation(fields: [dynamic_page_id], references: [id])
   school             School              @relation(fields: [school_id], references: [id])
-  parent             websiteQuickLinks?  @relation("websiteQuickLinks", fields: [parent_id], references: [id])
-  subcategories      websiteQuickLinks[] @relation("websiteQuickLinks")
 
   @@map("website_Quick_Links")
 }
