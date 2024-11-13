@@ -71,7 +71,21 @@ export default async function RootLayout({ children }) {
         }
       }
     });
-    console.log("resMenus...................",{resMenus})
+    // console.log("resMenus...................",{resMenus})
+
+
+    const resQuickDatas = await prisma.websiteQuickLinks.findMany({
+      where: { school: { domain }},
+       select:{
+        english_title:true ,
+        bangla_title:true  ,
+        link_type:true ,
+        website_link:true ,
+        dynamic_page_id:true ,
+       }
+    
+    });
+    console.log("resQuickDatas...................",{resQuickDatas})
 
     return (
       school_info ?
@@ -84,7 +98,7 @@ export default async function RootLayout({ children }) {
             <LanguageContextProvider>
               <Navbar datas={navarDatas || {}} menus={resMenus}></Navbar>
               {children}
-              <Footer  school_info={school_info} datas={navarDatas}></Footer>
+              <Footer  school_info={school_info} datas={navarDatas} resQuickDatas={resQuickDatas} ></Footer>
             </LanguageContextProvider>
             {/* <LayoutWrapper> */}
             {/* <div className=' px-4'>

@@ -5,12 +5,13 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
-export default function Footer({school_info,datas}) {
-	// console.log("school_info_________school_info_________________________" , {school_info})
+export default function Footer({school_info,datas ,resQuickDatas}) {
+	console.log("datas............datas" , {resQuickDatas})
 	const {
 		header_image,
 	  } = datas;
 	const { google_map_link,facebook_link,youtube_link,twitter_link } = school_info;
+	const { english_title,bangla_title,link_type,website_link } = resQuickDatas;
 	return (
 		<div>
 			<footer className=" bg-sky-400 border-t">
@@ -28,11 +29,23 @@ export default function Footer({school_info,datas}) {
 							<p>MRAM Technologies Ltd.</p>
 							</div>
 					</div>
+
+
+					{resQuickDatas.forEach(item => {
+					<div>
+						<div>{item.english_title}</div>
+					<div>{item.bangla_title}</div>
+					<div>{item.link_type}</div>
+					<div>{item.website_link}</div>
+					</div>
+					})}
+
+
 					<div className="lg:space-y-2 space-y-0  mx-auto">
 						<h3 className=" text-[#1F1C14] font-semibold text-2xl">Quick links</h3>
 						<ul className="space-y-2 text-sm">
 							<li>
-								<a rel="text-base font-normal" href="#">Home</a>
+								<a rel="text-base font-normal" href="#">{english_title}</a>
 							</li>
 							<li>
 								<a rel="text-base font-normal" href="#">About</a>
@@ -51,6 +64,11 @@ export default function Footer({school_info,datas}) {
 							</li>
 						</ul>
 					</div>
+
+
+
+
+					
 					<div className="lg:space-y-2 space-y-0  mx-auto">
 						<h3 className=" text-[#1F1C14] font-semibold text-2xl">Contact</h3>
 						<ul className="space-y-2 text-sm">
@@ -58,7 +76,7 @@ export default function Footer({school_info,datas}) {
 								<a rel="text-base font-normal" href="#">Address : Gulshan, Link Road</a>
 							</li>
 							<li>
-								<a rel="text-base font-normal" href="#">Contact No : 01302564259</a>
+								<a rel="text-base font-normal" href="#">Contact No : 0130</a>
 							</li>
 							<li>
 								<a rel="text-base font-normal" href="#">Email : mukta@gmail.com</a>

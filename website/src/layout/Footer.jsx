@@ -28,12 +28,7 @@ function Footer({ facebook_link, twitter_link, youtube_link, google_link, linked
           <Link href={twitter_link}  target='_blank'><AiOutlineTwitter className={footerIconClass} /></Link>
           <Link href={google_link} target='_blank'><AiOutlineGooglePlus className={footerIconClass} /></Link>
           <Link href={youtube_link} target='_blank'>  <AiOutlineYoutube className={footerIconClass} /></Link>
-          <Link href={linkedin_link} target='_blank'><FaLinkedinIn className={footerIconClass} /></Link>
-          
-          
-          
-        
-          
+          <Link href={linkedin_link} target='_blank'><FaLinkedinIn className={footerIconClass} /></Link>         
         </div>
       </footer>
     </>
