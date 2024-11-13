@@ -57,52 +57,12 @@ const WebsiteMenu = () => {
   const { t }: { t: any } = useTranslation();
   const [websiteMenuOpen, setWebsiteMenuOpen] = useState(false);
   const childrenRef = useRef(null);
-  // const [parentList, setParentList] = useState([
-  //   {
-  //     label: 'Root',
-  //     id: 1
-  //   },
-  //   {
-  //     label: 'Institution',
-  //     id: 2,
-  //     sub_menu: [
-  //       {
-  //         label: 'History',
-  //         id: 3,
-  //         sub_menu: [
-  //           {
-  //             label: 'Nested sub 1',
-  //             id: 5,
-  //             sub_menu: [
-  //               {
-  //                 label: 'Nested sub 2',
-  //                 id: 6
-  //               }
-  //             ]
-  //           }
-  //         ]
-  //       },
-  //       {
-  //         label: 'Lab',
-  //         id: 4
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     label: 'Academy',
-  //     id: 8
-  //   }
-  // ]);
   const [parentList, setParentList] = useState([]);
   const [linkTypeList, setLinkTypeList] = useState([
     {
       label: 'No Link',
       id: 1
     },
-    // {
-    //   label: 'Custom Link',
-    //   id: 2
-    // },
     {
       label: 'External Link',
       id: 3
@@ -258,7 +218,7 @@ const WebsiteMenu = () => {
 
   const websiteMenuList = () => {
     axios
-      .get('/api/website/menu')
+      .get('/api/website/quick_links')
       .then((res) => {
         setMenuInfo(res?.data?.result);
         setParentList(res?.data?.menus);
@@ -286,10 +246,10 @@ const WebsiteMenu = () => {
 
   const handleDeleteMenu = debounce((item) => {
     axios
-      .delete(`/api/website/menu/${item.id}`)
+      .delete(`/api/website/quick_links/${item.id}`)
       .then((response) => {
         if (response.status === 204) {
-          showNotification('website menu deleted successfull!!');
+          showNotification('Quick Links deleted successfull!!');
           websiteMenuList();
         }
       })
@@ -317,10 +277,10 @@ const WebsiteMenu = () => {
   return (
     <>
       <Head>
-        <title>Website Menu</title>
+        <title>Quick Links</title>
       </Head>
       <PageTitleWrapper>
-        <PageHeaderTitleWrapper name="Add/Edit Website Menu" handleCreateClassOpen={handleCreateAddWebsiteMenu} disabled={false} />
+        <PageHeaderTitleWrapper name="Add/Edit Quick Links" handleCreateClassOpen={handleCreateAddWebsiteMenu} disabled={false} />
       </PageTitleWrapper>
 
       {/* class routine form start */}
@@ -331,9 +291,9 @@ const WebsiteMenu = () => {
           }}
         >
           <Typography variant="h4" gutterBottom>
-            {t('Add new website menu')}
+            {t('Add new Quick Links')}
           </Typography>
-          <Typography variant="subtitle2">{t('Fill in the fields below to create and add a website menu')}</Typography>
+          <Typography variant="subtitle2">{t('Fill in the fields below to create and add a Quick Links')}</Typography>
         </DialogTitle>
         <Formik
           initialValues={{
@@ -364,9 +324,9 @@ const WebsiteMenu = () => {
 
               let response;
               if (editData) {
-                response = await axios.patch(`/api/website/menu/${editData.id}`, values);
+                response = await axios.patch(`/api/website/quick_links/${editData.id}`, values);
               } else {
-                response = await axios.post(`/api/website/menu`, values);
+                response = await axios.post(`/api/website/quick_links`, values);
               }
 
               if (response.status === 200) {
@@ -402,52 +362,7 @@ const WebsiteMenu = () => {
                     p: 3
                   }}
                 >
-                  <Grid container spacing={3} sx={{ paddingTop: '27px', paddingLeft: '27px', paddingBottom: '9px' }}>
-                    {/* updated code start */}
-                    {/* <Menu items={parentList} /> */}
-                    <Grid sx={{ width: '100%', position: 'relative' }} className="children" ref={childrenRef}>
-                      <TextField
-                        sx={{
-                          '& fieldset': {
-                            borderRadius: '3px'
-                          }
-                        }}
-                        size="small"
-                        fullWidth
-                        placeholder={'Root...'}
-                        onClick={() => {
-                          setWebsiteMenuOpen(true);
-                        }}
-                        value={menuLabel?.charAt(0).toUpperCase() + menuLabel?.slice(1) || 'Root'}
-                        variant="outlined"
-                      />
-                      {websiteMenuOpen && (
-                        <Grid
-                          sx={{
-                            position: 'absolute',
-                            top: '100%',
-                            left: 0,
-                            backgroundColor: '#fff',
-                            width: '100%',
-                            height: 'fit-content',
-                            overflowY: 'auto',
-                            zIndex: 10,
-                            border: '1px solid #0000001f'
-                          }}
-                        >
-                          <CustomMenu
-                            items={parentList}
-                            handleItemClick={handleItemClick}
-                            menuLabel={menuLabel}
-                            // editData={editData}
-                            setWebsiteMenuOpen={setWebsiteMenuOpen}
-                          />
-                        </Grid>
-                      )}
-                    </Grid>
-
-                    {/* updated code end */}
-                  </Grid>
+                  <Grid container spacing={3} sx={{ paddingTop: '27px', paddingLeft: '27px', paddingBottom: '9px' }}></Grid>
                   <Grid container spacing={3} sx={{ paddingTop: '27px', paddingLeft: '27px', paddingBottom: '9px' }}>
                     <TextField
                       sx={{
@@ -615,7 +530,7 @@ const WebsiteMenu = () => {
                 </DialogContent>
 
                 <DialogActionWrapper
-                  title="Website Menu"
+                  title="Quick Links"
                   errors={errors}
                   editData={editData || undefined}
                   handleCreateClassClose={handleCreateWebsiteMenuFormClose}

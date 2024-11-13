@@ -23,6 +23,8 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   const [dynamicContent, setDynamicContent] = useState([]);
   const featureImageRef = useRef();
 
+  const [photo, setPhoto] = useState(null);
+
   useEffect(() => {
     if (editData) setOpen(true);
   }, [editData]);
@@ -32,6 +34,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   };
 
   const handleCreateClassClose = () => {
+    setPhoto(null);
     setOpen(false);
     setEditData(null);
   };
@@ -75,6 +78,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
       const res = await axios.post(`/api/front_end/website_dynamic_pages`, formData);
       console.log({ res });
       successResponse('created');
+      setPhoto(null);
       // }
     } catch (err) {
       console.error(err);
@@ -159,6 +163,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
             english_description: editData?.english_description || '',
             bangla_description: editData?.bangla_description || '',
             feature_photo: '',
+            pdf_url: '',
             status: editData?.status || undefined,
             submit: null
           }}
@@ -202,7 +207,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                     />
 
                     {/* english description */}
-                    <Grid container pb={1} >
+                    <Grid container pb={1}>
                       <Grid>Description (English): *</Grid>
                       <RichTextEditorWrapper
                         // height='200px'
@@ -256,7 +261,9 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                               index={index}
                               key={index}
                               // @ts-ignore
-                              handleRemove={() => handleFileRemove(setFieldValue, 'feature_photo', 'preview_feature_photo', featureImageRef.current.resetInput)}
+                              handleRemove={() =>
+                                handleFileRemove(setFieldValue, 'feature_photo', 'preview_feature_photo', featureImageRef.current.resetInput)
+                              }
                             />
                           </>
                         ))}
@@ -274,6 +281,80 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                         )}
                       </Grid>
                     </Grid>
+                    {/* file or photo upload  */}
+                    <Grid item xs={12}>
+                      <Grid item xs={12}>
+                        <NewFileUploadFieldWrapper
+                          htmlFor="pdf_url"
+                          label="PDF File upload"
+                          name="pdf_url"
+                          value={values.pdf_url?.name || ''}
+                          accept="application/pdf"
+                          handleChangeFile={(e) => {
+                            if (e.target?.files?.length) {
+                              setPhoto(URL.createObjectURL(e.target.files[0]));
+                              setFieldValue('pdf_url', e.target.files[0]);
+                            }
+                          }}
+                          handleRemoveFile={() => {
+                            setPhoto(null);
+                            setFieldValue('pdf_url', undefined);
+                          }}
+                        />
+                      </Grid>
+                      {(photo || editData?.file_url) && (
+                        <Grid
+                          sx={{
+                            p: 1,
+                            border: 1,
+                            borderRadius: 1,
+                            borderColor: 'primary.main',
+                            color: 'primary.main'
+                          }}
+                        >
+                          <a style={{ width: '50px' }} target="_blank" href={photo || getFile(editData?.file_url)}>
+                            {photo || (editData?.file_url ? getFile(editData?.file_url) : 'Not selected')}
+                          </a>
+                        </Grid>
+                      )}
+                    </Grid>
+                    {/* file or photo upload  */}
+                    {/* <Grid sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                      <Grid>
+                        <FileUploadFieldWrapper
+                          htmlFor="photo"
+                          label="Photo Image"
+                          name="photo"
+                          value={values.photo?.name || ''}
+                          accept="application/pdf"
+                          handleChangeFile={(e) => {
+                            if (e.target?.files?.length) {
+                              setPhoto(URL.createObjectURL(e.target.files[0]));
+                              setFieldValue('photo', e.target.files[0]);
+                            }
+                          }}
+                          handleRemoveFile={() => {
+                            setPhoto(null);
+                            setFieldValue('photo', undefined);
+                          }}
+                        />
+                      </Grid>
+                      {(photo || editData?.file_url) && (
+                        <Grid
+                          sx={{
+                            p: 1,
+                            border: 1,
+                            borderRadius: 1,
+                            borderColor: 'primary.main',
+                            color: 'primary.main'
+                          }}
+                        >
+                          <a style={{ width: '50px' }} target="_blank" href={photo || getFile(editData?.file_url)}>
+                            {photo || (editData?.file_url ? getFile(editData?.file_url) : 'Not selected')}
+                          </a>
+                        </Grid>
+                      )}
+                    </Grid> */}
 
                     {/* status */}
                     <DropDownSelectWrapper

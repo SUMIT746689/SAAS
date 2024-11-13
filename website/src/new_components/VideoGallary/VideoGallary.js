@@ -1,6 +1,6 @@
 "use client"
 import { LanguageContext } from "@/app/context/language";
-import { handleTextChangeLangWise } from "@/utils/handleLanguage";
+import { handleTextChangeLangWise } from "@/utils/handleLanguage"; 
 import { useContext } from "react";
 export default function VideoGallary({ video_gallary }) {
 

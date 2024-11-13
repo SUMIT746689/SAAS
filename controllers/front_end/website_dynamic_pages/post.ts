@@ -11,13 +11,16 @@ async function post(req, res, refresh_token) {
     await certificateTemplateFolder(uploadFolderName);
 
     const fileType = ['image/jpeg', 'image/jpg', 'image/png'];
+    const pdfTpe = [ 'application/pdf'];
     const filterFiles = {
       feature_photo: fileType,
+      pdf_url:pdfTpe
     }
 
     const { files, fields, error } = await fileUpload({ req, filterFiles, uploadFolderName });
+    console.log({files})
 
-    const { feature_photo } = files;
+    const { feature_photo ,pdf_url} = files;
 
     if (files && (error)) for (const [key, value] of Object.entries(files)) {
       // @ts-ignore
@@ -38,10 +41,12 @@ async function post(req, res, refresh_token) {
         english_description,
         bangla_description,
         feature_photo: files['feature_photo'] ? `${uploadFolderName}/${files['feature_photo'].newFilename}` : undefined,
+        pdf_url: files['pdf_url'] ? `${uploadFolderName}/${files['pdf_url'].newFilename}` : undefined,
         status,
         school_id: refresh_token.school_id
       }
     })
+    console.log({response})
 
     res.json({ data: response, success: true });
 

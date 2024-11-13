@@ -293,7 +293,6 @@ const Results = () => {
                         <TableBodyCellWrapper align={'center'}>{i?.student?.class_name}</TableBodyCellWrapper>
                         <TableBodyCellWrapper align={'center'}>{i?.student?.academic_year_title}</TableBodyCellWrapper>
                         <TableBodyCellWrapper align={'center'}>{customizeDateWithTime(i?.student?.admission_date)}</TableBodyCellWrapper>
-
                         <TableBodyCellWrapper align={'center'}>
                           <Tooltip title={t('Approve')} arrow>
                             <IconButton

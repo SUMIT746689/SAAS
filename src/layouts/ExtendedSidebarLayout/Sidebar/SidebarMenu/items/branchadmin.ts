@@ -712,7 +712,12 @@ const website_settings: MenuItems[] = [
         name: 'Scholarship',
         icon: CameraFrontIcon,
         link: '/front_end/scholarship'
-      },
+      }, 
+      //  {
+      //   name: 'QuickLinks',
+      //   icon: CameraFrontIcon,
+      //   link: '/front_end/quick_links'
+      // },
       {
         name: 'Video Gallary',
         icon: CameraFrontIcon,

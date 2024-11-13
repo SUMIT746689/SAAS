@@ -39,7 +39,7 @@ async function post(req, res, refresh_token) {
 
     return res.json({ message: 'website menu created successfully!' });
   } catch (err) {
-    console.log({err})
+    console.log({ err });
     logFile.error(err.message);
     res.status(404).json({ error: err.message });
   }

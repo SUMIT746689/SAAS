@@ -147,6 +147,7 @@ model School {
   School                     School[]                     @relation("SchoolToBranch")
   Program                    Program[]
   TeacherShift               TeacherShift[]
+  websiteQuickLinks          websiteQuickLinks[]
 
   // routines Routine[]
   @@map("schools")
@@ -1876,6 +1877,25 @@ enum WebsiteMenuStatus {
   unpublish
 }
 
+model websiteQuickLinks {
+  id              Int               @id @default(autoincrement())
+  parent_id       Int?
+  english_title   String
+  bangla_title    String?
+  link_type       String
+  website_link    String
+  status          WebsiteMenuStatus @default(publish)
+  dynamic_page_id Int?
+  school_id       Int
+
+  websiteDynamicPage WebsiteDynamicPage? @relation(fields: [dynamic_page_id], references: [id])
+  school             School              @relation(fields: [school_id], references: [id])
+  parent             websiteQuickLinks?  @relation("websiteQuickLinks", fields: [parent_id], references: [id])
+  subcategories      websiteQuickLinks[] @relation("websiteQuickLinks")
+
+  @@map("website_Quick_Links")
+}
+
 model WebsiteMenu {
   id              Int               @id @default(autoincrement())
   parent_id       Int?
@@ -1907,10 +1927,12 @@ model WebsiteDynamicPage {
   english_description Json
   bangla_description  Json
   feature_photo       String?
+  pdf_url             String?
   status              WebsiteDynamicPageStatus
   school_id           Int
   school              School                   @relation(fields: [school_id], references: [id])
   WebsiteMenu         WebsiteMenu[]
+  websiteQuickLinks   websiteQuickLinks[]
 
   @@map("website_dynamic_pages")
 }

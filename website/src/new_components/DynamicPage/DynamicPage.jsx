@@ -33,6 +33,7 @@ const DynamicPage = ({ datas, serverHost }) => {
                         datas?.pdf_url ?
                         <button className="bg-orange-500 text-slate-100 font-bold py-2 px-4 mt-4">
                         <Link href={`${serverHost}/api/get_file/${datas?.pdf_url}`} >
+                        {/* <embed src={`${serverHost}/api/get_file/${datas?.pdf_url}`}  width="800px" height="2100px" /> */}
                         Show File
                         </Link>
                         </button>
