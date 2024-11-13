@@ -37,6 +37,7 @@ const index = async (req, res, refresh_token, academic_year) => {
               _students_to_batches.A as section_id
 
           FROM student_informations
+          JOIN users on users.id = student_informations.user_id AND users.deleted_at IS null
           JOIN students on  students.student_information_id = student_informations.id
           JOIN _students_to_batches on _students_to_batches.B = students.id
           JOIN classes  on classes.id = students.class_id
@@ -62,6 +63,7 @@ const index = async (req, res, refresh_token, academic_year) => {
                 _students_to_batches.A as section_id
                 
             FROM student_informations
+            JOIN users on users.id = student_informations.user_id AND users.deleted_at IS null
             JOIN students on  students.student_information_id = student_informations.id
             JOIN _students_to_batches on _students_to_batches.B = students.id
             JOIN classes  on classes.id = students.class_id
