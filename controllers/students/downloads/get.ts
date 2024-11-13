@@ -18,7 +18,16 @@ async function get(req, res, refresh_token, dcryptAcademicYear) {
         const fileName = date + `-${user_id}` + "-students.xls";
 
         const resStd = await prisma.student.findMany({
-            where: { academic_year_id, student_info: { school_id } },
+            where: {
+                academic_year_id, student_info: {
+                    school_id,
+                    user: {
+                        is: {
+                            deleted_at: null
+                        }
+                    }
+                }
+            },
             include: {
                 student_info: true,
                 // section: {
@@ -36,14 +45,14 @@ async function get(req, res, refresh_token, dcryptAcademicYear) {
                 group: {
                     select: { title: true }
                 },
-                
+
                 // academic_year: { select: { title: true } }
             }
         });
 
 
 
-        console.log("resStd..........................",JSON.stringify(resStd,null,3) )
+        console.log("resStd..........................", JSON.stringify(resStd, null, 3))
 
         const uploadFilePath = path.join(process.cwd(), `${process.env.FILESFOLDER}`, uploadFolderName, fileName);
 
@@ -106,8 +115,8 @@ const generateExcelFile = (datas, academic_year_title, uploadFilePath) => {
 
         const writeStream = fs.createWriteStream(uploadFilePath);
         const headerList = [
-            "Student Id", "Student Name", "Academic Year", "Class",  "Group",
-            "Branch", "Roll","PhoneNo", "Subjects", "Blood Group", "Father Name", "Mother Name", "Guardian Name"
+            "Student Id", "Student Name", "Academic Year", "Class", "Group",
+            "Branch", "Roll", "PhoneNo", "Subjects", "Blood Group", "Father Name", "Mother Name", "Guardian Name"
             , "Guardian Mobile Number", "Address"
         ]
         let header = headerList.join("\t") + "\n";
@@ -144,7 +153,7 @@ const generateExcelFile = (datas, academic_year_title, uploadFilePath) => {
             if (err) return reject(err);
             resolve(uploadFilePath);
         })
-        });
+    });
 };
 
 const removeFiles = (path) => {
