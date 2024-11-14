@@ -15,6 +15,7 @@ model User {
   user_role_id   Int
   role_id        Int?
   deleted_at     DateTime?
+  is_restore     Boolean?  @default(false)
   is_enabled     Boolean   @default(true)
   created_at     DateTime  @default(now())
   updated_at     DateTime  @updatedAt
@@ -281,6 +282,7 @@ model Section {
   student                    Student[]                    @relation("students_to_batches")
   Homework                   Homework[]
   fee                        Fee[]
+
   @@map("sections")
 }
 
