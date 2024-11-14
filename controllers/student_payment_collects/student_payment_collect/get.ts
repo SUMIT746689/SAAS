@@ -46,6 +46,7 @@ const get = async (req, res, refresh_token, academic_year) => {
     const student_fee = await prisma.studentFee.findMany({
       where: {
         student_id: Number(id),
+        deleted_at: null,
         ...query
       },
       include: {
@@ -84,7 +85,10 @@ const get = async (req, res, refresh_token, academic_year) => {
 
 
     const all_fees = await prisma.student.findFirst({
-      where: { id: Number(id), batches: { some: { id: { in: parseSectionIds } } } },
+      where: {
+        id: Number(id),
+        // batches: { some: { id: { in: parseSectionIds } } } 
+      },
       select: {
         id: true,
         class_registration_no: true,
@@ -114,14 +118,15 @@ const get = async (req, res, refresh_token, academic_year) => {
             fees: {
               where: {
                 academic_year_id,
+                deleted_at: null ,
                 ...whereObj
               },
               include: {
                 fees_head: true,
-                batch:{
-                  select:{
-                    id:true,
-                    name:true,
+                batch: {
+                  select: {
+                    id: true,
+                    name: true,
                   }
                 },
                 subject: true

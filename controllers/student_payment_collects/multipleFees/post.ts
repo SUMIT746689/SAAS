@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma_client';
-import { new_unique_tracking_number, unique_tracking_number } from '@/utils/utilitY-functions';
+import { handleGetMaxTrackingNumber } from '@/utils/utilitY-functions';
 import { logFile } from 'utilities_api/handleLogFile';
 import { post_other_fees } from './other_fees';
 
@@ -144,19 +144,7 @@ export const post = async (req, res, refresh_token) => {
 
 
     // create a single trancking_number
-      //get max track number for student fees transaction
-      const getMaxTrackingNumber = await prisma.$queryRaw`
-        SELECT 
-        -- CAST(SUBSTRING(tracking_number, 4) AS UNSIGNED) as 
-        tracking_number FROM transactions
-        WHERE school_id = ${school_id} AND tracking_number LIKE BINARY'ST-%' AND SUBSTRING(tracking_number, 4) REGEXP '^[0-9]+$'
-        ORDER BY CAST(SUBSTRING(tracking_number, 4) AS UNSIGNED) DESC , tracking_number DESC
-        LIMIT 1
-        `;
-
-      // create a new unique tracking number
-      const tracking_number = getMaxTrackingNumber[0]?.tracking_number ? `ST-${parseInt(getMaxTrackingNumber[0]?.tracking_number.slice(3)) + 1}` : 'ST-1000'
-      // let tracking_number = await new_unique_tracking_number(`st-${user_id}-${student_id}`, school_id);
+    const tracking_number = await handleGetMaxTrackingNumber(school_id);
 
     if (student_id && fee_id.length > 0 && account_id && payment_method_id && collected_by_user) {
       const promises = collect_filter_data.map(async (item) => {
@@ -197,7 +185,7 @@ export const post = async (req, res, refresh_token) => {
           });
 
           const fee = await prisma.fee.findFirst({
-            where: { id: fee_id }
+            where: { id: fee_id, deleted_at: null }
           });
 
           const AllDiscount = await prisma.student.findFirst({
@@ -220,6 +208,7 @@ export const post = async (req, res, refresh_token) => {
 
           const isAlreadyAvaliable = await prisma.studentFee.aggregate({
             where: {
+              deleted_at: null,
               student_id,
               fee_id
             },
