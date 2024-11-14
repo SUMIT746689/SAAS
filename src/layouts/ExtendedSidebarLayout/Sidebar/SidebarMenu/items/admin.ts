@@ -405,6 +405,11 @@ const accounting: MenuItems[] = [
             name: 'Collect Fee',
             icon: AccountTreeTwoToneIcon,
             link: '/management/student_fees_collection'
+          },
+          {
+            name: 'Modify Collected Fees',
+            icon: AccountTreeTwoToneIcon,
+            link: '/management/fees/recipt_report'
           }
         ]
       },

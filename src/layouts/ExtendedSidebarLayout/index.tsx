@@ -137,7 +137,7 @@ const ExtendedSidebarLayout: FC<ExtendedSidebarLayoutProps> = ({ children }) => 
         anchor="left"
         open={open}
       >
-        <Header drawerOpen={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose} />
+        {/* <Header drawerOpen={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose} /> */}
         <Sidebar />
       </Drawer>
       <Main open={open}>

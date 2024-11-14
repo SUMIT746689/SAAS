@@ -45,6 +45,7 @@ function Sidebar() {
         }}
       >
         <Scrollbar>
+          {/* top section */}
           <Grid container mt={3}>
             <Box
               sx={{
@@ -70,6 +71,7 @@ function Sidebar() {
               background: theme.colors.alpha.trueWhite[10]
             }}
           /> */}
+          {/* mid section */}
           <SidebarMenu />
         </Scrollbar>
         <Divider
@@ -77,6 +79,7 @@ function Sidebar() {
             background: theme.colors.alpha.trueWhite[10]
           }}
         />
+        {/* bottom section */}
         <SidebarFooter />
       </SidebarWrapper>
 
