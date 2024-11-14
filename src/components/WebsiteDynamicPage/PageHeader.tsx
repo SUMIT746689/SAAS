@@ -21,6 +21,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
   const [open, setOpen] = useState(false);
   const { showNotification } = useNotistick();
   const [dynamicContent, setDynamicContent] = useState([]);
+  
   const featureImageRef = useRef();
 
   const [photo, setPhoto] = useState(null);
@@ -261,9 +262,7 @@ function PageHeader({ editData, setEditData, reFetchData }) {
                               index={index}
                               key={index}
                               // @ts-ignore
-                              handleRemove={() =>
-                                handleFileRemove(setFieldValue, 'feature_photo', 'preview_feature_photo', featureImageRef.current.resetInput)
-                              }
+                              handleRemove={() =>handleFileRemove(setFieldValue, 'feature_photo', 'preview_feature_photo', featureImageRef.current.resetInput)}
                             />
                           </>
                         ))}

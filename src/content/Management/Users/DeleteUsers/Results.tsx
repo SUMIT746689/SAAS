@@ -459,11 +459,11 @@ const Results = ({ users, roleOptions, reFetchData, setEditUser }) => {
                         </TableCell>
                       )
                     }
-                    <TableCell>
+                    {/* <TableCell>
                       <Typography noWrap align="center">
                         {t('Active Status')}
                       </Typography>
-                    </TableCell>
+                    </TableCell> */}
                     {
                       // @ts-ignore
                       user?.role?.title === 'SUPER_ADMIN' && (
@@ -472,11 +472,11 @@ const Results = ({ users, roleOptions, reFetchData, setEditUser }) => {
                         </TableCell>
                       )
                     }
-                    <TableCell>
+                    {/* <TableCell>
                       <Typography noWrap align="center">
                         {t('Actions')}
                       </Typography>
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -519,26 +519,6 @@ const Results = ({ users, roleOptions, reFetchData, setEditUser }) => {
                               {/* @ts-ignore */}
                               <Typography variant="h5" noWrap>
                                 {i?.school?.name}
-                              </Typography>
-                            </TableCell>
-                          )
-                        }
-
-                        <TableCell align="center">
-                          {/* @ts-ignore */}
-                          <Typography variant="h5" color={i?.is_enabled ? 'green' : 'red'}>
-                            {/* {user?.is_enabled ? 'Enable' : 'Disable'} */}
-                            <Switch checked={i?.is_enabled} onClick={() => handleUserEnabled(i)} />
-                          </Typography>
-                        </TableCell>
-
-                        {
-                          // @ts-ignore
-                          user?.role?.title === 'SUPER_ADMIN' && (
-                            <TableCell align="center">
-                              <Typography variant="h5" color={i?.adminPanel?.is_active ? 'green' : 'red'}>
-                                {/* {user?.is_enabled ? 'Enable' : 'Disable'} */}
-                                <Switch checked={i?.adminPanel?.is_active} onClick={() => handleCngAdminPanelActiveStatus(i)} />
                               </Typography>
                             </TableCell>
                           )
@@ -693,98 +673,6 @@ const MenuList = ({ targetUser, setEditUser, reFetchData, setSelectedUser, setPe
     // @ts-ignore
     // await superAdminLogInAsAdmin(targetUser.id);
   };
-
-  return (
-    <div>
-      <ButtonWrapper handleClick={handleClick} variant="outlined">
-        Actions
-      </ButtonWrapper>
-
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button'
-        }}
-        sx={{
-          display: 'flex',
-          flexDirection: 'column'
-        }}
-      >
-        <li>
-          <ButtonWrapper startIcon={<LoginIcon fontSize="small" />} variant="outlined" handleClick={() => handleAutoLogin(targetUser?.id)}>
-            {t('Log in')}
-          </ButtonWrapper>
-        </li>
-
-        <li>
-          <ButtonWrapper startIcon={<LaunchTwoToneIcon fontSize="small" />} handleClick={() => setEditUser(targetUser)} variant="outlined">
-            {t('Edit')}
-          </ButtonWrapper>
-        </li>
-
-        {!targetUser.role_id && (
-          <li>
-            <ButtonWrapper
-              startIcon={<RestartAltIcon fontSize="small" />}
-              variant="outlined"
-              handleClick={() => {
-                try {
-                  axios
-                    .put(`/api/permission/attach-user`, {
-                      role_id: targetUser.user_role.id,
-                      user_id: targetUser.id
-                    })
-                    .then(() => {
-                      reFetchData();
-                    });
-                } catch (err) {
-                  console.log(err);
-                }
-              }}
-            >
-              {t('Reset Permission')}
-            </ButtonWrapper>
-          </li>
-        )}
-
-        <li>
-          <ButtonWrapper
-            startIcon={<KeyIcon fontSize="small" />}
-            variant="outlined"
-            handleClick={() => {
-              axios
-                .get(`/api/user/${targetUser?.id}`)
-                .then((res) => {
-                  console.log('selectedUser__', res.data);
-                  setSelectedUser(res.data);
-                  setPermissionModal(true);
-                })
-                .catch((err) => console.log(err));
-            }}
-          >
-            {t('Permission')}
-          </ButtonWrapper>
-        </li>
-
-        <li onClick={handleClose}>
-          <ButtonWrapper
-            startIcon={<DeleteTwoToneIcon fontSize="small" />}
-            variant="outlined"
-            handleClick={() => {
-              setUserDeleteId(targetUser?.id);
-              handleConfirmDelete();
-            }}
-            sx={{ color: 'red' }}
-          >
-            {t('Delete')}
-          </ButtonWrapper>
-        </li>
-      </Menu>
-    </div>
-  );
 };
 
 Results.propTypes = {

@@ -7,15 +7,12 @@ import { Grid, Dialog, DialogContent } from '@mui/material';
 import axios from 'axios';
 import useNotistick from '@/hooks/useNotistick';
 import { AcademicYearContext } from '@/contexts/UtilsContextUse';
-import dayjs from 'dayjs';
 import { PageHeaderTitleWrapper } from '@/components/PageHeaderTitle';
 import { TextFieldWrapper } from '@/components/TextFields';
-import { AutoCompleteWrapper, AutoCompleteWrapperWithoutRenderInput } from '@/components/AutoCompleteWrapper';
+import { AutoCompleteWrapperWithoutRenderInput } from '@/components/AutoCompleteWrapper';
 import { DialogActionWrapper, DialogTitleWrapper } from '@/components/DialogWrapper';
 import { ButtonWrapper } from '@/components/ButtonWrapper';
 import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
-import { label } from 'aws-amplify';
-import { Frequency } from '@prisma/client';
 
 const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((i) => ({
   label: i,
@@ -24,11 +21,15 @@ const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', '
 const fees_type_arr = [
   {
     id: 'class_based',
-    label: 'Class-Based'
+    label: 'Class Based'
+  },
+  {
+    id: 'batch_based',
+    label: 'Batch Based'
   },
   {
     id: 'subject_based',
-    label: 'Subject-Based'
+    label: 'Subject Based'
   }
 ];
 
@@ -40,6 +41,7 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
   const [academicYear, setAcademicYear] = useContext(AcademicYearContext);
   const [checked, setChecked] = useState(false);
   const [subjectList, setSubjectList] = useState<Array<any>>([]);
+  const [batchList, setBatchList] = useState([]);
 
   useEffect(() => {
     if (editData) handleCreateClassOpen();
@@ -76,7 +78,6 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
       // old code
       //const class_ids = _values.class_ids.map((cls) => cls.value);
       // dayjs(_values.last_date).format('YYYY-MM-DD')
-      console.log({ editData });
 
       if (editData) {
         const res = await axios.patch(`/api/fee/${editData.id}`, {
@@ -112,24 +113,24 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
     setValue('months', []);
   };
 
-  // subject list function
-  const subjectListFn = (classInfo) => {
-    axios
-      .get(`/api/subject?class_id=${classInfo.value}`)
-      .then((res) => {
-        const filterArr = res?.data.map((item) => {
-          return {
-            label: item.name,
-            value: item.id
-          };
-        });
-        setSubjectList(filterArr);
-      })
-      .catch((error) => {
-        setSubjectList([]);
-      });
-  };
-
+  // // subject list function
+  // const subjectListFn = (classInfo) => {
+  //   axios
+  //     .get(`/api/subject?class_id=${classInfo.value}`)
+  //     .then((res) => {
+  //       const filterArr = res?.data.map((item) => {
+  //         return {
+  //           label: item.name,
+  //           value: item.id
+  //         };
+  //       });
+  //       setSubjectList(filterArr);
+  //     })
+  //     .catch((error) => {
+  //       setSubjectList([]);
+  //     });
+  // };
+  console.log({ classData, batchList })
   return (
     <>
       <PageHeaderTitleWrapper name="Fees Management" handleCreateClassOpen={handleCreateClassOpen} />
@@ -229,8 +230,9 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
                         value={values.frequency || ''}
                       />
                     </Grid>
+
                     {/* fee's for which month */}
-                    <Grid item xs={12} sm={6}>
+                    {/* <Grid item xs={12} sm={6}>
                       <TextFieldWrapper
                         name="_for"
                         label="Fee For"
@@ -240,10 +242,9 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
                         handleChange={handleChange}
                         value={values?._for}
                       />
-                    </Grid>
+                    </Grid> */}
 
                     {/* select type */}
-
                     <Grid item xs={12} sm={6}>
                       <AutoCompleteWrapperWithoutRenderInput
                         multiple={false}
@@ -260,6 +261,11 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
                         touched={touched?.fees_type_id}
                         // @ts-ignore
                         handleChange={(e, value: any) => {
+                          setFieldValue('batch_ids', undefined);
+                          setFieldValue('batch_id', undefined);
+                          setFieldValue('section_ids', undefined);
+                          setFieldValue('section_id', undefined);
+
                           if (value) {
                             setFieldValue('fees_type', value);
                             setFieldValue('fees_type_id', value.id);
@@ -288,13 +294,48 @@ function PageHeader({ name, feesHeads, editData, seteditData, classData, reFetch
                           // @ts-ignore
                           handleChange={(event, value) => {
                             if (value) {
-                              subjectListFn(value);
+                              // subjectListFn(value);
                               setFieldValue('class_ids', value || undefined);
                               setFieldValue('class_id', value.value || 0);
+                              setBatchList(value.sections || []);
+                              setSubjectList(value.subjects || []);
                             } else {
                               setFieldValue('subject_ids', undefined);
                               setFieldValue('subject_id', 0);
                               setSubjectList([]);
+                              setBatchList([]);
+                            }
+                          }}
+                        />
+                      </Grid>
+                    )}
+
+                    {/* Batch */}
+                    {values.fees_type_id === 'batch_based' && (
+                      <Grid item xs={12} sm={6}>
+                        <AutoCompleteWrapperWithoutRenderInput
+                          multiple={false}
+                          disabled={editData}
+                          minWidth="100%"
+                          label="Select Batch"
+                          placeholder="select a batch..."
+                          // value={editData ? classData.find((cls) => cls.value === values.class_id) : values?.class_ids?.value}
+                          value={
+                            // editData ? subjectData.find((sub) => sub.value === values.subject_id) : 
+                            values.section_ids || null}
+                          options={batchList}
+                          name="batch_id"
+                          error={errors?.section_id}
+                          touched={touched?.section_id}
+                          // @ts-ignore
+                          handleChange={(event, value) => {
+                            if (value) {
+                              // subjectListFn(value);
+                              setFieldValue('section_ids', value || undefined);
+                              setFieldValue('section_id', value.value || 0);
+                            } else {
+                              setFieldValue('section_ids', undefined);
+                              setFieldValue('section_id', 0);
                             }
                           }}
                         />

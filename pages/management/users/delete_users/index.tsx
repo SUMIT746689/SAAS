@@ -2,17 +2,17 @@ import { useState } from 'react';
 import Head from 'next/head';
 import ExtendedSidebarLayout from 'src/layouts/ExtendedSidebarLayout';
 import { Authenticated } from 'src/components/Authenticated';
-import PageHeader from 'src/content/Management/Users/PageHeader';
-import PageHeaderForAdmin from 'src/content/Management/Users/PageHeaderForAdmin';
+import Results from 'src/content/Management/Users/DeleteUsers/Results';
+import PageHeader from 'src/content/Management/Users/DeleteUsers/PageHeader';
+import PageHeaderForAdmin from 'src/content/Management/Users/DeleteUsers/PageHeaderForAdmin';
 import Footer from 'src/components/Footer';
 import { Grid } from '@mui/material';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
-import Results from 'src/content/Management/Users/Results';
 import { useClientFetch } from '@/hooks/useClientFetch';
 import { useAuth } from '@/hooks/useAuth';
 
 function ManagementUsers() {
-  const { data: allUsers, reFetchData } = useClientFetch('/api/user');
+  const { data: allUsers, reFetchData } = useClientFetch('/api/user?show_deleted_at=true');
   const { data: roles } = useClientFetch('/api/role/school_other_role');
   const [editUser, setEditUser] = useState(null);
   const auth = useAuth();
@@ -20,7 +20,7 @@ function ManagementUsers() {
   return (
     <>
       <Head>
-        <title>Users - Management</title>
+        <title>Delete Users - Management</title>
       </Head>
       <PageTitleWrapper>
         {auth?.user?.user_role?.title === 'ADMIN' ? (

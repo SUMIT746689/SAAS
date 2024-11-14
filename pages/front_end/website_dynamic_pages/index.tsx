@@ -7,8 +7,8 @@ import Head from 'next/head';
 import PageBodyWrapper from '@/components/PageBodyWrapper';
 import { useState } from 'react';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
-import PageHeader from 'WebsiteDynamicPage/PageHeader';
-import Results from 'WebsiteDynamicPage/Results';
+import PageHeader from '@/components/WebsiteDynamicPage/PageHeader';
+import Results from '@/components/WebsiteDynamicPage/Results';
 
 const EmailTemplates = () => {
   const [editData, setEditData] = useState();
