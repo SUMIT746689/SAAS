@@ -197,6 +197,12 @@ export default function LeftFeesTable({
             <Grid textTransform="capitalize">{row.title}</Grid>
           </TableCellWrapper>
           <TableCellWrapper component="th" scope="row">
+            {row.fees_type.split('_').join(' ')}
+          </TableCellWrapper>
+          <TableCellWrapper component="th" scope="row">
+            {row.batch_name}
+          </TableCellWrapper>
+          <TableCellWrapper component="th" scope="row">
             {row.subject_name}
           </TableCellWrapper>
           <TableCellWrapper align="right">{row.amount}</TableCellWrapper>
@@ -253,6 +259,8 @@ export default function LeftFeesTable({
             </TableHeaderCellWrapper>
             <TableHeaderCellWrapper>Fees Head</TableHeaderCellWrapper>
             <TableHeaderCellWrapper>Fees</TableHeaderCellWrapper>
+            <TableHeaderCellWrapper>Fees Type</TableHeaderCellWrapper>
+            <TableHeaderCellWrapper>Batch</TableHeaderCellWrapper>
             <TableHeaderCellWrapper>Subject</TableHeaderCellWrapper>
             <TableHeaderCellWrapper align="right"> Amount</TableHeaderCellWrapper>
             <TableHeaderCellWrapper align="right"> Late Fee</TableHeaderCellWrapper>
@@ -319,15 +327,7 @@ export default function LeftFeesTable({
             <TableRow
             // sx={{ '&:last-child td, &:last-child th': { border: 0 }, py: 1 }}
             >
-              <TableFooterCellWrapper component="th" scope="row">
-                {' '}
-              </TableFooterCellWrapper>
-              <TableFooterCellWrapper component="th" scope="row">
-                {' '}
-              </TableFooterCellWrapper>
-              <TableFooterCellWrapper component="th" scope="row">
-                {' '}
-              </TableFooterCellWrapper>
+              <td colSpan={5}></td>
               <TableFooterCellWrapper component="th" scope="row">
                 {leftFeesTableTotalCalculation && 'Total'}
               </TableFooterCellWrapper>

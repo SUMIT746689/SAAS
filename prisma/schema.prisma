@@ -280,7 +280,7 @@ model Section {
   teacherSalaries            TeacherSalaryStructure[]
   student                    Student[]                    @relation("students_to_batches")
   Homework                   Homework[]
-
+  fee                        Fee[]
   @@map("sections")
 }
 
@@ -558,6 +558,7 @@ model Fee {
 
   academic_year_id Int
   class_id         Int
+  batch_id         Int?
   subject_id       Int?
   school_id        Int
   fees_head_id     Int?
@@ -566,6 +567,7 @@ model Fee {
 
   academic_year       AcademicYear @relation(fields: [academic_year_id], references: [id])
   class               Class        @relation(fields: [class_id], references: [id])
+  batch               Section?     @relation(fields: [batch_id], references: [id])
   subject             Subject?     @relation(fields: [subject_id], references: [id])
   school              School       @relation(fields: [school_id], references: [id])
   fees_head           FeesHaed?    @relation(fields: [fees_head_id], references: [id])
