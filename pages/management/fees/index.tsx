@@ -27,7 +27,7 @@ function ManagementFees() {
   useEffect(() => {
     if (data?.success) setDatas(data.data);
   }, [data, error]);
-  console.log({ classDatas })
+
   return (
     <>
       <Head>

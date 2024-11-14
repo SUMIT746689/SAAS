@@ -44,6 +44,7 @@ model User {
   Subscription_history Subscription_history[]
   OtherUsersInfo       OtherUsersInfo?
   adminPanel           AdminPanel?            @relation("admin_panel_to_users", fields: [admin_panel_id], references: [id])
+  deleted_student_fees StudentFee[]           @relation("deleted_user")
 
   @@map("users")
 }
@@ -281,6 +282,7 @@ model Section {
   student                    Student[]                    @relation("students_to_batches")
   Homework                   Homework[]
   fee                        Fee[]
+
   @@map("sections")
 }
 
@@ -596,6 +598,8 @@ model StudentFee {
   other_fee_name    String?
   collection_date   DateTime?
   on_time_discount  Int?
+  deleted_by        Int?
+  deleted_at        DateTime?
 
   transaction              Transaction?              @relation(fields: [transaction_id], references: [id])
   account                  Accounts?                 @relation(fields: [account_id], references: [id])
@@ -603,6 +607,7 @@ model StudentFee {
   student                  Student                   @relation(fields: [student_id], references: [id])
   fee                      Fee?                      @relation(fields: [fee_id], references: [id])
   collected_by_user        User?                     @relation(fields: [collected_by], references: [id])
+  deleted_by_user          User?                     @relation("deleted_user", fields: [deleted_by], references: [id])
   studentFeeWiseTeacherPay studentFeeWiseTeacherPay?
 
   @@map("student_fees")

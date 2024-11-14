@@ -33,6 +33,7 @@ const index = async (req, res, refresh_token, academic_year) => {
 
                 const data = await prisma.studentFee.findMany({
                     where: {
+                        deleted_at: null,
                         fee: { school_id, academic_year_id },
                         created_at: {
                             gte: from_date,

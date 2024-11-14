@@ -31,14 +31,13 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import PageHeader from 'src/content/Management/Attendence/PageHeader';
 import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
-import { MobileDatePicker } from '@mui/lab';
 import { AutoCompleteWrapper } from '@/components/AutoCompleteWrapper';
 import { DateRangePickerWrapper } from '@/components/DatePickerWrapper';
 import { ButtonWrapper } from '@/components/ButtonWrapper';
-import PaymentInvoice from '@/content/Management/StudentFeesCollection/PaymentInvoice';
 import { useClientFetch } from 'src/hooks/useClientFetch';
 import { Data } from '@/models/front_end';
 import { handleEndDate, handleStartDate } from '@/utils/customizeDate';
+import { handleShowErrMsg } from 'utilities_api/handleShowErrMsg';
 
 const tableStyle: object = {
   border: '1px solid black',
@@ -152,13 +151,22 @@ function FeesPaymentReport() {
     // }`
   });
 
+  const handleRemoveReceipt = (id)=>{
+   axios.delete(`/api/student_fees/${id}`)
+   .then(res=>{
+    showNotification('successfull');
+    getData(startDate, endDate);
+  }) 
+   .catch(err=> handleShowErrMsg(err,showNotification))
+  }
+
   return (
     <>
       <Head>
         <title>Recipt report</title>
       </Head>
       <PageTitleWrapper>
-        <PageHeader title={'Recipt report'} />
+        <PageHeader title={'Modify Collected Fees'} />
       </PageTitleWrapper>
 
       <form onSubmit={handlePaymentHistoryFind}>
@@ -269,6 +277,7 @@ function FeesPaymentReport() {
                         <TableCell>{t('Payment via')}</TableCell>
                         <TableCell>{t('Fee title')}</TableCell>
                         <TableCell>{t('Collected amount')}</TableCell>
+                        <TableCell>{t('Action')}</TableCell>
                         {/* <TableCell>{t('Discount')}</TableCell> */}
 
                         {/* <TableCell>{t('Total')}</TableCell> */}
@@ -342,7 +351,7 @@ function FeesPaymentReport() {
 
                             <TableCell align="center">
                               <Typography noWrap variant="h5">
-                                <ButtonWrapper
+                                {/* <ButtonWrapper
                                   handleClick={() => {
                                     setSelectedInvoice([
                                       {
@@ -361,6 +370,9 @@ function FeesPaymentReport() {
                                   startIcon={<LocalPrintshopIcon />}
                                 >
                                   Invoice
+                                </ButtonWrapper> */}
+                                <ButtonWrapper handleClick={()=>handleRemoveReceipt(i?.id)}>
+                                  Delete
                                 </ButtonWrapper>
                               </Typography>
                             </TableCell>
