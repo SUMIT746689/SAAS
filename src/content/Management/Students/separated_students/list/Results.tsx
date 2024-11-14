@@ -47,7 +47,7 @@ const DialogWrapper = styled(Dialog)(
 );
 const ActionStyle: object = {
   height: '20px',
-  cursor:"pointer"
+  cursor: 'pointer'
 };
 
 const Transition = forwardRef(function Transition(props: TransitionProps & { children: ReactElement<any, any> }, ref: Ref<unknown>) {
@@ -113,7 +113,7 @@ const Results = ({ query, setQuery, selectedItems, setSelectedUsers, students, r
       student_id: i.id
     });
     refetch();
-    showNotification('successfully active student')
+    showNotification('successfully active student');
     // console.log(res.data);
   };
 
@@ -506,17 +506,6 @@ const Results = ({ query, setQuery, selectedItems, setSelectedUsers, students, r
                               <VisibilityIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
-
-                          {/* <Tooltip title={t('Unseparate List')} arrow>
-                          <IconButton sx={ActionStyle} color="primary" size="small">
-                            <VisibilityIcon
-                              onClick={() => {
-                                handleActiveSeparateStudent(i);
-                              }}
-                              fontSize="small"
-                            />
-                          </IconButton>
-                        </Tooltip> */}
                           <Tooltip title={t('Active Student')} arrow>
                             <PersonRemoveIcon
                               sx={ActionStyle}
@@ -525,7 +514,6 @@ const Results = ({ query, setQuery, selectedItems, setSelectedUsers, students, r
                                 handleActiveSeparateStudent(i);
                               }}
                               fontSize="small"
-                              
                             />
                           </Tooltip>
                         </Grid>

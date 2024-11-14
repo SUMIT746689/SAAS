@@ -15,6 +15,7 @@ model User {
   user_role_id   Int
   role_id        Int?
   deleted_at     DateTime?
+  is_restore     Boolean?  @default(false)
   is_enabled     Boolean   @default(true)
   created_at     DateTime  @default(now())
   updated_at     DateTime  @updatedAt

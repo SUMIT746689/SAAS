@@ -1,5 +1,5 @@
 import { FC, ChangeEvent, useState, ReactElement, Ref, forwardRef, useEffect, useRef } from 'react';
-
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import PropTypes from 'prop-types';
 import {
   Avatar,
@@ -314,25 +314,6 @@ const Results = ({ users, roleOptions, reFetchData, setEditUser }) => {
         >
           {!selectedBulkActions && (
             <>
-              {/* <TextField
-              sx={{
-                m: 0
-              }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchTwoToneIcon />
-                  </InputAdornment>
-                )
-              }}
-              onChange={handleQueryChange}
-              placeholder={t('Search by name, email or username...')}
-              value={query}
-              size="small"
-              fullWidth
-              margin="normal"
-              variant="outlined"
-            /> */}
               <DebounceInput
                 debounceTimeout={500}
                 handleDebounce={(v) => setQuery(v)}
@@ -464,19 +445,19 @@ const Results = ({ users, roleOptions, reFetchData, setEditUser }) => {
                         {t('Active Status')}
                       </Typography>
                     </TableCell> */}
-                    {
+                    {/* {
                       // @ts-ignore
                       user?.role?.title === 'SUPER_ADMIN' && (
                         <TableCell>
                           <Typography noWrap>{t('Admin Panel (Active Status)')}</Typography>
                         </TableCell>
                       )
-                    }
-                    {/* <TableCell>
+                    } */}
+                    <TableCell>
                       <Typography noWrap align="center">
                         {t('Actions')}
                       </Typography>
-                    </TableCell> */}
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -519,6 +500,18 @@ const Results = ({ users, roleOptions, reFetchData, setEditUser }) => {
                               {/* @ts-ignore */}
                               <Typography variant="h5" noWrap>
                                 {i?.school?.name}
+                              </Typography>
+                            </TableCell>
+                          )
+                        }
+
+                        {
+                          // @ts-ignore
+                          user?.role?.title === 'SUPER_ADMIN' && (
+                            <TableCell align="center">
+                              <Typography variant="h5" color={i?.adminPanel?.is_active ? 'green' : 'red'}>
+                                {/* {user?.is_enabled ? 'Enable' : 'Disable'} */}
+                                <Switch checked={i?.adminPanel?.is_active} onClick={() => handleCngAdminPanelActiveStatus(i)} />
                               </Typography>
                             </TableCell>
                           )
@@ -673,6 +666,133 @@ const MenuList = ({ targetUser, setEditUser, reFetchData, setSelectedUser, setPe
     // @ts-ignore
     // await superAdminLogInAsAdmin(targetUser.id);
   };
+
+  const handleActiveSeparateStudent = async (i) => {
+    console.log(i.id);
+    const res = await axios.post(`/api/student/active-separate-student`, {
+      student_id: i.id
+    });
+    // refetch();
+    showNotification('successfully active student');
+    // console.log(res.data);
+  };
+
+  return (
+    <div>
+      {/* <button
+        className="bg-purple-900 p-2"
+        onClick={() => {
+          handleActiveSeparateStudent(i);
+        }}
+      >
+        <SettingsBackupRestoreIcon></SettingsBackupRestoreIcon>
+      </button> */}
+
+      <Button
+        variant="contained"
+        size="small"
+        sx={{
+          // ...sx,
+          color: (theme) => theme.colors.warning,
+          borderRadius: 0.5,
+          minHeight: 36,
+          width: '100%',
+          ':disabled': {
+            backgroundColor: 'lightgray'
+          }
+        }}
+        onClick={() => {
+          handleActiveSeparateStudent(i);
+        }}
+      >
+        <SettingsBackupRestoreIcon></SettingsBackupRestoreIcon>
+      </Button>
+
+      {/* <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button'
+        }}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
+        <li>
+          <ButtonWrapper startIcon={<LoginIcon fontSize="small" />} variant="outlined" handleClick={() => handleAutoLogin(targetUser?.id)}>
+            {t('Log in')}
+          </ButtonWrapper>
+        </li>
+
+        <li>
+          <ButtonWrapper startIcon={<LaunchTwoToneIcon fontSize="small" />} handleClick={() => setEditUser(targetUser)} variant="outlined">
+            {t('Edit')}
+          </ButtonWrapper>
+        </li>
+
+        {!targetUser.role_id && (
+          <li>
+            <ButtonWrapper
+              startIcon={<RestartAltIcon fontSize="small" />}
+              variant="outlined"
+              handleClick={() => {
+                try {
+                  axios
+                    .put(`/api/permission/attach-user`, {
+                      // role_id: targetUser.user_role.id,
+                      user_id: targetUser.id
+                    })
+                    .then(() => {
+                      reFetchData();
+                    });
+                } catch (err) {
+                  console.log(err);
+                }
+              }}
+            >
+              {t('Reset Permission')}
+            </ButtonWrapper>
+          </li>
+        )}
+
+        <li>
+          <ButtonWrapper
+            startIcon={<KeyIcon fontSize="small" />}
+            variant="outlined"
+            handleClick={() => {
+              axios
+                .get(`/api/user/${targetUser?.id}`)
+                .then((res) => {
+                  console.log('selectedUser__', res.data);
+                  setSelectedUser(res.data);
+                  setPermissionModal(true);
+                })
+                .catch((err) => console.log(err));
+            }}
+          >
+            {t('Permission')}
+          </ButtonWrapper>
+        </li>
+
+        <li onClick={handleClose}>
+          <ButtonWrapper
+            startIcon={<DeleteTwoToneIcon fontSize="small" />}
+            variant="outlined"
+            handleClick={() => {
+              setUserDeleteId(targetUser?.id);
+              handleConfirmDelete();
+            }}
+            sx={{ color: 'red' }}
+          >
+            {t('Delete')}
+          </ButtonWrapper>
+        </li>
+      </Menu> */}
+    </div>
+  );
 };
 
 Results.propTypes = {
