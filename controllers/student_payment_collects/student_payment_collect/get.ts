@@ -10,8 +10,12 @@ const get = async (req, res, refresh_token, academic_year) => {
     const { id: academic_year_id } = academic_year;
 
     if (!section_id) throw new Error('batch not founds');
-    const parseSectionId = parseInt(section_id);
-    if (Number.isNaN(parseSectionId)) throw new Error('provide invalid section id');
+
+    const parseSectionIds = section_id.split(',').map(section_id => {
+      const parseIntSectionId = parseInt(section_id);
+      if (Number.isNaN(parseIntSectionId)) throw new Error('provide invalid section id')
+      return parseInt(section_id)
+    });
 
     if (!id) throw new Error('provide student_id');
 
@@ -67,13 +71,20 @@ const get = async (req, res, refresh_token, academic_year) => {
           subject_id: { in: parseSubjectIds }
         }
           :
+          {},
+        Array.isArray(parseSectionIds) && parseSectionIds.length > 0 ?
+          {
+            fees_type: "batch_based",
+            batch_id: { in: parseSectionIds }
+          }
+          :
           {}
       ]
     }
 
 
     const all_fees = await prisma.student.findFirst({
-      where: { id: Number(id), batches: { some: { id: parseSectionId } } },
+      where: { id: Number(id), batches: { some: { id: { in: parseSectionIds } } } },
       select: {
         id: true,
         class_registration_no: true,
@@ -89,7 +100,7 @@ const get = async (req, res, refresh_token, academic_year) => {
             middle_name: true,
             last_name: true,
             father_name: true,
-            phone:true
+            phone: true
           }
         },
         group: {
@@ -97,63 +108,22 @@ const get = async (req, res, refresh_token, academic_year) => {
             title: true
           }
         },
-        // section: {
-        //   select: {
-        //     name: true,
-        //     class: {
-        //       select: {
-        //         name: true,
-        //         fees: {
-        //           where: {
-        //             academic_year_id,
-        //             // old
-        //             // fees_month: { in: monthsBeforeSelected },
-        //             // OR: [
-        //             //   {
-        //             //     fees_type: "class_based"
-        //             //   },
-        //             //   parseSubjectIds ? {
-        //             //     fees_type: "subject_based",
-        //             //     subject_id: { in: parseSubjectIds }
-        //             //   }
-        //             //     :
-        //             //     {}
-        //             // ]
-        //             ...whereObj
-        //           },
-        //           include: {
-        //             fees_head: true,
-        //             subject: true
-        //           },
-        //           orderBy: { fees_month: 'asc' }
-        //         }
-        //       }
-        //     }
-        //   }
-        // },
         class: {
           select: {
             name: true,
             fees: {
               where: {
                 academic_year_id,
-                // old
-                // fees_month: { in: monthsBeforeSelected },
-                // OR: [
-                //   {
-                //     fees_type: "class_based"
-                //   },
-                //   parseSubjectIds ? {
-                //     fees_type: "subject_based",
-                //     subject_id: { in: parseSubjectIds }
-                //   }
-                //     :
-                //     {}
-                // ]
                 ...whereObj
               },
               include: {
                 fees_head: true,
+                batch:{
+                  select:{
+                    id:true,
+                    name:true,
+                  }
+                },
                 subject: true
               },
               orderBy: { fees_month: 'asc' }
@@ -202,8 +172,6 @@ const get = async (req, res, refresh_token, academic_year) => {
         // }
       }
     });
-
-
 
     const waiver_fee = all_fees?.waiver_fees?.length > 0 ? all_fees?.waiver_fees?.map((i) => i.id) : [];
 
@@ -335,9 +303,6 @@ const get = async (req, res, refresh_token, academic_year) => {
       }
     }
 
-
-
-
     const data = {
       ...all_fees.student_info,
       id: all_fees.id,
@@ -354,10 +319,6 @@ const get = async (req, res, refresh_token, academic_year) => {
       //   return item.status !== 'paid' && item.status !== 'paid late';
       // })
     };
-
-
-
-
 
     res.status(200).json({ data, success: true });
   } catch (err) {

@@ -24,17 +24,21 @@ const index = async (req, res, refresh_token, academic_year) => {
         if (student_id) {
           students = await prisma.$queryRaw`
           SELECT 
-              student_informations.id,students.id as std_id,student_informations.first_name,student_informations.middle_name,student_informations.last_name, student_informations.student_id
+              student_informations.id,students.id as std_id
+              ,student_informations.first_name
+              ,student_informations.middle_name
+              ,student_informations.last_name
+              ,student_informations.student_id
               ,students.class_roll_no
               ,student_informations.phone as phone_number
               ,classes.name as class_name
-              ,sections.name as section_name
               ,classes.id as class_id
-              ,students.id as student_table_id,
-              GROUP_CONCAT(subjects.id) as subject_ids,
-              GROUP_CONCAT(subjects.name) AS subject_names,
-              _students_to_batches.A as batch_id,
-              _students_to_batches.A as section_id
+              ,students.id as student_table_id
+              ,GROUP_CONCAT(subjects.id) as subject_ids
+              ,GROUP_CONCAT(subjects.name) AS subject_names
+              ,GROUP_CONCAT(sections.name) as section_name
+              ,GROUP_CONCAT(_students_to_batches.A) as batch_id
+              ,GROUP_CONCAT(_students_to_batches.A) as section_id
 
           FROM student_informations
           JOIN users on users.id = student_informations.user_id AND users.deleted_at IS null
@@ -45,22 +49,26 @@ const index = async (req, res, refresh_token, academic_year) => {
           LEFT JOIN _student_subjects on _student_subjects.A = students.id
           LEFT JOIN subjects on subjects.id = _student_subjects.B
           WHERE student_informations.student_id = ${student_id_} AND students.academic_year_id=${academic_year_id} AND students.is_separate = false
-          GROUP BY students.id,_students_to_batches.A;  
+          GROUP BY students.id;  
         `;
         } else if (search_value) {
           students = await prisma.$queryRaw`
             SELECT 
-                student_informations.id, students.id as student_table_id, student_informations.first_name,student_informations.middle_name,student_informations.last_name, student_informations.student_id
-                ,students.class_roll_no
-                ,student_informations.phone as phone_number
-                ,sections.name as section_name
-                ,classes.name as class_name
-                ,classes.id as class_id
-                ,students.id as student_table_id,
-                GROUP_CONCAT(subjects.id) as subject_ids,
-                GROUP_CONCAT(subjects.name) AS subject_names,
-                _students_to_batches.A as batch_id,
-                _students_to_batches.A as section_id
+              student_informations.id,students.id as std_id
+              ,student_informations.first_name
+              ,student_informations.middle_name
+              ,student_informations.last_name
+              ,student_informations.student_id
+              ,students.class_roll_no
+              ,student_informations.phone as phone_number
+              ,classes.name as class_name
+              ,classes.id as class_id
+              ,students.id as student_table_id
+              ,GROUP_CONCAT(subjects.id) as subject_ids
+              ,GROUP_CONCAT(subjects.name) AS subject_names
+              ,GROUP_CONCAT(sections.name) as section_name
+              ,GROUP_CONCAT(_students_to_batches.A) as batch_id
+              ,GROUP_CONCAT(_students_to_batches.A) as section_id
                 
             FROM student_informations
             JOIN users on users.id = student_informations.user_id AND users.deleted_at IS null
@@ -71,7 +79,7 @@ const index = async (req, res, refresh_token, academic_year) => {
             LEFT JOIN _student_subjects on _student_subjects.A = students.id
             LEFT JOIN subjects on subjects.id = _student_subjects.B
             WHERE CONCAT(student_informations.first_name, IFNULL(student_informations.middle_name , ' '),IFNULL(student_informations.last_name, '')) REGEXP ${search_value_} AND students.academic_year_id=${academic_year_id}
-            GROUP BY students.id,_students_to_batches.A;          
+            GROUP BY students.id;          
           `;
         }
 

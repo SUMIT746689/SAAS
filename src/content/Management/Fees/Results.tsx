@@ -289,9 +289,10 @@ const Results: FC<ResultsProps> = ({ sessions, setEditData, reFetchData }) => {
                     </TableHeaderCellWrapper>
                     <TableHeaderCellWrapper>{t('Fee Head')}</TableHeaderCellWrapper>
                     <TableHeaderCellWrapper>{t('Fee')}</TableHeaderCellWrapper>
-                    <TableHeaderCellWrapper>{t('Fee for')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper>{t('Fee Type')}</TableHeaderCellWrapper>
                     <TableHeaderCellWrapper>{t('Amount')}</TableHeaderCellWrapper>
                     <TableHeaderCellWrapper>{t('Class')}</TableHeaderCellWrapper>
+                    <TableHeaderCellWrapper>{t('Batch')}</TableHeaderCellWrapper>
                     <TableHeaderCellWrapper>{t('Subject')}</TableHeaderCellWrapper>
                     <TableHeaderCellWrapper>{t('Last date')}</TableHeaderCellWrapper>
                     <TableHeaderCellWrapper>{t('Late fee')}</TableHeaderCellWrapper>
@@ -318,11 +319,12 @@ const Results: FC<ResultsProps> = ({ sessions, setEditData, reFetchData }) => {
                         </TableBodyCellWrapper>
                         <TableBodyCellWrapper>{fee?.fees_head?.title}</TableBodyCellWrapper>
                         <TableBodyCellWrapper>{fee?.title}</TableBodyCellWrapper>
-                        <TableBodyCellWrapper>{fee?.for}</TableBodyCellWrapper>
+                        <TableBodyCellWrapper>{fee?.fees_type.split('_').join(' ')}</TableBodyCellWrapper>
                         <TableBodyCellWrapper>
                           {formatNumber(fee.amount)} {currency}
                         </TableBodyCellWrapper>
                         <TableBodyCellWrapper>{fee.class?.name}</TableBodyCellWrapper>
+                        <TableBodyCellWrapper>{fee.batch?.name}</TableBodyCellWrapper>
                         <TableBodyCellWrapper>{fee.subject?.name}</TableBodyCellWrapper>
                         <TableBodyCellWrapper color="green">{dayjs(fee?.last_date).format('YYYY-MM-DD , HH:mm')}</TableBodyCellWrapper>
                         <TableBodyCellWrapper>

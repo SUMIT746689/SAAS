@@ -202,6 +202,8 @@ function Managementschools() {
         feeId: item.id,
         title: item.title,
         head_title: item?.fees_head?.title,
+        fees_type: item?.fees_type,
+        batch_name: item?.batch?.name,
         subject_name: item?.subject?.name,
         amount: item.amount ? item.amount : 0,
         late_fee: late_fee_value,
