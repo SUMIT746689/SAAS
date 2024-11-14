@@ -46,6 +46,15 @@ const id = async (req, res, refresh_token) => {
     case 'PATCH':
       patch(req, res, refresh_token);
       break;
+
+
+
+
+
+
+
+
+      
     case 'DELETE':
       await prisma.user.update({
         where: {
@@ -62,6 +71,10 @@ const id = async (req, res, refresh_token) => {
       logFile.error(`Method ${method} Not Allowed`)
       res.status(405).end(`Method ${method} Not Allowed`);
   }
+  // } catch (err) {
+  //   console.log(err);
+  //   res.status(500).json({ message: err.message });
+  // }
 };
 
 export default authenticate(id);

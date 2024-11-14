@@ -22,27 +22,17 @@ function ManagementUsers() {
         <title>Branch Admin - Management</title>
       </Head>
       <PageTitleWrapper>
-        <PageHeaderForAdmin
-          editUser={editUser}
-          setEditUser={setEditUser}
-          reFetchData={reFetchData}
-        />
+        <PageHeaderForAdmin editUser={editUser} setEditUser={setEditUser} reFetchData={reFetchData} />
       </PageTitleWrapper>
 
-      <Grid
-        sx={{ px: 4 }}
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="stretch"
-        spacing={3}
-      >
+      <Grid sx={{ px: 4 }} container direction="row" justifyContent="center" alignItems="stretch" spacing={3}>
         <Grid item xs={12}>
           <Results
             users={allUsers || []}
             roleOptions={
-              // roles?.map((i) => i.title) || 
-              []}
+              // roles?.map((i) => i.title) ||
+              []
+            }
             reFetchData={reFetchData}
             setEditUser={setEditUser}
           />

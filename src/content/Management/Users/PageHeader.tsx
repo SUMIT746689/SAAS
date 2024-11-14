@@ -31,7 +31,7 @@ function PageHeader({ editUser, setEditUser, reFetchData }) {
   const { user }: any = useAuth();
   const [user_photo, setUser_photo] = useState(null);
   const [isAvailableUsername, setIsAvailableUsername] = useState(null);
-  console.log({ editUser })
+  console.log({ editUser });
   useEffect(() => {
     if (editUser) handleCreateUserOpen();
   }, [editUser]);
@@ -44,11 +44,10 @@ function PageHeader({ editUser, setEditUser, reFetchData }) {
     { label: 'Stuff', role: 'STAFF', value: 'create_stuff' },
     { label: 'Accountant', role: 'ACCOUNTANT', value: 'create_accountant' },
     { label: 'Librarian', role: 'LIBRARIAN', value: 'create_librarian' },
-    { label: 'Receptionist', role: 'RECEPTIONIST', value: 'create_receptionist' },
-
+    { label: 'Receptionist', role: 'RECEPTIONIST', value: 'create_receptionist' }
   ];
   const available_permissions = user?.permissions?.map((permission) => permission.value);
-  console.log({ available_permissions })
+  console.log({ available_permissions });
   const userPrermissionRoles = permissons.filter((role) => available_permissions?.includes(role.value));
 
   const { t }: { t: any } = useTranslation();
@@ -108,9 +107,9 @@ function PageHeader({ editUser, setEditUser, reFetchData }) {
       setSubmitting(false);
     }
   };
-  console.log({ userPrermissionRoles })
+  console.log({ userPrermissionRoles });
   const temp = userPrermissionRoles.find((i) => i.role == editUser?.user_role?.title);
-  console.log({ temp })
+  console.log({ temp });
   const handleDebounce = (value) => {
     if (editUser?.username?.toLowerCase() === value?.toLowerCase()) return setIsAvailableUsername(null);
     if (value) {
@@ -175,9 +174,9 @@ function PageHeader({ editUser, setEditUser, reFetchData }) {
             preview_user_photo: [],
             role: temp
               ? {
-                role_title: temp?.role,
-                permission: temp?.value
-              }
+                  role_title: temp?.role,
+                  permission: temp?.value
+                }
               : undefined,
             domain: editUser?.adminPanel?.domain || '',
             copy_right_txt: editUser?.adminPanel?.copy_right_txt,
@@ -212,7 +211,7 @@ function PageHeader({ editUser, setEditUser, reFetchData }) {
           onSubmit={(_values, getValue: any) => handleFormSubmit(_values, getValue)}
         >
           {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue, setErrors }) => {
-            console.log({ errors })
+            console.log({ errors });
             return (
               <form onSubmit={handleSubmit}>
                 <DialogContent

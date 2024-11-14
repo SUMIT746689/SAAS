@@ -90,6 +90,11 @@ const all_users: MenuItems[] = [
         link: '/management/users'
       },
       {
+        name: 'Delete Users',
+        icon: AssignmentIndTwoToneIcon,
+        link: '/management/users/delete_users'
+      },
+      {
         name: 'Branch Admins',
         icon: AssignmentIndTwoToneIcon,
         link: '/management/users/branch_admins'

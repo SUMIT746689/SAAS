@@ -2,45 +2,25 @@ import prisma from '@/lib/prisma_client';
 import { logFile } from 'utilities_api/handleLogFile';
 import { refresh_token_varify } from 'utilities_api/jwtVerify';
 import { ref } from 'yup';
-
 export const get = async (req, res, refresh_token) => {
   try {
-    // if (!req.cookies.refresh_token) throw new Error('refresh token not founds');
-
-    // const refresh_token: any = refresh_token_varify(req.cookies.refresh_token);
-
-    // if (!refresh_token) throw new Error('invalid user');
-    console.log("req.query/////////////////////////////////",req.query)
     const { admin_panel_id } = refresh_token;
+    // const {} = req.query
+    console.log("req.query..................////////////",  req.query)
     const user = await prisma.user.findFirst({
       where: {
         id: refresh_token.id,
-        deleted_at :null
+        deleted_at: null
       },
-
-      // if (deleted_at  !== 'null') {
-      //   AND.push({
-      //     user_role: {
-      //       title: role
-      //     }
-      //   })
-      // },
-
-
       include: {
         user_role: true
       }
     });
     const { role, is_enabled } = req.query;
-
     const AND = [];
     AND.push({
-      deleted_at: req.query.show_deleted_at === "true" ? 
-      {
-        not: null
-      }  : null   
+      deleted_at: null
     })
-
     if (user.user_role.title === 'SUPER_ADMIN') AND.push({
       role: {
         title: 'ASSIST_SUPER_ADMIN'
@@ -76,10 +56,8 @@ export const get = async (req, res, refresh_token) => {
 
     }
     else throw new Error('Only role 1 and 2 is allowed to see validate data')
-    // : [{ school_id: user.school_id }, { id: { not: user.id } }]
     console.log({ is_enabled })
     if (is_enabled) AND.push({ is_enabled: is_enabled === 'true' ? true : false })
-
     const users = await prisma.user.findMany({
       where: {
         AND,
